@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "module": "CommonJS",
+    "target": "ES2020",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+//    "experimentalDecorators": true,
+    "experimentalDecorators": true,                   /* Enable experimental support for TC39 stage 2 draft decorators. */
+    "emitDecoratorMetadata": true,                    /* Emit design-type metadata for decorated declarations in source files. */
+
+    "noImplicitThis": true,
+//    "noImplicitReturns": true,
+    "alwaysStrict": true,
+    "noFallthroughCasesInSwitch": true,
+//    "noUnusedLocals": true,
+//    "noUnusedParameters": true,
+    "strict": false,
+//    "strictPropertyInitialization": true,
+    "lib": ["ES2020"],
+    "typeRoots": [
+      "./typings"
+    ],
+//    "outDir": "../TS2JS-Test/",
+    "sourceMap": true
+  },
+  "include": [
+    "./**/*.ts",
+    "node_modules/miniprogram-api-typings/types/wx/lib.wx.app.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "miniprogram/miniprogram_npm"
+  ]
+}

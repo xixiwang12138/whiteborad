@@ -1,11 +1,11 @@
 import {PartialPage} from "../core/BasePage";
 import {pageFunc} from "../PageBuilder";
-import {Player} from "../../../modules/user/data/User";
+import {Player} from "../../../modules/player/data/Player";
 import {pageMgr} from "../../../modules/core/managers/PageManager";
 import {BaseData} from "../../../modules/core/data/BaseData";
 import {field} from "../../../modules/core/data/DataLoader";
 import {modal} from "../../../modules/core/BaseAssist";
-import {userMgr} from "../../../modules/user/managers/UserManager";
+import {playerMgr} from "../../../modules/player/managers/PlayerManager";
 import {alertMgr} from "../../../modules/core/managers/AlertManager";
 import {waitForDataLoad} from "../../../modules/core/managers/DataManager";
 
@@ -124,7 +124,7 @@ export class PlayerPage extends PartialPage<Data> {
 	// }
 
 	public async autoLogin(refresh: boolean = false) {
-		let userInfo = await userMgr().login();
+		let userInfo = await playerMgr().login();
 
 		if (!userInfo && this.forceLogin) {
 			const res = await alertMgr().showAlert(JudgeLogin);
@@ -134,17 +134,17 @@ export class PlayerPage extends PartialPage<Data> {
 			if (res.cancel) await pageMgr().pop();
 
 		} else if (userInfo && refresh)
-			userInfo = await userMgr().refresh();
+			userInfo = await playerMgr().refresh();
 
 		return userInfo;
 	}
 
 	public async manualLogin(desc?: string) {
-		this.setPlayer(await userMgr().manualLogin(desc))
+		this.setPlayer(await playerMgr().manualLogin(desc))
 	}
 
 	public async refresh() {
-		this.setPlayer(await userMgr().refresh())
+		this.setPlayer(await playerMgr().refresh())
 	}
 
 	private setPlayer(player: Player) {

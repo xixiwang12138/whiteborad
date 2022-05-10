@@ -2,7 +2,7 @@ import {Itf, post} from "../../core/BaseAssist";
 import {BaseManager, getManager, manager} from "../../core/managers/BaseManager";
 import {appMgr} from "../../core/managers/AppManager";
 import {storageMgr} from "../../core/managers/StroageManager";
-import {Player} from "../data/User";
+import {Player} from "../data/Player";
 import {PromiseUtils} from "../../../utils/PromiseUtils";
 import {blockLoading, showLoading} from "../../core/managers/LoadingManager";
 import {handleError} from "../../core/managers/AlertManager";
@@ -23,20 +23,20 @@ const GetInfo: Itf<{}, {player: Player}>
 export function waitForLogin(obj, key, desc) {
   const oriFunc = desc.value;
   desc.value = async function (...p) {
-    await PromiseUtils.waitFor(() => userMgr().isLogin);
+    await PromiseUtils.waitFor(() => playerMgr().isLogin);
     return await oriFunc.apply(this, p);
   }
 }
 
-export function userMgr() {
-  return getManager(UserManager)
+export function playerMgr() {
+  return getManager(PlayerManager)
 }
 
 const UserInfoKey = "userInfo";
 const OpenidKey = "openid";
 
 @manager
-export class UserManager extends BaseManager {
+export class PlayerManager extends BaseManager {
 
   /**
    * 用户

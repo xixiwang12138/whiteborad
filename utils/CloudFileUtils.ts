@@ -1,4 +1,4 @@
-import {userMgr} from "../modules/user/managers/UserManager";
+import {playerMgr} from "../modules/player/managers/PlayerManager";
 import {handleError} from "../modules/core/managers/AlertManager";
 import {showLoading} from "../modules/core/managers/LoadingManager";
 
@@ -32,7 +32,7 @@ export class CloudFileUtils {
 	 * 生成文件名
 	 */
 	public static generateFileName(name, ext) {
-		const openid = userMgr().openid;
+		const openid = playerMgr().openid;
 		return `${openid}-${Date.now()}-${name}.${ext}`;
 	}
 

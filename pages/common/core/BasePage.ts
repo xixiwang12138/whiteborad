@@ -27,13 +27,16 @@ export abstract class BasePage<
 	public params: P = {} as P; // params是内部参数传递
 	public extra: any; // extra是微信参数传递
 
+	public app;
+
 	// public status: PageState = PageState.Unloaded;
 
 	// private isLoaded = false;
 
 	constructor(params?: P) {
 		super();
-		this.params = params
+		this.app = getApp();
+		this.params = params;
 	}
 
 	// region 页面数据
@@ -67,11 +70,11 @@ export abstract class BasePage<
 	 * OnLoad回调，子类无需添加pageFunc
 	 */
 	@pageFunc
-	public onLoad(e) {
+	public async onLoad(e) {
 		console.log("onLoad", e);
 		this.extra = e;
 		// @ts-ignore
-		this.setData({title: this.title});
+		await this.setData({title: this.title});
 		this.calcContentHeight();
 	}
 
@@ -109,55 +112,6 @@ export abstract class BasePage<
 
 	// endregion
 
-	// region 数据处理
-
-	/**
-	 * 设置数据
-	 */
-	// public async setData(data: Partial<D> & WechatMiniprogram.IAnyObject, callback?: () => void) {
-	// 	// 更新Page内数据
-	// 	// 是否需要refresh的flag，只要有一个key设置了路径，就需要整体refresh
-	// 	const flag = Object.keys(data).some(key => /[.\[\]]/.test(key));
-	// 	for (const key in data) {
-	// 		const val = data[key];
-	// 		if (flag) { // 如果有了路径设置，统一使用eval的方式赋值
-	// 			try { eval(`this.data.${key} = val`) }
-	// 			catch (e) { console.error("SetData失败：", e) }
-	// 		} else
-	// 			await this.refreshData(this.data[key] = val);
-	// 	}
-	// 	if (flag) await this.refreshData(this.data);
-	//
-	// 	// for (const key in data) {
-	// 	// 	const val = this.data[key] = data[key];
-	// 	// 	// TODO: 对简单的数组和对象进行处理，需要拓展
-	// 	// 	if (val instanceof Array) for (const v of val)
-	// 	// 		if (v?.refresh instanceof Function) await v.refresh();
-	// 	// 	if (val?.refresh instanceof Function) await val.refresh();
-	// 	// }
-	// 	// 更新微信Page数据
-	// 	const data_: any = DataLoader.convert(DataOccasion.Extra, data);
-	// 	return this.callPage?.setData(data_, callback);
-	// }
-	// private async refreshData(data) {
-	// 	if (!data || typeof data != "object") return;
-	// 	if (data.refresh instanceof Function) await data.refresh();
-	// 	for (const key in data) await this.refreshData(data[key]);
-	// }
-
-	// endregion
-
-	// region 自定义回调
-
-	// /**
-	//  * 数据读取回调
-	//  */
-	// protected onDataLoad() {
-	// 	this.isLoaded = true;
-	// }
-
-	// endregion
-
 	// region 更新
 
 	/**
@@ -189,11 +143,12 @@ export abstract class BasePage<
 	 */
 	public calcContentHeight() {
 		const query = wx.createSelectorQuery();
-		query.select(".top").boundingClientRect(rect => {
+		query.select(".top").boundingClientRect(
+			async rect => {
 			const wh = wx.getSystemInfoSync().windowHeight;
 			const rh = rect?.height || 0;
 			// @ts-ignore
-			this.setData({contentHeight: wh - rh});
+			await this.setData({contentHeight: wh - rh});
 		}).exec();
 	}
 

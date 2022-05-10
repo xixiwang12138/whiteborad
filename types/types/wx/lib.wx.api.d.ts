@@ -10525,7 +10525,7 @@ Page({
          * | 13000 | 设备不支持NFC |  |
          * | 13001 | 系统NFC开关未打开 |  |
          * | 13010 | 未知错误 |  |
-         * | 13019 | user is not authorized | 用户未授权 |
+         * | 13019 | player is not authorized | 用户未授权 |
          * | 13011 | invalid parameter | 参数无效 |
          * | 13012 | parse NdefMessage failed | 将参数解析为NdefMessage失败 |
          * | 13021 | NFC discovery already started | 已经开始NFC扫描 |
@@ -10545,7 +10545,7 @@ Page({
          * | 13000 | 设备不支持NFC |  |
          * | 13001 | 系统NFC开关未打开 |  |
          * | 13010 | 未知错误 |  |
-         * | 13019 | user is not authorized | 用户未授权 |
+         * | 13019 | player is not authorized | 用户未授权 |
          * | 13011 | invalid parameter | 参数无效 |
          * | 13012 | parse NdefMessage failed | 将参数解析为NdefMessage失败 |
          * | 13021 | NFC discovery already started | 已经开始NFC扫描 |
@@ -11462,7 +11462,7 @@ Component({
          * | 12004 | duplicate request | 重复连接 Wi-Fi |
          * | 12005 | wifi not turned on | Android 特有，未打开 Wi-Fi 开关 |
          * | 12006 | gps not turned on | Android 特有，未打开 GPS 定位开关 |
-         * | 12007 | user denied | 用户拒绝授权链接 Wi-Fi |
+         * | 12007 | player denied | 用户拒绝授权链接 Wi-Fi |
          * | 12008 | invalid SSID | 无效 SSID |
          * | 12009 | system config err | 系统运营商配置拒绝连接 Wi-Fi |
          * | 12010 | system internal error | 系统其他错误，需要在 errmsg 打印具体的错误原因 |
@@ -11480,7 +11480,7 @@ Component({
          * | 12004 | duplicate request | 重复连接 Wi-Fi |
          * | 12005 | wifi not turned on | Android 特有，未打开 Wi-Fi 开关 |
          * | 12006 | gps not turned on | Android 特有，未打开 GPS 定位开关 |
-         * | 12007 | user denied | 用户拒绝授权链接 Wi-Fi |
+         * | 12007 | player denied | 用户拒绝授权链接 Wi-Fi |
          * | 12008 | invalid SSID | 无效 SSID |
          * | 12009 | system config err | 系统运营商配置拒绝连接 Wi-Fi |
          * | 12010 | system internal error | 系统其他错误，需要在 errmsg 打印具体的错误原因 |
@@ -12108,7 +12108,7 @@ wx.chooseImage({
       filePath: tempFilePaths[0],
       name: 'file',
       formData: {
-        'user': 'test'
+        'player': 'test'
       },
       success (res){
         const data = res.data

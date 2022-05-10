@@ -5,8 +5,6 @@ export enum PlayerState {
 	Normal, Banned
 }
 
-export const LongTimeTime = new Date(9999, 11, 31).getTime();
-
 export class Player extends MainData {
 
 	@field

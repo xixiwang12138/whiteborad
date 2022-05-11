@@ -2,7 +2,6 @@
 // const Host = "https://www.exermon.com:8086";
 import {BaseManager, getManager, manager} from "./BaseManager";
 import {DataLoader} from "../data/DataLoader";
-import {appMgr} from "./AppManager";
 import {StringUtils} from "../../../utils/StringUtils";
 import {alertMgr, ErrorData} from "./AlertManager";
 import {loadingMgr, LoadingOptions, LoadingParam} from "./LoadingManager";
@@ -239,3 +238,5 @@ class NetworkManager extends BaseManager {
     this.errorHandler.register(func, interface_, status, code);
   }
 }
+
+import {appMgr} from "./AppManager";

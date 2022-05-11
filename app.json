@@ -1,6 +1,10 @@
 {
   "pages":[
-    "pages/index/index"
+    "pages/login/login",
+    "pages/main/main",
+    "pages/square/square",
+    "pages/mine/mine",
+    "pages/visit/visit"
   ],
   "window":{
     "backgroundTextStyle":"light",

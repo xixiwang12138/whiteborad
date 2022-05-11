@@ -19,7 +19,7 @@
     "useIsolateContext": true,
     "nodeModules": false,
     "enhance": true,
-    "useMultiFrameRuntime": false,
+    "useMultiFrameRuntime": true,
     "showShadowRootInWxmlPanel": true,
     "packNpmManually": false,
     "enableEngineNative": false,
@@ -50,5 +50,6 @@
   "packOptions": {
     "ignore": [],
     "include": []
-  }
+  },
+  "appid": "wxd1456ddc8b073f35"
 }

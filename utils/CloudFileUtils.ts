@@ -1,6 +1,6 @@
 import {playerMgr} from "../modules/player/managers/PlayerManager";
-import {handleError} from "../modules/core/managers/AlertManager";
 import {showLoading} from "../modules/core/managers/LoadingManager";
+import {handleError} from "../modules/core/managers/ErrorManager";
 
 export type MediaFile = {
 	size: number

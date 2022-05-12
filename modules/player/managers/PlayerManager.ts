@@ -5,8 +5,8 @@ import {storageMgr} from "../../core/managers/StroageManager";
 import {Player} from "../data/Player";
 import {PromiseUtils} from "../../../utils/PromiseUtils";
 import {blockLoading, showLoading} from "../../core/managers/LoadingManager";
-import {handleError} from "../../core/managers/AlertManager";
 import {DataLoader} from "../../core/data/DataLoader";
+import {handleError} from "../../core/managers/ErrorManager";
 
 const Login: Itf<
   {openid: string, player: Partial<Player>},

@@ -3,12 +3,12 @@
 import {BaseManager, getManager, manager} from "./BaseManager";
 import {DataLoader} from "../data/DataLoader";
 import {StringUtils} from "../../../utils/StringUtils";
-import {alertMgr, ErrorData} from "./AlertManager";
+import {alertMgr} from "./AlertManager";
 import {loadingMgr, LoadingOptions, LoadingParam} from "./LoadingManager";
 import {loading} from "../BaseAssist";
 
-const Host = "https://junxuntong-server-1849524-1310094760.ap-shanghai.run.tcloudbase.com";
-// const Host = "http://localhost:8086";
+// const Host = "https://junxuntong-server-1849524-1310094760.ap-shanghai.run.tcloudbase.com";
+const Host = "http://localhost:8090";
 
 const Request = loading(100001, "请求中", true);
 const DefaultTimeOut = 120000;
@@ -240,3 +240,4 @@ class NetworkManager extends BaseManager {
 }
 
 import {appMgr} from "./AppManager";
+import {ErrorData} from "./ErrorManager";

@@ -22,13 +22,14 @@ class DataLoaderError extends Error {
 }
 
 type DataSetting = {
-	default: any,
+	default: any
 	properties: {
 		[K: string]: {
 			type: Constructor | Constructor[], default: any
 		}
 	},
 	occasions: {[K: string]: number}
+	dataPK: string
 }
 const DataSettingKey = "setting";
 
@@ -88,13 +89,25 @@ export function occasion(...occasions: DataOccasion[]) {
 	};
 }
 
+/**
+ * 业务主键
+ */
+export function dataPK(obj: any, key: string) {
+	const clazz = obj.constructor;
+	const setting = DataLoader.getSetting(clazz);
+	if (setting.dataPK)
+		throw `${clazz.name}重复定义主键！！已有主键：${setting.dataPK}，第二次注明的主键：${key}`;
+	setting.dataPK = key;
+}
+
 export class DataLoader {
 
 	public static getSetting<T extends BaseData>(type: Constructor<T>) {
 		return getMetaData<DataSetting>(
 			type, DataSettingKey, {
 				default: new type(),
-				properties: {}, occasions: {}
+				properties: {}, occasions: {},
+				dataPK: undefined
 			});
 	}
 
@@ -104,9 +117,9 @@ export class DataLoader {
 	private static getProperties<T extends BaseData>(type: Constructor<T>) {
 		return this.getSetting(type).properties;
 	}
-	// private static getAssetFields<T extends BaseData>(type: Constructor<T>) {
-	// 	return this.getSetting(type).assetFields;
-	// }
+	public static getDataPK<T extends BaseData>(type: Constructor<T>) {
+		return this.getSetting(type).dataPK;
+	}
 
 	// region 读取（反序列化）
 

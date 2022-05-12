@@ -14,9 +14,7 @@ export class BaseData  {
 
 	onCreated?() {}
 
-	toJSON?() {
-		return DataLoader.convert(this);
-	}
+	toJSON?() { return DataLoader.convert(this); }
 }
 
 export class MainData extends BaseData {
@@ -26,7 +24,7 @@ export class MainData extends BaseData {
 
 }
 
-export function ifStatus<T>(...statuses: T[]) {
+export function ifState<T>(...statuses: T[]) {
 	return (obj, key, desc) => {
 		const oriFunc = desc.value;
 		desc.value = async function(...p) {
@@ -35,7 +33,7 @@ export function ifStatus<T>(...statuses: T[]) {
 		}
 	}
 }
-export function ensureStatus<T>(throw_: Function | string, ...statuses: T[]) {
+export function ensureState<T>(throw_: Function | string, ...statuses: T[]) {
 	return (obj, key, desc) => {
 		const oriFunc = desc.value;
 		desc.value = async function(...p) {
@@ -47,20 +45,20 @@ export function ensureStatus<T>(throw_: Function | string, ...statuses: T[]) {
 	}
 }
 
-export class StatusData<T> extends MainData {
+export class StateData<T> extends MainData {
 
 	@field
-	public status: T;
+	public state: T;
 	@field(Number)
-	public statusTime: number;
+	public stateTime?: number;
 	@field(String)
-	public statusDesc: string;
+	public stateDesc?: string;
 
 	/**
 	 * 状态变更时间文本
 	 */
 	public get statusTimeStr() {
-		return DateUtils.time2Str(this.statusTime);
+		return DateUtils.time2Str(this.stateTime);
 	}
 
 	// region 状态控制
@@ -69,17 +67,17 @@ export class StatusData<T> extends MainData {
 	 * 更改状态
 	 */
 	public changeStatus(status: T, desc?: string) {
-		this.status = status;
-		this.statusTime = Date.now();
-		this.statusDesc = desc;
+		this.state = status;
+		this.stateTime = Date.now();
+		this.stateDesc = desc;
 	}
 
 	/**
 	 * 判断状态
-	 * @param statuses
+	 * @param states
 	 */
-	public isStatus(...statuses: T[]) {
-		return statuses.includes(this.status);
+	public isState(...states: T[]) {
+		return states.includes(this.state);
 	}
 
 	// endregion

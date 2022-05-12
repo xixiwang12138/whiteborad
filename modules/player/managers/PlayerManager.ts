@@ -1,24 +1,24 @@
-import {Itf, post} from "../../core/BaseAssist";
+import {get, Itf, post} from "../../core/BaseAssist";
 import {BaseManager, getManager, manager} from "../../core/managers/BaseManager";
 import {appMgr} from "../../core/managers/AppManager";
 import {storageMgr} from "../../core/managers/StroageManager";
-import {Player} from "../data/Player";
+import {Player, WxUserInfo} from "../data/Player";
 import {PromiseUtils} from "../../../utils/PromiseUtils";
 import {blockLoading, showLoading} from "../../core/managers/LoadingManager";
-import {handleError} from "../../core/managers/AlertManager";
 import {DataLoader} from "../../core/data/DataLoader";
+import {handleError} from "../../core/managers/ErrorManager";
 
 const Login: Itf<
-  {openid: string, player: Partial<Player>},
-  {player: Partial<Player>, token: string}>
+  {openid: string, userInfo: WxUserInfo},
+  {player: Player, token: string}>
   = post("/player/player/login", false);
 const Logout: Itf = post("/player/player/logout");
 const GetOpenid: Itf<{code: string}, {openid: string}>
-  = post("/player/player/get_openid", false);
+  = post("/player/openid/get", false);
 const GetPhone: Itf<{code: string}, {phone: string}>
-  = post("/player/player/get_phone");
+  = post("/player/phone/get");
 const GetInfo: Itf<{}, {player: Player}>
-  = post("/player/player/get");
+  = get("/player/player/get");
 
 export function waitForLogin(obj, key, desc) {
   const oriFunc = desc.value;
@@ -77,24 +77,24 @@ export class PlayerManager extends BaseManager {
   @showLoading
   @blockLoading
   @handleError(true)
-  public async login(player?: Partial<Player>) {
+  public async login(userInfo?: WxUserInfo) {
     // 如果已经登陆了，直接返回用户数据
     if (this.isLogin) return this.player;
 
     // 如果没有userInfo缓存，则自动登陆失败
-    if (!(player ||= this.player)) return null;
+    if (!(userInfo ||= this.player)) return null;
     // 否则，可以进行自动登录
 
     // 如果没有openid缓存，手动获取openid
     this.openid ||= await this.getOpenid();
 
     const res = await Login({
-      openid: this.openid, player
+      openid: this.openid, userInfo
     });
     appMgr().setupToken(res.token);
 
-    player = DataLoader.load(Player, res.player);
-    return this.player = player as Player;
+    userInfo = DataLoader.load(Player, res.player);
+    return this.player = userInfo as Player;
   }
 
   /**

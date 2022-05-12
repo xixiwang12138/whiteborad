@@ -2,6 +2,7 @@ import {MainData, PK} from "./BaseData";
 import {dataMgr} from "../managers/DataManager";
 import {getSingleton, singleton} from "../../../utils/SingletonUtils";
 import {BaseContext, Constructor} from "../BaseContext";
+import {StaticData} from "./StaticData";
 
 @singleton
 export class RepositoryContext extends BaseContext<BaseRepository<any>> {
@@ -52,11 +53,22 @@ export function throwMessage(
 export type AutoMatchType = "find" | "findOne" |
 	"get" | "getOne" | "exist" | "count" | "ensure" | "ensureNot";
 
-const DefaultThrowFunc = () => {throw null};
+export const DefaultThrowFunc = (data) => {
+	console.error(data);
+	throw "Ensure/Get Error!"
+};
 
-export abstract class BaseRepository<T extends MainData> {
+export type F<T extends MainData> = Partial<T>;
+
+export abstract class BaseRepository<T extends StaticData> {
 
 	public abstract get clazz(): Constructor<T>;
+
+	private idMap: {[T: number]: string} = {};
+
+	constructor() {
+		this.processFuncs();
+	}
 
 	// region 预设函数
 
@@ -68,52 +80,57 @@ export abstract class BaseRepository<T extends MainData> {
 		return dataMgr().getDataById(this.clazz, id);
 	}
 
-	public find(filter: Partial<T> = {}) {
+	public find(filter: F<T> = {}) {
+		const keys = Object.keys(filter);
+		if (keys.length <= 0) return this.list;
 		return this.list.filter(item =>
-			Object.keys(filter).every(key =>
-				item[key] == filter[key])
+			keys.every(key => item[key] == filter[key])
 		);
 	}
-	public findOne(filter: Partial<T> = {}) {
+	public findOne(filter: F<T> = {}) {
+		const keys = Object.keys(filter);
+		if (keys.length <= 0) return this.list[0];
+		if ("id" in filter) { // 如果存在业务主键
+			const id = filter.id;
+			const _id = this.idMap[id] ||=
+				this.list.find(item => item.id == id)._id;
+			const res = this.doc(_id);
+			return keys.every(key => res[key] == filter[key]) ? res : null;
+		}
 		return this.list.find(item =>
-			Object.keys(filter).every(key =>
-				item[key] == filter[key])
+			keys.every(key => item[key] == filter[key])
 		);
 	}
 
-	public getOne(filter: Partial<T> = {},
-											throwFunc: Function = DefaultThrowFunc) {
+	public getOne(filter: F<T> = {},
+								throwFunc: Function = DefaultThrowFunc) {
 		const res = this.findOne(filter);
 		// 找不到，抛出异常。如果没有用throwMessage修饰，需要在外部通过catchAsError接收
-		if (res == null) throwFunc();
+		if (res == null) throwFunc({repo: this, filter});
 		return res;
 	}
-	// @throwMessage("找不到指定ID的数据")
-	public getById(id: PK) {
-		return this.getOne({_id: id} as any);
+	@throwMessage("找不到指定ID的数据")
+	public getById(id: number) {
+		return this.getOne({id} as any);
 	}
 
-	public count(filter: Partial<T> = {}) {
+	public count(filter: F<T> = {}) {
 		return this.find(filter).length;
 	}
-	public exist(filter: Partial<T> = {}) {
+	public exist(filter: F<T> = {}) {
 		return this.count(filter) > 0;
 	}
 
-	public ensure(filter: Partial<T> = {},
-											throwFunc: Function = DefaultThrowFunc) {
-		if (!this.findOne(filter)) throwFunc();
+	public ensure(filter: F<T> = {},
+								throwFunc: Function = DefaultThrowFunc) {
+		if (!this.findOne(filter)) throwFunc({repo: this, filter});
 	}
-	public ensureNot(filter: Partial<T> = {},
-												 throwFunc: Function = DefaultThrowFunc) {
-		if (this.findOne(filter)) throwFunc();
+	public ensureNot(filter: F<T> = {},
+									 throwFunc: Function = DefaultThrowFunc) {
+		if (this.findOne(filter)) throwFunc({repo: this, filter});
 	}
 
 	// endregion
-
-	protected constructor() {
-		this.processFuncs();
-	}
 
 	private processFuncs() {
 		const proto = this.constructor.prototype;
@@ -168,7 +185,7 @@ export abstract class BaseRepository<T extends MainData> {
 		const res = {};
 		keys.forEach((key, i) =>
 			res[this.convertKey(key)] = p[i]);
-		return res as Partial<T>;
+		return res as F<T>;
 	}
 	private convertKey(key) {
 		return key.charAt(0).toLowerCase() + key.slice(1);
@@ -207,10 +224,7 @@ export abstract class BaseRepository<T extends MainData> {
 	private getThrowFunc(name): Function {
 		const funcs = this.constructor["throwFuncs"];
 		const res = funcs ? funcs[name] : null;
-		return res || (() => {
-			console.error(this, name);
-			throw "Get/Ensure失败"
-		});
+		return res || (() => {throw null});
 	}
 
 }

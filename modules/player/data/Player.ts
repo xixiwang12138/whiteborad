@@ -1,20 +1,40 @@
-import {MainData} from "../../core/data/BaseData";
-import {field} from "../../core/data/DataLoader";
+import {MainData, StateData} from "../../core/data/BaseData";
+import {dataPK, field} from "../../core/data/DataLoader";
+import {DynamicData} from "../../core/data/DynamicData";
+
+export type WxUserInfo = {
+	nickName: string,
+	avatarUrl: string
+}
 
 export enum PlayerState {
 	Normal, Banned
 }
 
-export class Player extends MainData {
+export interface IPlayerData {
+	openid: string;
+}
 
-	@field
-	public openid: string = "";
+export abstract class PlayerData extends DynamicData implements IPlayerData {
+
+	@field(String)
+	@dataPK
+	public openid: string;
+
+}
+
+export class Player extends StateData<PlayerState> {
+
+	@field @dataPK
+	public openid: string;
 	@field
 	public chainId: number;
 	@field
 	public account: string = "";
 	@field
 	public name: string = "";
+	@field
+	public nickName: string = ""; // 微信名称
 	@field(String)
 	public phone: string;
 	@field
@@ -27,6 +47,10 @@ export class Player extends MainData {
 	public level: number = 1;
 	@field
 	public exp: number = 0;
+
+	@field(String)
+	public inviteCode: string;
+
 	@field(Number)
 	public characterId: number;
 	@field(Number)
@@ -37,9 +61,5 @@ export class Player extends MainData {
 
 	@field(Number)
 	public state: PlayerState = PlayerState.Normal;
-	@field(Number)
-	public stateTime: number;
-	@field(String)
-	public stateDesc?: string;
 
 }

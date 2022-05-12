@@ -1,5 +1,11 @@
+import {AppError} from "./managers/ErrorManager";
 
 export type Itf<I = any, O = any> = (data?: I) => Promise<O>
+
+export function error(code: number, errMsg?: string,
+                      alert?: AlertParam, detail?: string) {
+  return new AppError(code, errMsg, alert, detail);
+}
 
 export function loading(code: number, title?: string,
                         mask: boolean = false) {
@@ -45,5 +51,5 @@ function makeInterfaceOption(method: Method,
 }
 
 import {AppLoading} from "./managers/LoadingManager";
-import {AlertOptions, AppModal, AppToast, IconType} from "./managers/AlertManager";
+import {AlertOptions, AlertParam, AppModal, AppToast, IconType} from "./managers/AlertManager";
 import {Interface, InterfaceOptions, Method, networkMgr} from "./managers/NetworkManager";

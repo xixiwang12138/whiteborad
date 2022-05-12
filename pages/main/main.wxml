@@ -2,3 +2,4 @@
 <view class="container">
 
 </view>
+<real-tab-bar curPageIndex="0"></real-tab-bar>

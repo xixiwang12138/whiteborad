@@ -4,13 +4,53 @@ import {playerMgr} from "../../modules/player/managers/PlayerManager";
 import {PlayerPage} from "../common/partPages/PlayerPage";
 
 class Data extends BasePageData {
-
+	roomList:[{
+		name:string,
+		nickName:string,
+		level:number,
+		thumbnail:string
+	}]
 }
 
 @page("square", "广场")
 export class SquarePage extends BasePage<Data> {
 
 	public data = new Data();
+
+	@pageFunc
+	async onLoad(e) {
+		super.onLoad(e);
+
+		this.setData({
+			// @ts-ignore
+			roomList:[{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail:"../../assets/square/room.jpg"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail:"../../assets/square/room.jpg"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail:"../../assets/square/room.jpg"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail:"../../assets/square/room.jpg"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail:"../../assets/square/room.jpg"
+			}]
+		})
+	}
 
 	/**
 	 * 部分页

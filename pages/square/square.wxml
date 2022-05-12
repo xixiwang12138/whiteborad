@@ -1,4 +1,41 @@
 <!--square.wxml-->
 <view class="container">
+  <view class="container-top">
+    <view class="userInfo">
+      <view class="userInfo-gold-level">
+        <view class="userInfo-gold">
+          <image class="goldImg" src="../../assets/square/gold.png" mode="widthFix"></image>
+          <text>1634</text>
+        </view>
+        <view class="userInfo-level">
+          <text>3级</text>
+          <progress percent="80" stroke-width="10" color="white" border-radius="10"></progress>
+        </view>
+      </view>
+      <view class="userInfo-avatar">
+        <image class="avatarImg" src="../../assets/square/room.jpg" mode="widthFix"></image>
+      </view>
+      <view class="userInfo-nickName">测试君</view>
+    </view>
+    <view class="search">
+      <input value="输入ID以搜索" />
+    </view>
+  </view>
+  <scroll-view class="roomScroll" scroll-y="true">
+    <view class="roomList">
+      <view class="room" wx:for="{{roomList}}">
+        <image src="{{item.thumbnail}}" mode="widthFix" class="room-thumbnail"></image>
+        <view class="room-desc">
+          <text class="room-nickName">{{item.nickName}}'s</text>
+          <view class="room-level-name">
+            <text class="room-level">{{item.level}}</text>
+            <text class="room-name">{{item.name}}</text>
+          </view>
+        </view>
+
+      </view>
+    </view>
+  </scroll-view>
 
 </view>
+<real-tab-bar curPageIndex="1"></real-tab-bar>

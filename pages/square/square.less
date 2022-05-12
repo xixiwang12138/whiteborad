@@ -1,0 +1,155 @@
+page {
+  background-color: pink;
+}
+
+.container {
+
+  .container-top {
+    position: fixed;
+    top: 50rpx;
+    width: 100%;
+    z-index: 2;
+    display: flex;
+
+    justify-content: space-between;
+
+
+    height: 300rpx;
+
+    .userInfo {
+      width: 100%;
+
+      display: flex;
+      flex-direction: column;
+
+      justify-content: center;
+
+      .userInfo-gold-level {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 80%;
+
+        padding-left: 32rpx;
+
+        border: 1rpx solid gray;
+        border-top-right-radius: 32rpx;
+        border-bottom-right-radius: 32rpx;
+
+        .userInfo-gold {
+          display: flex;
+          align-items: center;
+
+          flex: 2;
+
+          .goldImg {
+            width: 32rpx;
+          }
+        }
+
+        .userInfo-level {
+          display: flex;
+          flex: 2;
+
+          progress {
+            width: 50%;
+          }
+        }
+      }
+
+      .userInfo-avatar {
+        margin: 16rpx 32rpx;
+
+        .avatarImg {
+          border-radius: 50%;
+          width: 128rpx;
+        }
+      }
+
+      .userInfo-nickName {
+        width: fit-content;
+
+        padding: 8rpx 64rpx;
+
+        text-align: center;
+        border: 1rpx solid gray;
+        border-top-right-radius: 32rpx;
+        border-bottom-right-radius: 32rpx;
+      }
+    }
+
+    .search {
+      align-self: flex-end;
+      margin: 64rpx 0;
+      padding: 8rpx 32rpx;
+      background-color: rgba(0, 0, 0, 0.24);
+
+      border-radius: 8rpx;
+
+      input {
+        padding: 8rpx 8rpx;
+        background-color: white;
+        border-radius: 16rpx;
+      }
+    }
+  }
+
+  .roomScroll {
+    position: fixed;
+    bottom: 200rpx;
+    height: 1100rpx;
+    background-color: pink !important;
+
+    .roomList {
+      display: flex;
+      flex-flow: row wrap;
+      width: 100%;
+
+      .room {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
+
+        .room-thumbnail {
+          width: 120%;
+        }
+
+        .room-desc {
+          width: 100%;
+
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          position: relative;
+          bottom: 70rpx;
+
+          .room-nickName {
+            margin: 16rpx 0;
+          }
+
+          .room-level-name {
+            width: 50%;
+            padding: 12rpx 42rpx;
+
+            display: flex;
+            justify-content: space-between;
+
+            border-radius: 16rpx;
+
+            background-color: rgba(0, 0, 0, 0.123);
+            color: white;
+
+            .room-level {
+              margin: 0 8rpx;
+            }
+          }
+        }
+
+      }
+    }
+  }
+}

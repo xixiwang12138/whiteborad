@@ -1,16 +1,39 @@
 {
-  "pages":[
+  "pages": [
     "pages/login/login",
     "pages/main/main",
     "pages/square/square",
     "pages/mine/mine",
     "pages/visit/visit"
   ],
-  "window":{
-    "backgroundTextStyle":"light",
+  "window": {
+    "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "Weixin",
-    "navigationBarTextStyle":"black"
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+    "backgroundColor": "#ffffff",
+    "list": [{
+        "pagePath": "pages/main/main",
+        "text": "主页",
+        "iconPath": "assets/tabbar/main.png",
+        "selectedIconPath": "assets/tabbar/main-selected.png"
+      },
+      {
+        "pagePath": "pages/square/square",
+        "text": "广场",
+        "iconPath": "assets/tabbar/square.png",
+        "selectedIconPath": "assets/tabbar/square-selected.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "assets/tabbar/mine.png",
+        "selectedIconPath": "assets/tabbar/mine-selected.png"
+      }
+    ]
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

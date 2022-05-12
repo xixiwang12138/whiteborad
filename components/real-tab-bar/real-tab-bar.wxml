@@ -1,0 +1,8 @@
+<!--components/real-tab-bar/real-tab-bar.wxml-->
+<view class="container">
+  <view class="tab-bar-border"></view>
+  <view wx:for="{{pages}}" wx:key="index" data-item="{{item}}" data-index="{{index}}" class="{{item.command ? 'main-button': 'menu-item'}}" bindtap="onTap">
+    <image class="{{item.command && showMainMenu && 'animation'}}" src="{{index == curPageIndex ? item.selectedIconPath : item.iconPath}}" mode="{{item.command ? 'widthFix': 'aspectFit'}}" />
+    <!-- <text style="color: {{curPageIndex === index ? selectedColor : color}}">{{item.text}}</text> -->
+  </view>
+</view>

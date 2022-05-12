@@ -1,8 +1,4 @@
 
-import {Interface, InterfaceOptions, Method, networkMgr} from "./managers/NetworkManager";
-import {AppLoading} from "./managers/LoadingManager";
-import {AlertOptions, AppModal, AppToast, IconType} from "./managers/AlertManager";
-
 export type Itf<I = any, O = any> = (data?: I) => Promise<O>
 
 export function loading(code: number, title?: string,
@@ -47,3 +43,7 @@ function makeInterfaceOption(method: Method,
   if (res.useToken === undefined) res.useToken = true;
   return res;
 }
+
+import {AppLoading} from "./managers/LoadingManager";
+import {AlertOptions, AppModal, AppToast, IconType} from "./managers/AlertManager";
+import {Interface, InterfaceOptions, Method, networkMgr} from "./managers/NetworkManager";

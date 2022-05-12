@@ -10,7 +10,8 @@
     "newFeature": false,
     "coverView": true,
     "nodeModules": false,
-    "autoAudits": false,
+    "enhance": true,
+    "useMultiFrameRuntime": true,
     "showShadowRootInWxmlPanel": true,
     "scopeDataCheck": false,
     "uglifyFileName": false,
@@ -50,7 +51,5 @@
     "ignore": [],
     "include": []
   },
-  "appid": "wxd1456ddc8b073f35",
-  "projectname": "Homi",
-  "condition": {}
+  "appid": "wxd1456ddc8b073f35"
 }

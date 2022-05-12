@@ -4,8 +4,9 @@ import {playerMgr} from "../../modules/player/managers/PlayerManager";
 import {PlayerPage} from "../common/partPages/PlayerPage";
 
 const LoginDesc = "个人信息仅用于展示";
-
+const isLogin=false;
 class Data extends BasePageData {}
+
 
 @page("login", "登陆")
 export class LoginPage extends BasePage<Data> {
@@ -15,7 +16,15 @@ export class LoginPage extends BasePage<Data> {
 	/**
 	 * 部分页
 	 */
-	public playerPage: PlayerPage = new PlayerPage();
+	 public playerPage: PlayerPage = new PlayerPage();
+
+	//测试登陆事件
+	@pageFunc
+ public login(){
+	this.setData({
+		isLogin:true
+	})
+}
 
 	// region 事件
 

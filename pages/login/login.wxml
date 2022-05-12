@@ -1,4 +1,33 @@
 <!--square.wxml-->
 <view class="container">
-
+  <view class="page">
+   <view class="block1" >
+   <image class="logo{{isLogin?'-1':''}}" src="../../images/logo.png"></image>
+   </view>
+   <view class="block2{{isLogin?'-1':''}}" >
+   <image class="avatar" src="../../images/avatar.jpeg" mode="aspectFill"></image>
+   </view>
+   <view class="block4" wx:if="{{isLogin}}">
+    <view class="name">
+    <input class="name-input" placeholder="测试君"/>
+    </view>
+   </view>
+   <view class="block5" wx:if="{{isLogin}}">
+    <view class="male">
+    <text class="gender-text">男</text>
+    </view>
+    <view class="female">
+    <text class="gender-text">女</text>
+    </view>
+   </view>
+   <view class="block6" wx:if="{{isLogin}}">
+   <textarea class="slogan" placeholder="好好学习加油买房!" adjust-position="{{false}}" focus="{{false}}" maxlength="50" cursor-spacing="10"/>
+   </view>
+   <view class="block3{{isLogin?'-1':''}}">
+    <view class="login">
+    <text class="login-text" wx:if="{{!isLogin}}" bindtap="login">登陆</text>
+    <text class="login-text" wx:if="{{isLogin}}" >注册</text>
+    </view>
+   </view>
+  </view>
 </view>

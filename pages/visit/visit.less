@@ -1,0 +1,146 @@
+page {
+  background-color: pink;
+}
+
+.container {
+
+  .container-top {
+    position: fixed;
+    top: 50rpx;
+    width: 100%;
+    z-index: 2;
+    display: flex;
+
+    justify-content: space-between;
+
+
+    height: 300rpx;
+
+    .userInfo {
+      width: 50%;
+
+      display: flex;
+      flex-direction: column;
+
+      justify-content: center;
+
+      .userInfo-gold-level {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        width: 80%;
+
+        padding-left: 32rpx;
+
+        border: 1rpx solid gray;
+        border-top-right-radius: 32rpx;
+        border-bottom-right-radius: 32rpx;
+
+        .userInfo-gold {
+          display: flex;
+          align-items: center;
+
+          flex: 2;
+
+          .goldImg {
+            width: 32rpx;
+          }
+        }
+
+        .userInfo-level {
+          display: flex;
+          flex: 2;
+
+          progress {
+            width: 50%;
+            margin: 0 16rpx;
+          }
+        }
+      }
+
+      .userInfo-avatar {
+        margin: 16rpx 32rpx;
+
+        .avatarImg {
+          border-radius: 50%;
+          width: 100rpx;
+        }
+      }
+
+      .userInfo-nickName {
+        width: fit-content;
+
+        padding: 8rpx 48rpx;
+
+        text-align: center;
+        border: 1rpx solid gray;
+        border-top-right-radius: 32rpx;
+        border-bottom-right-radius: 32rpx;
+      }
+    }
+
+
+
+    .btn-set {
+      display: flex;
+      flex-direction: column;
+      align-self: flex-end;
+
+      margin: 0 32rpx;
+
+      .btn {
+        margin: 8rpx 0;
+        width: 64rpx;
+      }
+    }
+  }
+
+  .room-name {
+    position: fixed;
+    left: 32%;
+    right: 32%;
+    top: 11%;
+
+    width: 36%;
+    height: 5%;
+
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    //padding: 64rpx 80rpx;
+
+    background-color: white;
+
+    border-radius: 32rpx;
+
+    .text {
+      height: fit-content;
+      font-size: 32rpx;
+    }
+  }
+
+  .focus-btn {
+    position: fixed;
+    left: 28%;
+    right: 28%;
+    bottom: 15%;
+
+    width: 44%;
+    height: 6%;
+
+    background-color: white;
+    border-radius: 64rpx;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .text {
+      font-size: 36rpx;
+      font-weight: bold;
+    }
+  }
+}

@@ -1,5 +1,6 @@
 {
   "usingComponents": {
     "real-tab-bar": "../../components/real-tab-bar/real-tab-bar"
-  }
+  },
+  "navigationStyle": "custom"
 }

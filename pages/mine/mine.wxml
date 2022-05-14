@@ -4,7 +4,7 @@
   <scroll-view scroll-y="{{true}}" >
     <view class="block1">
       <view class="border">
-      <image src="../../images/avatar.jpeg" class="icon1"></image>
+      <image src="../../images/coins.png" class="icon1"></image>
       <text class="text1">4396</text>
       <text class="text2">3级</text>
       <view class="mod1">
@@ -36,7 +36,7 @@
           </view>
           <text class="text6">进入房间</text>
           <view class="label">
-            <image src="../../images/avatar.jpeg" class="star"></image>
+            <image src="../../images/star.png" class="star"></image>
             <image src="../../images/enter.png" class="enter"></image>
           </view>
         </view>
@@ -52,7 +52,7 @@
           </view>
           <text class="text6">进入房间</text>
           <view class="label">
-            <image src="../../images/avatar.jpeg" class="star"></image>
+            <image src="../../images/star.png" class="star"></image>
             <image src="../../images/enter.png" class="enter"></image>
           </view>
         </view>
@@ -68,7 +68,7 @@
           </view>
           <text class="text6">进入房间</text>
           <view class="label">
-            <image src="../../images/avatar.jpeg" class="star"></image>
+            <image src="../../images/star.png" class="star"></image>
             <image src="../../images/enter.png" class="enter"></image>
           </view>
         </view>
@@ -84,7 +84,7 @@
           </view>
           <text class="text6">进入房间</text>
           <view class="label">
-            <image src="../../images/avatar.jpeg" class="star"></image>
+            <image src="../../images/star.png" class="star"></image>
             <image src="../../images/enter.png" class="enter"></image>
           </view>
         </view>
@@ -100,7 +100,7 @@
           </view>
           <text class="text6">进入房间</text>
           <view class="label">
-            <image src="../../images/avatar.jpeg" class="star"></image>
+            <image src="../../images/star.png" class="star"></image>
             <image src="../../images/enter.png" class="enter"></image>
           </view>
         </view>

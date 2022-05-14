@@ -3,8 +3,11 @@
   <view class="page">
    <view class="block1" >
    <image class="logo{{isLogin?'-1':''}}" src="../../images/logo.png"></image>
+   <view class="HOMI" wx:if="{{!isLogin}}">
+   <text class="HOMI-text">HOMI</text>
    </view>
-   <view class="block2{{isLogin?'-1':''}}" >
+   </view>
+   <view class="block2-1" wx:if="{{isLogin}}">
    <image class="avatar" src="../../images/avatar.jpeg" mode="aspectFill"></image>
    </view>
    <view class="block4" wx:if="{{isLogin}}">
@@ -24,9 +27,9 @@
    <textarea class="slogan" placeholder="好好学习加油买房!" adjust-position="{{false}}" focus="{{false}}" maxlength="50" cursor-spacing="10"/>
    </view>
    <view class="block3{{isLogin?'-1':''}}">
-    <view class="login">
-    <text class="login-text" wx:if="{{!isLogin}}" bindtap="login">登陆</text>
-    <text class="login-text" wx:if="{{isLogin}}" >注册</text>
+    <view class="login{{isLogin?'':'-1'}}">
+    <text class="login-text1" wx:if="{{!isLogin}}" bindtap="login">请使用微信登录</text>
+    <text class="login-text" wx:if="{{isLogin}}">完成</text>
     </view>
    </view>
   </view>

@@ -4,7 +4,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: rgba(38,34,57,1);
+  background:-webkit-linear-gradient(top,#FFFFFF,#C0A0C7)
 }
 @keyframes zoomOutDown1 {
   0% {
@@ -109,15 +109,29 @@
 .block1{
   // opacity: 0;
   position: relative;
-  top: 10vh;
+  top: 12vh;
   margin-left: auto;
   margin-right: auto;
 }
 .logo{
   opacity: 1;
   animation:2s linear 0s  alternate zoomOutDown1;
-  width: 60vw;
-  height: 54vw;
+  width: 100vw;
+  height: 90vw;
+}
+.HOMI{
+  animation:2.4s linear 0s  alternate zoomOutDown1;
+  position: relative;
+  bottom: 7.5vh;
+  height: 9vh;
+  width: 36.4vw;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.HOMI-text{
+  color: white;
+  font-size: 13vw;
 }
 .logo-1{
   opacity: 0;
@@ -126,7 +140,8 @@
   height: 54vw;
 }
 .block2{
-  animation:2.4s linear 0s  alternate zoomOutDown1;
+  opacity: 0;
+  // animation:2.4s linear 0s  alternate zoomOutDown1;
   position: relative;
   top:12vh;
   margin-left: auto;
@@ -136,7 +151,7 @@
 {
   animation:2s linear 0s  alternate zoomOutDown3;
   position: relative;
-  bottom:5vh;
+  bottom:7vh;
   margin-left: auto;
   margin-right: auto;
 }
@@ -149,13 +164,14 @@
   }
 }
 .avatar{
-  animation: animated-border 6s infinite;
-  width: 27vw;
-  height: 27vw;
-  border: 5px solid #D8D8D8;
+  // animation: animated-border 6s infinite;
+  width: 25vw;
+  height: 25vw;
+  border: 6px solid #F4D5D5;
   border-radius: 250rpx;
 }
 .block3{
+  opacity: 1;
   animation:3s linear 0s  alternate zoomOutDown1;
   position: relative;
   top: 22vh;
@@ -165,21 +181,31 @@
 }
 .block3-1
 {
-  animation:2s linear 0s  alternate zoomOutDown4;
+  animation:3.5s linear 0s  alternate zoomOutDown5;
   position: relative;
-  top: 8vh;
+  top: 2.5vh;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
 }
 .login{
-  animation: animated-border 2s infinite;
+  // animation: animated-border 2s infinite;
   height: 4.6vh;
-  border-radius: 16rpx;
-  background-color: rgba(76,67,123,1);
+  border-radius: 10rpx;
+  background-color: #8875B3;
   display: flex;
   flex-direction: column;
-  width: 184rpx;
+  width: 45vw;
+}
+.login-1{
+  position: relative;
+  bottom: 18vh;
+  width: 26vw;
+  height: 2.37vh;
+}
+.login-text1{
+  font-size: 3.7vw;
+  color: #373737;
 }
 .login-text{
   color: rgba(255,255,255,1);
@@ -194,9 +220,9 @@
   margin-right: auto;
 }
 .name{
-  height: 4vh;
+  height: 5vh;
   border-radius: 35rpx;
-  background-color: rgba(0,0,0,0.71);
+  background-color: rgba(0,0,0,0.55);
   width: 303rpx;
   text-align: center;
 }
@@ -204,12 +230,14 @@
   height: 3vh;
   width: 30vw;
   position: relative;
-  top: 0.6vh;
+  top: 0.8vh;
   margin-left: auto;
   margin-right: auto;
-  color: white;
+  color: rgba(255,255,255,1);
 }
 .block5{
+  position: relative;
+  bottom: 1vh;
   animation:2.6s linear 0s  alternate zoomOutDown5;
   width: 235rpx;
   height: 63rpx;
@@ -242,12 +270,12 @@
   animation:3.1s linear 0s  alternate zoomOutDown5;
   height: 11.4vh;
   border-radius: 16rpx;
-  border: 1px solid rgba(38,33,57,1);
+  // border: 1px solid rgba(38,33,57,1);
   background-color: rgba(255,255,255,1);
   width: 468rpx;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 3vh;
+  margin-top: 1vh;
 }
 .slogan{
   width: 50vw;

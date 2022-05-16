@@ -1,5 +1,5 @@
 page {
-  background-color: pink;
+  background: -webkit-linear-gradient(top, #C7E1FA, #4F8DCC);
 }
 
 .container {
@@ -8,91 +8,53 @@ page {
     position: fixed;
     top: 4%;
     width: 100%;
-    z-index: 2;
     display: flex;
 
     justify-content: space-between;
 
-
-    height: 20%;
+    height: 15%;
 
     .userInfo {
-      width: 55%;
 
       display: flex;
       flex-direction: column;
 
       justify-content: center;
 
-      .userInfo-gold-level {
-
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        width: 85%;
-
-        padding-left: 32rpx;
-
-        border: 1rpx solid gray;
-        border-top-right-radius: 32rpx;
-        border-bottom-right-radius: 32rpx;
-
-        .userInfo-gold {
-          display: flex;
-          align-items: center;
-
-          flex: 2;
-
-          .goldImg {
-            width: 32rpx;
-          }
-        }
-
-        .userInfo-level {
-          display: flex;
-          flex: 2;
-
-          progress {
-            width: 50%;
-            margin: 0 16rpx;
-          }
-        }
-      }
 
       .userInfo-avatar {
-        margin: 16rpx 32rpx;
+        margin: 8rpx 32rpx;
 
         .avatarImg {
           border-radius: 50%;
-          width: 100rpx;
+          width: 110rpx;
         }
       }
 
       .userInfo-nickName {
         width: fit-content;
 
-        padding: 8rpx 48rpx;
+        padding: 4rpx 48rpx;
 
         text-align: center;
         border: 1rpx solid gray;
         border-top-right-radius: 32rpx;
         border-bottom-right-radius: 32rpx;
+
+        font-size: 29rpx;
       }
     }
-
-
 
     .btn-set {
       display: flex;
       flex-direction: column;
       align-self: flex-end;
 
-      margin: 0 32rpx;
+      margin: 0rpx 32rpx;
 
       .btn {
         margin: 8rpx 0;
-        width: 64rpx;
+        width: 60rpx;
       }
     }
   }
@@ -110,7 +72,6 @@ page {
     text-align: center;
     align-items: center;
     justify-content: center;
-    //padding: 64rpx 80rpx;
 
     background-color: white;
 
@@ -119,6 +80,50 @@ page {
     .text {
       height: fit-content;
       font-size: 32rpx;
+    }
+  }
+
+  .gold-level {
+    margin-top: 15%;
+    margin-bottom: 5%;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: fit-content;
+    width: 45%;
+
+    padding-left: 16rpx;
+
+    border: 1rpx solid gray;
+    border-radius: 12rpx;
+
+    .gold {
+      display: flex;
+      align-items: center;
+
+      .goldImg {
+        width: 36rpx;
+      }
+    }
+
+    .level {
+      display: flex;
+      width: 60%;
+
+      .text {
+        width: fit-content;
+        word-break: keep-all; //否则会自动换行
+        text-align: center;
+      }
+
+      progress {
+        width: 100%;
+        margin: 0 16rpx;
+      }
     }
   }
 
@@ -143,4 +148,177 @@ page {
       font-weight: bold;
     }
   }
+}
+
+van-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+
+  .start-config {
+
+    border-radius: 64rpx;
+    background-color: white;
+    margin: auto auto;
+    display: flex;
+    flex-direction: column;
+    //justify-content: center;
+    align-items: center;
+    z-index: 2;
+
+    .start-config-top {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      .top-img {
+        height: 80rpx;
+        margin: 32rpx 32rpx;
+      }
+    }
+
+    .clock-img {
+      width: 270rpx;
+    }
+
+    van-slider {
+      width: 70%;
+      margin: 42rpx 0;
+    }
+
+    .time {
+      margin-bottom: 40rpx;
+
+      text {
+        color: #4895FF;
+        font-size: 35rpx;
+      }
+    }
+
+    .content {
+      margin-bottom: 40rpx;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .desc {
+        font-size: 36rpx;
+      }
+
+      .btn {
+        margin-left: 48rpx;
+        padding: 10rpx 20rpx;
+        background-color: #CADCEF;
+
+        border-radius: 8rpx;
+      }
+    }
+
+    .mode-set {
+      width: 75%;
+
+      margin-bottom: 21rpx;
+
+      display: flex;
+      justify-content: space-between;
+
+      .mode {
+        background-color: #D8D8D8;
+        padding: 20rpx 42rpx;
+
+        font-size: 30rpx;
+        font-weight: bold;
+
+        border-radius: 16rpx;
+      }
+    }
+
+    .text {
+      font-size: 27rpx;
+      font-weight: bold;
+    }
+
+    .start-btn {
+      background-color: #4C7FB3;
+      color: white;
+      padding: 16rpx 110rpx;
+      margin: 32rpx 32rpx;
+      border-radius: 8rpx;
+    }
+
+
+  }
+
+  .room-config {
+    width: 80%;
+    height: 35%;
+    border-radius: 64rpx;
+    background-color: white;
+
+    display: flex;
+    flex-direction: column;
+    //justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto auto;
+
+    .color-block {
+      margin: 30rpx 0;
+
+      .color-topic {
+        text-align: center;
+      }
+
+      .color-set {
+        display: flex;
+
+        .color {
+          width: 64rpx;
+          height: 64rpx;
+
+          margin: 16rpx 16rpx;
+
+          border-radius: 50%;
+
+          background-color: rebeccapurple;
+        }
+      }
+
+    }
+
+    .shade-block {
+
+      .shade-topic {
+        text-align: center;
+      }
+
+      .btn {
+        width: 110rpx;
+        margin: 16rpx 21rpx;
+      }
+    }
+
+    .save-btn {
+      width: 55%;
+      margin: 30rpx 0;
+      padding: 16rpx 0;
+
+      background-color: #4C7FB3;
+
+      border-radius: 16rpx;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+
+      .text {
+        font-size: 36rpx;
+        font-weight: bold;
+      }
+    }
+  }
+
+
 }

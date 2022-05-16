@@ -1,17 +1,8 @@
 <!--square.wxml-->
 <view class="container">
+
   <view class="container-top">
     <view class="userInfo">
-      <view class="userInfo-gold-level">
-        <view class="userInfo-gold">
-          <image class="goldImg" src="../../assets/square/gold.png" mode="widthFix"></image>
-          <text>1634</text>
-        </view>
-        <view class="userInfo-level">
-          <text>3级</text>
-          <progress percent="80" stroke-width="10" color="white" border-radius="10"></progress>
-        </view>
-      </view>
       <view class="userInfo-avatar">
         <image class="avatarImg" src="../../assets/square/room.jpg" mode="widthFix"></image>
       </view>
@@ -20,14 +11,74 @@
 
     <view class="btn-set">
       <image src="../../assets/main/config.png" mode="widthFix" class="btn"></image>
-      <image src="../../assets/main/config.png" mode="widthFix" class="btn"></image>
+      <image src="../../assets/main/config.png" mode="widthFix" class="btn" bindtap="onClickRoomConfig"></image>
+    </view>
+  </view>
+  <view class="gold-level">
+    <view class="gold">
+      <image class="goldImg" src="../../assets/square/gold.png" mode="widthFix"></image>
+      <text>1634</text>
+    </view>
+    <view class="level">
+      <view class="text">{{3}}级</view>
+      <progress percent="80" stroke-width="14" color="white" border-radius="10"></progress>
     </view>
   </view>
   <view class="room-name">
-    <view class="text">摆烂小屋</view>
+    <input class="text" value="摆烂小屋" placeholder="房间名不能为空~"></input>
   </view>
-  <view class="focus-btn">
+  <view class="focus-btn" bindtap="onClickStart">
     <view class="text">专注</view>
   </view>
 </view>
+
+<van-dialog use-slot show="{{ isShowStartConfig }}" showConfirmButton="{{false}}" bind:close="onClickHide" close-on-click-overlay data-windowName="start">
+  <view class="start-config">
+    <view class="start-config-top">
+      <image class="top-img" src="/assets/main/desc.png" mode="heightFix"></image>
+      <image class="top-img" src="/assets/main/close.png" mode="heightFix"></image>
+    </view>
+    <image class="clock-img" src="/assets/main/clock.png" mode="widthFix">
+    </image>
+    <van-slider value="{{time}}" bind:drag="onDragTime" min="0" max="120" />
+    <view class="time">
+      专注时长
+      <text>{{time}}</text>
+      /min
+    </view>
+    <view class="content">
+      <view class="desc">专注内容</view>
+      <view class="btn">沉迷学习</view>
+    </view>
+    <view class="mode-set">
+      <view class="mode">基础模式</view>
+      <view class="mode">反盖模式</view>
+    </view>
+    <view class="text">完成后经验+{{111}} 金币+{{111}}</view>
+    <view class="text">超时后可以继续获得奖励哦～</view>
+    <view class="start-btn">开始专注</view>
+  </view>
+</van-dialog>
+
+<van-dialog use-slot show="{{ isShowRoomConfig}}" showConfirmButton="{{false}}" bind:close="onClickHide" close-on-click-overlay data-windowName="room">
+  <view class="room-config">
+    <view class="color-block">
+      <view class="color-topic">主题色</view>
+      <view class="color-set">
+        <view class="color"></view>
+        <view class="color"></view>
+      </view>
+    </view>
+    <view class="shade-block">
+      <view class="shade-topic">光影</view>
+      <image src="/assets/main/sun.png" class="btn" mode="widthFix"></image>
+      <image src="/assets/main/lunar.png" class="btn" mode="widthFix"></image>
+      <image src="/assets/main/time.png" class="btn" mode="widthFix"></image>
+    </view>
+    <view class="save-btn">
+      <view class="text">保存</view>
+    </view>
+  </view>
+</van-dialog>
+
 <real-tab-bar curPageIndex="0"></real-tab-bar>

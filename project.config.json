@@ -10,7 +10,6 @@
     "newFeature": false,
     "coverView": true,
     "nodeModules": false,
-    "enhance": true,
     "useMultiFrameRuntime": true,
     "showShadowRootInWxmlPanel": true,
     "scopeDataCheck": false,
@@ -20,7 +19,6 @@
     "uploadWithSourceMap": true,
     "compileHotReLoad": false,
     "lazyloadPlaceholderEnable": false,
-    "useMultiFrameRuntime": true,
     "useApiHook": true,
     "useApiHostProcess": true,
     "babelSetting": {
@@ -39,7 +37,9 @@
     "useCompilerPlugins": [
       "less"
     ],
-    "ignoreUploadUnusedFiles": true
+    "ignoreUploadUnusedFiles": true,
+    "autoAudits": false,
+    "useStaticServer": true
   },
   "compileType": "miniprogram",
   "editorSetting": {

@@ -138,3 +138,5 @@
     </view>
    </view>
 </van-popup>
+
+<real-tab-bar curPageIndex="2"></real-tab-bar>

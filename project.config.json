@@ -51,5 +51,7 @@
     "ignore": [],
     "include": []
   },
-  "appid": "wxd1456ddc8b073f35"
+  "appid": "wxd1456ddc8b073f35",
+  "projectname": "Homi",
+  "condition": {}
 }

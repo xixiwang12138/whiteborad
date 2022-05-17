@@ -136,7 +136,7 @@ class AlertManager extends BaseManager {
 		return wx.showToast(config)
 	}
 	protected doHideToast() {
-		return wx.hideToast()
+		return wx.hideToast({})
 	}
 
 }

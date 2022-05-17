@@ -1,5 +1,5 @@
 page {
-  background-color: pink;
+  background: -webkit-linear-gradient(top, #C7E1FA, #4F8DCC);
 }
 
 .container {
@@ -11,91 +11,111 @@ page {
     z-index: 2;
     display: flex;
 
-    justify-content: space-between;
+    //justify-content: space-between;
 
-
-    height: 20%;
+    height: 15%;
 
     .userInfo {
-      width: 55%;
 
       display: flex;
       flex-direction: column;
 
       justify-content: center;
 
-      .userInfo-gold-level {
-
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        width: 85%;
-
-        padding-left: 32rpx;
-
-        border: 1rpx solid gray;
-        border-top-right-radius: 32rpx;
-        border-bottom-right-radius: 32rpx;
-
-        .userInfo-gold {
-          display: flex;
-          align-items: center;
-
-          flex: 2;
-
-          .goldImg {
-            width: 32rpx;
-          }
-        }
-
-        .userInfo-level {
-          display: flex;
-          flex: 2;
-
-          progress {
-            width: 50%;
-            margin: 0 16rpx;
-          }
-        }
-      }
 
       .userInfo-avatar {
-        margin: 16rpx 32rpx;
+        margin: 8rpx 32rpx;
 
         .avatarImg {
           border-radius: 50%;
-          width: 100rpx;
+          width: 110rpx;
         }
       }
 
       .userInfo-nickName {
         width: fit-content;
 
-        padding: 8rpx 48rpx;
+        padding: 4rpx 48rpx;
 
         text-align: center;
         border: 1rpx solid gray;
         border-top-right-radius: 32rpx;
         border-bottom-right-radius: 32rpx;
+
+        font-size: 29rpx;
+      }
+    }
+  }
+
+  .gold-level {
+    margin-top: 15%;
+    margin-bottom: 5%;
+    margin-left: auto;
+    margin-right: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    height: fit-content;
+    width: 45%;
+
+    padding-left: 16rpx;
+
+    border: 1rpx solid gray;
+    border-radius: 12rpx;
+
+    .gold {
+      display: flex;
+      align-items: center;
+
+      .goldImg {
+        width: 36rpx;
       }
     }
 
-    .search {
-      align-self: flex-end;
-      margin: 64rpx 0;
-      padding: 8rpx 32rpx;
-      background-color: rgba(0, 0, 0, 0.24);
-      width: 35%;
+    .level {
+      display: flex;
+      width: 60%;
 
-      border-radius: 8rpx;
-
-      input {
-        padding: 8rpx 8rpx;
-        background-color: white;
-        border-radius: 16rpx;
-        width: 80%;
+      .text {
+        width: fit-content;
+        word-break: keep-all; //否则会自动换行
+        text-align: center;
       }
+
+      progress {
+        width: 100%;
+        margin: 0 16rpx;
+      }
+    }
+  }
+
+  .search {
+    margin-right: 32rpx;
+    padding: 8rpx 24rpx;
+    background-color: rgba(0, 0, 0, 0.24);
+    width: 40%;
+
+    position: fixed;
+    right: 0;
+
+    border-radius: 8rpx;
+
+    display: flex;
+
+    input {
+      padding: 8rpx 8rpx;
+      background-color: white;
+      border-radius: 32rpx;
+      width: 80%;
+
+      font-size: 24rpx;
+    }
+
+    .img {
+      width: 60rpx;
+      margin-left: 16rpx;
     }
   }
 
@@ -103,7 +123,7 @@ page {
     position: fixed;
     top: 24%;
     height: 1100rpx;
-    background-color: pink !important;
+    //background-color: pink !important;
 
     .roomList {
       display: flex;

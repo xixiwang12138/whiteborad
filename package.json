@@ -8,9 +8,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://gitee.com/exermon-3/homi-miniprogram-client.git"
+    "url": "git@gitee.com:exermon-2/homi-miniprogram-client.git"
   },
-  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {

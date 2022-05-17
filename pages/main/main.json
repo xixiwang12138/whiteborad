@@ -1,6 +1,8 @@
 {
   "usingComponents": {
-    "real-tab-bar": "../../components/real-tab-bar/real-tab-bar"
+    "real-tab-bar": "../../components/real-tab-bar/real-tab-bar",
+    "van-dialog": "@vant/weapp/dialog/index",
+    "van-slider": "@vant/weapp/slider/index"
   },
   "navigationStyle": "custom"
 }

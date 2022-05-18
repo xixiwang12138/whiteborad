@@ -6,57 +6,7 @@ page {
 
   .container-top {
     position: fixed;
-    top: 4%;
-    width: 100%;
-    display: flex;
-
-    justify-content: space-between;
-
-    height: 15%;
-
-    .userInfo {
-
-      display: flex;
-      flex-direction: column;
-
-      justify-content: center;
-
-
-      .userInfo-avatar {
-        margin: 8rpx 32rpx;
-
-        .avatarImg {
-          border-radius: 50%;
-          width: 110rpx;
-        }
-      }
-
-      .userInfo-nickName {
-        width: fit-content;
-
-        padding: 4rpx 48rpx;
-
-        text-align: center;
-        border: 1rpx solid gray;
-        border-top-right-radius: 32rpx;
-        border-bottom-right-radius: 32rpx;
-
-        font-size: 29rpx;
-      }
-    }
-
-    .btn-set {
-      display: flex;
-      flex-direction: column;
-      align-self: flex-end;
-
-      margin: 0rpx 32rpx;
-
-      .btn {
-        margin: 8rpx 0;
-        width: 60rpx;
-      }
-    }
+    top: 80rpx;
   }
 
   .room-name {
@@ -80,50 +30,6 @@ page {
     .text {
       height: fit-content;
       font-size: 32rpx;
-    }
-  }
-
-  .gold-level {
-    margin-top: 15%;
-    margin-bottom: 5%;
-    margin-left: auto;
-    margin-right: auto;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    height: fit-content;
-    width: 45%;
-
-    padding-left: 16rpx;
-
-    border: 1rpx solid gray;
-    border-radius: 12rpx;
-
-    .gold {
-      display: flex;
-      align-items: center;
-
-      .goldImg {
-        width: 36rpx;
-      }
-    }
-
-    .level {
-      display: flex;
-      width: 60%;
-
-      .text {
-        width: fit-content;
-        word-break: keep-all; //否则会自动换行
-        text-align: center;
-      }
-
-      progress {
-        width: 100%;
-        margin: 0 16rpx;
-      }
     }
   }
 

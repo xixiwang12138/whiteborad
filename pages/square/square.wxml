@@ -11,9 +11,9 @@
   <scroll-view class="room-list" scroll-y="true">
     <view class="room-list-content">
       <view class="room" wx:for="{{roomList}}">
-        <image src="{{item.thumbnail}}" mode="widthFix" class="room-thumbnail"></image>
+        <image src="{{item.thumbnail}}" mode="widthFix" class="room-thumbnail"/>
         <view class="room-desc">
-          <text class="room-nickName">{{item.nickName}}'s</text>
+          <text class="room-user-name">{{item.nickName}}'s</text>
           <view class="room-level-name">
             <text class="room-level">{{item.level}}</text>
             <text class="room-name">{{item.name}}</text>

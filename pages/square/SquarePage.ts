@@ -27,27 +27,77 @@ export class SquarePage extends BasePage<Data> {
 				name:"摆烂小屋",
 				nickName:"摆烂君",
 				level:3,
-				thumbnail:"../../assets/square/room.jpg"
+				thumbnail: "../../assets/common/3.png"
 			},{
 				name:"摆烂小屋",
 				nickName:"摆烂君",
 				level:3,
-				thumbnail:"../../assets/square/room.jpg"
+				thumbnail: "../../assets/common/3.png"
 			},{
 				name:"摆烂小屋",
 				nickName:"摆烂君",
 				level:3,
-				thumbnail:"../../assets/square/room.jpg"
+				thumbnail: "../../assets/common/3.png"
 			},{
 				name:"摆烂小屋",
 				nickName:"摆烂君",
 				level:3,
-				thumbnail:"../../assets/square/room.jpg"
+				thumbnail: "../../assets/common/3.png"
 			},{
 				name:"摆烂小屋",
 				nickName:"摆烂君",
 				level:3,
-				thumbnail:"../../assets/square/room.jpg"
+				thumbnail: "../../assets/common/3.png"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail: "../../assets/common/3.png"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail: "../../assets/common/3.png"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail: "../../assets/common/3.png"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail: "../../assets/common/3.png"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail: "../../assets/common/3.png"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail: "../../assets/common/3.png"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail: "../../assets/common/3.png"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail: "../../assets/common/3.png"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail: "../../assets/common/3.png"
+			},{
+				name:"摆烂小屋",
+				nickName:"摆烂君",
+				level:3,
+				thumbnail: "../../assets/common/3.png"
 			}]
 		})
 	}

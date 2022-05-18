@@ -1,30 +1,15 @@
 <!--square.wxml-->
 <view class="container">
   <view class="container-top">
-    <view class="userInfo">
-      <view class="userInfo-avatar">
-        <image class="avatarImg" src="../../assets/square/room.jpg" mode="widthFix"></image>
-      </view>
-      <view class="userInfo-nickName">测试君</view>
-    </view>
-
+    <avatar-display avatar="../../assets/square/room.jpg" name="Exermon" />
   </view>
-  <view class="gold-level">
-    <view class="gold">
-      <image class="goldImg" src="../../assets/square/gold.png" mode="widthFix"></image>
-      <text>1634</text>
-    </view>
-    <view class="level">
-      <view class="text">{{3}}级</view>
-      <progress percent="80" stroke-width="14" color="white" border-radius="10"></progress>
-    </view>
-  </view>
+  <gold-level-display gold="50000" level="99" expRate="0.2333"/>
   <view class="search">
-    <input value="输入ID以搜索" />
+    <input value="输入id搜索" />
     <image class="img" src="../../assets/square/search.png" mode="widthFix"></image>
   </view>
-  <scroll-view class="roomScroll" scroll-y="true">
-    <view class="roomList">
+  <scroll-view class="room-list" scroll-y="true">
+    <view class="room-list-content">
       <view class="room" wx:for="{{roomList}}">
         <image src="{{item.thumbnail}}" mode="widthFix" class="room-thumbnail"></image>
         <view class="room-desc">

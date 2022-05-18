@@ -6,106 +6,27 @@ page {
 
   .container-top {
     position: fixed;
-    top: 4%;
-    width: 100%;
-    z-index: 2;
-    display: flex;
-
-    //justify-content: space-between;
-
-    height: 15%;
-
-    .userInfo {
-
-      display: flex;
-      flex-direction: column;
-
-      justify-content: center;
-
-
-      .userInfo-avatar {
-        margin: 8rpx 32rpx;
-
-        .avatarImg {
-          border-radius: 50%;
-          width: 110rpx;
-        }
-      }
-
-      .userInfo-nickName {
-        width: fit-content;
-
-        padding: 4rpx 48rpx;
-
-        text-align: center;
-        border: 1rpx solid gray;
-        border-top-right-radius: 32rpx;
-        border-bottom-right-radius: 32rpx;
-
-        font-size: 29rpx;
-      }
-    }
-  }
-
-  .gold-level {
-    margin-top: 15%;
-    margin-bottom: 5%;
-    margin-left: auto;
-    margin-right: auto;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    height: fit-content;
-    width: 45%;
-
-    padding-left: 16rpx;
-
-    border: 1rpx solid gray;
-    border-radius: 12rpx;
-
-    .gold {
-      display: flex;
-      align-items: center;
-
-      .goldImg {
-        width: 36rpx;
-      }
-    }
-
-    .level {
-      display: flex;
-      width: 60%;
-
-      .text {
-        width: fit-content;
-        word-break: keep-all; //否则会自动换行
-        text-align: center;
-      }
-
-      progress {
-        width: 100%;
-        margin: 0 16rpx;
-      }
-    }
+    top: 80rpx;
   }
 
   .search {
-    margin-right: 32rpx;
-    padding: 8rpx 24rpx;
-    background-color: rgba(0, 0, 0, 0.24);
-    width: 40%;
-
     position: fixed;
-    right: 0;
 
-    border-radius: 8rpx;
+    top: 168rpx;
+    right: 24rpx;
+
+    padding: 12rpx 20rpx;
+    background-color: rgba(0, 0, 0, 0.21);
+    width: 256rpx;
+
+    border-radius: 12rpx;
 
     display: flex;
+    flex-direction: row;
+    align-items: center;
 
     input {
-      padding: 8rpx 8rpx;
+      padding: 4rpx 16rpx;
       background-color: white;
       border-radius: 32rpx;
       width: 80%;
@@ -114,21 +35,24 @@ page {
     }
 
     .img {
-      width: 60rpx;
-      margin-left: 16rpx;
+      width: 48rpx;
+      margin-left: 12rpx;
     }
   }
 
-  .roomScroll {
+  .room-list {
     position: fixed;
-    top: 24%;
-    height: 1100rpx;
-    //background-color: pink !important;
 
-    .roomList {
-      display: flex;
-      flex-flow: row wrap;
+    top: 268rpx; bottom: 160rpx;
+
+    .room-list-content {
       width: 100%;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
 
       .room {
         display: flex;
@@ -137,9 +61,8 @@ page {
         width: 50%;
 
         .room-thumbnail {
-          width: 120%;
+          width: 100%;
         }
-
         .room-desc {
           width: 100%;
 
@@ -171,7 +94,6 @@ page {
             }
           }
         }
-
       }
     }
   }

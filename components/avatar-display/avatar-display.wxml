@@ -1,0 +1,5 @@
+
+<view class="player-info">
+  <image class="avatar" src="{{avatar}}" mode="widthFix"></image>
+  <view class="name">{{name}}</view>
+</view>

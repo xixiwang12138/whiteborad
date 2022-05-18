@@ -1,0 +1,9 @@
+
+<view class="gold-level">
+  <image src="../../images/coins.png"/>
+  <text class="gold">{{gold}}</text>
+  <text class="level">{{level}}级</text>
+  <view class="exp-background">
+    <view class="exp-bar" style="{{'right:' + (1-expRate)*100 + '%'}}"/>
+  </view>
+</view>

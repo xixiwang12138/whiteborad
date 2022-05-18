@@ -1,6 +1,7 @@
 {
   "usingComponents": {
     "van-popup": "@vant/weapp/popup/index",
+    "gold-level-display": "../../components/gold-level-display/gold-level-display",
     "real-tab-bar": "../../components/real-tab-bar/real-tab-bar"
   },
   "navigationStyle": "custom"

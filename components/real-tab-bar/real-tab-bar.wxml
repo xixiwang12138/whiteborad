@@ -1,4 +1,4 @@
-<!--components/real-tab-bar/real-tab-bar.wxml-->
+<!--components/real-tab-bar/avatar-display.wxml-->
 <view class="container">
   <view class="tab-bar-border"></view>
   <view wx:for="{{pages}}" wx:key="index" data-item="{{item}}" data-index="{{index}}" class="{{item.command ? 'main-button': 'menu-item'}}" bindtap="onTap">

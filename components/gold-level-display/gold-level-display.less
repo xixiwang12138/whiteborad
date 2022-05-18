@@ -1,0 +1,39 @@
+
+.gold-level{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+  justify-items: center;
+  justify-content: center;
+
+  width: 360rpx;
+  height: 42rpx;
+  margin: 108rpx auto 8rpx;
+  border-radius: 16rpx;
+  border: 1px solid #7F7F7F;
+
+  image {
+    width: 32rpx; height: 32rpx;
+    margin: 0 8rpx;
+  }
+  text { font-size: 28rpx; }
+  .gold { width: 25%; text-align: left; }
+  .level { margin: 0 12rpx; }
+  .exp-background {
+    position: relative;
+
+    width: 35%;
+    height: 28rpx;
+    background: rgba(255,255,255,0.44);
+    border-radius: 14rpx;
+
+    .exp-bar {
+      position: absolute;
+      left: 0; right: 0;
+      top: 0; bottom: 0;
+      background: #FFFFFF;
+      border-radius: 14rpx;
+    }
+  }
+}

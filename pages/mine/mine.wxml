@@ -1,142 +1,53 @@
-<!--square.wxml-->
-<view class="container">
+<view class="background"/>
+<view class="content">
  <view class="page">
-  <scroll-view scroll-y="{{true}}" >
-    <view class="block1">
-      <view class="border">
-      <image src="../../images/coins.png" class="icon1"></image>
-      <text class="text1">4396</text>
-      <text class="text2">3级</text>
-      <view class="mod1">
-      <view class="mod2"></view>
+   <view class="player-info">
+     <view class="gold-level">
+       <image src="../../images/coins.png"/>
+       <text class="gold">4396</text>
+       <text class="level">3级</text>
+       <view class="exp-background">
+         <view class="exp-bar"/>
+       </view>
+     </view>
+     <image class="avatar" src="../../images/avatar.jpeg"
+            mode="aspectFill" bind:tap="onAvatarTap"/>
+     <text class="name">测试君</text>
+     <text class="slogan">好好学习加油买房！</text>
+   </view>
+  <scroll-view class="room-list" scroll-y="{{true}}" >
+    <text class="label">我的收藏</text>
+    <view wx:for="{{collectedRooms}}" class="room-card">
+      <image class="room" src="../../assets/common/3.png" mode="heightFix"></image>
+      <view class="info">
+        <text class="user">测试君｜3</text>
+        <text class="name">摆烂小屋</text>
       </view>
+      <view class="enter-tips">
+        <text>进入房间</text>
+        <image class="enter" src="../../images/enter.png"></image>
+      </view>
+      <image class="star" src="../../images/star.png"></image>
     </view>
-  </view>
-  <view class="block2" bindtap="tapToEdit">
-  <image src="../../images/avatar.jpeg" style="width: 130rpx;height: 130rpx;border-radius: 88%;" mode="aspectFill"></image>
-  </view>
-  <view class="block3">
-  <text class="name">测试君</text>
-  </view>
-  <view class="block4">
-  <text class="slogan">好好学习加油买房!</text>
-  </view>
-  <view class="collect">
-  <text class="text3">我的收藏</text>
-  </view>
-  <block>
-   <view class="block5">
-        <view class="room">
-        <image src="../../images/room1.jpg" style="width: 17.5vw;height: 8.5vh;"></image>
-          <view class="info">
-            <text class="text4">测试君｜3</text>
-            <view class="roomName">
-              <text class="text5">摆烂小屋</text>
-            </view>
-          </view>
-          <text class="text6">进入房间</text>
-          <view class="label">
-            <image src="../../images/star.png" class="star"></image>
-            <image src="../../images/enter.png" class="enter"></image>
-          </view>
-        </view>
-   </view>
-   <view class="block5">
-        <view class="room">
-        <image src="../../images/room1.jpg" style="width: 17.5vw;height: 8.5vh;"></image>
-          <view class="info">
-            <text class="text4">测试君｜3</text>
-            <view class="roomName">
-              <text class="text5">摆烂小屋</text>
-            </view>
-          </view>
-          <text class="text6">进入房间</text>
-          <view class="label">
-            <image src="../../images/star.png" class="star"></image>
-            <image src="../../images/enter.png" class="enter"></image>
-          </view>
-        </view>
-   </view>
-   <view class="block5">
-        <view class="room">
-        <image src="../../images/room1.jpg" style="width: 17.5vw;height: 8.5vh;"></image>
-          <view class="info">
-            <text class="text4">测试君｜3</text>
-            <view class="roomName">
-              <text class="text5">摆烂小屋</text>
-            </view>
-          </view>
-          <text class="text6">进入房间</text>
-          <view class="label">
-            <image src="../../images/star.png" class="star"></image>
-            <image src="../../images/enter.png" class="enter"></image>
-          </view>
-        </view>
-   </view>
-   <view class="block5">
-        <view class="room">
-        <image src="../../images/room1.jpg" style="width: 17.5vw;height: 8.5vh;"></image>
-          <view class="info">
-            <text class="text4">测试君｜3</text>
-            <view class="roomName">
-              <text class="text5">摆烂小屋</text>
-            </view>
-          </view>
-          <text class="text6">进入房间</text>
-          <view class="label">
-            <image src="../../images/star.png" class="star"></image>
-            <image src="../../images/enter.png" class="enter"></image>
-          </view>
-        </view>
-   </view>
-   <view class="block5">
-        <view class="room">
-        <image src="../../images/room1.jpg" style="width: 17.5vw;height: 8.5vh;"></image>
-          <view class="info">
-            <text class="text4">测试君｜3</text>
-            <view class="roomName">
-              <text class="text5">摆烂小屋</text>
-            </view>
-          </view>
-          <text class="text6">进入房间</text>
-          <view class="label">
-            <image src="../../images/star.png" class="star"></image>
-            <image src="../../images/enter.png" class="enter"></image>
-          </view>
-        </view>
-   </view>
-  </block>
-</scroll-view>
+  </scroll-view>
  </view>
 </view>
-<van-popup show="{{isEdit}}" round  custom-style="width:80%;height: 50%;position:absolute;" z-index="10" bind:close="onClose">
-  <view class="block6" >
-   <image class="avatar" src="../../images/avatar.jpeg" mode="aspectFill"></image>
-   </view>
-   <view class="block7">
-    <view class="name1">
-    <input class="name-text" placeholder="测试君"></input>
+
+<van-popup show="{{isEdit}}" round bind:close="onClose"
+           custom-class="popup">
+  <view class="popup-content">
+    <image class="avatar" src="../../images/avatar.jpeg" mode="aspectFill"/>
+    <input class="name" value="测试君"></input>
+    <view class="gender">
+      <view class="male">男</view>
+      <view class="female">女</view>
     </view>
-   </view>
-   <view class="block8">
-    <view class="male">
-    <text class="gender-text">男</text>
+    <textarea class="slogan" placeholder="好好学习加油买房!" adjust-position="{{false}}" focus="{{false}}" maxlength="50" cursor-spacing="10"/>
+    <view class="buttons">
+      <view class="cancel">取消</view>
+      <view class="ok">完成</view>
     </view>
-    <view class="female">
-    <text class="gender-text">女</text>
-    </view>
-   </view>
-   <view class="block9">
-    <textarea class="slogan1" placeholder="好好学习加油买房!" adjust-position="{{false}}" focus="{{false}}" maxlength="50" cursor-spacing="10"/>
-   </view>
-   <view class="block10">
-    <view class="cancel">
-    <text class="decide-text">取消</text>
-    </view>
-    <view class="complete">
-    <text class="decide-text">完成</text>
-    </view>
-   </view>
+  </view>
 </van-popup>
 
 <real-tab-bar curPageIndex="2"></real-tab-bar>

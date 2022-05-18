@@ -1,29 +1,7 @@
 <!--square.wxml-->
-<view class="container">
+<canvas type='webgl' id="main-canvas"></canvas>
 
-<!--  <view class="container-top">-->
-<!--    <view class="userInfo">-->
-<!--      <view class="userInfo-avatar">-->
-<!--        <image class="avatarImg" src="../../assets/square/room.jpg" mode="widthFix"></image>-->
-<!--      </view>-->
-<!--      <view class="userInfo-nickName">测试君</view>-->
-<!--    </view>-->
-
-<!--    <view class="btn-set">-->
-<!--      <image src="../../assets/main/config.png" mode="widthFix" class="btn"></image>-->
-<!--      <image src="../../assets/main/config.png" mode="widthFix" class="btn" bindtap="onClickRoomConfig"></image>-->
-<!--    </view>-->
-<!--  </view>-->
-<!--  <view class="gold-level">-->
-<!--    <view class="gold">-->
-<!--      <image class="goldImg" src="../../assets/square/gold.png" mode="widthFix"></image>-->
-<!--      <text>1634</text>-->
-<!--    </view>-->
-<!--    <view class="level">-->
-<!--      <view class="text">{{3}}级</view>-->
-<!--      <progress percent="80" stroke-width="14" color="white" border-radius="10"></progress>-->
-<!--    </view>-->
-<!--  </view>-->
+<view class="content">
   <view class="container-top">
     <avatar-display avatar="../../assets/square/room.jpg" name="Exermon" />
   </view>

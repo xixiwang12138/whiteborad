@@ -22,7 +22,7 @@ class Data extends BaseData {
 const MinDateTime = new Date(2000, 0, 1).getTime();
 const MaxDateTime = new Date(2050, 0, 1).getTime();
 
-export class DatePicker extends PartialPage<Data>{
+export class DatePickerPage extends PartialPage<Data>{
 
 	public data = new Data();
 

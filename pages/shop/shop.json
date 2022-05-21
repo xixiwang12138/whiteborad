@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "gold-level-display": "../../components/gold-level-display/gold-level-display"
+  },
+  "navigationStyle": "custom"
+}

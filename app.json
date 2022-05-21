@@ -4,7 +4,8 @@
     "pages/main/main",
     "pages/square/square",
     "pages/mine/mine",
-    "pages/visit/visit"
+    "pages/visit/visit",
+    "pages/shop/shop"
   ],
   "window": {
     "backgroundTextStyle": "light",

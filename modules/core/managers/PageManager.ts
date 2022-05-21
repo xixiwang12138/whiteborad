@@ -122,7 +122,7 @@ class PageManager extends BaseManager {
 	/**
 	 * 切换页面（同switchTab）
 	 */
-	public switch<T extends BasePage<any, P>, P>(
+	public switch<P = {}, T extends BasePage<any, P> = BasePage<any, P>>(
 		type: Constructor<T>, data?: P, force: boolean = false) {
 		if (!force && this.isCurPage(type)) return;
 

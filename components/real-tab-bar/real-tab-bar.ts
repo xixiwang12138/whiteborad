@@ -2,6 +2,7 @@ import {pageMgr} from "../../modules/core/managers/PageManager";
 import {MinePage} from "../../pages/mine/MinePage";
 import {MainPage} from "../../pages/main/MainPage";
 import {SquarePage} from "../../pages/square/SquarePage";
+import {BasePage} from "../../pages/common/core/BasePage";
 
 const Pages = [MainPage, SquarePage, MinePage];
 
@@ -40,7 +41,7 @@ Component({
 
             this.setData({ selected: data.index });
             if (item.pageIdx != undefined) {
-                pageMgr().switch(Pages[item.pageIdx]).then();
+                pageMgr().switch<any, BasePage>(Pages[item.pageIdx]).then();
             }
         },
     }

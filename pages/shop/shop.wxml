@@ -1,0 +1,128 @@
+<view class="page">
+  <gold-level-display gold="50000" level="99" expRate="0.2333"/>
+  <view class="room">
+  <image src="../../images/room1.jpg"></image>
+  </view>
+  <view class="column">
+  <view class="return">
+  <image src="../../images/return.png" style="width: 60rpx;height: 55rpx;"></image>
+  <image src="../../images/return1.png" style="width: 60rpx;height: 55rpx;"></image>
+  </view>
+  <view class="sum">
+    <view class="box1">
+    <image src="../../images/coins.png" class="coins"></image>
+    <text class="coinsText">4396</text>
+    </view>
+  </view>
+  <view class="back">
+  <image src="../../images/back.png" style=" width: 65rpx;height: 65rpx;"></image>
+  </view>
+  </view>
+  <view class="choose">
+    <view class="rooms" style="background-color:rgba(255,255,255,{{isRooms?'1':'0.5'}});" bindtap="tapToChange1">
+    <text>小屋</text>
+    </view>
+    <view class="others" style="background-color:rgba(255,255,255,{{isRooms?'0.5':'1'}})" bindtap="tapToChange2">
+    <text>其他</text>
+    </view>
+  </view>
+  <view class="Detail">
+    <view class="shelf">
+      <view class="roomsDetail" wx:if="{{isRooms}}">
+        <view class="mod1-0">
+          <view class="outer">
+          <image src="../../images/room1.jpg" ></image>
+          </view>
+          <view class="tap">
+          <text class="tapText">点击更换</text>
+          </view>
+        </view>
+        <view class="mod1-1">
+          <view class="outer">
+          <image src="../../images/room1.jpg" ></image>
+          </view>
+          <view class="tap">
+          <text class="using">使用中</text>
+          </view>
+        </view>
+        <view class="mod1-2">
+          <view class="outer">
+        <image src="../../images/room1.jpg" ></image>
+          </view>
+          <view class="priceBox">
+        <image src="../../images/coins.png" style="width: 25rpx;height: 25rpx;"></image>
+        <text class="price">4396</text>
+          </view>
+        </view>
+        <view class="mod1-3">
+          <view class="outer">
+          <image src="../../images/room1.jpg" ></image>
+          </view>
+          <view class="priceBox">
+          <image src="../../images/coins.png" style="width: 25rpx;height: 25rpx;"></image>
+          <text class="price">4396</text>
+          </view>
+          <text class="unlock">10级解锁购买</text>
+        </view>
+        <view class="mod1-4">
+          <view class="outer">
+          <image src="../../images/room1.jpg" ></image>
+          </view>
+          <view class="priceBox">
+          <image src="../../images/coins.png" style="width: 25rpx;height: 25rpx;"></image>
+          <text class="price">4396</text>
+          </view>
+          <text class="unlock">15级解锁购买</text>
+        </view>
+      </view>
+      <view class="othersDetail" wx:if="{{!isRooms}}">
+        <view class="mod2-0">
+          <view class="outer">
+          <image src="../../images/room1.jpg" ></image>
+          </view>
+          <view class="priceBox">
+          <image src="../../images/coins.png" style="width: 25rpx;height: 25rpx;"></image>
+          <text class="price">4396</text>
+          </view>
+        </view>
+        <view class="mod2-1">
+          <view class="outer">
+          <image src="../../images/room1.jpg" ></image>
+          </view>
+          <view class="tap">
+          <text class="using">已拥有</text>
+          </view>
+        </view>
+        <view class="mod2-2">
+          <view class="outer">
+        <image src="../../images/room1.jpg" ></image>
+          </view>
+          <view class="tap">
+          <text class="using">已拥有</text>
+          </view>
+        </view>
+        <view class="mod2-3">
+          <view class="outer">
+          <image src="../../images/room1.jpg" ></image>
+          </view>
+          <view class="priceBox">
+          <image src="../../images/coins.png" style="width: 25rpx;height: 25rpx;"></image>
+          <text class="price">4396</text>
+          </view>
+          <text class="unlock">购买房间后解锁</text>
+        </view>
+        <view class="mod2-4">
+          <view class="outer">
+          <image src="../../images/room1.jpg" ></image>
+          </view>
+          <view class="priceBox">
+          <image src="../../images/coins.png" style="width: 25rpx;height: 25rpx;"></image>
+          <text class="price">4396</text>
+          </view>
+          <text class="unlock">购买房间后解锁</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+

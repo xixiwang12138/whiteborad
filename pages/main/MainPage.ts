@@ -2,12 +2,7 @@ import {page, pageFunc} from "../common/PageBuilder";
 import {BasePage, BasePageData} from "../common/core/BasePage";
 import {playerMgr} from "../../modules/player/managers/PlayerManager";
 import {PlayerPage} from "../common/partPages/PlayerPage";
-// @ts-ignore
-import {createPIXI} from "../../lib/pixi.miniprogram";
-
-const unsafeEval = require("../../lib/unsafeEval")
-const installAnimate = require("../../lib/pixi-animate")
-const myTween = require("../../lib/myTween")
+import {CanvasPage, onCanvasSetup} from "../common/partPages/CanvasPage";
 
 class Data extends BasePageData {
 	isShowStartConfig:boolean
@@ -24,60 +19,49 @@ export class MainPage extends BasePage<Data> {
 	 * 部分页
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
+	public canvasPage: CanvasPage = new CanvasPage();
 
 	@pageFunc
 	async onLoad(e){
 		await super.onLoad(e);
-
-		this.drawCanvas();
-
 		await this.setData({
-			isShowStartConfig:false,
-			isShowRoomConfig:false,
-			time:60
+			isShowStartConfig: false,
+			isShowRoomConfig: false,
+			time: 60
 		})
+		await this.refresh();
 	}
 
-	drawCanvas() {
-		const info = wx.getSystemInfoSync();
-		const sw = info.screenWidth;// 获取屏幕宽高
-		const sh = info.screenHeight;// 获取屏幕宽高
-		const tw = 750;
-		const th = Math.round(tw * sh / sw); // 计算canvas实际高度
-		const stageWidth = tw;
-		const stageHeight = th;
-		const query = wx.createSelectorQuery();
+	@onCanvasSetup
+	public async refresh() {
+		await this.drawBackground();
+		await this.drawHouse();
+		this.canvasPage.render();
+	}
 
-		query.select("#main-canvas").node().exec(res => {
-			console.log("query", res);
-			const canvas = res[0].node;
-			canvas.width = sw;
-			canvas.height = sh;
-			const pixi = createPIXI(canvas, stageWidth);
-			unsafeEval(pixi);
-			installAnimate(pixi);
+	private async drawBackground() {
+		const bg = await this.canvasPage.createGraphics();
+		const w =
+		bg.beginFill(0); // Color it black
+		bg.drawRect(
+			0, 0,
+			this.canvasPage.width,
+			this.canvasPage.height,
+		);
+		bg.endFill();
+		this.canvasPage.add(bg);
+	}
+	private async drawHouse() {
+		const sp = await this.canvasPage.createSprite("../../assets/common/3.png");
 
-			const renderer = pixi.autoDetectRenderer({
-				width: stageWidth, height: stageHeight,
-				transparent: true, premultipliedAlpha: true,
-				view: canvas
-			});
-			const stage = new pixi.Container();
-			const main = pixi.Sprite.from("../../assets/common/3.png");
+		sp.x = this.canvasPage.width / 2;
+		sp.y = this.canvasPage.height / 2;
 
-			main.y = stageHeight * 0.5;
-			main.x = stageWidth * 0.5;
-			main.scale.x = main.scale.y = 1;
-			main.anchor.x = 0.5;
-			main.anchor.y = 0.75;
+		sp.scale.x = sp.scale.y = 0.8;
+		sp.anchor.x = 0.5;
+		sp.anchor.y = 0.75;
 
-			stage.addChild(main);
-
-			setTimeout(() => {
-				renderer.render(stage);
-			}, 1000);
-
-		})
+		this.canvasPage.add(sp);
 	}
 
 	@pageFunc

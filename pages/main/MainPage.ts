@@ -29,7 +29,7 @@ export class MainPage extends BasePage<Data> {
 			isShowRoomConfig: false,
 			time: 60
 		})
-		await this.refresh();
+		// await this.refresh();
 	}
 
 	@onCanvasSetup
@@ -62,21 +62,12 @@ export class MainPage extends BasePage<Data> {
 		ctx.fillRect(0, 0, w, h);
 
 		const dataUrl = ctx.canvas.toDataURL();
+		console.log("dataUrl", dataUrl);
+
 		const bg = await this.canvasPage.createSprite(dataUrl);
 		bg.x = bg.y = 0;
 
 		this.canvasPage.add(bg);
-
-		// const bg = await this.canvasPage.createGraphics();
-		// const w =
-		// bg.beginFill(0); // Color it black
-		// bg.drawRect(
-		// 	0, 0,
-		// 	this.canvasPage.width,
-		// 	this.canvasPage.height,
-		// );
-		// bg.endFill();
-		// this.canvasPage.add(bg);
 	}
 	private async drawHouse() {
 		const sp = await this.canvasPage.createSprite("../../assets/common/3.png");
@@ -87,6 +78,8 @@ export class MainPage extends BasePage<Data> {
 		sp.scale.x = sp.scale.y = 0.8;
 		sp.anchor.x = 0.5;
 		sp.anchor.y = 0.75;
+
+		console.log("drawHouse", sp);
 
 		this.canvasPage.add(sp);
 	}

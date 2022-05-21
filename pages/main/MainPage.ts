@@ -37,19 +37,38 @@ export class MainPage extends BasePage<Data> {
 		await this.drawBackground();
 		await this.drawHouse();
 		this.canvasPage.render();
+		console.log("canvasPage", this.canvasPage);
 	}
 
 	private async drawBackground() {
-		const bg = await this.canvasPage.createGraphics();
-		const w =
-		bg.beginFill(0); // Color it black
-		bg.drawRect(
-			0, 0,
-			this.canvasPage.width,
-			this.canvasPage.height,
-		);
-		bg.endFill();
+		const bg = await this.canvasPage.createSprite();
+		const w = this.canvasPage.width;
+		const h = this.canvasPage.height;
+		const ctx = this.canvasPage.makeContext(w, h)
+
+		const grd = ctx.createLinearGradient(0, 0, 0, h);
+		grd.addColorStop(0, "#C7E1FA");
+		grd.addColorStop(1, "#4F8DCC");
+
+		ctx.fillStyle = grd;
+		ctx.fillRect(0, 0, w, h);
+
+		this.canvasPage.setContext(bg, ctx);
+
+		bg.x = bg.y = 0;
+
 		this.canvasPage.add(bg);
+
+		// const bg = await this.canvasPage.createGraphics();
+		// const w =
+		// bg.beginFill(0); // Color it black
+		// bg.drawRect(
+		// 	0, 0,
+		// 	this.canvasPage.width,
+		// 	this.canvasPage.height,
+		// );
+		// bg.endFill();
+		// this.canvasPage.add(bg);
 	}
 	private async drawHouse() {
 		const sp = await this.canvasPage.createSprite("../../assets/common/3.png");

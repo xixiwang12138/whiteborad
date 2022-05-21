@@ -9,6 +9,9 @@ const unsafeEval = require("../../../lib/unsafeEval")
 const installAnimate = require("../../../lib/pixi-animate")
 const myTween = require("../../../lib/myTween")
 
+import * as PIXI from 'pixi.js';
+import {Container, Sprite, Texture} from "pixi.js";
+
 export function onCanvasSetup(obj, key, desc) {
 	const oriFunc = desc.value;
 	desc.value = async function (...p) {
@@ -33,7 +36,7 @@ export class CanvasPage extends PartialPage<Data>{
 	public canvas;
 	public renderer;
 	public pixi;
-	public stage;
+	public stage: Container;
 
 	constructor(selector = "#main-canvas") {
 		super();
@@ -58,6 +61,17 @@ export class CanvasPage extends PartialPage<Data>{
 			this.canvas = res[0].node;
 			this.canvas.width = sw;
 			this.canvas.height = sh;
+
+			// this.canvas.getContext2 = this.canvas.getContext;
+			// this.canvas.getContext = function(t?) {
+			// 	const res = this.getContext2('2d');
+			// 	res.fillStyle = '';
+			// 	res.fillRect = function() {}
+			// 	res.drawImage = function() {}
+			// 	res.getImageData = function() {}
+			// 	return res;
+			// }
+			// const context = this.canvas.getContext('webgl');
 			this.pixi = createPIXI(this.canvas, tw);
 
 			unsafeEval(this.pixi);
@@ -80,15 +94,53 @@ export class CanvasPage extends PartialPage<Data>{
 
 	// region Sprite操作
 
-	public async createSprite(url, waitFor = true) {
-		const res = this.pixi.Sprite.from(url);
-		if (waitFor) await PromiseUtils.waitFor(
-			() => res.texture.valid);
-		return res;
+	public async createSprite(url?, waitFor = true) {
+		if (url) {
+			const res: Sprite = this.pixi.Sprite.from(url);
+			if (waitFor) await PromiseUtils.waitFor(
+				() => res.texture.valid);
+			return res;
+		}
+		return new this.pixi.Sprite(
+			new this.pixi.Texture(new this.pixi.BaseTexture())
+		);
 	}
 
-	public createGraphics() {
-		return this.pixi.Graphics();
+	// @ts-ignore
+	public makeContext(width, height): CanvasRenderingContext2D {
+		// @ts-ignore
+		const canvas = wx.createOffscreenCanvas({
+			type: "2d", width, height
+		});
+		// const canvas = document.createElement('canvas');
+		return canvas.getContext('2d');
+		// const context = canvas.getContext('2d');
+
+		// canvas.width = Math.max(width || 0, 1);
+		// canvas.height = Math.max(height || 0, 1);
+
+		// const baseTexture = new this.pixi.BaseTexture(canvas);
+		// baseTexture.mipmap = false;
+		// baseTexture.width = width;
+		// baseTexture.height = height;
+
+		// return context;
+	}
+
+	// @ts-ignore
+	public setContext(sprite: Sprite, context) {
+		const width = context.canvas.width;
+		const height = context.canvas.height;
+		const baseTexture = this.pixi.BaseTexture.from(context.canvas, {
+			width, height
+		});
+		console.log("baseTexture", baseTexture);
+		// baseTexture.mipmap = false;
+
+		sprite.texture = new this.pixi.Texture(baseTexture);
+		sprite.texture.noFrame = false;
+		sprite.texture.frame.width = width;
+		sprite.texture.frame.height = height;
 	}
 
 	// endregion

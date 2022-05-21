@@ -10,7 +10,10 @@ const installAnimate = require("../../../lib/pixi-animate")
 const myTween = require("../../../lib/myTween")
 
 import * as PIXI from 'pixi.js';
-import {Container, Sprite, Texture} from "pixi.js";
+import {Container, Graphics, Sprite, Texture} from "pixi.js";
+import Canvas = WechatMiniprogram.Canvas;
+
+const MaxCanvasSize = 1365;
 
 export function onCanvasSetup(obj, key, desc) {
 	const oriFunc = desc.value;
@@ -62,16 +65,16 @@ export class CanvasPage extends PartialPage<Data>{
 			this.canvas.width = sw;
 			this.canvas.height = sh;
 
-			// this.canvas.getContext2 = this.canvas.getContext;
-			// this.canvas.getContext = function(t?) {
-			// 	const res = this.getContext2('2d');
-			// 	res.fillStyle = '';
-			// 	res.fillRect = function() {}
-			// 	res.drawImage = function() {}
-			// 	res.getImageData = function() {}
-			// 	return res;
-			// }
-			// const context = this.canvas.getContext('webgl');
+			this.canvas.getContext2 = this.canvas.getContext;
+			this.canvas.getContext = function(t?) {
+				const res = this.getContext2('webgl', { alpha: true });
+				res.fillStyle = '';
+				res.fillRect = function() {}
+				res.drawImage = function() {}
+				res.getImageData = function() {}
+				return res;
+			}
+			// const context = this.canvas.getContext('webgl', { alpha: true }));
 			this.pixi = createPIXI(this.canvas, tw);
 
 			unsafeEval(this.pixi);
@@ -94,24 +97,40 @@ export class CanvasPage extends PartialPage<Data>{
 
 	// region Sprite操作
 
-	public async createSprite(url?, waitFor = true) {
-		if (url) {
-			const res: Sprite = this.pixi.Sprite.from(url);
+	// @ts-ignore
+	public async createSprite(urlOrCanvas?: string | HTMLCanvasElement,
+														waitFor = true) {
+		if (typeof urlOrCanvas == "string") {
+			const res: Sprite = this.pixi.Sprite.from(urlOrCanvas);
 			if (waitFor) await PromiseUtils.waitFor(
 				() => res.texture.valid);
 			return res;
-		}
+		} else if (urlOrCanvas)
+			return this.pixi.Sprite.fromCanvas(urlOrCanvas);
 		return new this.pixi.Sprite(
 			new this.pixi.Texture(new this.pixi.BaseTexture())
 		);
 	}
 
+	public createGraphics(): Graphics {
+		return new this.pixi.Graphics();
+	}
+
 	// @ts-ignore
 	public makeContext(width, height): CanvasRenderingContext2D {
+		// const rate = Math.max(width, height) / MaxCanvasSize;
+		// if (rate > 1) {
+		// 	width = Math.floor(width / rate);
+		// 	height = Math.floor(height / rate);
+		// }
 		// @ts-ignore
 		const canvas = wx.createOffscreenCanvas({
 			type: "2d", width, height
 		});
+		// @ts-ignore
+		canvas.width = width;
+		// @ts-ignore
+		canvas.height = height;
 		// const canvas = document.createElement('canvas');
 		return canvas.getContext('2d');
 		// const context = canvas.getContext('2d');
@@ -128,7 +147,7 @@ export class CanvasPage extends PartialPage<Data>{
 	}
 
 	// @ts-ignore
-	public setContext(sprite: Sprite, context) {
+	public setContext(sprite: Sprite, context: CanvasRenderingContext2D) {
 		const width = context.canvas.width;
 		const height = context.canvas.height;
 		const baseTexture = this.pixi.BaseTexture.from(context.canvas, {

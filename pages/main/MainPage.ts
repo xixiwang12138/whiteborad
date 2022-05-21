@@ -41,7 +41,15 @@ export class MainPage extends BasePage<Data> {
 	}
 
 	private async drawBackground() {
-		const bg = await this.canvasPage.createSprite();
+		// const bg = this.canvasPage.createGraphics();
+		//
+		// bg.lineStyle(4, 0xFF3300, 1);
+		// bg.beginFill(0x66CCFF);
+		// bg.drawRect(0, 0, 64, 64);
+		// bg.endFill();
+		// bg.x = 170;
+		// bg.y = 170;
+
 		const w = this.canvasPage.width;
 		const h = this.canvasPage.height;
 		const ctx = this.canvasPage.makeContext(w, h)
@@ -53,8 +61,8 @@ export class MainPage extends BasePage<Data> {
 		ctx.fillStyle = grd;
 		ctx.fillRect(0, 0, w, h);
 
-		this.canvasPage.setContext(bg, ctx);
-
+		const dataUrl = ctx.canvas.toDataURL();
+		const bg = await this.canvasPage.createSprite(dataUrl);
 		bg.x = bg.y = 0;
 
 		this.canvasPage.add(bg);
@@ -85,6 +93,7 @@ export class MainPage extends BasePage<Data> {
 
 	@pageFunc
 	onClickStart(){
+		// this.refresh();
 		this.setData({
 			isShowStartConfig:!this.data.isShowStartConfig
 		})

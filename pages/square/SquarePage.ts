@@ -3,13 +3,15 @@ import {BasePage, BasePageData} from "../common/core/BasePage";
 import {playerMgr} from "../../modules/player/managers/PlayerManager";
 import {PlayerPage} from "../common/partPages/PlayerPage";
 
+export type RoomInfo = {
+	name:string,
+	nickName:string,
+	level:number,
+	thumbnail:string
+}
+
 class Data extends BasePageData {
-	roomList:[{
-		name:string,
-		nickName:string,
-		level:number,
-		thumbnail:string
-	}]
+	roomList: RoomInfo[]
 }
 
 @page("square", "广场")
@@ -22,7 +24,6 @@ export class SquarePage extends BasePage<Data> {
 		super.onLoad(e);
 
 		this.setData({
-			// @ts-ignore
 			roomList:[{
 				name:"摆烂小屋",
 				nickName:"摆烂君",

@@ -8,7 +8,7 @@ class Data extends BasePageData {
 
 	@field(Array)
 	collectedRooms = [{
-		userName: "测试君", level: 3, name: "摆烂小屋"
+		userName: "测试君", level: 3, name: "摆烂12小屋"
 	},{
 		userName: "测试君", level: 3, name: "摆烂小屋"
 	},{

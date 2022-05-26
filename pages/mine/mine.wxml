@@ -13,8 +13,8 @@
     <view wx:for="{{collectedRooms}}" class="room-card">
       <image class="room" src="../../assets/common/3.png" mode="heightFix"></image>
       <view class="info">
-        <text class="user">测试君｜3</text>
-        <text class="name">摆烂小屋</text>
+        <text class="user">{{item.userName}}｜{{item.level}}</text>
+        <text class="name">{{item.name}}</text>
       </view>
       <view class="enter-tips">
         <text>进入房间</text>

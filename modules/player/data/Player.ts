@@ -27,12 +27,14 @@ export class Player extends StateData<PlayerState> {
 
 	@field @dataPK
 	public openid: string;
-	@field
+	@field(Number)
 	public chainId: number;
 	@field
 	public account: string = "";
 	@field
 	public name: string = "";
+	@field(Number)
+	public gender: number;
 	@field
 	public nickName: string = ""; // 微信名称
 	@field(String)
@@ -51,8 +53,6 @@ export class Player extends StateData<PlayerState> {
 	@field(String)
 	public inviteCode: string;
 
-	@field(Number)
-	public characterId: number;
 	@field(Number)
 	public createTime: number;
 

@@ -1,107 +1,26 @@
-page {
-  background-color: pink;
+#main-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -100
 }
 
-.container {
-
-  .container-top {
+.content {
+  .return {
     position: fixed;
-    top: 50rpx;
-    width: 100%;
-    z-index: 2;
-    display: flex;
+    left: 5%;
 
-    justify-content: space-between;
+    height: 80rpx;
 
-
-    height: 300rpx;
-
-    .userInfo {
-      width: 50%;
-
-      display: flex;
-      flex-direction: column;
-
-      justify-content: center;
-
-      .userInfo-gold-level {
-
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        width: 80%;
-
-        padding-left: 32rpx;
-
-        border: 1rpx solid gray;
-        border-top-right-radius: 32rpx;
-        border-bottom-right-radius: 32rpx;
-
-        .userInfo-gold {
-          display: flex;
-          align-items: center;
-
-          flex: 2;
-
-          .goldImg {
-            width: 32rpx;
-          }
-        }
-
-        .userInfo-level {
-          display: flex;
-          flex: 2;
-
-          progress {
-            width: 50%;
-            margin: 0 16rpx;
-          }
-        }
-      }
-
-      .userInfo-avatar {
-        margin: 16rpx 32rpx;
-
-        .avatarImg {
-          border-radius: 50%;
-          width: 100rpx;
-        }
-      }
-
-      .userInfo-nickName {
-        width: fit-content;
-
-        padding: 8rpx 48rpx;
-
-        text-align: center;
-        border: 1rpx solid gray;
-        border-top-right-radius: 32rpx;
-        border-bottom-right-radius: 32rpx;
-      }
-    }
-
-
-
-    .btn-set {
-      display: flex;
-      flex-direction: column;
-      align-self: flex-end;
-
-      margin: 0 32rpx;
-
-      .btn {
-        margin: 8rpx 0;
-        width: 64rpx;
-      }
-    }
   }
 
   .room-name {
     position: fixed;
     left: 32%;
     right: 32%;
-    top: 11%;
+    top: 13%;
 
     width: 36%;
     height: 5%;
@@ -110,7 +29,6 @@ page {
     text-align: center;
     align-items: center;
     justify-content: center;
-    //padding: 64rpx 80rpx;
 
     background-color: white;
 
@@ -129,8 +47,9 @@ page {
     bottom: 15%;
 
     width: 44%;
-    height: 6%;
+    height: 8%;
 
+    //background-color: white;
     background-color: white;
     border-radius: 64rpx;
 
@@ -143,4 +62,171 @@ page {
       font-weight: bold;
     }
   }
+
+  .content-bottom {
+    position: fixed;
+    bottom: 2%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 13%;
+    width: 100%;
+
+    .slogan {
+      background-color: rgba(0, 0, 0, 0.664);
+      width: 60%;
+      height: 40%;
+
+      border-radius: 25rpx;
+
+      color: white;
+      font-size: 27rpx;
+
+      padding: 20rpx 20rpx;
+    }
+  }
+}
+
+van-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+
+  .start-config {
+
+    border-radius: 64rpx;
+    background-color: white;
+    margin: auto auto;
+    display: flex;
+    flex-direction: column;
+    //justify-content: center;
+    align-items: center;
+    z-index: 2;
+
+    .start-config-top {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+
+      .top-img {
+        height: 80rpx;
+        margin: 32rpx 32rpx;
+      }
+    }
+
+    .clock-img {
+      width: 270rpx;
+    }
+
+    van-slider {
+      width: 70%;
+      margin: 42rpx 0;
+    }
+
+    .time {
+      margin-bottom: 40rpx;
+
+      text {
+        color: #4895FF;
+        font-size: 35rpx;
+      }
+    }
+
+    .content {
+      height: fit-content;
+      margin-bottom: 40rpx;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .desc {
+        font-size: 36rpx;
+      }
+
+      .btn {
+        margin-left: 48rpx;
+        padding: 10rpx 20rpx;
+        background-color: #CADCEF;
+
+        border-radius: 8rpx;
+      }
+    }
+
+    .mode-set {
+      width: 75%;
+
+      margin-bottom: 21rpx;
+
+      display: flex;
+      justify-content: space-between;
+
+      .mode {
+        background-color: #D8D8D8;
+        padding: 20rpx 42rpx;
+
+        font-size: 30rpx;
+        font-weight: bold;
+
+        border-radius: 16rpx;
+      }
+    }
+
+    .text {
+      font-size: 27rpx;
+      font-weight: bold;
+    }
+
+    .start-btn {
+      background-color: #4C7FB3;
+      color: white;
+      padding: 16rpx 110rpx;
+      margin: 32rpx 32rpx;
+      border-radius: 8rpx;
+    }
+
+
+  }
+
+  .selector-config {
+
+    border-radius: 64rpx;
+    background-color: white;
+    margin: auto auto;
+    padding-top: 32rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+
+    .content {
+      height: fit-content;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+
+      .btn {
+        margin: 28rpx 24rpx;
+        padding: 10rpx 20rpx;
+        background-color: #CADCEF;
+        border-radius: 8rpx;
+
+        font-size: 34rpx;
+        font-weight: bold;
+      }
+    }
+
+    .selector-btn {
+      background-color: #4C7FB3;
+      color: white;
+      padding: 16rpx 190rpx;
+      margin: 40rpx 32rpx;
+      border-radius: 8rpx;
+    }
+  }
+
+
 }

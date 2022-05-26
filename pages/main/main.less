@@ -1,7 +1,7 @@
-
 #main-canvas {
   position: absolute;
-  left: 0; top: 0;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 100vh;
   z-index: -100
@@ -108,6 +108,7 @@ van-dialog {
     }
 
     .content {
+      height: fit-content;
       margin-bottom: 40rpx;
       display: flex;
       justify-content: center;
@@ -159,6 +160,44 @@ van-dialog {
     }
 
 
+  }
+
+  .selector-config {
+
+    border-radius: 64rpx;
+    background-color: white;
+    margin: auto auto;
+    padding-top: 32rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+
+    .content {
+      height: fit-content;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+
+      .btn {
+        margin: 28rpx 24rpx;
+        padding: 10rpx 20rpx;
+        background-color: #CADCEF;
+        border-radius: 8rpx;
+
+        font-size: 34rpx;
+        font-weight: bold;
+      }
+    }
+
+    .selector-btn {
+      background-color: #4C7FB3;
+      color: white;
+      padding: 16rpx 190rpx;
+      margin: 40rpx 32rpx;
+      border-radius: 8rpx;
+    }
   }
 
   .room-config {

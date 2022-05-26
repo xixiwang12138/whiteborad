@@ -10,7 +10,7 @@
   </view>
   <scroll-view class="room-list" scroll-y="true">
     <view class="room-list-content">
-      <view class="room" wx:for="{{roomList}}">
+      <view class="room" wx:for="{{roomList}}" bindtap="toVisit">
         <image src="{{item.thumbnail}}" mode="widthFix" class="room-thumbnail"/>
         <view class="room-desc">
           <text class="room-user-name">{{item.nickName}}'s</text>

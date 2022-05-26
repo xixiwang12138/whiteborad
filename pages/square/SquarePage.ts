@@ -2,6 +2,8 @@ import {page, pageFunc} from "../common/PageBuilder";
 import {BasePage, BasePageData} from "../common/core/BasePage";
 import {playerMgr} from "../../modules/player/managers/PlayerManager";
 import {PlayerPage} from "../common/partPages/PlayerPage";
+import {pageMgr} from "../../modules/core/managers/PageManager";
+import {VisitPage} from "../visit/VisitPage";
 
 class Data extends BasePageData {
 	roomList:[{
@@ -100,6 +102,11 @@ export class SquarePage extends BasePage<Data> {
 				thumbnail: "../../assets/common/3.png"
 			}]
 		})
+	}
+
+	@pageFunc
+	toVisit(){
+		pageMgr().push<any, BasePage>(VisitPage)
 	}
 
 	/**

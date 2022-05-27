@@ -5,7 +5,7 @@
   <view class="container-top">
     <avatar-display avatar="../../assets/square/room.jpg" name="Exermon" />
   </view>
-  <gold-level-display gold="50000" level="99" expRate="0.2333"/>
+  <gold-level-display gold="50000" level="99" expRate="0.2333" />
   <view class="room-name">
     <input class="text" value="摆烂小屋" placeholder="房间名不能为空~"></input>
   </view>
@@ -18,7 +18,7 @@
   <view class="start-config">
     <view class="start-config-top">
       <image class="top-img" src="/assets/main/desc.png" mode="heightFix"></image>
-      <image class="top-img" src="/assets/main/close.png" mode="heightFix"></image>
+      <image class="top-img" src="/assets/main/close.png" mode="heightFix" bindtap="onClickHide" data-windowName="start"></image>
     </view>
     <image class="clock-img" src="/assets/main/clock.png" mode="widthFix">
     </image>
@@ -30,7 +30,7 @@
     </view>
     <view class="content">
       <view class="desc">专注内容</view>
-      <view class="btn">沉迷学习</view>
+      <view class="btn" bindtap="onClickSelector">沉迷学习</view>
     </view>
     <view class="mode-set">
       <view class="mode">基础模式</view>
@@ -60,6 +60,15 @@
     <view class="save-btn">
       <view class="text">保存</view>
     </view>
+  </view>
+</van-dialog>
+
+<van-dialog use-slot show="{{ isShowSelectorConfig }}" showConfirmButton="{{false}}" bind:close="onClickHide" close-on-click-overlay data-windowName="selector">
+  <view class="selector-config">
+    <view class="content">
+      <view class="btn" wx:for="{{selectorList}}">{{item}}</view>
+    </view>
+    <view class="selector-btn" bindtap="onClickHide" data-windowName="selector">完成</view>
   </view>
 </van-dialog>
 

@@ -38,7 +38,6 @@ export class ShopPage extends BasePage<Data>{
 
 	public data = new Data();
 
-	@pageFunc
 	async onLoad(e) {
 		this.setData({
 			isRooms:true

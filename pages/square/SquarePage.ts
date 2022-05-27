@@ -21,7 +21,6 @@ export class SquarePage extends BasePage<Data> {
 
 	public data = new Data();
 
-	@pageFunc
 	async onLoad(e) {
 		super.onLoad(e);
 

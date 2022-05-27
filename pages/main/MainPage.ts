@@ -23,7 +23,6 @@ export class MainPage extends BasePage<Data> {
   public playerPage: PlayerPage = new PlayerPage();
   public canvasPage: CanvasPage = new CanvasPage();
 
-  @pageFunc
   async onLoad(e) {
     await super.onLoad(e);
     this.setData({
@@ -34,7 +33,7 @@ export class MainPage extends BasePage<Data> {
         selectorList: ["沉迷学习", "爆肝", "大考备战", "项目制作", "认真搞钱", "锻炼健身", "专注创作", "兴趣爱好", "快乐摸鱼"]
 
     });
-    await this.refresh();
+    // await this.refresh();
   }
 
   @onCanvasSetup

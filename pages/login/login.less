@@ -5,24 +5,26 @@
   display: flex;
   flex-direction: column;
   background:-webkit-linear-gradient(top,#FFFFFF,#C0A0C7);
-  .Logo{
+
+  .logo-container{
     position: relative;
     top: 12vh;
     margin-left: auto;
     margin-right: auto;
-    .logo{
+
+    .logo {
       opacity: 1;
-      animation:2s linear 0s  alternate zoomOutDown1;
+      animation: 2s linear 0s  alternate zoomOutDown1;
       width: 100vw;
       height: 90vw;
     }
-    .logo-1{
+    .logo-small {
       opacity: 0;
-      animation:2s linear 0s  alternate zoomOutDown2;
+      animation: 2s linear 0s  alternate zoomOutDown2;
       width: 60vw;
       height: 54vw;
     }
-    .HOMI{
+    .homi {
       animation:2.4s linear 0s  alternate zoomOutDown1;
       position: relative;
       bottom: 7.5vh;
@@ -31,13 +33,13 @@
       text-align: center;
       margin-left: auto;
       margin-right: auto;
-      .HOMI-text{
+      .homi-text{
         color: white;
         font-size: 13vw;
       }
     }
   }
-  .Avatar{
+  .avatar-container{
     animation:2s linear 0s  alternate zoomOutDown3;
     position: relative;
     bottom:7vh;
@@ -50,7 +52,7 @@
       border-radius: 250rpx;
     }
   }
-  .NameInput{
+  .name-container{
     animation:2.3s linear 0s  alternate zoomOutDown5;
     position: relative;
     bottom: 3vh;
@@ -73,7 +75,7 @@
       }
     }
   }
-  .Login{
+  .login-block{
     opacity: 1;
     animation:3s linear 0s  alternate zoomOutDown1;
     position: relative;
@@ -81,18 +83,18 @@
     margin-left: auto;
     margin-right: auto;
     text-align: center;
-    .login-1{
+    .login-small{
       position: relative;
       bottom: 18vh;
       width: 26vw;
       height: 2.37vh;
-      .login-text1{
+      .login-button{
         font-size: 3.7vw;
         color: #373737;
       }
     }
   }
-  .Login-1{
+  .login-block-small{
     animation:3.5s linear 0s  alternate zoomOutDown5;
     position: relative;
     top: 2.5vh;
@@ -113,7 +115,7 @@
       }
     }
   }
-  .Gender{
+  .gender-container {
     position: relative;
     bottom: 1vh;
     animation:2.6s linear 0s  alternate zoomOutDown5;
@@ -144,7 +146,7 @@
       font-size: 3.8vw;
     }
   }
-  .Slogan{
+  .slogan-container {
     animation:3.1s linear 0s  alternate zoomOutDown5;
     height: 11.4vh;
     border-radius: 16rpx;
@@ -169,6 +171,7 @@
     }
   }
 }
+
 @keyframes zoomOutDown1 {
   0% {
     opacity: 0;

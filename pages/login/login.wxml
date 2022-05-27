@@ -1,21 +1,21 @@
 <!--square.wxml-->
 <view class="container">
   <view class="page">
-    <view class="Logo" >
-      <image class="logo{{isLogin?'-1':''}}" src="../../images/logo.png"></image>
-      <view class="HOMI" wx:if="{{!isLogin}}">
-        <text class="HOMI-text">HOMI</text>
+    <view class="logo-container" >
+      <image class="logo{{isNewer?'-small':''}}" src="../../images/logo.png"></image>
+      <view class="homi" wx:if="{{!isNewer}}">
+        <text class="homi-text">HOMI</text>
       </view>
     </view>
-    <view class="Avatar" wx:if="{{isLogin}}">
+    <view class="avatar-container" wx:if="{{isNewer}}">
       <image class="avatar" src="../../images/avatar.jpeg" mode="aspectFill"></image>
     </view>
-    <view class="NameInput" wx:if="{{isLogin}}">
+    <view class="name-container" wx:if="{{isNewer}}">
       <view class="name">
         <input class="name-input" placeholder="测试君"/>
       </view>
     </view>
-    <view class="Gender" wx:if="{{isLogin}}">
+    <view class="gender-container" wx:if="{{isNewer}}">
       <view class="male">
         <text class="gender-text">男</text>
       </view>
@@ -23,13 +23,16 @@
         <text class="gender-text">女</text>
       </view>
     </view>
-    <view class="Slogan" wx:if="{{isLogin}}">
-      <textarea class="slogan" placeholder="好好学习加油买房!" adjust-position="{{false}}" focus="{{false}}" maxlength="50" cursor-spacing="10"/>
+    <view class="slogan-container" wx:if="{{isNewer}}">
+      <textarea class="slogan" placeholder="好好学习加油买房!"
+                adjust-position="{{false}}" focus="{{false}}"
+                maxlength="50" cursor-spacing="10"/>
     </view>
-    <view class="Login{{isLogin?'-1':''}}">
-      <view class="login{{isLogin?'':'-1'}}">
-        <text class="login-text1" wx:if="{{!isLogin}}" bindtap="login">请使用微信登录</text>
-        <text class="login-text" wx:if="{{isLogin}}">完成</text>
+    <view class="login-block{{isNewer?'-small':''}}">
+      <view class="login{{isNewer?'':'-small'}}">
+        <button class="login-button" wx:if="{{!isNewer}}"
+                bindtap="tapToLogin">请使用微信登录</button>
+        <text class="login-text" wx:if="{{isNewer}}">完成</text>
       </view>
     </view>
   </view>

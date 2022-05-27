@@ -8,7 +8,7 @@ export type WxUserInfo = {
 }
 
 export enum PlayerState {
-	Normal, Banned
+	Newer, Normal, Banned
 }
 
 export interface IPlayerData {
@@ -60,6 +60,6 @@ export class Player extends StateData<PlayerState> {
 	public gold: number;
 
 	@field(Number)
-	public state: PlayerState = PlayerState.Normal;
+	public state: PlayerState = PlayerState.Newer;
 
 }

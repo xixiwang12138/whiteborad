@@ -1,36 +1,36 @@
 <!--square.wxml-->
 <view class="container">
   <view class="page">
-   <view class="block1" >
-   <image class="logo{{isLogin?'-1':''}}" src="../../images/logo.png"></image>
-   <view class="HOMI" wx:if="{{!isLogin}}">
-   <text class="HOMI-text">HOMI</text>
-   </view>
-   </view>
-   <view class="block2-1" wx:if="{{isLogin}}">
-   <image class="avatar" src="../../images/avatar.jpeg" mode="aspectFill"></image>
-   </view>
-   <view class="block4" wx:if="{{isLogin}}">
-    <view class="name">
-    <input class="name-input" placeholder="测试君"/>
+    <view class="Logo" >
+      <image class="logo{{isLogin?'-1':''}}" src="../../images/logo.png"></image>
+      <view class="HOMI" wx:if="{{!isLogin}}">
+        <text class="HOMI-text">HOMI</text>
+      </view>
     </view>
-   </view>
-   <view class="block5" wx:if="{{isLogin}}">
-    <view class="male">
-    <text class="gender-text">男</text>
+    <view class="Avatar" wx:if="{{isLogin}}">
+      <image class="avatar" src="../../images/avatar.jpeg" mode="aspectFill"></image>
     </view>
-    <view class="female">
-    <text class="gender-text">女</text>
+    <view class="NameInput" wx:if="{{isLogin}}">
+      <view class="name">
+        <input class="name-input" placeholder="测试君"/>
+      </view>
     </view>
-   </view>
-   <view class="block6" wx:if="{{isLogin}}">
-   <textarea class="slogan" placeholder="好好学习加油买房!" adjust-position="{{false}}" focus="{{false}}" maxlength="50" cursor-spacing="10"/>
-   </view>
-   <view class="block3{{isLogin?'-1':''}}">
-    <view class="login{{isLogin?'':'-1'}}">
-    <text class="login-text1" wx:if="{{!isLogin}}" bindtap="login">请使用微信登录</text>
-    <text class="login-text" wx:if="{{isLogin}}">完成</text>
+    <view class="Gender" wx:if="{{isLogin}}">
+      <view class="male">
+        <text class="gender-text">男</text>
+      </view>
+      <view class="female">
+        <text class="gender-text">女</text>
+      </view>
     </view>
-   </view>
+    <view class="Slogan" wx:if="{{isLogin}}">
+      <textarea class="slogan" placeholder="好好学习加油买房!" adjust-position="{{false}}" focus="{{false}}" maxlength="50" cursor-spacing="10"/>
+    </view>
+    <view class="Login{{isLogin?'-1':''}}">
+      <view class="login{{isLogin?'':'-1'}}">
+        <text class="login-text1" wx:if="{{!isLogin}}" bindtap="login">请使用微信登录</text>
+        <text class="login-text" wx:if="{{isLogin}}">完成</text>
+      </view>
+    </view>
   </view>
 </view>

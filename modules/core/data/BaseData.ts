@@ -15,6 +15,16 @@ export class BaseData  {
 	onCreated?() {}
 
 	toJSON?() { return DataLoader.convert(this); }
+
+	/**
+	 * 克隆
+	 */
+	public clone(deep = false): this {
+		// @ts-ignore
+		const type: Constructor<any> = this.constructor;
+		return deep ? DataLoader.load(type, DataLoader.convert(this)) :
+			Object.assign(new type(), this);
+	}
 }
 
 export class MainData extends BaseData {

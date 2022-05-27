@@ -1,39 +1,55 @@
 import { page, pageFunc } from "../common/PageBuilder";
 import { BasePage, BasePageData } from "../common/core/BasePage";
-import { playerMgr } from "../../modules/player/managers/PlayerManager";
+import {playerMgr, waitForLogin} from "../../modules/player/managers/PlayerManager";
 import { PlayerPage } from "../common/partPages/PlayerPage";
 import { CanvasPage, onCanvasSetup } from "../common/partPages/CanvasPage";
+import {field} from "../../modules/core/data/DataLoader";
+import {wsMgr} from "../../modules/websocket/WebSocketManager";
+import {ItemDetailPage} from "../common/pages/ItemDetailPage";
+import {Room} from "../../modules/room/data/Room";
 
 class Data extends BasePageData {
-  isShowStartConfig: boolean
-  isShowRoomConfig: boolean
-  isShowSelectorConfig: boolean
-  time: number
-  selectorList: string[]
+
+  @field
+  item: Room = Room.testData()
+  @field
+  isShowStartConfig: boolean = false
+  @field
+  isShowRoomConfig: boolean = false
+  @field
+  isShowSelectorConfig: boolean = false
+  @field
+  time: number = 60
+  @field
+  selectorList: string[] = ["沉迷学习", "期末爆肝", "大考备战", "项目制作", "认真搞钱", "锻炼健身", "专注创作", "兴趣爱好", "快乐摸鱼"]
 }
 
+export const RoomType = "room";
+
 @page("main", "主页")
-export class MainPage extends BasePage<Data> {
+export class MainPage extends ItemDetailPage<Data, Room> {
 
   public data = new Data();
 
   /**
    * 部分页
    */
-  public playerPage: PlayerPage = new PlayerPage();
+  public playerPage: PlayerPage = new PlayerPage(true, true);
   public canvasPage: CanvasPage = new CanvasPage();
 
+  @waitForLogin
   async onLoad(e) {
     await super.onLoad(e);
-    this.setData({
-      isShowStartConfig: false,
-      isShowRoomConfig: false,
-      isShowSelectorConfig: false,
-      time: 60,
-        selectorList: ["沉迷学习", "爆肝", "大考备战", "项目制作", "认真搞钱", "锻炼健身", "专注创作", "兴趣爱好", "快乐摸鱼"]
-
-    });
+    this.setupConnection();
     // await this.refresh();
+  }
+
+  private setupConnection() {
+    wsMgr().connect(RoomType, [this.item.roomId],
+      data => this.onRoomMessage(data));
+  }
+  private onRoomMessage(data) {
+    console.log("onRoomMessage", data);
   }
 
   @onCanvasSetup

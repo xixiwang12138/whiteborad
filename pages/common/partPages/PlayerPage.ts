@@ -8,6 +8,7 @@ import {modal} from "../../../modules/core/BaseAssist";
 import {playerMgr} from "../../../modules/player/managers/PlayerManager";
 import {alertMgr} from "../../../modules/core/managers/AlertManager";
 import {waitForDataLoad} from "../../../modules/core/managers/DataManager";
+import {LoginPage} from "../../login/LoginPage";
 
 const JudgeLogin = modal("请登录", "登录后才能进入小程序哦~");
 
@@ -130,7 +131,7 @@ export class PlayerPage extends PartialPage<Data> {
 			const res = await alertMgr().showAlert(JudgeLogin);
 
 			// TODO: 补充登录页
-			if (res.confirm) await pageMgr().goto(undefined);
+			if (res.confirm) await pageMgr().goto(LoginPage);
 			if (res.cancel) await pageMgr().pop();
 
 		} else if (userInfo && refresh)

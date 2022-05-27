@@ -32,34 +32,6 @@ export class VisitPage extends BasePage<Data> {
       time: 60,
       selectorList: ["沉迷学习", "期末复习", "大考备战", "项目制作", "认真搞钱", "专注创作", "兴趣爱好", "快乐摸鱼", "打会游戏"]
     });
-
-    const ws = wx.connectSocket({
-      url: "ws://localhost:3000/"
-    })
-    ws.onOpen(code => {
-      console.log("onOpen", code)
-
-      ws.send({
-        data: JSON.stringify({a: 1, b: 2})
-      });
-      ws.send({
-        data: "as 234"
-      });
-
-      setTimeout(() => ws.close({
-        code: 3500
-      }), 10000);
-    })
-    ws.onClose(code => {
-      console.log("onClose", code)
-    })
-    ws.onError(code => {
-      console.log("onError", code)
-    })
-    ws.onMessage(msg => {
-      console.log("onMessage", msg.data)
-    })
-    console.log({ws});
   }
 
   @onCanvasSetup
@@ -71,15 +43,6 @@ export class VisitPage extends BasePage<Data> {
   }
 
   private async drawBackground() {
-    // const bg = this.canvasPage.createGraphics();
-    //
-    // bg.lineStyle(4, 0xFF3300, 1);
-    // bg.beginFill(0x66CCFF);
-    // bg.drawRect(0, 0, 64, 64);
-    // bg.endFill();
-    // bg.x = 170;
-    // bg.y = 170;
-
     const w = this.canvasPage.width;
     const h = this.canvasPage.height;
     const ctx = this.canvasPage.makeContext(w, h)

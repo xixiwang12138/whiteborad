@@ -7,11 +7,15 @@ import {field} from "../../modules/core/data/DataLoader";
 import {wsMgr} from "../../modules/websocket/WebSocketManager";
 import {ItemDetailPage} from "../common/pages/ItemDetailPage";
 import {Room} from "../../modules/room/data/Room";
+import {Focus, FocusTags} from "../../modules/focus/data/Focus";
 
 class Data extends BasePageData {
 
-  @field
-  item: Room = Room.testData()
+  @field(Room)
+  item: Room
+  @field(Focus)
+  focus: Focus
+
   @field
   isShowStartConfig: boolean = false
   @field
@@ -21,7 +25,7 @@ class Data extends BasePageData {
   @field
   time: number = 60
   @field
-  selectorList: string[] = ["沉迷学习", "期末爆肝", "大考备战", "项目制作", "认真搞钱", "锻炼健身", "专注创作", "兴趣爱好", "快乐摸鱼"]
+  focusTags: string[] = FocusTags
 }
 
 export const RoomType = "room";
@@ -37,20 +41,54 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   public playerPage: PlayerPage = new PlayerPage(true, true);
   public canvasPage: CanvasPage = new CanvasPage();
 
-  @waitForLogin
   async onLoad(e) {
+    this.playerPage.registerOnLogin(
+      () => this.onLogin())
     await super.onLoad(e);
-    this.setupConnection();
-    // await this.refresh();
   }
+
+  // region 连接控制
 
   private setupConnection() {
     wsMgr().connect(RoomType, [this.item.roomId],
       data => this.onRoomMessage(data));
   }
+
+  // endregion
+
+  // region 事件
+
+  private async onLogin() {
+    this.setupConnection();
+    await this.refresh();
+  }
+
   private onRoomMessage(data) {
     console.log("onRoomMessage", data);
   }
+
+  @pageFunc
+  onClickShow(e) {
+    const window = e.currentTarget.dataset.window
+    this.setData({ [`isShow${window}Config`]: true })
+  }
+  @pageFunc
+  onClickHide(e) {
+    const window = e.currentTarget.dataset.window
+    this.setData({ [`isShow${window}Config`]: false })
+  }
+
+  @pageFunc
+  onDragTime(e) {
+    console.log(e);
+    this.setData({
+      time: e.detail.value
+    })
+  }
+
+  // endregion
+
+  // region 界面绘制
 
   @onCanvasSetup
   public async refresh() {
@@ -61,15 +99,6 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   }
 
   private async drawBackground() {
-    // const bg = this.canvasPage.createGraphics();
-    //
-    // bg.lineStyle(4, 0xFF3300, 1);
-    // bg.beginFill(0x66CCFF);
-    // bg.drawRect(0, 0, 64, 64);
-    // bg.endFill();
-    // bg.x = 170;
-    // bg.y = 170;
-
     const w = this.canvasPage.width;
     const h = this.canvasPage.height;
     const ctx = this.canvasPage.makeContext(w, h)
@@ -84,19 +113,9 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     const dataUrl = ctx.canvas.toDataURL();
     const bg = await this.canvasPage.createSprite(dataUrl);
     bg.x = bg.y = 0;
+    bg.alpha = 0.25; // Debug模式
 
     this.canvasPage.add(bg);
-
-    // const bg = await this.canvasPage.createGraphics();
-    // const w =
-    // bg.beginFill(0); // Color it black
-    // bg.drawRect(
-    // 	0, 0,
-    // 	this.canvasPage.width,
-    // 	this.canvasPage.height,
-    // );
-    // bg.endFill();
-    // this.canvasPage.add(bg);
   }
   private async drawHouse() {
     const sp = await this.canvasPage.createSprite("../../assets/common/3.png");
@@ -108,58 +127,11 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     sp.anchor.x = 0.5;
     sp.anchor.y = 0.75;
 
+    sp.alpha = 0.25; // Debug模式
+
     this.canvasPage.add(sp);
   }
 
-  @pageFunc
-  onClickStart() {
-    // this.refresh();
-    this.setData({
-      isShowStartConfig: !this.data.isShowStartConfig
-    })
-  }
-  @pageFunc
-  onClickRoomConfig() {
-    this.setData({
-      isShowRoomConfig: !this.data.isShowRoomConfig
-    })
-  }
-  @pageFunc
-  onClickSelector() {
-    this.setData({
-      isShowSelectorConfig: !this.data.isShowSelectorConfig
-    })
-  }
-
-  @pageFunc
-  onClickHide(e) {
-    console.log(e)
-    const targetName = e.currentTarget.dataset.windowname
-    switch (targetName) {
-      case "start":
-        this.setData({
-          isShowStartConfig: !this.data.isShowStartConfig
-        })
-        break
-      case "room":
-        this.setData({
-          isShowRoomConfig: !this.data.isShowRoomConfig
-        })
-        break
-      case "selector":
-        this.setData({
-          isShowSelectorConfig: !this.data.isShowSelectorConfig
-        })
-        break
-    }
-  }
-
-  @pageFunc
-  onDragTime(e) {
-    console.log(e);
-    this.setData({
-      time: e.detail.value
-    })
-  }
+  // endregion
 
 }

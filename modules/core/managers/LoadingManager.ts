@@ -70,7 +70,7 @@ class LoadingManager extends BaseManager {
 	public isBlocked: boolean = false;
 
 	public async showLoading(config: LoadingOptions) {
-		console.error("showLoading", this.isBlocked, config)
+		// console.error("showLoading", this.isBlocked, config)
 		if (this.isBlocked || !config ||
 			config.enable === false) return false;
 
@@ -78,7 +78,7 @@ class LoadingManager extends BaseManager {
 		return true;
 	}
 	public async hideLoading() {
-		console.error("hideLoading", this.isBlocked);
+		// console.error("hideLoading", this.isBlocked);
 		if (this.isBlocked) return;
 
 		await this.onHideLoading();

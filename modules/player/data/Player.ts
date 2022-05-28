@@ -2,6 +2,8 @@ import {MainData, StateData} from "../../core/data/BaseData";
 import {dataPK, field} from "../../core/data/DataLoader";
 import {DynamicData} from "../../core/data/DynamicData";
 
+const DefaultGold = 500;
+
 export type WxUserInfo = {
 	nickName: string,
 	avatarUrl: string
@@ -59,7 +61,7 @@ export class Player extends StateData<PlayerState> {
 	public createTime: number;
 
 	@field(Number)
-	public gold: number;
+	public gold: number = DefaultGold;
 
 	@field(Number)
 	public state: PlayerState = PlayerState.Newer;

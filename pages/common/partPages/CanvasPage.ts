@@ -44,12 +44,12 @@ export class CanvasPage extends PartialPage<Data>{
 	constructor(selector = "#main-canvas") {
 		super();
 		this.selector = selector;
-		this.setupCanvas();
 	}
 
-	// @pageFunc
-	// async onLoad(e) {
-	// }
+	@pageFunc
+	async onReady(e) {
+		this.setupCanvas();
+	}
 
 	setupCanvas() {
 		const info = wx.getSystemInfoSync();
@@ -99,7 +99,7 @@ export class CanvasPage extends PartialPage<Data>{
 
 	// @ts-ignore
 	public async createSprite(urlOrCanvas?: string | HTMLCanvasElement,
-														waitFor = true) {
+														waitFor = true): Promise<Sprite> {
 		if (typeof urlOrCanvas == "string") {
 			const res: Sprite = this.pixi.Sprite.from(urlOrCanvas);
 			if (waitFor) await PromiseUtils.waitFor(

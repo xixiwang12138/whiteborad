@@ -2,10 +2,8 @@
 <view class="container">
   <view class="login-page {{isLogin ? 'is-login' : ''}}" >
     <view class="logo-container">
-      <image class="logo" src="../../images/logo.png"></image>
-      <view class="homi">
-        <text class="homi-text">HOMI</text>
-      </view>
+      <image class="logo" src="../../assets/logo.png" mode="widthFix"></image>
+      <image class="homi" src="../../assets/logo-text.png" mode="heightFix"></image>
     </view>
     <view class="login-block">
       <text class="tips">点击进入元宇宙</text>
@@ -38,7 +36,7 @@
       <textarea class="slogan" placeholder="输入你的Slogan吧！"
                 adjust-position="{{false}}" focus="{{false}}"
                 maxlength="50" cursor-spacing="10"
-                bind:input="onSloganInput"/>
+                value="{{info.slogan}}" bind:input="onSloganInput"/>
     </view>
     <view class="submit" bind:tap="onSubmit">完成</view>
   </view>

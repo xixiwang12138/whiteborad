@@ -1,9 +1,9 @@
 <!--square.wxml-->
 <view class="container">
   <view class="container-top">
-    <avatar-display avatar="../../assets/square/room.jpg" name="Exermon" />
+    <avatar-display avatar="{{player.avatarUrl}}" name="{{player.name}}" />
   </view>
-  <gold-level-display gold="50000" level="99" expRate="0.2333"/>
+  <gold-level-display gold="{{player.gold}}" level="99" expRate="0.2333" />
   <view class="search">
     <input value="输入id搜索" />
     <image class="img" src="../../assets/square/search.png" mode="widthFix"></image>

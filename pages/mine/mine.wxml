@@ -2,11 +2,11 @@
 <view class="content">
  <view class="page">
    <view class="player-info">
-     <gold-level-display gold="50000" level="99" expRate="0.2333"/>
-     <image class="avatar" src="../../images/avatar.jpeg"
+     <gold-level-display gold="{{player.gold}}" level="99" expRate="0.2333"/>
+     <image class="avatar" src="{{player.avatarUrl}}"
             mode="aspectFill" bind:tap="onAvatarTap"/>
-     <text class="name">测试君</text>
-     <text class="slogan">好好学习加油买房！</text>
+     <text class="name">{{player.name}}</text>
+     <text class="slogan">{{player.slogan}}</text>
    </view>
   <scroll-view class="room-list" scroll-y="{{true}}" >
     <text class="label">我的收藏</text>

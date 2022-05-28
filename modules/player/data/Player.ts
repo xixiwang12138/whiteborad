@@ -15,12 +15,13 @@ export interface IPlayerData {
 	openid: string;
 }
 
-export abstract class PlayerData extends DynamicData implements IPlayerData {
-
-	@field(String)
-	@dataPK
-	public openid: string;
-
+export type PlayerEditableInfo = {
+	name?: string
+	gender?: number
+	nickName?: string
+	phone?: string
+	avatarUrl?: string
+	slogan?: string
 }
 
 export class Player extends StateData<PlayerState> {
@@ -30,11 +31,12 @@ export class Player extends StateData<PlayerState> {
 	@field(Number)
 	public chainId: number;
 	@field
-	public account: string = "";
+	public address: string; // 钱包地址
+
 	@field
 	public name: string = "";
 	@field(Number)
-	public gender: number;
+	public gender: number = 0;
 	@field
 	public nickName: string = ""; // 微信名称
 	@field(String)
@@ -61,5 +63,27 @@ export class Player extends StateData<PlayerState> {
 
 	@field(Number)
 	public state: PlayerState = PlayerState.Newer;
+
+	// region 额外数据
+
+	public refresh() {
+
+	}
+
+	// endregion
+
+	/**
+	 * 修改数据
+	 */
+	public edit(info: PlayerEditableInfo) {
+		Object.assign(this, info);
+	}
+}
+
+export abstract class PlayerData extends DynamicData implements IPlayerData {
+
+	@field(String)
+	@dataPK
+	public openid: string;
 
 }

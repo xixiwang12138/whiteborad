@@ -1,10 +1,16 @@
-.page {
+.container {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
   background:-webkit-linear-gradient(top,#FFFFFF,#C0A0C7);
+}
+
+.login-page {
+  position: absolute;
+
+  left: 0; top: 0;
+  height: 100%; width: 100%;
+  overflow: hidden;
 
   .logo-container{
     position: relative;
@@ -14,18 +20,12 @@
 
     .logo {
       opacity: 1;
-      animation: 2s linear 0s  alternate zoomOutDown1;
+      animation: 2s 0s alternate login-move-in both;
       width: 100vw;
       height: 90vw;
     }
-    .logo-small {
-      opacity: 0;
-      animation: 2s linear 0s  alternate zoomOutDown2;
-      width: 60vw;
-      height: 54vw;
-    }
     .homi {
-      animation:2.4s linear 0s  alternate zoomOutDown1;
+      animation: 2s 0.5s alternate login-move-in both;
       position: relative;
       bottom: 7.5vh;
       height: 9vh;
@@ -33,180 +33,265 @@
       text-align: center;
       margin-left: auto;
       margin-right: auto;
+
       .homi-text{
         color: white;
         font-size: 13vw;
       }
     }
   }
-  .avatar-container{
-    animation:2s linear 0s  alternate zoomOutDown3;
-    position: relative;
-    bottom:7vh;
+
+  .login-block {
+    position: absolute;
+
+    left: 50%; top: 80%;
+
     margin-left: auto;
     margin-right: auto;
+
+    text-align: center;
+
+    transform: translate(-50%, -50%);
+
+    .tips {
+      position: absolute;
+
+      font-size: 3.7vw;
+
+      width: 100vw;
+      bottom: 108rpx;
+
+      transform: translateX(-50%);
+
+      animation: 1s 1s alternate login-button-show both;
+    }
+
+    .button {
+      animation: 1s 1s alternate login-button-show both;
+
+      position: relative;
+
+      width: 64rpx; height: 64rpx;
+      padding: 0;
+
+      background-color: #BC9BC4;
+      border-radius: 50%;
+
+      overflow: visible;
+
+      .effect {
+        position: absolute;
+
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+
+        background-color: #BC9BC4;
+        border-radius: 50%;
+
+        animation: 1.5s infinite login-button-effect;
+      }
+
+    }
+    .is-login {
+      animation: 2s ease alternate login-scale both;
+    }
+  }
+
+}
+
+.is-login {
+  animation: 2s ease alternate login-move-out both;
+}
+
+.register-page {
+  position: absolute;
+
+  left: 0; top: 0;
+  height: 100%; width: 100%;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+
+  .avatar-container{
+    position: relative;
+    width: 25vw; height: 25vw;
+
+    animation: 2s linear 0s alternate both register-move-in;
+    margin: 256rpx auto 32rpx;
+
     .avatar{
-      width: 25vw;
-      height: 25vw;
+      position: absolute;
+
+      left: -6px; top: -6px;
+      width: 100%; height: 100%;
       border: 6px solid #F4D5D5;
       border-radius: 250rpx;
     }
+
+    .effect {
+      position: absolute;
+
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+
+      background-color: #F4D5D5;
+      border-radius: 50%;
+
+      animation: 1.5s infinite avatar-effect;
+    }
   }
   .name-container{
-    animation:2.3s linear 0s  alternate zoomOutDown5;
-    position: relative;
-    bottom: 3vh;
-    margin-left: auto;
-    margin-right: auto;
+    animation: 2s linear 0.5s alternate both register-move-in;
+    margin: 32rpx auto 16rpx;
+
     .name{
-      height: 5vh;
-      border-radius: 35rpx;
-      background-color: rgba(0,0,0,0.55);
+      height: 64rpx;
       width: 303rpx;
+      border-radius: 32rpx;
+      background-color: rgba(0,0,0,0.55);
       text-align: center;
+
       .name-input{
-        height: 3vh;
-        width: 30vw;
-        position: relative;
-        top: 0.8vh;
-        margin-left: auto;
-        margin-right: auto;
+        height: 64rpx;
+        line-height: 64rpx;
+        width: 100%;
         color: rgba(255,255,255,1);
-      }
-    }
-  }
-  .login-block{
-    opacity: 1;
-    animation:3s linear 0s  alternate zoomOutDown1;
-    position: relative;
-    top: 22vh;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    .login-small{
-      position: relative;
-      bottom: 18vh;
-      width: 26vw;
-      height: 2.37vh;
-      .login-button{
-        font-size: 3.7vw;
-        color: #373737;
-      }
-    }
-  }
-  .login-block-small{
-    animation:3.5s linear 0s  alternate zoomOutDown5;
-    position: relative;
-    top: 2.5vh;
-    margin-left: auto;
-    margin-right: auto;
-    text-align: center;
-    .login{
-      height: 4.6vh;
-      border-radius: 10rpx;
-      background-color: #8875B3;
-      display: flex;
-      flex-direction: column;
-      width: 45vw;
-      .login-text{
-        color: rgba(255,255,255,1);
-        font-size: 4vw;
-        margin: 1vh 0 0 0;
       }
     }
   }
   .gender-container {
-    position: relative;
-    bottom: 1vh;
-    animation:2.6s linear 0s  alternate zoomOutDown5;
-    width: 235rpx;
-    height: 63rpx;
+    animation: 2s linear 0.5s alternate both register-move-in;
+    width: 256rpx; height: 64rpx;
+    margin: 16rpx auto;
+
     flex-direction: row;
     display: flex;
     justify-content: space-between;
-    margin-left: auto;
-    margin-right: auto;
-    .male{
-      height: 3.85vh;
+
+    .gender-box {
+      width: 92rpx; height: 64rpx;
+      line-height: 64rpx;
+
+      font-size: 28rpx;
+      text-align: center;
+
       border-radius: 32rpx;
+
       background-color: rgba(234,234,234,1);
-      width: 91rpx;
-      text-align: center;
+
+      .gender-text{
+        line-height: 100%;
+      }
     }
-    .female{
-      height: 3.85vh;
-      border-radius: 32rpx;
-      background-color: rgba(244,213,213,1);
-      width: 91rpx;
-      text-align: center;
-    }
-    .gender-text{
-      position: relative;
-      top: 0.45vh;
-      font-size: 3.8vw;
-    }
+    //.male{  }
+    //.female { background-color: rgba(244,213,213,1); }
+
+    //.selected { border: solid 2px darkslateblue; }
+    .male.selected{ background-color: rgba(213,213,244,1); }
+    .female.selected { background-color: rgba(244,213,213,1); }
   }
   .slogan-container {
-    animation:3.1s linear 0s  alternate zoomOutDown5;
+    animation: 2s linear 0.5s alternate both register-move-in;
     height: 11.4vh;
     border-radius: 16rpx;
     background-color: rgba(255,255,255,1);
     width: 468rpx;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 1vh;
+    margin: 16rpx auto;
+
     .slogan{
       width: 50vw;
       height: 7vh;
       display: block;
       overflow-wrap: break-word;
       color: rgba(0,0,0,1);
-      font-size: 4vw;
+      font-size: 24rpx;
       line-height: 35rpx;
       text-align: left;
-      margin-top:2vh;
-      margin-left: auto;
-      margin-right: auto;
-      word-break:break-all
+      margin: 20rpx auto;
+      word-break: break-all
     }
+  }
+  .submit {
+    opacity: 1;
+    animation: 2s linear 1s alternate both register-move-in;
+
+    margin: 32rpx auto;
+
+    text-align: center;
+
+    width: 324rpx; height: 64rpx;
+    line-height: 64rpx;
+    border-radius: 10rpx;
+
+    background-color: #8875B3;
+    color: white;
+  }
+
+}
+
+// region 登录页动画
+
+@keyframes login-move-in {
+  0% {
+    opacity: 0; transform: scale(1) translateY(96rpx);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+  100% {
+    opacity: 1; transform: scale(1) translateY(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   }
 }
 
-@keyframes zoomOutDown1 {
+@keyframes login-button-show {
+  0% { opacity: 0; }//transform: scale(0); }
+  100% { opacity: 1; }//transform: scale(1); }
+}
+@keyframes login-button-effect {
+  0% { opacity: 1; transform: scale(1) }
+  100% { opacity: 0; transform: scale(1.75) }
+}
+@keyframes login-scale {
+  0% { width: 64rpx; height: 64rpx; }
+  99% { display: block !important; }
+  100% { width: 1280rpx; height: 1280rpx; display: none !important; }
+}
+
+@keyframes login-move-out {
   0% {
-    opacity: 0;
-    transform: scale3d(0.4, 0.4, 0.4) translate3d(0, 0, 0);
+    opacity: 1; transform: translateY(0);
     animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
   }
-  60% {
-    opacity: 0;
-    transform: scale3d(0.8, 0.8, 0.8) translate3d(0, -200px, 0);
+  99% { display: block; }
+  100% {
+    opacity: 0; transform: translateY(-96rpx);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    display: none;
+  }
+}
+
+// endregion
+
+// region 注册页动画
+
+@keyframes register-move-in {
+  0% {
+    opacity: 0; transform: translateY(96rpx);
     animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
   }
-  to {
-    opacity: 1;
-    transform: scale3d(1, 1, 1) translate3d(0, 0px, 0);
+  100% {
+    opacity: 1; transform: translateY(0);
     animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   }
 }
-@keyframes zoomOutDown2 {
-  30% {
-    opacity: 1;
-    transform: scale3d(0.6, 0.6, 0.6) translate3d(0, -200px, 0);
-    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-  }
-  60% {
-    opacity: 0;
-    transform: scale3d(0.3, 0.3, 0.3) translate3d(0, -200px, 0);
-    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-  }
-  to {
-    opacity: 0;
-    transform: scale3d(0,0, 0) translate3d(0, -400px, 0);
-    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
-  }
+@keyframes avatar-effect {
+  0% { opacity: 1; transform: scale(1) }
+  100% { opacity: 0; transform: scale(1.5) }
 }
-@keyframes zoomOutDown3 {
+
+// endregion
+
+@keyframes zoom-down3 {
   0%{
     opacity: 1;
     transform: scale3d(0.4, 0.4, 0.4) translate3d(0, 250px, 0);
@@ -228,7 +313,7 @@
     animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   }
 }
-@keyframes zoomOutDown4 {
+@keyframes zoom-down4 {
   0%{
     opacity: 1;
     transform: scale3d(0.4, 0.4, 0.4) translate3d(0, -300px, 0);
@@ -250,7 +335,7 @@
     animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   }
 }
-@keyframes zoomOutDown5 {
+@keyframes zoom-down5 {
   0% {
     opacity: 0;
     transform: scale3d(1, 1, 1) translate3d(0, 0, 0);

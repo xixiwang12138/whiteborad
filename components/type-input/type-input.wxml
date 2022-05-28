@@ -1,0 +1,2 @@
+<input bind:input="onInput" placeholder="{{placeholder}}"
+			 value="{{value}}" maxlength="{{maxLength}}"></input>

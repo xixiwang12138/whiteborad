@@ -24,7 +24,7 @@ class StorageManager extends BaseManager {
 				console.error("JSON Parse Error", e, res);
 				res = null;
 			}
-			if (res && isChildClassOf(clazz, BaseData))
+			if (res && isChildClassOf(clazz, BaseData)) // @ts-ignore
 				res = DataLoader.load(DataOccasion.Cache, clazz, res);
 
 			console.log("Get: ", key, res);

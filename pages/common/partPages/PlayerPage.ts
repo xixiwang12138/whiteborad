@@ -100,8 +100,8 @@ export class PlayerPage extends PartialPage<Data> {
 
 	public onLogin: Function[] = [];
 
-	public get openid() { return this.userInfo?._id }
-	public get userInfo() { return this.data.player; }
+	public get openid() { return this.player?._id }
+	public get player() { return this.data.player; }
 
 	@pageFunc
 	public onShow() {
@@ -149,8 +149,15 @@ export class PlayerPage extends PartialPage<Data> {
 	}
 
 	private setPlayer(player: Player) {
+		const oriPlayer = this.player
 		this.setData({ player });
-		this.onLogin.forEach(f => f());
+
+		if (oriPlayer != player)
+			this.onLogin.forEach(f => f());
+	}
+
+	public resetPlayer() {
+		this.setPlayer(this.player);
 	}
 
 	public registerOnLogin(func: Function) {
@@ -163,7 +170,7 @@ export class PlayerPage extends PartialPage<Data> {
 	public ensureLogin(throw_?: Function | string) {
 		if (throw_ == undefined) throw_ = DefaultLoginThrow;
 
-		if (!this.userInfo)
+		if (!this.player)
 			if (throw_ instanceof Function) throw_();
 			else throw throw_;
 	}

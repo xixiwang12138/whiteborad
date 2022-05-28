@@ -1,4 +1,6 @@
 {
-  "usingComponents": {},
+  "usingComponents": {
+    "type-input": "../../components/type-input/type-input"
+  },
   "navigationStyle": "custom"
 }

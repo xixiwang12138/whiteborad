@@ -2,7 +2,7 @@ import {get, Itf, post} from "../../core/BaseAssist";
 import {BaseManager, getManager, manager} from "../../core/managers/BaseManager";
 import {appMgr} from "../../core/managers/AppManager";
 import {storageMgr} from "../../core/managers/StroageManager";
-import {Player, WxUserInfo} from "../data/Player";
+import {Player, PlayerEditableInfo, WxUserInfo} from "../data/Player";
 import {PromiseUtils} from "../../../utils/PromiseUtils";
 import {blockLoading, showLoading} from "../../core/managers/LoadingManager";
 import {DataLoader} from "../../core/data/DataLoader";
@@ -17,8 +17,10 @@ const GetOpenid: Itf<{code: string}, {openid: string}>
   = post("/player/openid/get", false);
 const GetPhone: Itf<{code: string}, {phone: string}>
   = post("/player/phone/get");
-const GetInfo: Itf<{}, {player: Player}>
-  = get("/player/player/get");
+const GetPlayerInfo: Itf<{}, {player: Player}>
+  = get("/player/player_info/get");
+const EditPlayerInfo: Itf<{info: PlayerEditableInfo}, {}>
+  = post("/player/player_info/edit");
 
 export function waitForLogin(obj, key, desc) {
   const oriFunc = desc.value;
@@ -134,7 +136,7 @@ export class PlayerManager extends BaseManager {
    */
   public async refresh() {
     if (!this.isLogin) return;
-    const res = await GetInfo();
+    const res = await GetPlayerInfo();
     const player = DataLoader.load<Player>(Player, res.player);
     return this.player = player;
   }
@@ -156,4 +158,12 @@ export class PlayerManager extends BaseManager {
 
   // endregion
 
+  // region 业务逻辑
+
+  public async editInfo(info: PlayerEditableInfo) {
+    await EditPlayerInfo({info})
+    this.player.edit(info);
+  }
+
+  // endregion
 }

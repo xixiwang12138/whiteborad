@@ -5,7 +5,6 @@ import {PlayerPage} from "../common/partPages/PlayerPage";
 import {field} from "../../modules/core/data/DataLoader";
 import {PlayerEditableInfo, PlayerState} from "../../modules/player/data/Player";
 import {pageMgr} from "../../modules/core/managers/PageManager";
-import {MainPage} from "../main/MainPage";
 import {input} from "../common/utils/PageUtils";
 
 const LoginDesc = "个人信息仅用于展示";
@@ -97,3 +96,5 @@ export class LoginPage extends BasePage<Data> {
 	// endregion
 
 }
+
+import {MainPage} from "../main/MainPage";

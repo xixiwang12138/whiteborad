@@ -1,13 +1,14 @@
+import {field} from "../../modules/core/data/DataLoader";
 import { page, pageFunc } from "../common/PageBuilder";
 import { BasePage, BasePageData } from "../common/core/BasePage";
-import {playerMgr, waitForLogin} from "../../modules/player/managers/PlayerManager";
 import { PlayerPage } from "../common/partPages/PlayerPage";
 import { CanvasPage, onCanvasSetup } from "../common/partPages/CanvasPage";
-import {field} from "../../modules/core/data/DataLoader";
 import {wsMgr} from "../../modules/websocket/WebSocketManager";
 import {ItemDetailPage} from "../common/pages/ItemDetailPage";
 import {Room} from "../../modules/room/data/Room";
 import {Focus, FocusTags} from "../../modules/focus/data/Focus";
+
+type WindowType = "Start" | "Room" | "Tags";
 
 class Data extends BasePageData {
 
@@ -17,13 +18,12 @@ class Data extends BasePageData {
   focus: Focus
 
   @field
-  isShowStartConfig: boolean = false
+  isShowStartWindow: boolean = false
   @field
-  isShowRoomConfig: boolean = false
+  isShowRoomWindow: boolean = false
   @field
-  isShowSelectorConfig: boolean = false
-  @field
-  time: number = 60
+  isShowTagsWindow: boolean = false
+
   @field
   focusTags: string[] = FocusTags
 }
@@ -68,21 +68,33 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   }
 
   @pageFunc
-  onClickShow(e) {
-    const window = e.currentTarget.dataset.window
-    this.setData({ [`isShow${window}Config`]: true })
+  async onClickShow(e) {
+    const window = e.currentTarget.dataset.window;
+    await this[`on${window}WindowShow`]?.();
+    await this.setData({ [`isShow${window}Window`]: true })
   }
   @pageFunc
   onClickHide(e) {
-    const window = e.currentTarget.dataset.window
-    this.setData({ [`isShow${window}Config`]: false })
+    const window = e.currentTarget.dataset.window;
+    this.setData({ [`isShow${window}Window`]: false })
+  }
+
+  async onStartWindowShow() {
+    await this.setData({focus: Focus.emptyData(this.playerPage.openid)});
   }
 
   @pageFunc
   onDragTime(e) {
-    console.log(e);
     this.setData({
-      time: e.detail.value
+      "focus.duration": e.detail.value
+    })
+  }
+
+  @pageFunc
+  onTagTab(e) {
+    const index = e.currentTarget.dataset.index;
+    this.setData({
+      "focus.duration": e.detail.value
     })
   }
 

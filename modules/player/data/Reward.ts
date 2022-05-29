@@ -1,4 +1,5 @@
 import {BaseData} from "../../core/data/BaseData";
+import {field} from "../../core/data/DataLoader";
 
 export enum RewardType {
 	Gold = "gold",
@@ -6,7 +7,6 @@ export enum RewardType {
 
 	// TODO: 补充更多
 }
-
 
 export function r(type: RewardType, value: number, params = {}) {
 	return Reward.create(type, value, params);
@@ -33,7 +33,6 @@ export class Reward extends BaseData {
 }
 
 import {createProcessor} from "../utils/RewardProcessor";
-import {field} from "../../core/data/DataLoader";
 
 export class RewardGroup extends BaseData {
 

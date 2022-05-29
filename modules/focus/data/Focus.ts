@@ -1,7 +1,7 @@
 import {DynamicData} from "../../core/data/DynamicData";
 import {dataPK, field} from "../../core/data/DataLoader";
-import {Reward} from "../../player/data/Reward";
 import {MathUtils} from "../../../utils/MathUtils";
+import {Reward} from "../../player/data/Reward";
 
 export const FocusTags = [
 	"沉迷学习", "期末爆肝", "大考备战",
@@ -64,6 +64,21 @@ export class Focus extends DynamicData {
 	}
 
 	public start() {
-
+		this.startTime = Date.now();
+		this.state = FocusState.Started;
+	}
+	public end() {
+		this.endTime = Date.now();
+		this.state = FocusState.Finished;
+	}
+	public cancel() {
+		this.endTime = Date.now();
+		this.state = FocusState.Failed;
+	}
+	public pause() {
+		this.state = FocusState.Paused;
+	}
+	public resume() {
+		this.state = FocusState.Started;
 	}
 }

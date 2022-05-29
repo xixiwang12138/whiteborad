@@ -38,10 +38,9 @@ export class RuntimeFocus extends BaseData {
 
 	public refresh() {
 		const duration = this.focus.duration;
-		const dTime = duration * 60 * 1000;
-		const rest = this.elapseTime - dTime;
+		const rest = duration * 60 - this.elapseTime / 1000;
 
-		this.restTime = DateUtils.time2TimeStr(rest, false);
+		this.restTime = DateUtils.sec2Str(rest);
 	}
 
 	// endregion

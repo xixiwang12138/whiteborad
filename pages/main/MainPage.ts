@@ -88,7 +88,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
 
   updateTime() {
     const runtimeFocus = this.data.runtimeFocus;
-    if (!runtimeFocus.isValid) return;
+    if (!runtimeFocus?.isValid) return;
 
     const dt = pageMgr().deltaTime;
     runtimeFocus.elapseTime += dt;

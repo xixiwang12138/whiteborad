@@ -11,7 +11,8 @@
   <view class="room-name">
     <input class="text" value="摆烂小屋" placeholder="房间名不能为空~"></input>
   </view>
-  <view class="focus-btn" bindtap="onClickShow" data-window="Start">
+  <view wx:if="{{!runtimeFocus}}" class="focus-btn"
+        bindtap="onClickShow" data-window="Start">
     <view class="text">专注</view>
   </view>
 </view>

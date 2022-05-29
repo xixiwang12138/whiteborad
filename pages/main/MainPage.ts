@@ -6,7 +6,12 @@ import { CanvasPage, onCanvasSetup } from "../common/partPages/CanvasPage";
 import {wsMgr} from "../../modules/websocket/WebSocketManager";
 import {ItemDetailPage} from "../common/pages/ItemDetailPage";
 import {Room} from "../../modules/room/data/Room";
-import {Focus, FocusTags} from "../../modules/focus/data/Focus";
+import {Focus, FocusTags, RuntimeFocus} from "../../modules/focus/data/Focus";
+import {input} from "../common/utils/PageUtils";
+import {waitForDataLoad} from "../../modules/core/managers/DataManager";
+import {waitForLogin} from "../../modules/player/managers/PlayerManager";
+import {focusMgr} from "../../modules/focus/managers/FocusManager";
+import {pageMgr} from "../../modules/core/managers/PageManager";
 
 type WindowType = "Start" | "Room" | "Tags";
 
@@ -26,6 +31,13 @@ class Data extends BasePageData {
 
   @field
   focusTags: string[] = FocusTags
+
+  @field(RuntimeFocus)
+  runtimeFocus: RuntimeFocus
+
+  @field
+  isDown: boolean = false
+
 }
 
 export const RoomType = "room";
@@ -41,31 +53,57 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   public playerPage: PlayerPage = new PlayerPage(true, true);
   public canvasPage: CanvasPage = new CanvasPage();
 
+  // region 初始化
+
   async onLoad(e) {
-    this.playerPage.registerOnLogin(
-      () => this.onLogin())
     await super.onLoad(e);
+    await this.initialize();
   }
 
-  // region 连接控制
+  @waitForLogin
+  @waitForDataLoad
+  private async initialize() {
+    await this.loadRoom();
+    this.createConnection();
+    await this.refresh();
+  }
 
-  private setupConnection() {
+  private async loadRoom() {
+    await this.setItem(Room.testData());
+  }
+
+  private createConnection() {
     wsMgr().connect(RoomType, [this.item.roomId],
       data => this.onRoomMessage(data));
   }
 
   // endregion
 
-  // region 事件
+  // region 更新
 
-  private async onLogin() {
-    this.setupConnection();
-    await this.refresh();
+  update() {
+    super.update();
+    this.updateTime();
   }
+
+  updateTime() {
+    const runtimeFocus = this.data.runtimeFocus;
+    if (!runtimeFocus.isValid) return;
+
+    const dt = pageMgr().deltaTime;
+    runtimeFocus.elapseTime += dt;
+    this.setData({ runtimeFocus });
+  }
+
+  // endregion
+
+  // region 事件
 
   private onRoomMessage(data) {
     console.log("onRoomMessage", data);
   }
+
+  // region 窗口事件
 
   @pageFunc
   async onClickShow(e) {
@@ -83,20 +121,46 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     await this.setData({focus: Focus.emptyData(this.playerPage.openid)});
   }
 
+  // endregion
+
+  // region 专注相关
+
   @pageFunc
   onDragTime(e) {
-    this.setData({
-      "focus.duration": e.detail.value
-    })
+    const focus = this.data.focus;
+    focus.duration = Number(e.detail.value);
+    this.setData({ focus })
   }
 
   @pageFunc
   onTagTab(e) {
     const index = e.currentTarget.dataset.index;
-    this.setData({
-      "focus.duration": e.detail.value
+    const focus = this.data.focus;
+    focus.tagIdx = Number(index);
+    this.setData({ focus })
+  }
+
+  @pageFunc
+  onModeTab(e) {
+    const index = e.currentTarget.dataset.index;
+    const focus = this.data.focus;
+    focus.mode = Number(index);
+    this.setData({ focus })
+  }
+
+  @pageFunc
+  async onSubmit() {
+    const focus = this.data.focus;
+    // TODO: 离线测试
+    // const {tagIdx, mode, duration} = this.data.focus;
+    // const focus = await focusMgr().startFocus(tagIdx, mode, duration);
+    await this.setData({
+      focus, runtimeFocus: RuntimeFocus.create(focus),
+      isShowStartWindow: false
     })
   }
+
+  // endregion
 
   // endregion
 

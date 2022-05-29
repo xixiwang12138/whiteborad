@@ -3,9 +3,11 @@
 
 <view class="content">
   <view class="container-top">
-    <avatar-display avatar="{{player.avatarUrl}}" name="{{player.name}}" />
+    <avatar-display wx:if="{{!runtimeFocus}}"
+                    avatar="{{player.avatarUrl}}" name="{{player.name}}" />
   </view>
-  <gold-level-display gold="{{player.gold}}" level="99" expRate="0.2333" />
+  <gold-level-display wx:if="{{!runtimeFocus}}"
+                      gold="{{player.gold}}" level="99" expRate="0.2333" />
   <view class="room-name">
     <input class="text" value="摆烂小屋" placeholder="房间名不能为空~"></input>
   </view>
@@ -21,31 +23,34 @@
             data-window="Start">
   <view class="start-config">
     <view class="start-config-top">
-      <image class="top-img" src="/assets/main/desc.png" mode="heightFix"></image>
+      <image class="top-img" src="/assets/main/desc.png" mode="heightFix"/>
       <image class="top-img" src="/assets/main/close.png" mode="heightFix"
-             bindtap="onClickHide" data-window="Start"></image>
+             bindtap="onClickHide" data-window="Start"/>
     </view>
-    <image class="clock-img" src="/assets/main/clock.png" mode="widthFix">
-    </image>
-    <van-slider value="{{time}}" bind:drag="onDragTime"
-                min="15" max="120" />
+    <image class="clock-img" src="/assets/main/clock.png" mode="widthFix"/>
+    <van-slider value="{{focus.duration}}"
+                min="{{item.minDuration}}"
+                max="{{item.maxDuration}}"
+                bind:drag="onDragTime"/>
     <view class="time">
       专注时长
-      <text>{{time}}</text>
+      <text>{{focus.duration}}</text>
       /min
     </view>
     <view class="content">
       <view class="desc">专注内容</view>
       <view class="btn" bindtap="onClickShow"
-            data-window="Tags">沉迷学习</view>
+            data-window="Tags">{{focusTags[focus.tagIdx]}}</view>
     </view>
     <view class="mode-set">
-      <view class="mode">基础模式</view>
-      <view class="mode">反盖模式</view>
+      <view class="mode {{focus.mode == 0 ? 'selected' : ''}}"
+            bind:tap="onModeTab" data-index="{{0}}">基础模式</view>
+      <view class="mode {{focus.mode == 1 ? 'selected' : ''}}"
+            bind:tap="onModeTab" data-index="{{1}}">反盖模式</view>
     </view>
-    <view class="text">完成后经验+{{111}} 金币+{{111}}</view>
+    <view class="text">完成后经验+{{focus.expectExpGain}} 金币+{{focus.expectGoldGain}}</view>
     <view class="text">超时后可以继续获得奖励哦～</view>
-    <view class="start-btn">开始专注</view>
+    <view class="start-btn" bind:tap="onSubmit">开始专注</view>
   </view>
 </van-dialog>
 
@@ -90,4 +95,4 @@
   </view>
 </van-dialog>
 
-<real-tab-bar curPageIndex="0"></real-tab-bar>
+<real-tab-bar curPageIndex="0" wx:if="{{!runtimeFocus}}"></real-tab-bar>

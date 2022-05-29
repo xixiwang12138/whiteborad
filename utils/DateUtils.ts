@@ -20,15 +20,21 @@ export class DateUtils {
 	/**
 	 * 日期转化为字符串
 	 */
-	public static time2TimeStr(time: number) {
+	public static time2TimeStr(time: number, withHour = true) {
 		if (!time) return "";
 
 		const date = new Date(time);
-		const hour = date.getHours().toString().padStart(2, "0");
-		const minute = date.getMinutes().toString().padStart(2, "0");
-		const second = date.getSeconds().toString().padStart(2, "0");
+		let hour = date.getHours();
+		let minute = date.getMinutes();
+		let second = date.getSeconds();
 
-		return `${hour}:${minute}:${second}`;
+		if (!withHour) minute += hour * 60;
+
+		const sHour = hour.toString().padStart(2, "0");
+		const sMinute = minute.toString().padStart(2, "0");
+		const sSecond = second.toString().padStart(2, "0");
+
+		return withHour ? `${sHour}:${sMinute}:${sSecond}` : `${sMinute}:${sSecond}`;
 	}
 
 	/**

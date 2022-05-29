@@ -55,7 +55,6 @@ class AppManager extends BaseManager {
 
 	update() {
 		super.update();
-
 		this.checkUpdateToken();
 	}
 

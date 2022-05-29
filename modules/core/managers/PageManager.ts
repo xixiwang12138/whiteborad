@@ -41,6 +41,7 @@ class PageManager extends BaseManager {
 	 * 更新每个页面
 	 */
 	public update() {
+		super.update();
 		this.pages.forEach(p =>
 			p == this.curPage() ? p.update() : p.updateOnHidden()
 		)

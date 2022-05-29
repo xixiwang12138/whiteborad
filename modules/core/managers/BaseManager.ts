@@ -36,6 +36,14 @@ setInterval(updateContext, UpdateInterval);
 
 export class BaseManager {
 
-	public update() { }
+	public lastUpdateTime = 0;
+	public deltaTime = 0;
+
+	public update() {
+		const now = Date.now();
+		if (this.lastUpdateTime > 0)
+			this.deltaTime = now - this.lastUpdateTime
+		this.lastUpdateTime = now;
+	}
 
 }

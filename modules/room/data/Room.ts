@@ -29,8 +29,12 @@ export class Room extends MainData {
 	public level: number = 1;
 	@field
 	public exp: number = 0;
+
 	@field
-	public star: number = 0;
+	public minDuration: number = 15;
+	@field
+	public maxDuration: number = 90;
+
 	@field([Number])
 	public params: number[] = [];
 	@field([Trait])

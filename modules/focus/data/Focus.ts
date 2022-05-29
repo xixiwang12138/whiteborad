@@ -1,7 +1,9 @@
 import {DynamicData} from "../../core/data/DynamicData";
-import {dataPK, field} from "../../core/data/DataLoader";
+import {DataOccasion, dataPK, field, occasion} from "../../core/data/DataLoader";
 import {MathUtils} from "../../../utils/MathUtils";
 import {Reward} from "../../player/data/Reward";
+import {BaseData} from "../../core/data/BaseData";
+import {DateUtils} from "../../../utils/DateUtils";
 
 export const FocusTags = [
 	"沉迷学习", "期末爆肝", "大考备战",
@@ -17,6 +19,54 @@ export enum FocusMode {
 	Normal, Flip, Bright
 }
 
+export class RuntimeFocus extends BaseData {
+
+	@field
+	public elapseTime: number = 0;
+	@field
+	public isPause: boolean = false;
+	@field
+	public isDown: boolean = false; // 朝下
+
+	public focus: Focus
+
+	// region 拓展数据
+
+	@field
+	@occasion(DataOccasion.Extra)
+	public restTime: string;
+
+	public refresh() {
+		const duration = this.focus.duration;
+		const dTime = duration * 60 * 1000;
+		const rest = this.elapseTime - dTime;
+
+		this.restTime = DateUtils.time2TimeStr(rest, false);
+	}
+
+	// endregion
+
+	public static create(focus: Focus) {
+		const res = new RuntimeFocus();
+		res.focus = focus;
+		return res;
+	}
+
+	// region 状态判断
+
+	public get isValid() {
+		if (this.isPause) return false;
+		switch (this.focus.mode) {
+			case FocusMode.Normal: return true;
+			case FocusMode.Flip: return this.isDown;
+			case FocusMode.Bright: return true; // TODO: 可能要修改
+		}
+	}
+
+	// endregion
+
+}
+
 export class Focus extends DynamicData {
 
 	@field(String) @dataPK
@@ -28,7 +78,7 @@ export class Focus extends DynamicData {
 	@field(String)
 	public note: string
 	@field(String)
-	public mode: FocusMode = FocusMode.Normal
+	public mode: FocusMode = FocusMode.Flip
 	@field(Number)
 	public duration: number = 60
 	@field(Number)
@@ -41,6 +91,23 @@ export class Focus extends DynamicData {
 	public state: FocusState = FocusState.NotStarted
 
 	public get tag() { return FocusTags[this.tagIdx]; }
+
+	// region 拓展数据
+
+	@field(Number)
+	@occasion(DataOccasion.Extra)
+	public expectExpGain: number;
+	@field(Number)
+	@occasion(DataOccasion.Extra)
+	public expectGoldGain: number;
+
+	public refresh() {
+		// TODO: 确定增益算法
+		this.expectExpGain = this.duration * 10;
+		this.expectGoldGain = this.duration * 2;
+	}
+
+	// endregion
 
 	public static testData() {
 		const res = new Focus();
@@ -63,6 +130,8 @@ export class Focus extends DynamicData {
 		this.id = Date.now() + MathUtils.randomString(8);
 	}
 
+	// region 流程控制
+
 	public start() {
 		this.startTime = Date.now();
 		this.state = FocusState.Started;
@@ -81,4 +150,6 @@ export class Focus extends DynamicData {
 	public resume() {
 		this.state = FocusState.Started;
 	}
+
+	// endregion
 }

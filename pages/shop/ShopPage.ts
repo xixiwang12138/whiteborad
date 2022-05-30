@@ -57,10 +57,5 @@ export class ShopPage extends BasePage<Data>{
 				isRooms:false
 			})
 		}
-		// onLoad: function (options) {
-		// 	this.setData({
-		// 		isRooms:true
-		// 	})
-		// },
 }
 

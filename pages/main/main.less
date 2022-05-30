@@ -1,3 +1,20 @@
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+  60% {
+    opacity: 0;
+    transform: scale3d(1, 1, 1) translate3d(0, 100px, 0);
+    animation-timing-function: cubic-bezier(0.175, 0.385, 0.32, 1);
+  }
+  to {
+    opacity: 1;
+    transform: scale3d(1, 1, 1) translate3d(0, 0px, 0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.375, 0.19);
+  }
+}
 #main-canvas {
   position: absolute;
   left: 0;
@@ -7,13 +24,27 @@
   z-index: -100
 }
 
+.container{
+  position: absolute;
+  left: 0; right: 0;
+  width: 100vw;
+  height: 100vh;
+  background:-webkit-linear-gradient(top,#C7E1FA,#4F8DCC);
+  z-index: -100;
+}
+
 .content {
 
   .container-top {
     position: fixed;
     top: 80rpx;
   }
-
+  .topPlayerName{
+    font-size: 3.8vw;
+    position: fixed;
+    top: 10vh;
+    left: 45vw;
+  }
   .room-name {
     position: fixed;
     left: 32%;
@@ -36,8 +67,14 @@
       height: fit-content;
       font-size: 32rpx;
     }
-  }
 
+  }
+  .restTime{
+    position: fixed;
+    top: 18vh;
+    left: 33vw;
+    font-size: 105rpx;
+  }
   .focus-btn {
     position: fixed;
     left: 28%;
@@ -58,6 +95,26 @@
       font-size: 36rpx;
       font-weight: bold;
     }
+  }
+  .toShop{
+    width: 8vw;
+    height: 8vw;
+    position: fixed;
+    left: 86%;
+    right: 4%;
+    top: 11%;
+    padding: 0.8vw;
+    background-color: #979797;
+    border-radius: 9px;
+  }
+  .toSetting{
+    width: 7vw;
+    height: 7vw;
+    position: fixed;
+    left: 86.7%;
+    right: 3.3%;
+    top: 16%;
+    padding: 1vw;
   }
 }
 
@@ -274,4 +331,114 @@ van-dialog {
   }
 
 
+}
+
+.beFocus{
+  position: fixed;
+  bottom: 7vh;
+  .weatherStatus {
+    animation: 1.5s linear 0s zoomIn;
+    position: relative;
+    bottom: 1vh;
+    left: 28vw;
+    height: 75rpx;
+    border-radius: 18rpx;
+    background-color: rgba(0,0,0,0.19);
+    display: flex;
+    flex-direction: column;
+    width: 345rpx;
+    .weatherBox {
+      width: 301rpx;
+      height: 56rpx;
+      flex-direction: row;
+      display: flex;
+      justify-content: space-between;
+      margin: 9rpx 0 0 38rpx;
+      .weather {
+        width: 58rpx;
+        height: 51rpx;
+        margin: 2rpx 28rpx 0 0;
+      }
+    }
+  }
+  .bottomInfo {
+    animation: 1s linear 0s zoomIn;
+    position: relative;
+    width: 671rpx;
+    height: 109rpx;
+    margin-top: 98rpx;
+    flex-direction: row;
+    display: flex;
+    .playerInfo {
+      position: relative;
+      bottom: 1.1vh;
+      left: 4vw;
+      .avatar1{
+        width: 80rpx; height: 80rpx;
+        margin: 4rpx;
+        border-radius: 50%;
+        border: #F8D1DB solid 2px;
+      }
+      .playerName{
+        width: 63rpx;
+        height: 30rpx;
+        color: rgba(0,0,0,0.5);
+        font-size: 24rpx;
+        text-align: left;
+        margin: 4rpx 0 0 22rpx;
+      }
+    }
+    .slogan {
+      position: relative;
+      left: 4vw;
+      height: 96rpx;
+      border-radius: 14rpx;
+      background-color: rgba(0,0,0,0.13);
+      width: 870rpx;
+      .slogan-text {
+        width: 221rpx;
+        height: 35rpx;
+        color: rgba(255,255,255,1);
+        font-size: 25rpx;
+        text-align: left;
+        margin: 14rpx 0 0 33rpx;
+      }
+    }
+  }
+  .roomStatus{
+    animation: 2s linear 0s zoomIn;
+    position: absolute;
+    left: 74vw;
+    bottom: 25vh;
+    width: 30vw;
+    font-size: 3vw;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.remind{
+  position: fixed;
+  width: 50%;
+  left: 25%;
+  bottom: 30%;
+  height: 12vh;
+  border-radius: 20px;
+  background-color: rgba(255,255,255,0.89);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  .remind-text1{
+    font-size: 28rpx;
+    padding-top: 2.2vh;
+  }
+  .remind-text2{
+    font-size: 28rpx;
+    padding-top: 1vh;
+  }
+  .remind-text3{
+    font-size: 21rpx;
+    padding-top: 2vh;
+  }
 }

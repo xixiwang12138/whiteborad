@@ -210,4 +210,10 @@ export class MainPage extends ItemDetailPage<Data, Room> {
 
   // endregion
 
+  @pageFunc
+  tapToShop(){
+    wx.navigateTo({
+      url:"../shop/shop"
+    })
+  }
 }

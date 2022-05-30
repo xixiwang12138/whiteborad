@@ -1,6 +1,6 @@
 <!--square.wxml-->
+<view class="container">
 <canvas type='webgl' id="main-canvas"></canvas>
-
 <view class="content">
   <view class="container-top">
     <avatar-display wx:if="{{!runtimeFocus}}"
@@ -8,9 +8,13 @@
   </view>
   <gold-level-display wx:if="{{!runtimeFocus}}"
                       gold="{{player.gold}}" level="99" expRate="0.2333" />
+  <text class="topPlayerName" wx:if="{{runtimeFocus}}">{{player.name}}'s</text>
   <view class="room-name">
     <input class="text" value="摆烂小屋" placeholder="房间名不能为空~"></input>
   </view>
+  <text class="restTime">{{runtimeFocus.restTime}}</text>
+  <image src="../../assets/main/shop.png" class="toShop" mode="aspectFit" wx:if="{{!runtimeFocus}}" bindtap="tapToShop"></image>
+  <image src="../../assets/main/setting.png" class="toSetting" wx:if="{{!runtimeFocus}}" mode="aspectFit" ></image>
   <view wx:if="{{!runtimeFocus}}" class="focus-btn"
         bindtap="onClickShow" data-window="Start">
     <view class="text">专注</view>
@@ -95,5 +99,40 @@
           data-window="Tags">完成</view>
   </view>
 </van-dialog>
+<block wx:if="{{runtimeFocus}}">
+  <view class="beFocus">
+    <view class="weatherStatus">
+      <view class="weatherBox">
+        <image src="../../assets/main/thunder.png" class="weather"></image>
+        <image src="../../assets/main/thunder.png" class="weather"></image>
+        <image src="../../assets/main/rainy.png" class="weather"></image>
+        <image src="../../assets/main/rainy.png" class="weather"></image>
+      </view>
+    </view>
+    <view class="bottomInfo">
+        <view class="playerInfo">
+          <image class="avatar1" src="{{player.avatarUrl}}"></image>
+          <text class="playerName">{{player.name}}</text>
+        </view>
+        <view class="slogan">
+          <text class="slogan-text">好好学习加油买房！</text>
+        </view>
+    </view>
+    <view class="roomStatus">
+    <text class="status-text">3人正在专注中</text>
+    <text class="status-text">小黑已开始专注</text>
+    <text class="status-text">小黑已结束专注</text>
+    <text class="status-text">小黑已离开房间</text>
+    </view>
+  </view>
+</block>
 
+<block wx:if="{{focus.mode==1}}">
+  <view class="remind" wx:if="{{isDown}}">
+    <text class="remind-text1">累了吗？快结束啦！</text>
+    <text class="remind-text2">加油坚持住！</text>
+    <text class="remind-text3">请在10s内把手机反扣回桌面</text>
+  </view>
+</block>
+</view>
 <real-tab-bar curPageIndex="0" wx:if="{{!runtimeFocus}}"></real-tab-bar>

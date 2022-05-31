@@ -12,54 +12,81 @@ export const FocusTags = [
 ];
 
 export enum FocusState {
-	NotStarted = -2, Started, Finished,
-	Failed, Paused, Abnormal
+	NotStarted = -2, Started,
+	Finished, Failed, Abnormal
 }
 export enum FocusMode {
 	Normal, Flip, Bright
 }
+
+const MaxInvalidTime = 15;
+const OverdueTime = 60 * 60 * 1000; // 过期时间（60分钟）
+const AbnormalTime = 60 * 1000; // 60秒内的专注不算入内
 
 export class RuntimeFocus extends BaseData {
 
 	@field
 	public elapseTime: number = 0;
 	@field
-	public isPause: boolean = false;
+	public realTime: number = 0;
+
+	// @field
+	// public isPause: boolean = false;
 	@field
 	public isDown: boolean = false; // 朝下
+	@field
+	public invalidTime: number = 0; // 单次无效的时间
+	@field
+	public invalidCount: number = 0; // 中途无效次数
 
 	public focus: Focus
+
+	constructor(index?, parent?) {
+		super(index);
+		if (parent && parent instanceof Focus)
+			this.focus = parent;
+	}
 
 	// region 拓展数据
 
 	@field
 	@occasion(DataOccasion.Extra)
 	public restTime: string;
+	@field
+	@occasion(DataOccasion.Extra)
+	public restInvalidTime: string;
 
 	public refresh() {
 		const duration = this.focus.duration;
 		const rest = duration * 60 - this.elapseTime / 1000;
-
 		this.restTime = DateUtils.sec2Str(rest);
+
+		const restI = MaxInvalidTime - this.invalidTime / 1000;
+		this.restInvalidTime = Math.floor(restI).toString();
 	}
 
 	// endregion
 
 	public static create(focus: Focus) {
-		const res = new RuntimeFocus();
-		res.focus = focus;
-		return res;
+		return new RuntimeFocus(undefined, focus);
 	}
 
 	// region 状态判断
 
 	public get isValid() {
-		if (this.isPause) return false;
+		// if (this.isPause) return false;
 		switch (this.focus.mode) {
 			case FocusMode.Normal: return true;
 			case FocusMode.Flip: return this.isDown;
 			case FocusMode.Bright: return true; // TODO: 可能要修改
 		}
+	}
+
+	public get isFailed() {
+		return this.invalidTime >= MaxInvalidTime;
+	}
+	public get isSuccess() {
+		return this.elapseTime / 1000 >= this.focus.duration * 60;
 	}
 
 	// endregion
@@ -72,6 +99,12 @@ export class Focus extends DynamicData {
 	public id: string
 	@field(String)
 	public openid: string
+
+	@field(String)
+	public roomId?: string
+	@field(String)
+	public npcRoomId?: number
+
 	@field(Number)
 	public tagIdx: number = 0
 	@field(String)
@@ -89,7 +122,13 @@ export class Focus extends DynamicData {
 	@field(Number)
 	public state: FocusState = FocusState.NotStarted
 
+	@field(RuntimeFocus)
+	public runtime: RuntimeFocus
+
 	public get tag() { return FocusTags[this.tagIdx]; }
+	public get realDuration() {
+		return Math.floor(this.runtime?.elapseTime / 1000 / 60);
+	}
 
 	// region 拓展数据
 
@@ -129,26 +168,33 @@ export class Focus extends DynamicData {
 		this.id = Date.now() + MathUtils.randomString(8);
 	}
 
-	// region 流程控制
+	// region 状态判断
 
-	public start() {
-		this.startTime = Date.now();
-		this.state = FocusState.Started;
+	public get isEnd() {
+		return this.state == FocusState.Finished ||
+			this.state == FocusState.Failed;
 	}
-	public end() {
-		this.endTime = Date.now();
-		this.state = FocusState.Finished;
-	}
-	public cancel() {
-		this.endTime = Date.now();
-		this.state = FocusState.Failed;
-	}
-	public pause() {
-		this.state = FocusState.Paused;
-	}
-	public resume() {
-		this.state = FocusState.Started;
+	public get isAbnormal() {
+		return !this.runtime || this.state == FocusState.Abnormal ||
+			(this.isEnd && this.runtime.elapseTime <= AbnormalTime);
 	}
 
 	// endregion
+
+	// // region 流程控制
+	//
+	// public start() {
+	// 	this.startTime = Date.now();
+	// 	this.state = FocusState.Started;
+	// }
+	// public end() {
+	// 	this.endTime = Date.now();
+	// 	this.state = FocusState.Finished;
+	// }
+	// public cancel() {
+	// 	this.endTime = Date.now();
+	// 	this.state = FocusState.Failed;
+	// }
+	//
+	// // endregion
 }

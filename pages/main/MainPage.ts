@@ -13,6 +13,8 @@ import {waitForLogin} from "../../modules/player/managers/PlayerManager";
 import {focusMgr} from "../../modules/focus/managers/FocusManager";
 import {pageMgr} from "../../modules/core/managers/PageManager";
 import SystemInfo = WechatMiniprogram.SystemInfo;
+import {alertMgr} from "../../modules/core/managers/AlertManager";
+import {ShopPage} from "../shop/ShopPage";
 
 type WindowType = "Start" | "Room" | "Tags";
 
@@ -31,6 +33,8 @@ class Data extends BasePageData {
   isShowRoomWindow: boolean = false
   @field
   isShowTagsWindow: boolean = false
+  @field
+  isShowResultWindow: boolean = false
 
   @field
   focusTags: string[] = FocusTags
@@ -45,12 +49,15 @@ class Data extends BasePageData {
 
 export const RoomType = "room";
 
+const FocusUpdateInterval = 10000; // 5秒更新一次
+
 @page("main", "主页")
 export class MainPage extends ItemDetailPage<Data, Room> {
 
   public data = new Data();
 
-  public sys: SystemInfo;
+  private sys: SystemInfo;
+  private lastFocusUpdateTime = 0;
 
   /**
    * 部分页
@@ -99,16 +106,54 @@ export class MainPage extends ItemDetailPage<Data, Room> {
 
   update() {
     super.update();
+    this.updateDown();
     this.updateTime();
+    this.updateFocus();
+  }
+
+  updateDown() {
+    const runtimeFocus = this.data.runtimeFocus;
+    if (!runtimeFocus) return;
+    runtimeFocus.isDown = this.data.isDown;
+    this.setData({ runtimeFocus })
   }
 
   updateTime() {
     const runtimeFocus = this.data.runtimeFocus;
-    if (!runtimeFocus?.isValid) return;
+    if (!runtimeFocus) return;
 
     const dt = pageMgr().deltaTime;
-    runtimeFocus.elapseTime += dt;
-    this.setData({ runtimeFocus });
+
+    if (!runtimeFocus.isValid) {
+      if (runtimeFocus.invalidTime == 0) // 初次
+        runtimeFocus.invalidCount++;
+      runtimeFocus.invalidTime += dt;
+    } else {
+      runtimeFocus.invalidTime = 0;
+      runtimeFocus.elapseTime += dt;
+    }
+    runtimeFocus.realTime += dt; // 实际经过的时间
+
+    if (runtimeFocus.isSuccess) {
+      this.setData({ runtimeFocus: null });
+      this.onSuccess();
+    } else if (runtimeFocus.isFailed) {
+      this.setData({ runtimeFocus: null });
+      this.onFailed();
+    } else
+      this.setData({ runtimeFocus });
+  }
+
+  updateFocus() {
+    const runtimeFocus = this.data.runtimeFocus;
+    if (!runtimeFocus) return;
+
+    const now = Date.now();
+    if (now - this.lastFocusUpdateTime
+      <= FocusUpdateInterval) return;
+    this.lastFocusUpdateTime = now;
+
+    focusMgr().updateFocus(runtimeFocus);
   }
 
   // endregion
@@ -142,14 +187,14 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   // region 专注相关
 
   @pageFunc
-  onDragTime(e) {
+  private onDragTime(e) {
     const focus = this.data.focus;
     focus.duration = Number(e.detail.value);
     this.setData({ focus })
   }
 
   @pageFunc
-  onTagTab(e) {
+  private onTagTab(e) {
     const index = e.currentTarget.dataset.index;
     const focus = this.data.focus;
     focus.tagIdx = Number(index);
@@ -157,7 +202,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   }
 
   @pageFunc
-  onModeTab(e) {
+  private onModeTab(e) {
     const index = e.currentTarget.dataset.index;
     const focus = this.data.focus;
     focus.mode = Number(index);
@@ -165,16 +210,41 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   }
 
   @pageFunc
-  async onSubmit() {
-    const focus = this.data.focus;
+  private async onSubmit() {
+    // const focus = this.data.focus;
     // TODO: 离线测试
-    // const {tagIdx, mode, duration} = this.data.focus;
-    // const focus = await focusMgr().startFocus(tagIdx, mode, duration);
+    const {tagIdx, mode, duration} = this.data.focus;
+    const focus = await focusMgr().startFocus(tagIdx, mode, duration);
     await this.setData({
       focus, runtimeFocus: RuntimeFocus.create(focus),
       isShowStartWindow: false
     })
   }
+
+  private async onSuccess() {
+    const {tagIdx, note} = this.data.focus;
+    const focus = await focusMgr().endFocus(
+      this.data.runtimeFocus, tagIdx, note);
+    await this.setData({
+      focus, runtimeFocus: null,
+      isShowResultWindow: true
+    })
+  }
+
+  private async onFailed() {
+    const {tagIdx, note} = this.data.focus;
+    const focus = await focusMgr().endFocus(
+      this.data.runtimeFocus, tagIdx, note);
+    await this.setData({ focus, runtimeFocus: null })
+    await alertMgr().showToast("好遗憾，专注失败了，调整状态再来一次吧！");
+  }
+
+  // endregion
+
+  // 其他事件
+
+  @pageFunc
+  onShopTap() { pageMgr().push(ShopPage); }
 
   // endregion
 
@@ -227,11 +297,4 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   }
 
   // endregion
-
-  @pageFunc
-  tapToShop(){
-    wx.navigateTo({
-      url:"../shop/shop"
-    })
-  }
 }

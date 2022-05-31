@@ -113,7 +113,7 @@ class AlertManager extends BaseManager {
 		await this.onHideToast();
 	}
 
-	public showToast(title: string, icon: IconType) {
+	public showToast(title: string, icon: IconType = "none") {
 		return this.showAlert({ title, icon, type: "toast" })
 	}
 

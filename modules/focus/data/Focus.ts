@@ -22,6 +22,7 @@ export enum FocusMode {
 const MaxInvalidTime = 15;
 const OverdueTime = 60 * 60 * 1000; // 过期时间（60分钟）
 const AbnormalTime = 60 * 1000; // 60秒内的专注不算入内
+const DefaultDuration = 60;
 
 export class RuntimeFocus extends BaseData {
 
@@ -111,10 +112,10 @@ export class Focus extends DynamicData {
 	public tagIdx: number = 0
 	@field(String)
 	public note: string
-	@field(Number)
+	@field
 	public mode: FocusMode = FocusMode.Flip
 	@field(Number)
-	public duration: number = 60
+	public duration: number
 	@field(Number)
 	public startTime: number
 	@field(Number)
@@ -161,6 +162,7 @@ export class Focus extends DynamicData {
 	public static emptyData(openid) {
 		const res = new Focus();
 		res.openid = openid;
+		res.duration = DefaultDuration;
 		res.generateId();
 
 		return res;

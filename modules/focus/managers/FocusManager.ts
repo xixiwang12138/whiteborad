@@ -3,6 +3,7 @@ import {BaseManager, getManager, manager} from "../../core/managers/BaseManager"
 import {Focus, FocusMode, RuntimeFocus} from "../data/Focus";
 import {DataLoader} from "../../core/data/DataLoader";
 import {IRoomIndex} from "../../room/data/PlayerRoom";
+import {blockLoading} from "../../core/managers/LoadingManager";
 
 const StartFocus: Itf<
   {room: IRoomIndex, mode: FocusMode, tagIdx?: number, duration?: number},
@@ -49,6 +50,7 @@ export class FocusManager extends BaseManager {
   /**
    * 取消专注
    */
+  @blockLoading
   public async updateFocus(runtime: RuntimeFocus) {
     await UpdateFocus({runtime});
   }

@@ -12,8 +12,11 @@ import {waitForDataLoad} from "../../modules/core/managers/DataManager";
 import {waitForLogin} from "../../modules/player/managers/PlayerManager";
 import {focusMgr} from "../../modules/focus/managers/FocusManager";
 import {pageMgr} from "../../modules/core/managers/PageManager";
+import SystemInfo = WechatMiniprogram.SystemInfo;
 
 type WindowType = "Start" | "Room" | "Tags";
+
+const AccThreshold = 0.3;
 
 class Data extends BasePageData {
 
@@ -47,6 +50,8 @@ export class MainPage extends ItemDetailPage<Data, Room> {
 
   public data = new Data();
 
+  public sys: SystemInfo;
+
   /**
    * 部分页
    */
@@ -56,6 +61,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   // region 初始化
 
   async onLoad(e) {
+    this.sys = await wx.getSystemInfo();
     await super.onLoad(e);
     await this.initialize();
   }
@@ -65,6 +71,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   private async initialize() {
     await this.loadRoom();
     this.createConnection();
+    this.setupWxListeners();
     await this.refresh();
   }
 
@@ -75,6 +82,15 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   private createConnection() {
     wsMgr().connect(RoomType, [this.item.roomId],
       data => this.onRoomMessage(data));
+  }
+
+  private setupWxListeners() {
+    wx.onAccelerometerChange(res =>
+      this.setData({ isDown: res.z >= AccThreshold })
+    );
+    wx.enableAlertBeforeUnload({
+      message: "退出将无法完成本次专注，您确定要退出吗？"
+    });
   }
 
   // endregion
@@ -166,6 +182,8 @@ export class MainPage extends ItemDetailPage<Data, Room> {
 
   // region 界面绘制
 
+  public get isDebug() { return this.sys.platform == 'devtools'; }
+
   @onCanvasSetup
   public async refresh() {
     await this.drawBackground();
@@ -189,7 +207,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     const dataUrl = ctx.canvas.toDataURL();
     const bg = await this.canvasPage.createSprite(dataUrl);
     bg.x = bg.y = 0;
-    bg.alpha = 0.25; // Debug模式
+    bg.alpha = this.isDebug ? 0.25 : 1;
 
     this.canvasPage.add(bg);
   }
@@ -203,7 +221,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     sp.anchor.x = 0.5;
     sp.anchor.y = 0.75;
 
-    sp.alpha = 0.25; // Debug模式
+    sp.alpha = this.isDebug ? 0.25 : 1;
 
     this.canvasPage.add(sp);
   }

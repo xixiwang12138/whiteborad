@@ -1,27 +1,20 @@
-@keyframes zoomIn {
+@keyframes move-in {
   0% {
     opacity: 0;
-    transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
-    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
-  }
-  60% {
-    opacity: 0;
-    transform: scale3d(1, 1, 1) translate3d(0, 100px, 0);
+    transform: translateY(100px);
     animation-timing-function: cubic-bezier(0.175, 0.385, 0.32, 1);
   }
   to {
     opacity: 1;
-    transform: scale3d(1, 1, 1) translate3d(0, 0px, 0);
+    transform: translateY(0);
     animation-timing-function: cubic-bezier(0.55, 0.055, 0.375, 0.19);
   }
 }
 #main-canvas {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -100
+  left: 0; top: 0;
+  width: 100vw; height: 100vh;
+  z-index: -100;
 }
 
 .container{
@@ -39,41 +32,45 @@
     position: fixed;
     top: 80rpx;
   }
-  .topPlayerName{
-    font-size: 3.8vw;
-    position: fixed;
-    top: 10vh;
-    left: 45vw;
-  }
-  .room-name {
-    position: fixed;
-    left: 32%;
-    right: 32%;
-    top: 13%;
+  .room-info {
+    margin-top: 15%;
+    width: 100%;
+    transition: all 1s ease 0s;
 
-    width: 36%;
-    height: 5%;
-
-    display: flex;
     text-align: center;
-    align-items: center;
-    justify-content: center;
 
-    background-color: white;
+    .top-player-name{
+      width: fit-content;
+      font-size: 24rpx;
+      margin: 4rpx auto;
 
-    border-radius: 32rpx;
-
-    .text {
-      height: fit-content;
-      font-size: 32rpx;
+      transition: all 1.5s ease 0s;
     }
+    .room-name {
+      width: 296rpx; height: 80rpx;
+      margin: 12rpx auto;
 
+      text-align: center;
+
+      background-color: white;
+      border-radius: 32rpx;
+
+      .text {
+        width: fit-content;
+        height: 100%;
+        font-size: 32rpx;
+        line-height: 80rpx;
+        margin: 12rpx auto;
+      }
+    }
+    .rest-time {
+      width: fit-content;
+      margin: 32rpx auto;
+      font-size: 96rpx;
+    }
   }
-  .restTime{
-    position: fixed;
-    top: 18vh;
-    left: 33vw;
-    font-size: 105rpx;
+  .room-info.focusing {
+    margin-top: 12%;
   }
   .focus-btn {
     position: fixed;
@@ -125,7 +122,6 @@ van-dialog {
   width: 80%;
 
   .start-config {
-
     border-radius: 64rpx;
     background-color: white;
     margin: auto auto;
@@ -146,9 +142,7 @@ van-dialog {
       }
     }
 
-    .clock-img {
-      width: 270rpx;
-    }
+    .clock-img { width: 270rpx; }
 
     van-slider {
       width: 70%;
@@ -171,10 +165,7 @@ van-dialog {
       justify-content: center;
       align-items: center;
 
-      .desc {
-        font-size: 32rpx;
-      }
-
+      .desc { font-size: 32rpx; }
       .btn {
         margin-left: 48rpx;
         padding: 10rpx 20rpx;
@@ -186,7 +177,6 @@ van-dialog {
 
     .mode-set {
       width: 75%;
-
       margin-bottom: 21rpx;
 
       display: flex;
@@ -195,20 +185,12 @@ van-dialog {
       .mode {
         background-color: #D8D8D8;
         padding: 20rpx 42rpx;
-
         font-size: 30rpx;
-
         border-radius: 16rpx;
       }
-      .selected {
-        background-color: #C0A0C7;
-      }
+      .selected { background-color: #C0A0C7; }
     }
-
-    .text {
-      font-size: 27rpx;
-    }
-
+    .text { font-size: 27rpx; }
     .start-btn {
       background-color: #4C7FB3;
       color: white;
@@ -216,11 +198,8 @@ van-dialog {
       margin: 32rpx 32rpx;
       border-radius: 8rpx;
     }
-
-
   }
-
-  .selector-config {
+  .tags-config {
 
     border-radius: 64rpx;
     background-color: white;
@@ -298,11 +277,7 @@ van-dialog {
     }
 
     .shade-block {
-
-      .shade-topic {
-        text-align: center;
-      }
-
+      .shade-topic { text-align: center; }
       .btn {
         width: 110rpx;
         margin: 16rpx 21rpx;
@@ -329,84 +304,88 @@ van-dialog {
       }
     }
   }
-
-
 }
 
-.beFocus{
+.focus-bottom{
   position: fixed;
-  bottom: 7vh;
-  .weatherStatus {
-    animation: 1.5s linear 0s zoomIn;
-    position: relative;
-    bottom: 1vh;
-    left: 28vw;
-    height: 75rpx;
-    border-radius: 18rpx;
-    background-color: rgba(0,0,0,0.19);
+  left: 0; bottom: 5vh;
+  width: 100%;
+
+  .weather-status {
+    animation: 1.5s linear 0.5s move-in both;
+
     display: flex;
-    flex-direction: column;
-    width: 345rpx;
-    .weatherBox {
-      width: 301rpx;
-      height: 56rpx;
-      flex-direction: row;
-      display: flex;
-      justify-content: space-between;
-      margin: 9rpx 0 0 38rpx;
-      .weather {
-        width: 58rpx;
-        height: 51rpx;
-        margin: 2rpx 28rpx 0 0;
-      }
-    }
-  }
-  .bottomInfo {
-    animation: 1s linear 0s zoomIn;
-    position: relative;
-    width: 671rpx;
-    height: 109rpx;
-    margin-top: 98rpx;
+    //flex-direction: column;
+    //justify-content: center;
+    align-items: center;
     flex-direction: row;
+    justify-content: space-between;
+
+    width: 312rpx; height: 72rpx;
+
+    border-radius: 16rpx;
+    background-color: rgba(0,0,0,0.19);
+
+    margin: 0 auto;
+    padding: 0 16rpx;
+
+    .weather { height: 56rpx; }
+  }
+  .bottom-info {
+    animation: 1s linear 0s move-in;
+    position: relative;
+    width: 100%;
+    height: 128rpx;
+    margin-top: 92rpx;
     display: flex;
-    .playerInfo {
-      position: relative;
-      bottom: 1.1vh;
-      left: 4vw;
-      .avatar1{
+    flex-direction: row;
+
+    .player-info {
+      position: absolute;
+
+      left: 24rpx;
+      width: 160rpx; height: fit-content;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .avatar {
         width: 80rpx; height: 80rpx;
-        margin: 4rpx;
+        margin: 0 0 8rpx;
         border-radius: 50%;
         border: #F8D1DB solid 2px;
       }
-      .playerName{
-        width: 63rpx;
-        height: 30rpx;
-        color: rgba(0,0,0,0.5);
+      .player-name {
+        width: 100%; height: 32rpx;
+
+        color: white;
         font-size: 24rpx;
-        text-align: left;
-        margin: 4rpx 0 0 22rpx;
+        text-align: center;
+
+        overflow: hidden; // 隐藏文字
+        white-space: nowrap; // 不换行
+        text-overflow: ellipsis;// 显示...
       }
     }
     .slogan {
-      position: relative;
-      left: 4vw;
-      height: 96rpx;
+      position: absolute;
+
+      left: 192rpx; right: 32rpx;
+      height: 80rpx;
+
       border-radius: 14rpx;
       background-color: rgba(0,0,0,0.13);
-      width: 870rpx;
-      .slogan-text {
-        width: 221rpx;
-        height: 35rpx;
-        color: rgba(255,255,255,1);
-        font-size: 25rpx;
-        text-align: left;
-        margin: 14rpx 0 0 33rpx;
-      }
+
+      color: white;
+      font-size: 24rpx;
+      text-align: left;
+
+      padding: 16rpx 32rpx;
     }
   }
-  .roomStatus{
-    animation: 2s linear 0s zoomIn;
+  .room-status{
+    animation: 2s linear 0s move-in;
     position: absolute;
     left: 74vw;
     bottom: 25vh;

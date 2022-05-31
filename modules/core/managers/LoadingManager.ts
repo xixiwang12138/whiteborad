@@ -67,30 +67,35 @@ export function loadingMgr(): LoadingManager {
 @manager
 class LoadingManager extends BaseManager {
 
-	public isBlocked: boolean = false;
+	public isLoading = false;
+	public isBlocked = false;
 
 	public async showLoading(config: LoadingOptions) {
-		// console.error("showLoading", this.isBlocked, config)
+		console.error("[S] showLoading", this.isBlocked, config)
 		if (this.isBlocked || !config ||
 			config.enable === false) return false;
 
 		await this.onShowLoading(config);
+		this.isLoading = true;
 		return true;
 	}
 	public async hideLoading() {
 		// console.error("hideLoading", this.isBlocked);
-		if (this.isBlocked) return;
+		if (this.isBlocked || !this.isLoading) return;
 
 		await this.onHideLoading();
+		this.isLoading = false;
 	}
 
 	/**
 	 * 自定义Loading实现
 	 */
 	protected onShowLoading(config: LoadingOptions) {
+		console.error("[L] showLoading", config)
 		return wx.showLoading(config);
 	}
 	protected onHideLoading() {
+		console.error("[L] hideLoading")
 		return wx.hideLoading();
 	}
 }

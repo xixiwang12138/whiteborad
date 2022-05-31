@@ -2,6 +2,7 @@ import {BaseManager, getManager, manager} from "./BaseManager";
 import {PromiseUtils} from "../../../utils/PromiseUtils";
 import {ErrorData, errorMgr} from "./ErrorManager";
 import ShowModalSuccessCallbackResult = WechatMiniprogram.ShowModalSuccessCallbackResult;
+import {loadingMgr} from "./LoadingManager";
 
 export type AlertType = "toast" | "modal";
 export type IconType = "success" | "error" | "loading" | "none";
@@ -102,14 +103,14 @@ class AlertManager extends BaseManager {
 
 		if (this.isToast) {
 			// @ts-ignore
-			await this.doShowToast(config);
+			await this.onShowToast(config);
 			await PromiseUtils.wait(config.duration);
-		} else res = await this.doShowModal(config)
+		} else res = await this.onShowModal(config)
 		return res;
 	}
 	public async hideAlert() {
 		if (!this.isToast) return;
-		await this.doHideToast();
+		await this.onHideToast();
 	}
 
 	public showToast(title: string, icon: IconType) {
@@ -129,13 +130,17 @@ class AlertManager extends BaseManager {
 	/**
 	 * 自定义实现
 	 */
-	protected doShowModal(config: AlertOptions) {
+	protected onShowModal(config: AlertOptions) {
+		console.error("[L] showModal", config)
 		return wx.showModal(config)
 	}
-	protected doShowToast(config: AlertOptions) {
+	protected async onShowToast(config: AlertOptions) {
+		await PromiseUtils.waitFor(() => !loadingMgr().isLoading)
+		console.error("[L] showToast", config)
 		return wx.showToast(config)
 	}
-	protected doHideToast() {
+	protected onHideToast() {
+		console.error("[L] hideToast")
 		return wx.hideToast({})
 	}
 

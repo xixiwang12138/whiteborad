@@ -1,4 +1,5 @@
 <view class="player-info">
   <image class="avatar" src="{{avatar}}" mode="widthFix"></image>
-  <view class="name" style="border: {{isShowBorder?1:0}}px solid gray;">{{name}}</view>
+  <view class="name"
+        style="border: {{isShowBorder?1:0}}px solid gray; border-left: none;">{{name}}</view>
 </view>

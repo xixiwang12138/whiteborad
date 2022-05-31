@@ -2,7 +2,7 @@ import {MainData, StateData} from "../../core/data/BaseData";
 import {dataPK, field} from "../../core/data/DataLoader";
 import {DynamicData} from "../../core/data/DynamicData";
 
-const DefaultGold = 500;
+const DefaultGold = 100;
 
 export type WxUserInfo = {
 	nickName: string,

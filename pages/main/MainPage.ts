@@ -15,10 +15,12 @@ import {pageMgr} from "../../modules/core/managers/PageManager";
 import SystemInfo = WechatMiniprogram.SystemInfo;
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {ShopPage} from "../shop/ShopPage";
+import { Sprite } from "pixi.js";
 
 type WindowType = "Start" | "Room" | "Tags";
 
 const AccThreshold = 0.3;
+const TimeRate = 1000;
 
 class Data extends BasePageData {
 
@@ -109,6 +111,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     this.updateDown();
     this.updateTime();
     this.updateFocus();
+    this.updateHouseMove();
   }
 
   updateDown() {
@@ -122,7 +125,8 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     const runtimeFocus = this.data.runtimeFocus;
     if (!runtimeFocus) return;
 
-    const dt = pageMgr().deltaTime;
+    const rate = this.isDebug ? TimeRate : 1;
+    const dt = pageMgr().deltaTime * rate;
 
     if (!runtimeFocus.isValid) {
       if (runtimeFocus.invalidTime == 0) // 初次
@@ -239,7 +243,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
 
   // endregion
 
-  // 其他事件
+  // region 其他事件
 
   @pageFunc
   onShopTap() { pageMgr().push(ShopPage); }
@@ -249,6 +253,11 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   // endregion
 
   // region 界面绘制
+
+  private pixiObj: {
+    background?: Sprite,
+    house?: Sprite
+  } = { };
 
   public get isDebug() { return this.sys.platform == 'devtools'; }
 
@@ -278,12 +287,13 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     bg.alpha = this.isDebug ? 0.25 : 1;
 
     this.canvasPage.add(bg);
+    this.pixiObj.background = bg;
   }
   private async drawHouse() {
     const sp = await this.canvasPage.createSprite("../../assets/common/3.png");
 
     sp.x = this.canvasPage.width / 2;
-    sp.y = this.canvasPage.height / 2;
+    sp.y = this.canvasPage.height / 5 * 3;
 
     sp.scale.x = sp.scale.y = 0.8;
     sp.anchor.x = 0.5;
@@ -292,6 +302,28 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     sp.alpha = this.isDebug ? 0.25 : 1;
 
     this.canvasPage.add(sp);
+    this.pixiObj.house = sp;
+  }
+
+  private updateHouseMove() {
+    const runtimeFocus = this.data.runtimeFocus;
+    const focusing = runtimeFocus?.isValid
+    if (!focusing) { // 缩小
+      const dtScale = (this.pixiObj.house.scale.x - 0.8) / 8;
+      if (dtScale <= 0.00001) return;
+
+      this.pixiObj.house.scale.x -= dtScale;
+      this.pixiObj.house.scale.y -= dtScale;
+
+    } else { // 放大
+      const dtScale = (1 - this.pixiObj.house.scale.x) / 24;
+      if (dtScale <= 0.00001) return;
+
+      this.pixiObj.house.scale.x += dtScale;
+      this.pixiObj.house.scale.y += dtScale;
+    }
+
+    this.canvasPage.render();
   }
 
   // endregion

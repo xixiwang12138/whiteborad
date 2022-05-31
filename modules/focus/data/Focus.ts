@@ -57,6 +57,8 @@ export class RuntimeFocus extends BaseData {
 	public restInvalidTime: string;
 
 	public refresh() {
+		if (!this.focus) return;
+
 		const duration = this.focus.duration;
 		const rest = duration * 60 - this.elapseTime / 1000;
 		this.restTime = DateUtils.sec2Str(rest);
@@ -83,7 +85,7 @@ export class RuntimeFocus extends BaseData {
 	}
 
 	public get isFailed() {
-		return this.invalidTime >= MaxInvalidTime;
+		return this.invalidTime >= MaxInvalidTime * 1000;
 	}
 	public get isSuccess() {
 		return this.elapseTime / 1000 >= this.focus.duration * 60;
@@ -102,14 +104,14 @@ export class Focus extends DynamicData {
 
 	@field(String)
 	public roomId?: string
-	@field(String)
+	@field(Number)
 	public npcRoomId?: number
 
 	@field(Number)
 	public tagIdx: number = 0
 	@field(String)
 	public note: string
-	@field(String)
+	@field(Number)
 	public mode: FocusMode = FocusMode.Flip
 	@field(Number)
 	public duration: number = 60

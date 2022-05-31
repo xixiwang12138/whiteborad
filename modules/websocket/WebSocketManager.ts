@@ -5,8 +5,8 @@ import SocketTask = WechatMiniprogram.SocketTask;
 export function wsMgr() {
 	return getManager(WebSocketManager)
 }
-// const Host = "wss://homi-ws-server-1836805-1255510304.ap-shanghai.run.tcloudbase.com";
-const Host = "ws://localhost:3000";
+const Host = "wss://homi-ws-server-1836805-1255510304.ap-shanghai.run.tcloudbase.com";
+// const Host = "ws://localhost:3000";
 
 @manager
 export class WebSocketManager extends BaseManager {

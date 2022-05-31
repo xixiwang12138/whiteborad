@@ -39,6 +39,7 @@ export class FocusManager extends BaseManager {
    * 结束专注
    */
   public async endFocus(runtime: RuntimeFocus, tagIdx?: number, note?: string) {
+    debugger;
     const response = await EndFocus({runtime, tagIdx, note});
     const res = DataLoader.load(Focus, response.focus);
     this.curFocus = null;

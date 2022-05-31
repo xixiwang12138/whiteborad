@@ -135,11 +135,11 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     runtimeFocus.realTime += dt; // 实际经过的时间
 
     if (runtimeFocus.isSuccess) {
-      this.setData({ runtimeFocus: null });
       this.onSuccess();
-    } else if (runtimeFocus.isFailed) {
       this.setData({ runtimeFocus: null });
+    } else if (runtimeFocus.isFailed) {
       this.onFailed();
+      this.setData({ runtimeFocus: null });
     } else
       this.setData({ runtimeFocus });
   }
@@ -232,9 +232,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   }
 
   private async onFailed() {
-    const {tagIdx, note} = this.data.focus;
-    const focus = await focusMgr().endFocus(
-      this.data.runtimeFocus, tagIdx, note);
+    const focus = await focusMgr().cancelFocus("专注失败");
     await this.setData({ focus, runtimeFocus: null })
     await alertMgr().showToast("好遗憾，专注失败了，调整状态再来一次吧！");
   }

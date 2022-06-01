@@ -26,6 +26,16 @@ export type PlayerEditableInfo = {
 	slogan?: string
 }
 
+export type PlayerBaseInfo = {
+	openid: string
+	chainId: string
+	address: string
+	name: string
+	nickName: string
+	avatarUrl: string
+	level: string
+}
+
 export class Player extends StateData<PlayerState> {
 
 	@field @dataPK

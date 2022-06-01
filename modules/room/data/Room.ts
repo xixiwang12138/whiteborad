@@ -16,6 +16,11 @@ export enum ParamType {
 	EB, // Exp Bonus: 经验值加成
 }
 
+export type RoomEditableInfo = {
+	name?: string,
+	notice?: string
+}
+
 export class Room extends DynamicData implements IRoomDrawable {
 
 	@field(String)

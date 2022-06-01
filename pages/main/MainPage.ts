@@ -91,8 +91,6 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   }
 
   private createConnection() {
-    wsMgr().connect(RoomType, [this.item.roomId],
-      data => this.onRoomMessage(data));
   }
 
   private setupWxListeners() {

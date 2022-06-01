@@ -25,4 +25,7 @@ export class WebSocketManager extends BaseManager {
 		return task;
 	}
 
+	public close(task: SocketTask, code?: number, reason?: string) {
+		task.close({code, reason})
+	}
 }

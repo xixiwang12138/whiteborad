@@ -5,7 +5,7 @@
   <image class="return" src="../../assets/visit/return.png" mode="heightFix" bindtap="return"></image>
   <gold-level-display gold="50000" level="99" expRate="0.2333" />
   <view class="room-name">
-    <input class="text" value="摆烂小屋" placeholder="房间名不能为空~"></input>
+    <input class="text" value="摆烂小屋" placeholder="房间名不能为空~" disabled="true"/>
   </view>
   <view class="focus-btn" bindtap="onClickStart">
     <view class="text">专注</view>

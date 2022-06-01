@@ -16,6 +16,8 @@ import SystemInfo = WechatMiniprogram.SystemInfo;
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {ShopPage} from "../shop/ShopPage";
 import { Sprite } from "pixi.js";
+import CustomEvent = WechatMiniprogram.CustomEvent;
+import {blockLoading} from "../../modules/core/managers/LoadingManager";
 
 type WindowType = "Start" | "Room" | "Tags";
 
@@ -244,6 +246,14 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   // endregion
 
   // region 其他事件
+
+  @pageFunc
+  @blockLoading
+  onRoomNameBlur(e: CustomEvent) {
+    console.log("onRoomNameBlur", e);
+    const name = e.detail.value;
+
+  }
 
   @pageFunc
   onShopTap() { pageMgr().push(ShopPage); }

@@ -3,7 +3,7 @@ import {dataPK, field} from "../../core/data/DataLoader";
 import {Player} from "../../player/data/Player";
 import {Trait} from "./Trait";
 import {DynamicData} from "../../core/data/DynamicData";
-import {IRoomDrawable} from "./Animation";
+import {IRoomDrawable} from "./IRoomDrawable";
 import {Effect} from "./Effect";
 import {roomSkinRepo} from "./RoomSkin";
 
@@ -76,9 +76,13 @@ export class Room extends DynamicData implements IRoomDrawable {
 
 	public get skin() { return roomSkinRepo().getById(this.skinId) }
 
-	public get picture() {return this.skin.picture }
-	public get layers() {return this.skin.layers }
-	public get animations() {return this.skin.animations }
+	public get thumbnail() { return this.skin.thumbnail }
+	public get picture() { return this.skin.picture }
+	public get layers() { return this.skin.layers }
+	public get animations() { return this.skin.animations }
+
+	public get thumbnailUrl() { return this.skin.thumbnailUrl; }
+	public get pictureUrl() { return this.skin.pictureUrl; }
 
 	// endregion
 

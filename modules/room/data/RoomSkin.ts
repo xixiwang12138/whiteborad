@@ -1,14 +1,14 @@
 import {dataClass} from "../../core/managers/DataManager";
 import {StaticData} from "../../core/data/StaticData";
 import {BaseRepository, getRepository, repository} from "../../core/data/BaseRepository";
-import {Condition} from "../../player/data/Condition";
 import {field} from "../../core/data/DataLoader";
-import {Animation, PictureLayer} from "./Animation";
+import {Animation, IRoomDrawable, PictureLayer} from "./IRoomDrawable";
+import {Condition} from "../../player/data/Condition";
 
 export type Color = string;
 
 @dataClass("RoomSkin")
-export class RoomSkin extends StaticData {
+export class RoomSkin extends StaticData implements IRoomDrawable {
 
 	@field(String)
 	public name: string;
@@ -18,7 +18,7 @@ export class RoomSkin extends StaticData {
 	public thumbnail?: string; // 缩略图（如果不提供，根据图层来绘制）
 
 	@field(String)
-	public picture: string; // 房间图片
+	public picture?: string; // 房间图片
 	@field([PictureLayer])
 	public layers: PictureLayer[] = []; // 额外图层
 	@field([Animation])
@@ -42,6 +42,14 @@ export class RoomSkin extends StaticData {
 
 	@field(Number)
 	public price: number;
+
+	public get thumbnailUrl() {
+		return this.thumbnail || `/roomSkins/thumbnails/${this.id}.png` || this.pictureUrl;
+	}
+	public get pictureUrl() {
+		return this.picture || `/roomSkins/pictures/${this.id}.png`;
+	}
+
 }
 
 export function roomSkinRepo() {

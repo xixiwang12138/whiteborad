@@ -1,4 +1,4 @@
-import {Condition, ConditionType} from "../Data/Condition";
+import {Condition, ConditionType} from "../data/Condition";
 import {Constructor} from "../../core/BaseContext";
 
 export function conditionProcessor(type: ConditionType) {

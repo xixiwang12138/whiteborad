@@ -1,4 +1,5 @@
 import {BaseData} from "../../core/data/BaseData";
+import {field} from "../../core/data/DataLoader";
 
 export enum ConditionType {
 	Func = "func",
@@ -103,7 +104,6 @@ export class Condition extends BaseData {
 }
 
 import {createProcessor} from "../utils/ConditionProcessor";
-import {field} from "../../core/data/DataLoader";
 
 export class ConditionGroup extends BaseData {
 

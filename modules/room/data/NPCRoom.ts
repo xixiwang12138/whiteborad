@@ -4,7 +4,7 @@ import {Effect} from "./Effect";
 import {Trait} from "./Trait";
 import {BaseRepository, getRepository, repository} from "../../core/data/BaseRepository";
 import {Constructor} from "../../core/BaseContext";
-import {Animation, PictureLayer} from "./Animation";
+import {Animation, PictureLayer} from "./IRoomDrawable";
 import {Condition} from "../../player/data/Condition";
 
 export enum NPCRoomState {

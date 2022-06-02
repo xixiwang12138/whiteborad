@@ -18,6 +18,7 @@ import {ShopPage} from "../shop/ShopPage";
 import { Sprite } from "pixi.js";
 import CustomEvent = WechatMiniprogram.CustomEvent;
 import {blockLoading} from "../../modules/core/managers/LoadingManager";
+import {roomMgr} from "../../modules/room/managers/RoomManager";
 
 type WindowType = "Start" | "Room" | "Tags";
 
@@ -81,16 +82,15 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   @waitForDataLoad
   private async initialize() {
     await this.loadRoom();
-    this.createConnection();
     this.setupWxListeners();
     await this.refresh();
   }
 
   private async loadRoom() {
-    await this.setItem(Room.testData());
-  }
-
-  private createConnection() {
+    const room = Room.testData();
+    await this.setItem(room);
+    await roomMgr().enterRoom(room,
+        e => this.onRoomMessage(e))
   }
 
   private setupWxListeners() {
@@ -278,13 +278,15 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   }
 
   private async drawBackground() {
+    const skin = this.item.skin;
+
     const w = this.canvasPage.width;
     const h = this.canvasPage.height;
-    const ctx = this.canvasPage.makeContext(w, h)
+    const ctx = this.canvasPage.makeContext(w, h);
 
     const grd = ctx.createLinearGradient(0, 0, 0, h);
-    grd.addColorStop(0, "#C7E1FA");
-    grd.addColorStop(1, "#4F8DCC");
+    grd.addColorStop(0, `#${skin.backgroundColors[0]}`);
+    grd.addColorStop(1, `#${skin.backgroundColors[1]}`);
 
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0, w, h);
@@ -306,7 +308,6 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     sp.scale.x = sp.scale.y = 0.8;
     sp.anchor.x = 0.5;
     sp.anchor.y = 0.75;
-
     sp.alpha = this.isDebug ? 0.25 : 1;
 
     this.canvasPage.add(sp);
@@ -314,6 +315,8 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   }
 
   private updateHouseMove() {
+    if (!this.pixiObj.house) return;
+
     const runtimeFocus = this.data.runtimeFocus;
     const focusing = runtimeFocus?.isValid
     if (!focusing) { // 缩小

@@ -238,7 +238,6 @@ van-dialog {
       border-radius: 8rpx;
     }
   }
-
   .room-config {
     width: 80%;
     height: 35%;
@@ -302,6 +301,147 @@ van-dialog {
         font-size: 36rpx;
         font-weight: normal;
       }
+    }
+  }
+  .result-config {
+    border-radius: 150rpx;
+    background-color: white;
+    margin: auto auto;
+    padding-top: 32rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+    .result-config-top{
+      margin-top: 4vh;
+      z-index: 72;
+      height: 16vh;
+      border-radius: 20px;
+      background-color: rgba(237,237,237,1);
+      width: 65vw;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+      .coinGain {
+        width: 329rpx;
+        height: 88rpx;
+        flex-direction: row;
+        display: flex;
+        justify-content: space-between;
+        margin: 33rpx 0 0 40rpx;
+        text {
+          font-size: 37rpx;
+          text-align: center;
+          margin-top: 19rpx;
+        }
+      }
+
+      .upgrade {
+        width: 401rpx;
+        height: 53rpx;
+        flex-direction: row;
+        display: flex;
+        justify-content: space-between;
+        margin: 37rpx 0 0 39rpx;
+        .level {
+          height: 53rpx;
+          border-radius: 26rpx;
+          background-color: rgba(216,216,216,1);
+          display: flex;
+          flex-direction: column;
+          width: 112rpx;
+          text{
+            width: 40rpx;
+            height: 35rpx;
+            display: block;
+            overflow-wrap: break-word;
+            font-size: 25rpx;
+            line-height: 35rpx;
+            text-align: left;
+            margin: 9rpx 0 0 37rpx;
+          }
+        }
+        .experience {
+          height: 49rpx;
+          border-radius: 6px;
+          background-color: rgba(255,255,255,1);
+          display: flex;
+          flex-direction: column;
+          width: 216rpx;
+          .progress {
+            width: 158rpx;
+            height: 49rpx;
+            border-radius: 6px;
+            background-color: rgba(179,179,179,1);
+            display: flex;
+            flex-direction: column;
+          }
+        }
+      }
+
+      .tips {
+        width: 184rpx;
+        height: 30rpx;
+        display: flex;
+        flex-direction: row;
+        margin: 0 0 16rpx 277rpx;
+        text {
+          width: 184rpx;
+          height: 30rpx;
+          font-size: 21rpx;
+          text-align: left;
+        }
+      }
+    }
+    .add {
+      z-index: 75;
+      position: absolute;
+      left: 293rpx;
+      top: 156rpx;
+      width: 60rpx;
+      height: 51rpx;
+      display: block;
+      overflow-wrap: break-word;
+      font-size: 37rpx;
+      white-space: nowrap;
+      line-height: 51rpx;
+      text-align: center;
+    }
+    .content {
+      width: 412rpx;
+      height: 121rpx;
+      overflow-wrap: break-word;
+      text-align: center;
+      font-size: 0rpx;
+      margin: 37rpx 0 0 33rpx;
+      .result-text1 {
+        font-size: 28rpx;
+        line-height: 39rpx;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .mins {
+        font-size: 32rpx;
+        color: rgba(74,150,255,1);
+        line-height: 39rpx;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .result-text2 {
+        text-align: center;
+        font-size: 28rpx;
+        line-height: 39rpx;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    .result-btn {
+      background-color: #4C7FB3;
+      color: white;
+      padding: 16rpx 140rpx;
+      margin: 40rpx 32rpx;
+      border-radius: 8rpx;
     }
   }
 }

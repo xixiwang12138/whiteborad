@@ -15,15 +15,23 @@ import {pageMgr} from "../../modules/core/managers/PageManager";
 import SystemInfo = WechatMiniprogram.SystemInfo;
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {ShopPage} from "../shop/ShopPage";
-import { Sprite, Container } from "pixi.js";
+import { Sprite, Container, Texture } from "pixi.js";
 import CustomEvent = WechatMiniprogram.CustomEvent;
 import {blockLoading} from "../../modules/core/managers/LoadingManager";
 import {roomMgr} from "../../modules/room/managers/RoomManager";
+import {Animation} from "../../modules/room/data/IRoomDrawable";
+import {MathUtils} from "../../utils/MathUtils";
 
 type WindowType = "Start" | "Room" | "Tags";
 
 const AccThreshold = 0.3;
-const TimeRate = 1000;
+const TimeRate = 200;
+
+type RuntimeAnimation = {
+  animation: Animation
+  textures: Texture[]
+  sprite: Sprite
+}
 
 class Data extends BasePageData {
 
@@ -113,6 +121,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     this.updateTime();
     this.updateFocus();
     this.updateHouseMove();
+    this.updateAnimations();
   }
 
   updateDown() {
@@ -264,9 +273,16 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   // region 界面绘制
 
   private pixiObj: {
-    background?: Sprite,
+    aniTime: number
+    background?: Sprite
     house?: Container
-  } = { };
+    layers: Sprite[]
+    animations: RuntimeAnimation[]
+  } = {
+    aniTime: 0,
+    layers: [],
+    animations: []
+  };
 
   public get isDebug() { return this.sys.platform == 'devtools'; }
 
@@ -314,28 +330,48 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     house.scale.x = house.scale.y = 0.3;
     house.pivot.x = house.pivot.y = 0.5;
 
-    house.alpha = this.isDebug ? 0.5 : 1;
+    // house.alpha = this.isDebug ? 0.5 : 1;
 
     const picture = await this.canvasPage
       .createSprite(this.item.pictureUrl);
 
     picture.anchor.x = picture.anchor.y = 0.5;
+    picture.zIndex = 0;
+
+    house.addChild(picture);
 
     for (const layer of this.item.layers) {
       const ls = await this.canvasPage
         .createSprite(layer.pictureUrl);
       ls.anchor.x = layer.anchor[0];
       ls.anchor.y = layer.anchor[1];
-      ls.x = layer.position[0] * house.width;
-      ls.y = layer.position[1] * house.height;
+      ls.x = layer.position[0] * picture.width;
+      ls.y = layer.position[1] * picture.height;
       ls.zIndex = layer.z;
 
-      ls.scale.x = 10;
-
       house.addChild(ls);
+      this.pixiObj.layers.push(ls);
     }
+    for (const animation of this.item.animations) {
+      const textures = [];
+      for (let i = 0; i < animation.count; i++)
+        textures.push(await this.canvasPage
+          .createTexture(animation.pictureUrl(i)));
 
-    house.addChild(picture);
+      const as = await this.canvasPage.createSprite();
+      as.anchor.x = animation.anchor[0];
+      as.anchor.y = animation.anchor[1];
+      as.x = animation.position[0] * picture.width;
+      as.y = animation.position[1] * picture.height;
+      as.zIndex = animation.z;
+      as.alpha = 0;
+
+      house.addChild(as);
+      this.pixiObj.animations.push({
+        animation, textures, sprite: as
+      });
+    }
+    house.sortChildren();
 
     this.canvasPage.add(house);
     this.pixiObj.house = house;
@@ -364,8 +400,25 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     this.canvasPage.render();
   }
 
-  private updateAnimation() {
+  private updateAnimations() {
+    if (this.pixiObj.animations.length <= 0) return;
 
+    const runtimeFocus = this.data.runtimeFocus;
+    const focusing = runtimeFocus?.isValid;
+
+    this.pixiObj.aniTime += pageMgr().deltaTime;
+    this.pixiObj.animations.forEach(
+      ani => this.updateAnimation(ani, focusing));
+  }
+
+  private updateAnimation(ra: RuntimeAnimation, focusing) {
+    const ani = ra.animation;
+    const fd = ani.duration / ani.count * 1000;
+    const index = Math.floor((this.pixiObj.aniTime / fd) % ani.count);
+
+    ra.sprite.texture = ra.textures[index];
+    ra.sprite.alpha = MathUtils.clamp(
+      ra.sprite.alpha + (focusing ? 0.05 : -0.05));
   }
 
   // endregion

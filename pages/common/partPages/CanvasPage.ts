@@ -101,21 +101,36 @@ export class CanvasPage extends PartialPage<Data>{
 	// @ts-ignore
 	public async createSprite(urlOrCanvas?: string | HTMLCanvasElement,
 														waitFor = true): Promise<Sprite> {
+		// if (typeof urlOrCanvas == "string") {
+		// 	if (urlOrCanvas.startsWith("@")) // 远程文件
+		// 		urlOrCanvas = await CloudFileUtils.downloadFile(urlOrCanvas.slice(1));
+		//
+		// 	const res: Sprite = this.pixi.Sprite.from(urlOrCanvas);
+		// 	if (waitFor) await PromiseUtils.waitFor(
+		// 		() => res.texture.valid);
+		// 	return res;
+		// } else if (urlOrCanvas)
+		// 	return this.pixi.Sprite.fromCanvas(urlOrCanvas);
+		// return new this.pixi.Sprite(
+		// 	new this.pixi.Texture(new this.pixi.BaseTexture())
+		// );
+		return new this.pixi.Sprite(await this.createTexture(urlOrCanvas, waitFor));
+	}
+
+	// @ts-ignore
+	public async createTexture(urlOrCanvas?: string | HTMLCanvasElement,
+											 waitFor = true): Promise<Texture> {
 		if (typeof urlOrCanvas == "string") {
 			if (urlOrCanvas.startsWith("@")) // 远程文件
 				urlOrCanvas = await CloudFileUtils.downloadFile(urlOrCanvas.slice(1));
 
-			const res: Sprite = this.pixi.Sprite.from(urlOrCanvas);
-			if (waitFor) await PromiseUtils.waitFor(
-				() => res.texture.valid);
+			const res: Texture = this.pixi.Texture.from(urlOrCanvas);
+			if (waitFor) await PromiseUtils.waitFor(() => res.valid);
 			return res;
 		} else if (urlOrCanvas)
-			return this.pixi.Sprite.fromCanvas(urlOrCanvas);
-		return new this.pixi.Sprite(
-			new this.pixi.Texture(new this.pixi.BaseTexture())
-		);
+			return this.pixi.Texture.fromCanvas(urlOrCanvas);
+		return new this.pixi.Texture(new this.pixi.BaseTexture());
 	}
-
 	public createGraphics(): Graphics {
 		return new this.pixi.Graphics();
 	}

@@ -95,8 +95,8 @@ export class Animation extends BaseData {
 
 	public pictureUrl(index, gender = 0) {
 		const root = this.isNPCRoom ? "npcRooms" : "roomSkins";
-		return `@/${root}/animations/${this.parent.id}-${this.index}-${index}` +
-			this.isCharacter && gender > 0 ? `-${gender}.png` : `.png`
+		return `@/${root}/animations/${this.parent.id}-${this.index}-${index + 1}` +
+			(this.isCharacter && gender > 0 ? `-${gender}.png` : `.png`)
 	}
 
 }

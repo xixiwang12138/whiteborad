@@ -3,7 +3,8 @@ import {BasePage, BasePageData} from "../common/core/BasePage";
 import {playerMgr} from "../../modules/player/managers/PlayerManager";
 import {PlayerPage} from "../common/partPages/PlayerPage";
 import {field} from "../../modules/core/data/DataLoader";
-
+import {PlayerEditableInfo, PlayerState} from "../../modules/player/data/Player";
+import {input} from "../common/utils/PageUtils";
 class Data extends BasePageData {
 
 	@field(Array)
@@ -21,10 +22,12 @@ class Data extends BasePageData {
 		userName: "测试君", level: 3, name: "摆烂小屋"
 	},{
 		userName: "测试君", level: 3, name: "摆烂小屋"
-	}]
-
+	}];
 	@field
-	isEdit = false
+	info: PlayerEditableInfo = {};
+	@field
+	isEdit = false;
+
 }
 
 @page("mine", "我的")
@@ -37,6 +40,26 @@ export class MinePage extends BasePage<Data> {
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
 
+	onReady() {
+		super.onReady();
+		this.playerPage.registerOnLogin(
+			() => this.onLogin())
+	}
+
+	// region 事件
+
+	onLogin() {
+		const player = this.playerPage.player;
+		this.setData({
+			info: {
+				name: player.name,
+				slogan: player.slogan,
+				gender: player.gender,
+				avatarUrl: player.avatarUrl
+			},
+		});
+	}
+
 	@pageFunc
   public onAvatarTap(){
     this.setData({ isEdit: true }).then()
@@ -45,5 +68,33 @@ export class MinePage extends BasePage<Data> {
   @pageFunc
   public onClose(){
 		this.setData({ isEdit: false }).then()
- 	}
+	 }
+	 
+	 @pageFunc
+	 onMaleTap() {
+		 this.setData({ "info.gender": 1 });
+	 }
+
+	 @pageFunc
+	 onFemaleTap() {
+		 this.setData({ "info.gender": 2 });
+	 }
+ 
+	 @pageFunc
+	 @input("info.name")
+	 onNameInput() {}
+ 
+	 @pageFunc
+	 @input("info.slogan")
+	 onSloganInput() {}
+
+	 @pageFunc
+	 public async onSubmit() {
+		const player = this.playerPage.player;
+		 await playerMgr().editInfo(this.data.info);
+		 this.setData({
+			 isEdit:false,
+		 }),
+		 this.playerPage.resetPlayer()
+	 }
 }

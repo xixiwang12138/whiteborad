@@ -29,16 +29,21 @@
 <van-popup show="{{isEdit}}" round bind:close="onClose"
            custom-class="popup">
   <view class="popup-content">
-    <image class="avatar" src="../../images/avatar.jpeg" mode="aspectFill"/>
-    <input class="name" value="测试君"></input>
-    <view class="gender">
-      <view class="male">男</view>
-      <view class="female">女</view>
+    <image class="avatar" src="{{info.avatarUrl}}" mode="aspectFill"/>
+    <input class="name" maxlength="8" value="{{info.name}}"bind:input="onNameInput" />
+    <view class="gender-container">
+      <view class="gender-box male {{info.gender == 1 ? 'selected' : ''}}"
+            bind:tap="onMaleTap">男</view>
+      <view class="gender-box female {{info.gender == 2 ? 'selected' : ''}}"
+            bind:tap="onFemaleTap">女</view>
     </view>
-    <textarea class="slogan" placeholder="好好学习加油买房!" adjust-position="{{false}}" focus="{{false}}" maxlength="50" cursor-spacing="10"/>
+    <textarea class="slogan" placeholder="输入你的Slogan吧！"
+                adjust-position="{{false}}" focus="{{false}}"
+                maxlength="50" cursor-spacing="10"
+                value="{{info.slogan}}" bind:input="onSloganInput"/>
     <view class="buttons">
-      <view class="cancel">取消</view>
-      <view class="ok">完成</view>
+      <view class="cancel" bindtap="onClose">取消</view>
+      <view class="ok" bindtap="onSubmit">完成</view>
     </view>
   </view>
 </van-popup>

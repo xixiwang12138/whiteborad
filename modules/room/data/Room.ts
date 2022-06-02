@@ -1,11 +1,12 @@
-import {BaseData, MainData, pkType} from "../../core/data/BaseData";
-import {dataPK, field} from "../../core/data/DataLoader";
+import {BaseData, pkType} from "../../core/data/BaseData";
+import {DataOccasion, dataPK, field, occasion} from "../../core/data/DataLoader";
 import {Player} from "../../player/data/Player";
 import {Trait} from "./Trait";
 import {DynamicData} from "../../core/data/DynamicData";
 import {IRoomDrawable} from "./IRoomDrawable";
 import {Effect} from "./Effect";
 import {roomSkinRepo} from "./RoomSkin";
+import {roomStarRepo} from "./RoomStar";
 
 export enum RoomState {
 	Uncreated, Created, Banned
@@ -20,6 +21,8 @@ export type RoomEditableInfo = {
 	name?: string,
 	notice?: string
 }
+
+const DefaultMinDuration = 15;
 
 export class Room extends DynamicData implements IRoomDrawable {
 
@@ -40,12 +43,7 @@ export class Room extends DynamicData implements IRoomDrawable {
 	@field
 	public notice: string = "";
 	@field
-	public star: number = 1;
-
-	@field
-	public minDuration: number = 15;
-	@field
-	public maxDuration: number = 90;
+	public starId: number = 1;
 
 	@field([Number])
 	public params: number[] = [];
@@ -66,8 +64,15 @@ export class Room extends DynamicData implements IRoomDrawable {
 
 	// region 额外数据
 
-	public refresh() {
+	@field
+	@occasion(DataOccasion.Extra)
+	public minDuration: number = DefaultMinDuration;
+	@field
+	@occasion(DataOccasion.Extra)
+	public maxDuration: number = 90;
 
+	public refresh() {
+		this.maxDuration = this.star.maxDuration;
 	}
 
 	// endregion
@@ -85,6 +90,8 @@ export class Room extends DynamicData implements IRoomDrawable {
 	public get pictureUrl() { return this.skin.pictureUrl; }
 
 	// endregion
+
+	public get star() { return roomStarRepo().getById(this.starId) }
 
 	/**
 	 * 创建房间

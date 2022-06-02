@@ -87,7 +87,8 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   }
 
   private async loadRoom() {
-    const room = Room.testData();
+    // const room = Room.testData();
+    const room = await roomMgr().getSelfRoom();
     await this.setItem(room);
     await roomMgr().enterRoom(room,
         e => this.onRoomMessage(e))

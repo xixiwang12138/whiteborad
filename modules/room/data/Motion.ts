@@ -29,6 +29,9 @@ export class Motion extends StaticData {
 	@field([Reward])
 	public rewards: Reward[] = [] // 出现奖励
 
+	public get thumbnailUrl() {
+		return this.thumbnail || `/motions/${this.id}.png`;
+	}
 }
 
 export function motionRepo() {

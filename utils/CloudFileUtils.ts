@@ -15,7 +15,19 @@ export type File = {
 	type: string
 }
 
+const BasePath = "cloud://env-8gbpg0wjca0c43ce.656e-env-8gbpg0wjca0c43ce-1255510304/homi/assets";
+
 export class CloudFileUtils {
+
+	/**
+	 * 下载图片
+	 */
+	public static async downloadFile(path) {
+		const fileID = BasePath + path;
+		console.log("downloadFile: ", fileID)
+		const res = await wx.cloud.downloadFile({fileID})
+		return res.tempFilePath;
+	}
 
 	/**
 	 * 媒体文件转化为文件

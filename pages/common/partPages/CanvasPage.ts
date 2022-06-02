@@ -12,6 +12,7 @@ const myTween = require("../../../lib/myTween")
 import * as PIXI from 'pixi.js';
 import {Container, Graphics, Sprite, Texture} from "pixi.js";
 import Canvas = WechatMiniprogram.Canvas;
+import {CloudFileUtils} from "../../../utils/CloudFileUtils";
 
 const MaxCanvasSize = 1365;
 
@@ -101,6 +102,9 @@ export class CanvasPage extends PartialPage<Data>{
 	public async createSprite(urlOrCanvas?: string | HTMLCanvasElement,
 														waitFor = true): Promise<Sprite> {
 		if (typeof urlOrCanvas == "string") {
+			if (urlOrCanvas.startsWith("@")) // 远程文件
+				urlOrCanvas = await CloudFileUtils.downloadFile(urlOrCanvas.slice(1));
+
 			const res: Sprite = this.pixi.Sprite.from(urlOrCanvas);
 			if (waitFor) await PromiseUtils.waitFor(
 				() => res.texture.valid);
@@ -114,6 +118,10 @@ export class CanvasPage extends PartialPage<Data>{
 
 	public createGraphics(): Graphics {
 		return new this.pixi.Graphics();
+	}
+
+	public createContainer(): Container {
+		return new this.pixi.Container();
 	}
 
 	// @ts-ignore

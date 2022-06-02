@@ -3,6 +3,7 @@ import {field} from "../../core/data/DataLoader";
 import {RoomSkin} from "./RoomSkin";
 import {NPCRoom} from "./NPCRoom";
 import {Room} from "./Room";
+import {motionRepo} from "./Motion";
 
 export enum AnimationType {
 	Normal, Focus
@@ -29,7 +30,7 @@ export class PictureLayer extends BaseData {
 	public z: number = 0; // 图层Z坐标
 
 	@field([Number])
-	public offset: [number, number] = [0, 0]; // 图层偏移量
+	public position: [number, number] = [0, 0]; // 图层偏移量
 	@field([Number])
 	public anchor: [number, number] = [0.5, 0.5]; // 锚点
 
@@ -45,16 +46,18 @@ export class PictureLayer extends BaseData {
 
 	public get pictureUrl() {
 		const root = this.isNPCRoom ? "npcRooms" : "roomSkins";
-		return this.picture || `/${root}/layers/${this.parent.id}-${this.index}.png`;
+		return this.picture || `@/${root}/layers/${this.parent.id}-${this.index}.png`;
 	}
 }
 
 export class Animation extends BaseData {
 
-	@field(Number)
-	public type: AnimationType = AnimationType.Normal;
-	@field(Boolean)
-	public isCharacter: boolean; // 是否人物动作
+	@field(String)
+	public name?: string; // 动画名称
+	@field
+	public type: AnimationType = AnimationType.Focus;
+	@field
+	public isCharacter: boolean = true; // 是否人物动作
 	// 如果是人物动作，则不能同时出现，而且会有淡入淡出效果
 
 	@field(Number)
@@ -72,7 +75,7 @@ export class Animation extends BaseData {
 	@field
 	public z: number = 0; // Z坐标
 	@field([Number])
-	public offset: [number, number] = [0.5, 0.5]; // 位置（按百分比）
+	public position: [number, number] = [0.5, 0.5]; // 位置（按百分比，原点为图像中心）
 	@field([Number])
 	public anchor: [number, number] = [0.5, 0.5]; // 锚点
 
@@ -86,9 +89,14 @@ export class Animation extends BaseData {
 	public get isNPCRoom() { return this.parent instanceof NPCRoom }
 	public get isRoomSkin() { return this.parent instanceof RoomSkin }
 
+	public get motion() { return motionRepo().getById(this.motionId); }
+
+	public get realRate() { return this.motion?.rate || this.rate; }
+
 	public pictureUrl(index, gender = 0) {
 		const root = this.isNPCRoom ? "npcRooms" : "roomSkins";
-		return `/${root}/animations/${this.parent.id}-${this.index}-${index}` +
+		return `@/${root}/animations/${this.parent.id}-${this.index}-${index}` +
 			this.isCharacter && gender > 0 ? `-${gender}.png` : `.png`
 	}
+
 }

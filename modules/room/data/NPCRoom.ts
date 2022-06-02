@@ -50,6 +50,13 @@ export class NPCRoom extends StaticData {
 	@field
 	public state: NPCRoomState = NPCRoomState.Closed;
 
+	public get thumbnailUrl() {
+		return this.thumbnail || `@/npcRooms/thumbnails/${this.id}.png` || this.pictureUrl;
+	}
+	public get pictureUrl() {
+		return this.picture || `@/npcRooms/pictures/${this.id}.png`;
+	}
+
 }
 
 export function npcRoomRepo() {

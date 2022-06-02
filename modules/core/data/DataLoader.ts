@@ -131,6 +131,7 @@ export class DataLoader {
 		parent?: BaseData) : T {
 
 		// region 解析参数
+
 		let occasion = DataOccasion.Default,
 			type: Constructor<T>,
 			data: Partial<T>, index: number;
@@ -152,9 +153,10 @@ export class DataLoader {
 		}
 		if (typeof indexOrParent == 'object') {
 			parent = indexOrParent;
-		} else if (indexOrParent) {
+		} else if (indexOrParent != null) {
 			index = indexOrParent;
 		}
+
 		// endregion
 
 		if (data == null) return null;

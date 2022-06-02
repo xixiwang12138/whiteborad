@@ -15,7 +15,7 @@ import {pageMgr} from "../../modules/core/managers/PageManager";
 import SystemInfo = WechatMiniprogram.SystemInfo;
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {ShopPage} from "../shop/ShopPage";
-import { Sprite } from "pixi.js";
+import { Sprite, Container } from "pixi.js";
 import CustomEvent = WechatMiniprogram.CustomEvent;
 import {blockLoading} from "../../modules/core/managers/LoadingManager";
 import {roomMgr} from "../../modules/room/managers/RoomManager";
@@ -265,7 +265,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
 
   private pixiObj: {
     background?: Sprite,
-    house?: Sprite
+    house?: Container
   } = { };
 
   public get isDebug() { return this.sys.platform == 'devtools'; }
@@ -295,24 +295,50 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     const dataUrl = ctx.canvas.toDataURL();
     const bg = await this.canvasPage.createSprite(dataUrl);
     bg.x = bg.y = 0;
-    bg.alpha = this.isDebug ? 0.25 : 1;
+    bg.alpha = this.isDebug ? 0.5 : 1;
 
     this.canvasPage.add(bg);
     this.pixiObj.background = bg;
   }
   private async drawHouse() {
-    const sp = await this.canvasPage.createSprite("../../assets/common/3.png");
+    console.log("drawHouse", this.item)
 
-    sp.x = this.canvasPage.width / 2;
-    sp.y = this.canvasPage.height / 5 * 3;
+    const house = this.canvasPage.createContainer();
 
-    sp.scale.x = sp.scale.y = 0.8;
-    sp.anchor.x = 0.5;
-    sp.anchor.y = 0.75;
-    sp.alpha = this.isDebug ? 0.25 : 1;
+    house.x = this.canvasPage.width / 2;
+    house.y = this.canvasPage.height / 2;
 
-    this.canvasPage.add(sp);
-    this.pixiObj.house = sp;
+    house.width = this.canvasPage.width;
+    house.height = this.canvasPage.height;
+
+    house.scale.x = house.scale.y = 0.3;
+    house.pivot.x = house.pivot.y = 0.5;
+
+    house.alpha = this.isDebug ? 0.5 : 1;
+
+    const picture = await this.canvasPage
+      .createSprite(this.item.pictureUrl);
+
+    picture.anchor.x = picture.anchor.y = 0.5;
+
+    for (const layer of this.item.layers) {
+      const ls = await this.canvasPage
+        .createSprite(layer.pictureUrl);
+      ls.anchor.x = layer.anchor[0];
+      ls.anchor.y = layer.anchor[1];
+      ls.x = layer.position[0] * house.width;
+      ls.y = layer.position[1] * house.height;
+      ls.zIndex = layer.z;
+
+      ls.scale.x = 10;
+
+      house.addChild(ls);
+    }
+
+    house.addChild(picture);
+
+    this.canvasPage.add(house);
+    this.pixiObj.house = house;
   }
 
   private updateHouseMove() {
@@ -321,14 +347,14 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     const runtimeFocus = this.data.runtimeFocus;
     const focusing = runtimeFocus?.isValid
     if (!focusing) { // 缩小
-      const dtScale = (this.pixiObj.house.scale.x - 0.8) / 8;
+      const dtScale = (this.pixiObj.house.scale.x - 0.3) / 8;
       if (dtScale <= 0.00001) return;
 
       this.pixiObj.house.scale.x -= dtScale;
       this.pixiObj.house.scale.y -= dtScale;
 
     } else { // 放大
-      const dtScale = (1 - this.pixiObj.house.scale.x) / 24;
+      const dtScale = (0.4 - this.pixiObj.house.scale.x) / 24;
       if (dtScale <= 0.00001) return;
 
       this.pixiObj.house.scale.x += dtScale;
@@ -336,6 +362,10 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     }
 
     this.canvasPage.render();
+  }
+
+  private updateAnimation() {
+
   }
 
   // endregion

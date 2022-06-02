@@ -79,7 +79,6 @@ class DataManager extends BaseManager {
 	private async _initializeData() {
 		this.dataLoaded = false;
 
-		/*
 		const data = (await GetData()).data;
 
 		for (const key in this.database) {
@@ -89,7 +88,6 @@ class DataManager extends BaseManager {
 				data[item.name], item.clazz);
 		}
 		console.log("Database: ", this.database);
-		*/
 		this.dataLoaded = true;
 	}
 

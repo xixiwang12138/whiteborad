@@ -44,10 +44,10 @@ export class RoomSkin extends StaticData implements IRoomDrawable {
 	public price: number;
 
 	public get thumbnailUrl() {
-		return this.thumbnail || `/roomSkins/thumbnails/${this.id}.png` || this.pictureUrl;
+		return this.thumbnail || `@/roomSkins/thumbnails/${this.id}.png` || this.pictureUrl;
 	}
 	public get pictureUrl() {
-		return this.picture || `/roomSkins/pictures/${this.id}.png`;
+		return this.picture || `@/roomSkins/pictures/${this.id}.png`;
 	}
 
 }

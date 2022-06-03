@@ -1,5 +1,6 @@
 import {BaseManager, getManager, manager} from "./BaseManager";
 import {Itf, post} from "../BaseAssist";
+import SystemInfo = WechatMiniprogram.SystemInfo;
 
 const UpdateToken: Itf<{}, {token: string}>
   = post("/core/token/update");
@@ -50,6 +51,13 @@ class AppManager extends BaseManager {
 	private token: Token = null; // Token.invalid();
 
 	private lastCheckUpdToken: number = 0;
+
+	private _sys: SystemInfo;
+	public get sys() {
+		return this._sys ||= wx.getSystemInfoSync();
+	}
+
+	public get isDebug() { return this.sys.platform == 'devtools'; }
 
 	// region 更新
 

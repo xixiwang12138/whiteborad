@@ -10,6 +10,8 @@ import {pageMgr} from "../../../modules/core/managers/PageManager";
 import {MathUtils} from "../../../utils/MathUtils";
 import {Constructor} from "../../../modules/core/BaseContext";
 import SystemInfo = WechatMiniprogram.SystemInfo;
+import {pageFunc} from "../PageBuilder";
+import {appMgr} from "../../../modules/core/managers/AppManager";
 
 const TimeRate = 100;
 const AniColCount = 4;
@@ -69,18 +71,9 @@ export class RoomDrawingPage extends CanvasPage {
 
 	// endregion
 
-	private sys: SystemInfo;
-
-	async onLoad() {
-		this.sys = await wx.getSystemInfo();
-	}
-
-	// TODO: 提取
-	public get isDebug() { return this.sys.platform == 'devtools'; }
-
-	@waitForCanvas
 	public async draw(room: Room) {
 		this.room = room;
+		await this.waitForCanvasSetup();
 		await this.drawBackground();
 		await this.drawHouse();
 		this.render();
@@ -102,7 +95,7 @@ export class RoomDrawingPage extends CanvasPage {
 		const dataUrl = ctx.canvas.toDataURL();
 		const bg = await this.createSprite(dataUrl);
 		bg.x = bg.y = 0;
-		bg.alpha = this.isDebug ? 0.5 : 1;
+		bg.alpha = appMgr().isDebug ? 0.5 : 1;
 
 		this.add(bg);
 		this.pixiObj.background = bg;
@@ -165,7 +158,7 @@ export class RoomDrawingPage extends CanvasPage {
 		}
 		house.sortChildren();
 
-		house.alpha = this.isDebug ? 0.5 : 1;
+		house.alpha = appMgr().isDebug ? 0.5 : 1;
 
 		this.add(house);
 		this.pixiObj.house = house;
@@ -200,7 +193,7 @@ export class RoomDrawingPage extends CanvasPage {
 	}
 
 	private updateMotions() {
-		const rate = this.isDebug ? TimeRate : 1;
+		const rate = appMgr().isDebug ? TimeRate : 1;
 		const dt = pageMgr().deltaTime * rate;
 
 		this.motionData.duration += dt;

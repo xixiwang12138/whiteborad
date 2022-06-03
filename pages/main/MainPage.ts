@@ -21,6 +21,7 @@ import {Constructor} from "../../modules/core/BaseContext";
 import SystemInfo = WechatMiniprogram.SystemInfo;
 import CustomEvent = WechatMiniprogram.CustomEvent;
 import {RoomDrawingPage, RoomPage} from "../common/partPages/RoomPage";
+import {appMgr} from "../../modules/core/managers/AppManager";
 
 type WindowType = "Start" | "Room" | "Tags";
 
@@ -136,7 +137,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     const runtimeFocus = this.data.runtimeFocus;
     if (!runtimeFocus) return;
 
-    const rate = this.roomDrawingPage.isDebug ? TimeRate : 1;
+    const rate = appMgr().isDebug ? TimeRate : 1;
     const dt = pageMgr().deltaTime * rate;
 
     if (!runtimeFocus.isValid) {

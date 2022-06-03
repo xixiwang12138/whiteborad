@@ -2,7 +2,7 @@ import { page, pageFunc } from "../common/PageBuilder";
 import { BasePage, BasePageData } from "../common/core/BasePage";
 import { playerMgr } from "../../modules/player/managers/PlayerManager";
 import { PlayerPage } from "../common/partPages/PlayerPage";
-import { CanvasPage, onCanvasSetup } from "../common/partPages/CanvasPage";
+import { CanvasPage, waitForCanvas } from "../common/partPages/CanvasPage";
 import { pageMgr } from "../../modules/core/managers/PageManager";
 
 class Data extends BasePageData {
@@ -34,7 +34,7 @@ export class VisitPage extends BasePage<Data> {
     });
   }
 
-  @onCanvasSetup
+  @waitForCanvas
   public async refresh() {
     await this.drawBackground();
     await this.drawHouse();

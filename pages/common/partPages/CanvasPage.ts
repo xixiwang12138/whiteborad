@@ -16,7 +16,7 @@ import {CloudFileUtils} from "../../../utils/CloudFileUtils";
 
 const MaxCanvasSize = 1365;
 
-export function onCanvasSetup(obj, key, desc) {
+export function waitForCanvas(obj, key, desc) {
 	const oriFunc = desc.value;
 	desc.value = async function (...p) {
 		if (!this.canvasPage) return;

@@ -15,22 +15,24 @@ import {pageMgr} from "../../modules/core/managers/PageManager";
 import SystemInfo = WechatMiniprogram.SystemInfo;
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {ShopPage} from "../shop/ShopPage";
-import { Sprite, Container, Texture } from "pixi.js";
+import { Sprite, Container, Texture, Rectangle } from "pixi.js";
 import CustomEvent = WechatMiniprogram.CustomEvent;
 import {blockLoading} from "../../modules/core/managers/LoadingManager";
 import {roomMgr} from "../../modules/room/managers/RoomManager";
 import {Animation} from "../../modules/room/data/IRoomDrawable";
 import {MathUtils} from "../../utils/MathUtils";
+import {Constructor} from "../../modules/core/BaseContext";
 
 type WindowType = "Start" | "Room" | "Tags";
 
 const AccThreshold = 0.3;
-const TimeRate = 200;
+const TimeRate = 500;
 
 type RuntimeAnimation = {
   animation: Animation
-  textures: Texture[]
   sprite: Sprite
+  width: number
+  height: number
 }
 
 class Data extends BasePageData {
@@ -353,12 +355,13 @@ export class MainPage extends ItemDetailPage<Data, Room> {
       this.pixiObj.layers.push(ls);
     }
     for (const animation of this.item.animations) {
-      const textures = [];
-      for (let i = 0; i < animation.count; i++)
-        textures.push(await this.canvasPage
-          .createTexture(animation.pictureUrl(i)));
+      const as = await this.canvasPage
+        .createSprite(animation.pictureUrl());
+      // const Rect = as.texture.frame.constructor as Constructor<Rectangle>;
+      const width = as.texture.width / animation.count, height = as.texture.height;
 
-      const as = await this.canvasPage.createSprite();
+      // as.texture.frame = new Rect(0, 0, width, height);
+
       as.anchor.x = animation.anchor[0];
       as.anchor.y = animation.anchor[1];
       as.x = animation.position[0] * picture.width;
@@ -368,7 +371,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
 
       house.addChild(as);
       this.pixiObj.animations.push({
-        animation, textures, sprite: as
+        animation, sprite: as, width, height
       });
     }
     house.sortChildren();
@@ -409,6 +412,8 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     this.pixiObj.aniTime += pageMgr().deltaTime;
     this.pixiObj.animations.forEach(
       ani => this.updateAnimation(ani, focusing));
+
+    this.canvasPage.render();
   }
 
   private updateAnimation(ra: RuntimeAnimation, focusing) {
@@ -416,9 +421,25 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     const fd = ani.duration / ani.count * 1000;
     const index = Math.floor((this.pixiObj.aniTime / fd) % ani.count);
 
-    ra.sprite.texture = ra.textures[index];
+    // console.log("updateAnimation", index, ra);
+
     ra.sprite.alpha = MathUtils.clamp(
       ra.sprite.alpha + (focusing ? 0.05 : -0.05));
+
+    const w = ra.width, h = ra.height;
+    const Rect = ra.sprite.texture.frame.constructor as Constructor<Rectangle>;
+    ra.sprite.texture.frame = new Rect(index * w, 0, w, h);
+
+    // ra.sprite.texture.frame = ra.textures[index];
+    // ra.sprite.texture.update();
+    // // @ts-ignore
+    // ra.sprite.texture.requiresUpdate = true;
+    // ra.sprite.texture.updateUvs();
+    //
+    // if (ra.animation.index == 0) {
+    //   // @ts-ignore
+    //   ra.sprite.texture.frame = new c(0, 0, 374, 309);
+    // }
   }
 
   // endregion

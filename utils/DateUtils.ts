@@ -72,9 +72,9 @@ export class DateUtils {
 	public static sec2Str(sec: number) {
 		if (sec == null) return "";
 		sec = Math.round(sec);
-		if (sec < 60) return sec.toString();
-		return Math.floor(sec / 60) + ":" +
-			(sec % 60).toString().padStart(2, "0");
+		const minStr = Math.floor(sec / 60).toString().padStart(2, "0");
+		const secStr = (sec % 60).toString().padStart(2, "0");
+		return `${minStr}:${secStr}`;
 	}
 
 	/**

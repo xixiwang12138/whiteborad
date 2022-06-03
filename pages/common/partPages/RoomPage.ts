@@ -1,13 +1,8 @@
 import { BaseData } from "../../../modules/core/data/BaseData";
-import {PartialPage} from "../core/BasePage";
-import {pageFunc} from "../PageBuilder";
 import {CanvasPage} from "./CanvasPage";
 import {field} from "../../../modules/core/data/DataLoader";
 import {roomMgr} from "../../../modules/room/managers/RoomManager";
 import {Room} from "../../../modules/room/data/Room";
-
-
-const MaxCanvasSize = 1365;
 
 class Data extends BaseData {
 

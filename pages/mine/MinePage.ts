@@ -1,10 +1,11 @@
 import {page, pageFunc} from "../common/PageBuilder";
 import {BasePage, BasePageData} from "../common/core/BasePage";
-import {playerMgr} from "../../modules/player/managers/PlayerManager";
+import {playerMgr, waitForLogin} from "../../modules/player/managers/PlayerManager";
 import {PlayerPage} from "../common/partPages/PlayerPage";
 import {field} from "../../modules/core/data/DataLoader";
 import {PlayerEditableInfo, PlayerState} from "../../modules/player/data/Player";
 import {input} from "../common/utils/PageUtils";
+import {RoomPage} from "../common/partPages/RoomPage";
 class Data extends BasePageData {
 
 	@field(Array)
@@ -39,18 +40,18 @@ export class MinePage extends BasePage<Data> {
 	 * 部分页
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
+	public roomPage: RoomPage = new RoomPage();
 
-	onReady() {
+	async onReady() {
 		super.onReady();
-		this.playerPage.registerOnLogin(
-			() => this.onLogin())
+		await this.onLogin();
 	}
 
-	// region 事件
-
-	onLogin() {
+	@waitForLogin
+	async onLogin() {
 		const player = this.playerPage.player;
-		this.setData({
+		await this.roomPage.loadSelfRoom();
+		await this.setData({
 			info: {
 				name: player.name,
 				slogan: player.slogan,
@@ -59,6 +60,8 @@ export class MinePage extends BasePage<Data> {
 			},
 		});
 	}
+
+	// region 事件
 
 	@pageFunc
   public onAvatarTap(){
@@ -69,7 +72,7 @@ export class MinePage extends BasePage<Data> {
   public onClose(){
 		this.setData({ isEdit: false }).then()
 	 }
-	 
+
 	 @pageFunc
 	 onMaleTap() {
 		 this.setData({ "info.gender": 1 });
@@ -79,11 +82,11 @@ export class MinePage extends BasePage<Data> {
 	 onFemaleTap() {
 		 this.setData({ "info.gender": 2 });
 	 }
- 
+
 	 @pageFunc
 	 @input("info.name")
 	 onNameInput() {}
- 
+
 	 @pageFunc
 	 @input("info.slogan")
 	 onSloganInput() {}

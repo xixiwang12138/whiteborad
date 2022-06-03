@@ -1,6 +1,6 @@
 import {page, pageFunc} from "../common/PageBuilder";
 import {BasePage, BasePageData} from "../common/core/BasePage";
-import {playerMgr} from "../../modules/player/managers/PlayerManager";
+import {playerMgr, waitForLogin} from "../../modules/player/managers/PlayerManager";
 import {PlayerPage} from "../common/partPages/PlayerPage";
 import {pageMgr} from "../../modules/core/managers/PageManager";
 import {VisitPage} from "../visit/VisitPage";
@@ -106,9 +106,14 @@ export class SquarePage extends BasePage<Data> {
 	public playerPage: PlayerPage = new PlayerPage();
 	public roomPage: RoomPage = new RoomPage();
 
-	async onLoad(e) {
-		super.onLoad(e);
+	async onReady() {
+		super.onReady();
+		await this.onLogin();
+	}
 
+	@waitForLogin
+	async onLogin() {
+		await this.roomPage.loadSelfRoom();
 	}
 
 	@pageFunc

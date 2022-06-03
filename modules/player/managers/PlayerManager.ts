@@ -76,7 +76,7 @@ export class PlayerManager extends BaseManager {
    * 登陆
    * 登陆只会执行一次，要想重新登录，必须先登出
    */
-  @showLoading
+  // @showLoading
   @blockLoading
   @handleError(true)
   public async login(userInfo?: WxUserInfo) {
@@ -112,7 +112,7 @@ export class PlayerManager extends BaseManager {
   /**
    * 手动登录
    */
-  @showLoading
+  // @showLoading
   @blockLoading
   public async manualLogin(desc?: string) {
     const profile = await wx.getUserProfile({

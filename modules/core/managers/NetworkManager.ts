@@ -170,7 +170,7 @@ class NetworkManager extends BaseManager {
     if (interface__.useToken)
       header["Token"] = appMgr().getToken();
 
-    const useLoading = await loadingMgr().showLoading(interface__.loadingSetting);
+    // const useLoading = await loadingMgr().showLoading(interface__.loadingSetting);
 
     return new Promise<T>((resolve, reject) => {
       wx.request<T>({
@@ -219,7 +219,7 @@ class NetworkManager extends BaseManager {
           reject(errData)
         },
         complete: () => {
-          if (useLoading) loadingMgr().hideLoading();
+          // if (useLoading) loadingMgr().hideLoading();
         }
       })
     })

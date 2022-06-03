@@ -26,6 +26,9 @@ export class CloudFileUtils {
 		const fileID = BasePath + path;
 		console.log("downloadFile: ", fileID)
 		const res = await wx.cloud.downloadFile({fileID})
+			.then(res => {console.log(res); return res})
+			.catch(e => {console.error("catch", e); return null;})
+			.finally(() => console.log("finally"))
 		return res.tempFilePath;
 	}
 

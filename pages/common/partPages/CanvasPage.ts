@@ -119,13 +119,15 @@ export class CanvasPage extends PartialPage<Data>{
 
 	// @ts-ignore
 	public async createTexture(urlOrCanvas?: string | HTMLCanvasElement,
-											 waitFor = true): Promise<Texture> {
+														 waitFor = true): Promise<Texture> {
 		if (typeof urlOrCanvas == "string") {
+			const oriUrl = urlOrCanvas;
 			if (urlOrCanvas.startsWith("@")) // 远程文件
 				urlOrCanvas = await CloudFileUtils.downloadFile(urlOrCanvas.slice(1));
 
 			const res: Texture = this.pixi.Texture.from(urlOrCanvas);
-			if (waitFor) await PromiseUtils.waitFor(() => res.valid);
+			if (waitFor) await PromiseUtils.waitFor(() => res.valid,
+				20, 1000);
 			return res;
 		} else if (urlOrCanvas)
 			return this.pixi.Texture.fromCanvas(urlOrCanvas);

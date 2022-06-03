@@ -43,7 +43,7 @@ export class MathUtils {
 	 * 获取随机范围数
 	 */
 	public static randomInt(min, max, include = false) {
-		return Math.floor(this.random(min, max + include ? 1 : 0));
+		return Math.floor(this.random(min, max + (include ? 1 : 0)));
 	}
 
 	/**

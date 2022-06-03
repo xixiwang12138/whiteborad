@@ -71,6 +71,8 @@ export class RoomDrawingPage extends CanvasPage {
 
 	// endregion
 
+	// region 基本绘制
+
 	public async draw(room: Room) {
 		this.room = room;
 		await this.waitForCanvasSetup();
@@ -114,26 +116,9 @@ export class RoomDrawingPage extends CanvasPage {
 		house.scale.x = house.scale.y = 0.3;
 		house.pivot.x = house.pivot.y = 0.5;
 
-		const picture = await this
-			.createSprite(this.room.pictureUrl);
 
-		picture.anchor.x = picture.anchor.y = 0.5;
-		picture.zIndex = 0;
+		await this.drawLayers(house, picture)
 
-		house.addChild(picture);
-
-		for (const layer of this.room.layers) {
-			const ls = await this
-				.createSprite(layer.pictureUrl);
-			ls.anchor.x = layer.anchor[0];
-			ls.anchor.y = layer.anchor[1];
-			ls.x = layer.position[0] * picture.width;
-			ls.y = layer.position[1] * picture.height;
-			ls.zIndex = layer.z;
-
-			house.addChild(ls);
-			this.pixiObj.layers.push(ls);
-		}
 		for (const animation of this.room.animations) {
 			const as = await this
 				.createSprite(animation.pictureUrl());
@@ -163,6 +148,35 @@ export class RoomDrawingPage extends CanvasPage {
 		this.add(house);
 		this.pixiObj.house = house;
 	}
+	private async drawPicture(house) {
+		const res = await this
+			.createSprite(this.room.pictureUrl);
+
+		res.anchor.x = res.anchor.y = 0.5;
+		res.zIndex = 0;
+
+		house.addChild(res);
+
+		return res;
+	}
+	private async drawLayers(house, picture) {
+		for (const layer of this.room.layers) {
+			const ls = await this
+				.createSprite(layer.pictureUrl);
+			ls.anchor.x = layer.anchor[0];
+			ls.anchor.y = layer.anchor[1];
+			ls.x = layer.position[0] * picture.width;
+			ls.y = layer.position[1] * picture.height;
+			ls.zIndex = layer.z;
+
+			house.addChild(ls);
+			this.pixiObj.layers.push(ls);
+		}
+	}
+
+	// endregion
+
+	// region 更新
 
 	update(focusing) {
 		this.focusing = focusing;
@@ -231,5 +245,7 @@ export class RoomDrawingPage extends CanvasPage {
 		const Rect = ra.sprite.texture.frame.constructor as Constructor<Rectangle>;
 		ra.sprite.texture.frame = new Rect(c * w, r * h, w, h);
 	}
+
+	// endregion
 
 }

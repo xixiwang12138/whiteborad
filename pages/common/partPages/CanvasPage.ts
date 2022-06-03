@@ -1,7 +1,7 @@
 // @ts-ignore
 import {createPIXI} from "../../../lib/pixi.miniprogram";
 import {BaseData} from "../../../modules/core/data/BaseData";
-import {PartialPage} from "../core/BasePage";
+import {BasePageData, PartialPage} from "../core/BasePage";
 import {pageFunc} from "../PageBuilder";
 import {PromiseUtils} from "../../../utils/PromiseUtils";
 
@@ -31,9 +31,9 @@ class Data extends BaseData {
 
 const CanvasWidth = 750;
 
-export class CanvasPage extends PartialPage<Data>{
+export class CanvasPage<T extends BaseData = Data> extends PartialPage<T> {
 
-	public data = new Data();
+	public data = new Data() as T;
 
 	private selector: string;
 

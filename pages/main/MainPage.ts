@@ -338,8 +338,6 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     house.scale.x = house.scale.y = 0.3;
     house.pivot.x = house.pivot.y = 0.5;
 
-    // house.alpha = this.isDebug ? 0.5 : 1;
-
     const picture = await this.canvasPage
       .createSprite(this.item.pictureUrl);
 
@@ -383,6 +381,8 @@ export class MainPage extends ItemDetailPage<Data, Room> {
       });
     }
     house.sortChildren();
+
+    house.alpha = this.isDebug ? 0.5 : 1;
 
     this.canvasPage.add(house);
     this.pixiObj.house = house;

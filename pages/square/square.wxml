@@ -1,5 +1,5 @@
 <!--square.wxml-->
-<view class="container">
+<view class="container" style="{{room.backgroundStyle}}">
   <view class="container-top">
     <avatar-display avatar="{{player.avatarUrl}}" name="{{player.name}}" />
   </view>

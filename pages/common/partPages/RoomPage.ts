@@ -84,26 +84,33 @@ export class RoomDrawingPage extends CanvasPage {
 	}
 
 	private async drawBackground() {
+		const ctx = this.drawBackgroundContext();
+		await this.createBackgroundSprite(ctx);
+	}
+	private drawBackgroundContext() {
 		const skin = this.room.skin;
 
 		const w = this.width, h = this.height;
-		const ctx = this.makeContext(w, h);
+		const res = this.makeContext(w, h);
 
-		const grd = ctx.createLinearGradient(0, 0, 0, h);
+		const grd = res.createLinearGradient(0, 0, 0, h);
 		grd.addColorStop(0, `#${skin.backgroundColors[0]}`);
 		grd.addColorStop(1, `#${skin.backgroundColors[1]}`);
 
-		ctx.fillStyle = grd;
-		ctx.fillRect(0, 0, w, h);
+		res.fillStyle = grd;
+		res.fillRect(0, 0, w, h);
 
+		return res;
+	}
+	private async createBackgroundSprite(ctx) {
 		const dataUrl = ctx.canvas.toDataURL();
 		const bg = await this.createSprite(dataUrl);
 		bg.x = bg.y = 0;
 		bg.alpha = appMgr().isDebug ? 0.5 : 1;
 
-		this.add(bg);
-		this.pixiObj.background = bg;
+		this.add(this.pixiObj.background = bg);
 	}
+
 	private async drawHouse() {
 		const house = this.createHouse();
 		const picture = await this.drawPicture(house);
@@ -145,31 +152,29 @@ export class RoomDrawingPage extends CanvasPage {
 			ls.y = layer.position[1] * picture.height;
 			ls.zIndex = layer.z;
 
-			house.addChild(ls);
 			this.pixiObj.layers.push(ls);
+			house.addChild(ls);
 		}
 	}
 	private async drawAnimations(house, picture) {
 		for (const animation of this.room.animations) {
-			const as = await this.createSprite(animation.pictureUrl());
-			// const Rect = as.texture.frame.constructor as Constructor<Rectangle>;
+			const sprite = await this.createSprite(animation.pictureUrl());
+			// const Rect = sprite.texture.frame.constructor sprite Constructor<Rectangle>;
 			const row = Math.ceil(animation.count / AniColCount);
-			const width = as.texture.width / AniColCount,
-				height = as.texture.height / row;
+			const width = sprite.texture.width / AniColCount,
+				height = sprite.texture.height / row;
 
-			// as.texture.frame = new Rect(0, 0, width, height);
+			sprite.anchor.x = animation.anchor[0];
+			sprite.anchor.y = animation.anchor[1];
+			sprite.x = animation.position[0] * picture.width;
+			sprite.y = animation.position[1] * picture.height;
+			sprite.zIndex = animation.z;
+			sprite.alpha = 0;
 
-			as.anchor.x = animation.anchor[0];
-			as.anchor.y = animation.anchor[1];
-			as.x = animation.position[0] * picture.width;
-			as.y = animation.position[1] * picture.height;
-			as.zIndex = animation.z;
-			as.alpha = 0;
-
-			house.addChild(as);
 			this.pixiObj.animations.push({
-				animation, sprite: as, width, height
+				animation, sprite, width, height
 			});
+			house.addChild(sprite);
 		}
 	}
 
@@ -182,27 +187,21 @@ export class RoomDrawingPage extends CanvasPage {
 		this.updateHouseMove();
 		this.updateMotions();
 		this.updateAnimations();
+
+		this.render();
 	}
 
 	private updateHouseMove() {
 		if (!this.pixiObj.house) return;
 
-		let dtScale;
-		if (!this.focusing) { // 缩小
-			dtScale = (DefaultHouseScale -
-				this.pixiObj.house.scale.x) / 8;
-			if (dtScale <= 0.00001) return;
+		let dtScale = this.focusing ?
+			(FocusingHouseScale - this.pixiObj.house.scale.x) / 24 :
+			(DefaultHouseScale - this.pixiObj.house.scale.x) / 8;
 
-		} else { // 放大
-			dtScale = (FocusingHouseScale -
-				this.pixiObj.house.scale.x) / 24;
-			if (dtScale <= 0.00001) return;
-		}
+		if (Math.abs(dtScale) <= 0.00001) return;
 
 		this.pixiObj.house.scale.x += dtScale;
 		this.pixiObj.house.scale.y += dtScale;
-
-		this.render();
 	}
 
 	private updateMotions() {
@@ -223,8 +222,6 @@ export class RoomDrawingPage extends CanvasPage {
 		this.pixiObj.aniTime += pageMgr().deltaTime;
 		this.pixiObj.animations.forEach(
 			ani => this.updateAnimation(ani));
-
-		this.render();
 	}
 
 	private updateAnimation(ra: RuntimeAnimation) {

@@ -140,22 +140,27 @@
       margin-top: 24rpx;
       text-align: center;
     }
-    .gender {
+    .gender-container {
       display: flex;
       flex-direction: row;
       align-content: center;
       align-items: center;
       text-align: center;
-      view {
+      .gender-box {
         color: black;
         border-radius: 36rpx;
         padding: 12rpx 32rpx;
         margin: 24rpx;
         font-size: 28rpx;
         text-align: center;
+        background-color: rgba(234,234,234,1);
+  
+        .gender-text{
+          line-height: 100%;
+        }
       }
-      .male { background-color: #EAEAEA; }
-      .female { background-color: #F4D5D5; }
+      .male.selected{ background-color: rgba(213,213,244,1); }
+      .female.selected { background-color: rgba(244,213,213,1); }
     }
     .slogan {
       width: 75%; height: 192rpx;

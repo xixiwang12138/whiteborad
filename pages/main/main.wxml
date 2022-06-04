@@ -151,6 +151,19 @@
             close-on-click-overlay
             data-window="Result">
   <view class="result-config">
+    <view class="focus-title">
+      <text lines="1" >本次专注时长</text>
+      <text lines="1" >本次专注内容</text>
+    </view>
+    <view class="TimeAndType">
+      <text lines="1" >120min</text>
+      <view class="focus-type">
+        <text lines="1" >沉迷学习</text>
+      </view>
+    </view>
+    <view class="focus-content">
+      <text lines="1" class="word5">专注内容备注…</text>
+    </view>
     <view class="result-config-top">
       <view class="coinGain">
         <image class="coins" src="/assets/square/gold.png" mode="heightFix" style="height: 88rpx;width: 109rpx;"/>
@@ -168,11 +181,6 @@
         <text>距离升级还需xxmin</text>
       </view>
       <text class="add">+12</text>
-    </view>
-    <view class="content">
-      <text lines="1" class="result-text1">恭喜你成功完成了</text>
-      <text lines="1" class="mins">120min</text>
-      <text lines="1" class="result-text2">的专注{{'\n'}}途中一定学到了不少吧{{'\n'}}请再接再厉哦～</text>
     </view>
     <view class="result-btn" bind:tap="onClickHide" data-window="Result">完成</view>
   </view>

@@ -44,7 +44,6 @@ export class RoomPage extends PartialPage<Data> {
 		const room = await roomMgr().getSelfRoom();
 		await this.setData({room});
 	}
-
 }
 
 export class RoomDrawingPage extends CanvasPage {

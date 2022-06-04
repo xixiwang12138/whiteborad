@@ -258,6 +258,9 @@ export class Focus extends DynamicData {
 	 * 奖励
 	 */
 	public async realRewards(duration?, openid?) {
+		if (this.rewards)
+			return RewardGroup.create(...this.rewards);
+
 		openid ||= this.openid;
 		const res = this.baseRewards(duration);
 		const room = await this.room();

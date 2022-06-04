@@ -64,8 +64,8 @@ export class RoomManager extends BaseManager {
     }
   }
   public async getSelfRoom() {
-    const response = await GetSelfRoom();
-    return this.selfRoom = DataLoader.load(Room, response.room);
+    return this.selfRoom ||= DataLoader.load(
+      Room, (await GetSelfRoom()).room);
   }
 
   public async editRoomInfo(info: RoomEditableInfo) {

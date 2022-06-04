@@ -1,5 +1,6 @@
 import {BaseData} from "../../core/data/BaseData";
-import {field} from "../../core/data/DataLoader";
+import {DataOccasion, field, occasion} from "../../core/data/DataLoader";
+import {createProcessor} from "../utils/RewardProcessor";
 
 export enum RewardType {
 	Gold = "gold",
@@ -24,7 +25,7 @@ export class Reward extends BaseData {
 	public params: object = {};
 
 	public get realValue() {
-		return this.value * ((this.bonus.rate || 0) + 1) + (this.bonus.val || 0)
+		return Math.round(this.value * (this.bonus.rate + 1) + this.bonus.val)
 	}
 
 	public static create(type: RewardType,
@@ -38,12 +39,26 @@ export class Reward extends BaseData {
 
 }
 
-import {createProcessor} from "../utils/RewardProcessor";
-
 export class RewardGroup extends BaseData {
 
 	@field([Reward])
 	public rewards: Reward[] = [];
+
+	// region 额外数据
+
+	@field(Number)
+	@occasion(DataOccasion.Extra)
+	public goldValue: number
+	@field(Number)
+	@occasion(DataOccasion.Extra)
+	public expValue: number
+
+	public refresh() {
+		this.goldValue = this.gold.realValue;
+		this.expValue = this.exp.realValue;
+	}
+
+	// endregion
 
 	public static create(...rewards: (Reward | RewardGroup)[]) {
 		const res = new RewardGroup();

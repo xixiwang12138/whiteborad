@@ -5,6 +5,7 @@ import {DataLoader} from "../../core/data/DataLoader";
 import {IRoomIndex} from "../../room/data/PlayerRoom";
 import {blockLoading} from "../../core/managers/LoadingManager";
 import {roomMgr} from "../../room/managers/RoomManager";
+import {RewardGroup} from "../../player/data/Reward";
 
 const StartFocus: Itf<
   {room: IRoomIndex, mode: FocusMode, tagIdx?: number, duration?: number},
@@ -25,6 +26,7 @@ export function focusMgr() {
 export class FocusManager extends BaseManager {
 
   public curFocus: Focus;
+  public curRewards: RewardGroup;
 
   // region 业务逻辑
 
@@ -32,8 +34,10 @@ export class FocusManager extends BaseManager {
    * 开始专注
    */
   public async startFocus(tagIdx: number, mode: FocusMode, duration: number) {
-    const room = {roomId: "test123456789"}; // TODO: 测试房间，后面需要获取当前房间
+    const room = await roomMgr().getSelfRoom();
+    // const room = {roomId: "test123456789"}; // TODO: 测试房间，后面需要获取当前房间
     const response = await StartFocus({room, tagIdx, mode, duration});
+
     roomMgr().onFocusStart();
 
     return this.curFocus = DataLoader.load(Focus, response.focus);
@@ -44,9 +48,12 @@ export class FocusManager extends BaseManager {
    */
   public async endFocus(runtime: RuntimeFocus, tagIdx?: number, note?: string) {
     const response = await EndFocus({runtime, tagIdx, note});
+
     roomMgr().onFocusEnd();
 
     const res = DataLoader.load(Focus, response.focus);
+    const rewards = this.curRewards = await res.realRewards();
+    rewards.invoke(); // 执行奖励
 
     this.curFocus = null;
     return res;
@@ -56,8 +63,8 @@ export class FocusManager extends BaseManager {
    * 取消专注
    */
   @blockLoading
-  public async updateFocus(runtime: RuntimeFocus) {
-    await UpdateFocus({runtime});
+  public updateFocus(runtime: RuntimeFocus) {
+    return UpdateFocus({runtime});
   }
 
   /**
@@ -65,6 +72,7 @@ export class FocusManager extends BaseManager {
    */
   public async cancelFocus(reason?: string) {
     const response = await CancelFocus({reason});
+
     roomMgr().onFocusEnd();
 
     const res = DataLoader.load(Focus, response.focus);

@@ -22,6 +22,7 @@ import SystemInfo = WechatMiniprogram.SystemInfo;
 import CustomEvent = WechatMiniprogram.CustomEvent;
 import {RoomDrawingPage, RoomPage} from "../common/partPages/RoomPage";
 import {appMgr} from "../../modules/core/managers/AppManager";
+import {RewardGroup} from "../../modules/player/data/Reward";
 
 type WindowType = "Start" | "Room" | "Tags";
 
@@ -34,6 +35,8 @@ class Data extends BasePageData {
   item: Room
   @field(Focus)
   focus: Focus
+  @field(RewardGroup)
+  rewards: RewardGroup
 
   @field
   isShowStartWindow: boolean = false
@@ -49,6 +52,10 @@ class Data extends BasePageData {
 
   @field(RuntimeFocus)
   runtimeFocus: RuntimeFocus
+
+  // region 结算动画数据
+
+  // endregion
 
   @field
   isDown: boolean = false
@@ -243,7 +250,8 @@ export class MainPage extends ItemDetailPage<Data, Room> {
       this.data.runtimeFocus, tagIdx, note);
     await this.setData({
       focus, runtimeFocus: null,
-      isShowResultWindow: true
+      isShowResultWindow: true,
+      rewards: focusMgr().curRewards
     })
   }
 

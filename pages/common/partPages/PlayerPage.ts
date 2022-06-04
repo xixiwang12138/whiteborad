@@ -100,7 +100,7 @@ export class PlayerPage extends PartialPage<Data> {
 
 	public onLogin: Function[] = [];
 
-	public get openid() { return this.player?._id }
+	public get openid() { return this.player?.openid }
 	public get player() { return this.data.player; }
 
 	@pageFunc

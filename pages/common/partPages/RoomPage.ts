@@ -16,6 +16,7 @@ const AniColCount = 4;
 const MotionDuration = 60;
 const DefaultHouseScale = 0.3;
 const FocusingHouseScale = 0.4;
+const DebugAlpha = 0.1;
 
 type RuntimeAnimation = {
 	animation: Animation
@@ -107,7 +108,7 @@ export class RoomDrawingPage extends CanvasPage {
 		const dataUrl = ctx.canvas.toDataURL();
 		const bg = await this.createSprite(dataUrl);
 		bg.x = bg.y = 0;
-		bg.alpha = appMgr().isDebug ? 0.5 : 1;
+		bg.alpha = appMgr().isDebug ? DebugAlpha : 1;
 
 		this.add(this.base.background = bg);
 	}
@@ -119,7 +120,7 @@ export class RoomDrawingPage extends CanvasPage {
 		await this.drawAnimations(house, picture);
 
 		house.sortChildren();
-		house.alpha = appMgr().isDebug ? 0.5 : 1;
+		house.alpha = appMgr().isDebug ? DebugAlpha : 1;
 		this.add(house);
 	}
 	private createHouse() {

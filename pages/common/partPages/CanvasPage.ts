@@ -183,7 +183,7 @@ export class CanvasPage<T extends BaseData = Data> extends PartialPage<T> {
 
 	// endregion
 
-	// region 渲染
+	// region 渲染 
 
 	public render() {
 		this.renderer?.render(this.stage);

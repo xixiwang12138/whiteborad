@@ -312,8 +312,86 @@ van-dialog {
     flex-direction: column;
     align-items: center;
     z-index: 2;
+    .focus-title {
+      width: 411rpx;
+      height: 39rpx;
+      // margin-left: 10rpx;
+      flex-direction: row;
+      display: flex;
+      justify-content: space-between;
+      text{
+        width: 168rpx;
+        height: 39rpx;
+        display: block;
+        overflow-wrap: break-word;
+        font-size: 30rpx;
+        white-space: nowrap;
+        line-height: 39rpx;
+        text-align: center;
+      }
+    }
+    .TimeAndType {
+      width: 361rpx;
+      height: 54rpx;
+      flex-direction: row;
+      display: flex;
+      justify-content: space-between;
+      margin: 5rpx 0 0 23rpx;
+      text{
+        width: 123rpx;
+        height: 51rpx;
+        display: block;
+        overflow-wrap: break-word;
+        color: rgba(76,127,179,1);
+        font-size: 37rpx;
+        white-space: nowrap;
+        line-height: 51rpx;
+        text-align: center;
+        margin-top: 2rpx;
+      }
+      .focus-type {
+        height: 54rpx;
+        border-radius: 5rpx;
+        background-color: rgba(202,220,239,1);
+        display: flex;
+        flex-direction: column;
+        width: 133rpx;
+        text{
+          width: 98rpx;
+          height: 35rpx;
+          display: block;
+          overflow-wrap: break-word;
+          font-size: 25rpx;
+          white-space: nowrap;
+          line-height: 35rpx;
+          text-align: center;
+          margin: 9rpx 0 0 19rpx;
+        }
+      }
+    }
+    .focus-content {
+      height: 98rpx;
+      border-radius: 14rpx;
+      background-color: rgba(242,242,242,1);
+      display: flex;
+      flex-direction: column;
+      width: 426rpx;
+      margin: 14rpx 0 0 0;
+      text{
+        width: 147rpx;
+        height: 30rpx;
+        display: block;
+        overflow-wrap: break-word;
+        color: rgba(123,123,123,1);
+        font-size: 21rpx;
+        white-space: nowrap;
+        line-height: 30rpx;
+        text-align: center;
+        margin: 7rpx 0 0 16rpx;
+      }
+    }
     .result-config-top{
-      margin-top: 4vh;
+      margin-top: 2vh;
       z-index: 72;
       height: 16vh;
       border-radius: 20px;
@@ -408,34 +486,35 @@ van-dialog {
       line-height: 51rpx;
       text-align: center;
     }
-    .content {
-      width: 80%;
-      height: fit-content;
-      overflow-wrap: break-word;
-      text-align: center;
-      font-size: 0rpx;
-      margin: 37rpx 0 0 33rpx;
-      .result-text1 {
-        font-size: 28rpx;
-        line-height: 39rpx;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .mins {
-        font-size: 32rpx;
-        color: rgba(74,150,255,1);
-        line-height: 39rpx;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .result-text2 {
-        text-align: center;
-        font-size: 28rpx;
-        line-height: 39rpx;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-    }
+    // .content {
+    //   width: 80%;
+    //   height: fit-content;
+    //   overflow-wrap: break-word;
+    //   text-align: center;
+    //   font-size: 0rpx;
+    //   margin: 37rpx 0 0 33rpx;
+    //   .result-text1 {
+    //     font-size: 28rpx;
+    //     line-height: 39rpx;
+    //     overflow: hidden;
+    //     text-overflow: ellipsis;
+    //   }
+    //   .mins {
+    //     font-size: 32rpx;
+    //     color: rgba(74,150,255,1);
+    //     line-height: 39rpx;
+    //     overflow: hidden;
+    //     text-overflow: ellipsis;
+    //   }
+    //   .result-text2 {
+    //     text-align: center;
+    //     font-size: 28rpx;
+    //     line-height: 39rpx;
+    //     overflow: hidden;
+    //     text-overflow: ellipsis;
+    //   }
+    // }
+
     .result-btn {
       background-color: #4C7FB3;
       color: white;

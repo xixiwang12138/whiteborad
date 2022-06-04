@@ -6,93 +6,14 @@ import {pageMgr} from "../../modules/core/managers/PageManager";
 import {VisitPage} from "../visit/VisitPage";
 import {RoomPage} from "../common/partPages/RoomPage";
 import {field} from "../../modules/core/data/DataLoader";
-
-export type RoomInfo = {
-	name:string,
-	nickName:string,
-	level:number,
-	thumbnail:string
-}
+import {roomMgr} from "../../modules/room/managers/RoomManager";
+import {Room, RoomInfo} from "../../modules/room/data/Room";
 
 class Data extends BasePageData {
 
 	@field([Object])
-	roomList: RoomInfo[] = [{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	},{
-		name:"摆烂小屋",
-		nickName:"摆烂君",
-		level:3,
-		thumbnail: "../../assets/common/3.png"
-	}]
+	roomList: RoomInfo[];
+	isGetAllRooms:boolean = false;
 }
 
 @page("square", "广场")
@@ -106,6 +27,8 @@ export class SquarePage extends BasePage<Data> {
 	public playerPage: PlayerPage = new PlayerPage();
 	public roomPage: RoomPage = new RoomPage();
 
+	private offset:number = 0;
+
 	async onReady() {
 		super.onReady();
 		await this.onLogin();
@@ -114,10 +37,46 @@ export class SquarePage extends BasePage<Data> {
 	@waitForLogin
 	async onLogin() {
 		await this.roomPage.loadSelfRoom();
+		await this.refreshRooms();
 	}
 
 	@pageFunc
 	toVisit(){
 		pageMgr().push<any, BasePage>(VisitPage)
+	}
+
+	async refreshRooms(){
+		this.offset=0;
+		this.setData({
+			roomList:[]
+		})
+		await this.getRoomsList();
+
+	}
+
+	async getRoomsList(){
+		const count:number = 12;		//单次获取房间列表长度
+		if(!this.data.isGetAllRooms){
+		const tempRoomAndNPCList = await roomMgr().getRooms(this.offset,count,"",{});
+		const tempRoomList:RoomInfo[] = tempRoomAndNPCList.rooms;
+
+		//判断是否到达房间列表底部
+		if(tempRoomList.length < count)this.setData({
+			isGetAllRooms: true
+		});
+
+		let roomList:RoomInfo[] = this.data.roomList;
+		tempRoomList.forEach((value,index)=>{
+			roomList.push(value);
+		});
+
+		this.setData({roomList});
+		}
+
+
+
+
+
+
 	}
 }

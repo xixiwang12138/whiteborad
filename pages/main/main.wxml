@@ -7,7 +7,8 @@
                       avatar="{{player.avatarUrl}}" name="{{player.name}}" />
     </view>
     <gold-level-display wx:if="{{!runtimeFocus}}"
-                        gold="{{player.gold}}" level="99" expRate="0.2333" />
+                        gold="{{player.gold}}" level="{{player.levelStr}}"
+                        expRate="{{player.expRate}}" />
     <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">
       <text class="top-player-name" wx:if="{{runtimeFocus}}">{{player.name}}'s</text>
       <view class="room-name">
@@ -101,7 +102,7 @@
       <view class="mode {{focus.mode == 1 ? 'selected' : ''}}"
             bind:tap="onModeTab" data-index="{{1}}">反盖模式</view>
     </view>
-    <view class="text">完成后经验+{{focus.expectExpGain}} 金币+{{focus.expectGoldGain}}</view>
+    <view class="text">完成后经验+{{focus.expectExpReward}} 金币+{{focus.expectGoldReward}}</view>
     <view class="text">超时后可以继续获得奖励哦～</view>
     <view class="start-btn" bind:tap="onSubmit">开始专注</view>
   </view>
@@ -171,7 +172,7 @@
     </view>
     <view class="content">
       <text lines="1" class="result-text1">恭喜你成功完成了</text>
-      <text lines="1" class="mins">120min</text>
+      <text lines="1" class="mins">{{focus.realDuration}}min</text>
       <text lines="1" class="result-text2">的专注{{'\n'}}途中一定学到了不少吧{{'\n'}}请再接再厉哦～</text>
     </view>
     <view class="result-btn" bind:tap="onClickHide" data-window="Result">完成</view>

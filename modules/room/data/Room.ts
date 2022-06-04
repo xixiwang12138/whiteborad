@@ -1,6 +1,6 @@
 import {BaseData, pkType} from "../../core/data/BaseData";
 import {DataOccasion, dataPK, field, occasion} from "../../core/data/DataLoader";
-import {Player} from "../../player/data/Player";
+import {Player, PlayerBaseInfo} from "../../player/data/Player";
 import {Trait} from "./Trait";
 import {DynamicData} from "../../core/data/DynamicData";
 import {IRoomDrawable} from "./IRoomDrawable";
@@ -23,6 +23,7 @@ export type RoomEditableInfo = {
 }
 
 const DefaultMinDuration = 15;
+const FocusFeeRate = 0.5;
 
 export class Room extends DynamicData implements IRoomDrawable {
 
@@ -52,6 +53,9 @@ export class Room extends DynamicData implements IRoomDrawable {
 	@field([Trait])
 	public traits: Trait[] = [];
 
+	@field
+	public feeRate: number = FocusFeeRate;
+
 	@field(Number)
 	public skinId: number;
 
@@ -61,6 +65,10 @@ export class Room extends DynamicData implements IRoomDrawable {
 	// public location: Location;
 	@field(Number)
 	public createTime: number;
+
+	@field(PlayerBaseInfo)
+	@occasion(DataOccasion.Interface)
+	public player?: PlayerBaseInfo;
 
 	// region 额外数据
 
@@ -82,21 +90,7 @@ export class Room extends DynamicData implements IRoomDrawable {
 
 	// endregion
 
-	// region 绘制数据
-
-	public get skin() { return roomSkinRepo().getById(this.skinId) }
-
-	public get thumbnail() { return this.skin.thumbnail }
-	public get picture() { return this.skin.picture }
-	public get layers() { return this.skin.layers }
-	public get animations() { return this.skin.animations }
-
-	public get thumbnailUrl() { return this.skin.thumbnailUrl; }
-	public get pictureUrl() { return this.skin.pictureUrl; }
-
-	// endregion
-
-	public get star() { return roomStarRepo().getById(this.starId) }
+	// region 初始化
 
 	/**
 	 * 创建房间
@@ -126,6 +120,54 @@ export class Room extends DynamicData implements IRoomDrawable {
 		return res;
 	}
 
+	// endregion
+
+	// region 数据获取
+
+	public get star() { return roomStarRepo().getById(this.starId) }
+
+	// region 绘制数据
+
+	public get skin() { return roomSkinRepo().getById(this.skinId) }
+
+	public get thumbnail() { return this.skin.thumbnail }
+	public get picture() { return this.skin.picture }
+	public get layers() { return this.skin.layers }
+	public get animations() { return this.skin.animations }
+
+	public get thumbnailUrl() { return this.skin.thumbnailUrl; }
+	public get pictureUrl() { return this.skin.pictureUrl; }
+
+	// endregion
+
+	// endregion
+
+	// region 皮肤控制
+
+	public switchSkin(skinId: number) {
+		this.skinId = skinId;
+		this.starId = this.skin.level;
+	}
+
+	// endregion
+
+	// region 属性控制
+
+	/**
+	 * 获取属性
+	 */
+	public param(index: ParamType) {
+		return this.params[index] + this.skin?.params[index] || 0;
+	}
+
+	/**
+	 * 属性快速访问
+	 */
+	public get gb() { return this.param(ParamType.GB) }
+	public get eb() { return this.param(ParamType.EB) }
+
+	// endregion
+
 }
 
 export class RoomInfo extends BaseData {
@@ -142,72 +184,83 @@ export class RoomInfo extends BaseData {
 	public openid: string;
 
 	@field
-	public star: number = 1;
+	public starId: number = 1;
 
 	@field(Number)
 	public skinId: number;
 	@field
 	public state: RoomState = RoomState.Uncreated;
 
-	@field
-	public playerOnline: boolean = false
-	@field(String)
-	public playerName: string
-	@field(String)
-	public playerAvatar: string
-}
-
-export class RoomData extends BaseData {
-
-	@field(String)
-	public roomId: string;
-	@field(String)
-	public displayId: string;
-	@field
-	public name: string = "";
-	@field(String)
-	public creatorAccount: string;
-	@field(String)
-	public ownerAccount: string;
-	@field(pkType())
-	public openid: string;
-
-	@field
-	public notice: string = "";
-	@field
-	public star: number = 1;
-
-	@field
-	public minDuration: number = 15;
-	@field
-	public maxDuration: number = 90;
-
-	@field([Number])
-	public params: number[] = [];
-	@field([Trait])
-	public traits: Trait[] = [];
-	@field(Number)
-	public skinId: number;
-	@field
-	public state: RoomState = RoomState.Uncreated;
-	// @field(Location)
-	// public location: Location;
-	@field(Number)
-	public createTime: number;
-
-	@field
-	public playerOnline: boolean = false
 	@field(String)
 	public playerName: string
 	@field(String)
 	public playerAvatar: string
 
-	// region 额外数据
-
-	public refresh() {
-
-	}
-
-	// endregion
-
 }
+
+// export class RoomData extends BaseData {
+//
+// 	@field(String)
+// 	public roomId: string;
+// 	@field(String)
+// 	public displayId: string;
+// 	@field
+// 	public name: string = "";
+// 	@field(String)
+// 	public creatorAccount: string;
+// 	@field(String)
+// 	public ownerAccount: string;
+// 	@field(pkType())
+// 	public openid: string;
+//
+// 	@field
+// 	public notice: string = "";
+// 	@field
+// 	public star: number = 1;
+//
+// 	@field
+// 	public minDuration: number = 15;
+// 	@field
+// 	public maxDuration: number = 90;
+//
+// 	@field([Number])
+// 	public params: number[] = [];
+// 	@field([Effect])
+// 	public effects: Effect[] = [];
+// 	@field([Trait])
+// 	public traits: Trait[] = [];
+//
+// 	@field
+// 	public feeRate: number = FocusFeeRate;
+//
+// 	@field(Number)
+// 	public skinId: number;
+// 	@field
+// 	public state: RoomState = RoomState.Uncreated;
+// 	// @field(Location)
+// 	// public location: Location;
+// 	@field(Number)
+// 	public createTime: number;
+//
+// 	@field
+// 	public playerOnline: boolean = false
+// 	@field(String)
+// 	public playerName: string
+// 	@field(String)
+// 	public playerAvatar: string
+//
+// 	// region 额外数据
+//
+// 	public refresh() {
+//
+// 	}
+//
+// 	// endregion
+//
+// 	public toRoom() {
+// 		const res = new Room();
+// 		Object.assign(res, this);
+// 		return res;
+// 	}
+//
+// }

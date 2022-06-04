@@ -143,6 +143,7 @@ export class CanvasPage<T extends BaseData = Data> extends PartialPage<T> {
 
 	// @ts-ignore
 	public makeContext(width, height): CanvasRenderingContext2D {
+		// 限制尺寸
 		// const rate = Math.max(width, height) / MaxCanvasSize;
 		// if (rate > 1) {
 		// 	width = Math.floor(width / rate);
@@ -153,22 +154,9 @@ export class CanvasPage<T extends BaseData = Data> extends PartialPage<T> {
 			type: "2d", width, height
 		});
 		// @ts-ignore
-		canvas.width = width;
-		// @ts-ignore
-		canvas.height = height;
-		// const canvas = document.createElement('canvas');
+		canvas.width = width; canvas.height = height;
+
 		return canvas.getContext('2d');
-		// const context = canvas.getContext('2d');
-
-		// canvas.width = Math.max(width || 0, 1);
-		// canvas.height = Math.max(height || 0, 1);
-
-		// const baseTexture = new this.pixi.BaseTexture(canvas);
-		// baseTexture.mipmap = false;
-		// baseTexture.width = width;
-		// baseTexture.height = height;
-
-		// return context;
 	}
 
 	// @ts-ignore
@@ -179,7 +167,6 @@ export class CanvasPage<T extends BaseData = Data> extends PartialPage<T> {
 			width, height
 		});
 		console.log("baseTexture", baseTexture);
-		// baseTexture.mipmap = false;
 
 		sprite.texture = new this.pixi.Texture(baseTexture);
 		sprite.texture.noFrame = false;
@@ -199,7 +186,7 @@ export class CanvasPage<T extends BaseData = Data> extends PartialPage<T> {
 	// region 渲染
 
 	public render() {
-		this.renderer.render(this.stage);
+		this.renderer?.render(this.stage);
 	}
 
 	// endregion

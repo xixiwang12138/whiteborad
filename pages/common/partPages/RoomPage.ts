@@ -54,20 +54,24 @@ export class RoomDrawingPage extends CanvasPage {
 	private room: Room;
 	private focusing: boolean = false;
 
-	private pixiObj: {
-		aniTime: number
+	private base: {
 		background?: Sprite
 		house?: Container
+		picture?: Sprite
 		layers: Sprite[]
-		animations: RuntimeAnimation[]
 	} = {
-		aniTime: 0,
-		layers: [],
-		animations: []
+		layers: []
 	};
 
-	private motionData = {
-		motionId: 1,
+	private motion: {
+		aniTime: number
+		animations: RuntimeAnimation[]
+		curMotionId: number
+		duration: number
+	} = {
+		aniTime: 0,
+		animations: [],
+		curMotionId: 1,
 		duration: 0
 	};
 
@@ -108,7 +112,7 @@ export class RoomDrawingPage extends CanvasPage {
 		bg.x = bg.y = 0;
 		bg.alpha = appMgr().isDebug ? 0.5 : 1;
 
-		this.add(this.pixiObj.background = bg);
+		this.add(this.base.background = bg);
 	}
 
 	private async drawHouse() {
@@ -130,7 +134,7 @@ export class RoomDrawingPage extends CanvasPage {
 		res.scale.x = res.scale.y = DefaultHouseScale;
 		res.pivot.x = res.pivot.y = 0.5;
 
-		return this.pixiObj.house = res;
+		return this.base.house = res;
 	}
 	private async drawPicture(house) {
 		const res = await this
@@ -152,7 +156,7 @@ export class RoomDrawingPage extends CanvasPage {
 			ls.y = layer.position[1] * picture.height;
 			ls.zIndex = layer.z;
 
-			this.pixiObj.layers.push(ls);
+			this.base.layers.push(ls);
 			house.addChild(ls);
 		}
 	}
@@ -171,7 +175,7 @@ export class RoomDrawingPage extends CanvasPage {
 			sprite.zIndex = animation.z;
 			sprite.alpha = 0;
 
-			this.pixiObj.animations.push({
+			this.motion.animations.push({
 				animation, sprite, width, height
 			});
 			house.addChild(sprite);
@@ -184,54 +188,53 @@ export class RoomDrawingPage extends CanvasPage {
 
 	update(focusing) {
 		this.focusing = focusing;
-		this.updateHouseMove();
+		this.updateHouseScale();
 		this.updateMotions();
 		this.updateAnimations();
 
 		this.render();
 	}
 
-	private updateHouseMove() {
-		if (!this.pixiObj.house) return;
+	private updateHouseScale() {
+		if (!this.base.house) return;
 
 		let dtScale = this.focusing ?
-			(FocusingHouseScale - this.pixiObj.house.scale.x) / 24 :
-			(DefaultHouseScale - this.pixiObj.house.scale.x) / 8;
+			(FocusingHouseScale - this.base.house.scale.x) / 24 :
+			(DefaultHouseScale - this.base.house.scale.x) / 8;
 
 		if (Math.abs(dtScale) <= 0.00001) return;
 
-		this.pixiObj.house.scale.x += dtScale;
-		this.pixiObj.house.scale.y += dtScale;
+		this.base.house.scale.x += dtScale;
+		this.base.house.scale.y += dtScale;
 	}
 
 	private updateMotions() {
 		const rate = appMgr().isDebug ? TimeRate : 1;
 		const dt = pageMgr().deltaTime * rate;
 
-		this.motionData.duration += dt;
-		if ((this.motionData.duration += dt)
+		this.motion.duration += dt;
+		if ((this.motion.duration += dt)
 			< MotionDuration * 1000) return;
 
-		this.motionData.duration = 0;
-		this.motionData.motionId = MathUtils.randomInt(1, 3);
+		this.motion.duration = 0;
+		this.motion.curMotionId = MathUtils.randomInt(1, 3);
 	}
 
 	private updateAnimations() {
-		if (this.pixiObj.animations.length <= 0) return;
+		if (this.motion.animations.length <= 0) return;
 
-		this.pixiObj.aniTime += pageMgr().deltaTime;
-		this.pixiObj.animations.forEach(
+		this.motion.aniTime += pageMgr().deltaTime;
+		this.motion.animations.forEach(
 			ani => this.updateAnimation(ani));
 	}
 
 	private updateAnimation(ra: RuntimeAnimation) {
-		let show = this.focusing;
-		if (ra.animation.motionId)
-			show &&= this.motionData.motionId == ra.animation.motionId;
+		const show = this.focusing && (!ra.animation.motionId ||
+			this.motion.curMotionId == ra.animation.motionId);
 
 		const ani = ra.animation;
 		const fd = ani.duration / ani.count * 1000;
-		const index = Math.floor((this.pixiObj.aniTime / fd) % ani.count);
+		const index = Math.floor((this.motion.aniTime / fd) % ani.count);
 
 		ra.sprite.alpha = MathUtils.clamp(
 			ra.sprite.alpha + (show ? 0.05 : -0.05));

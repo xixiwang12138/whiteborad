@@ -1,9 +1,13 @@
 import {DynamicData} from "../../core/data/DynamicData";
 import {DataOccasion, dataPK, field, occasion} from "../../core/data/DataLoader";
 import {MathUtils} from "../../../utils/MathUtils";
-import {Reward} from "../../player/data/Reward";
+import {r, Reward, RewardGroup, RewardType} from "../../player/data/Reward";
 import {BaseData} from "../../core/data/BaseData";
 import {DateUtils} from "../../../utils/DateUtils";
+import {playerMgr} from "../../player/managers/PlayerManager";
+import {Room} from "../../room/data/Room";
+import {NPCRoom} from "../../room/data/NPCRoom";
+import {roomMgr} from "../../room/managers/RoomManager";
 
 export const FocusTags = [
 	"沉迷学习", "期末爆肝", "大考备战",
@@ -23,6 +27,13 @@ const MaxInvalidTime = 15;
 const OverdueTime = 60 * 60 * 1000; // 过期时间（60分钟）
 const AbnormalTime = 60 * 1000; // 60秒内的专注不算入内
 const DefaultDuration = 60;
+
+const GoldRewardCalc = {
+	MaxG: 300, MaxD: 210, K: 0.1, MinK: 0.5
+}
+const ExpRewardCalc = {
+	K: 10
+}
 
 export class RuntimeFocus extends BaseData {
 
@@ -121,7 +132,7 @@ export class Focus extends DynamicData {
 	@field(Number)
 	public endTime?: number
 	@field([Reward])
-	public reward: Reward[] = []
+	public rewards: Reward[];
 	@field(Number)
 	public state: FocusState = FocusState.NotStarted
 
@@ -129,6 +140,8 @@ export class Focus extends DynamicData {
 	public runtime: RuntimeFocus
 
 	public get tag() { return FocusTags[this.tagIdx]; }
+	@field(Number)
+	@occasion(DataOccasion.Extra)
 	public get realDuration() {
 		return Math.floor(this.runtime?.elapseTime / 1000 / 60);
 	}
@@ -137,15 +150,27 @@ export class Focus extends DynamicData {
 
 	@field(Number)
 	@occasion(DataOccasion.Extra)
-	public expectExpGain: number;
+	public expectExpReward: number;
 	@field(Number)
 	@occasion(DataOccasion.Extra)
-	public expectGoldGain: number;
+	public expectGoldReward: number;
+	@field(Number)
+	@occasion(DataOccasion.Extra)
+	public expReward: number;
+	@field(Number)
+	@occasion(DataOccasion.Extra)
+	public goldReward: number;
 
-	public refresh() {
-		// TODO: 确定增益算法
-		this.expectExpGain = this.duration * 10;
-		this.expectGoldGain = this.duration * 2;
+	public async refresh() {
+		const group = await this.realRewards(this.duration);
+
+		this.expectExpReward = group.exp.realValue;
+		this.expectGoldReward = group.gold.realValue;
+
+		if (this.rewards) {
+			this.expReward = group.exp.realValue;
+			this.goldReward = group.gold.realValue;
+		}
 	}
 
 	// endregion
@@ -181,6 +206,81 @@ export class Focus extends DynamicData {
 	public get isAbnormal() {
 		return !this.runtime || this.state == FocusState.Abnormal ||
 			(this.isEnd && this.runtime.elapseTime <= AbnormalTime);
+	}
+
+	// endregion
+
+	// region 房间相关
+
+	private _room: Room | NPCRoom;
+	public async room() {
+		if (!this._room) {
+			this._room = await roomMgr().getRoom(this);
+		}
+		return this._room;
+	}
+	public inNPCRoom() {
+		return !this.roomId && this.npcRoomId
+	}
+	public async inSelfRoom() {
+		if (this.inNPCRoom()) return false;
+		const room = await this.room() as Room;
+		return room.openid == this.openid;
+	}
+	public async inOtherRoom() {
+		if (this.inNPCRoom()) return false;
+		const room = await this.room() as Room;
+		return room.openid != this.openid;
+	}
+
+	// endregion
+
+	// region 奖励控制
+
+	/**
+	 * 奖励
+	 */
+	public baseRewards(duration?) {
+		return RewardGroup.create(
+			r(RewardType.Gold, this.baseGoldReward(duration)),
+			r(RewardType.Exp, this.baseExpReward(duration)))
+	}
+	private baseGoldReward(duration?) {
+		const d = duration || this.realDuration, f = GoldRewardCalc;
+		return Math.round(Math.max(d * f.MinK,
+			f.MaxG * MathUtils.sigmoid((d / f.MaxD - 0.5) / f.K)))
+	}
+	private baseExpReward(duration?) {
+		return (duration || this.realDuration) * ExpRewardCalc.K;
+	}
+
+	/**
+	 * 奖励
+	 */
+	public async realRewards(duration?, openid?) {
+		openid ||= this.openid;
+		const res = this.baseRewards(duration);
+		const room = await this.room();
+
+		let gb = room.gb, eb = room.eb;
+
+		if (room instanceof Room) { // 如果是玩家房间
+			if (room.openid != openid) { // 如果在其他人房间里专注
+				res.bonus(RewardType.Gold, gb * (1 - room.feeRate));
+				res.bonus(RewardType.Exp, eb);
+			} else if (this.openid == openid) { // 如果专注者是自己，在自己房间里专注
+				res.bonus(RewardType.Gold, gb);
+				res.bonus(RewardType.Exp, eb);
+			} else { // 专注者不是自己，其他人在自己房间专注
+				res.bonus(RewardType.Gold, gb * room.feeRate - 1);
+				res.exp.value = 0;
+			}
+		} else {
+			res.bonus(RewardType.Gold, gb);
+			res.bonus(RewardType.Exp, eb);
+		}
+
+		return res
 	}
 
 	// endregion

@@ -1,5 +1,6 @@
-import {Reward, RewardType} from "../Data/Reward";
+import {Reward, RewardType} from "../data/Reward";
 import {Constructor} from "../../core/BaseContext";
+import {playerMgr} from "../managers/PlayerManager";
 
 export function rewardProcessor(type: RewardType) {
 	return (clazz) => {
@@ -25,5 +26,25 @@ export abstract class RewardProcessor {
 
 	public get value() { return this.reward.value; }
 
+	public player() { return playerMgr().player }
+
 	public abstract invoke(rate?);
+}
+
+@rewardProcessor(RewardType.Gold)
+class GoldRewardProcessor extends RewardProcessor {
+
+	async invoke(rate?) {
+		const player = await this.player();
+		player.gainGold(this.value);
+	}
+}
+
+@rewardProcessor(RewardType.Exp)
+class ExpRewardProcessor extends RewardProcessor {
+
+	async invoke(rate?) {
+		const player = await this.player();
+		player.gainExp(this.value);
+	}
 }

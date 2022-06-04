@@ -6,6 +6,7 @@ import {BaseRepository, getRepository, repository} from "../../core/data/BaseRep
 import {Constructor} from "../../core/BaseContext";
 import {Animation, PictureLayer} from "./IRoomDrawable";
 import {Condition} from "../../player/data/Condition";
+import {ParamType} from "./Room";
 
 export enum NPCRoomState {
 	Closed = -2, Building, Opened
@@ -57,6 +58,22 @@ export class NPCRoom extends StaticData {
 		return this.picture || `@/npcRooms/pictures/${this.id}.png`;
 	}
 
+	// region 属性控制
+
+	/**
+	 * 获取属性
+	 */
+	public param(index: ParamType) {
+		return this.params[index];
+	}
+
+	/**
+	 * 属性快速访问
+	 */
+	public get gb() { return this.param(ParamType.GB) }
+	public get eb() { return this.param(ParamType.EB) }
+
+	// endregion
 }
 
 export function npcRoomRepo() {

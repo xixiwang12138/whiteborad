@@ -47,6 +47,7 @@ export class FocusManager extends BaseManager {
     roomMgr().onFocusEnd();
 
     const res = DataLoader.load(Focus, response.focus);
+
     this.curFocus = null;
     return res;
   }

@@ -1,6 +1,10 @@
 
 export class MathUtils {
 
+	public static sigmoid(x) {
+		return 1 / (1 + Math.pow(Math.E, -x))
+	}
+
 	/**
 	 * 四舍五入保留指定位数小数
 	 */

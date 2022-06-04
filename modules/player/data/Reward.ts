@@ -19,7 +19,13 @@ export class Reward extends BaseData {
 	@field
 	public value: number = 0;
 	@field(Object)
+	public bonus: {rate: number, val: number} = {rate: 0, val: 0};
+	@field(Object)
 	public params: object = {};
+
+	public get realValue() {
+		return this.value * ((this.bonus.rate || 0) + 1) + (this.bonus.val || 0)
+	}
 
 	public static create(type: RewardType,
 											 value: number, params = {}) {
@@ -67,6 +73,11 @@ export class RewardGroup extends BaseData {
 
 	public find(type: RewardType) {
 		return this.rewards.find(c => c.type == type);
+	}
+
+	public bonus(type: RewardType, rate?, val?) {
+		this.find(type).bonus.val += val;
+		this.find(type).bonus.rate += rate;
 	}
 
 	// region 快捷查找

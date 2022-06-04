@@ -156,14 +156,16 @@
       <text lines="1" >本次专注时长</text>
       <text lines="1" >本次专注内容</text>
     </view>
-    <view class="TimeAndType">
+    <view class="focus-val">
       <text lines="1" >{{focus.realDuration}}min</text>
-      <view class="focus-type">
-        <text lines="1" >沉迷学习</text>
+      <view class="focus-type" bindtap="onClickShow"
+            data-window="Tags">
+        <text lines="1">{{focusTags[focus.tagIdx]}}</text>
       </view>
     </view>
     <view class="focus-content">
-      <text lines="1" class="word5">专注内容备注…</text>
+      <textarea lines="1" class="word5" placeholder="专注内容备注…"
+                bind:input="onNoteInput"/>
     </view>
     <view class="result-config-top">
       <view class="coinGain">

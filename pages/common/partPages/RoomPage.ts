@@ -9,8 +9,6 @@ import {Animation} from "../../../modules/room/data/IRoomDrawable";
 import {pageMgr} from "../../../modules/core/managers/PageManager";
 import {MathUtils} from "../../../utils/MathUtils";
 import {Constructor} from "../../../modules/core/BaseContext";
-import SystemInfo = WechatMiniprogram.SystemInfo;
-import {pageFunc} from "../PageBuilder";
 import {appMgr} from "../../../modules/core/managers/AppManager";
 
 const TimeRate = 100;

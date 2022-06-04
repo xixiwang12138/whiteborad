@@ -202,7 +202,11 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   }
 
   async onStartWindowShow() {
-    await this.setData({focus: Focus.emptyData(this.playerPage.openid)});
+    const focus = Focus.emptyData(
+      this.playerPage.openid, {
+        roomId: this.item.roomId
+      })
+    await this.setData({focus});
   }
 
   // endregion
@@ -229,6 +233,13 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     const index = e.currentTarget.dataset.index;
     const focus = this.data.focus;
     focus.mode = Number(index);
+    this.setData({ focus })
+  }
+
+  @pageFunc
+  private onNoteInput(e) {
+    const focus = this.data.focus;
+    focus.note = e.detail.value;
     this.setData({ focus })
   }
 

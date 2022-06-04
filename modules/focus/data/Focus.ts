@@ -8,6 +8,7 @@ import {playerMgr} from "../../player/managers/PlayerManager";
 import {Room} from "../../room/data/Room";
 import {NPCRoom} from "../../room/data/NPCRoom";
 import {roomMgr} from "../../room/managers/RoomManager";
+import {IRoomIndex} from "../../room/data/PlayerRoom";
 
 export const FocusTags = [
 	"沉迷学习", "期末爆肝", "大考备战",
@@ -184,10 +185,12 @@ export class Focus extends DynamicData {
 		res.generateId();
 		return res;
 	}
-	public static emptyData(openid) {
+	public static emptyData(openid: string, room: IRoomIndex) {
 		const res = new Focus();
 		res.openid = openid;
 		res.duration = DefaultDuration;
+		res.roomId = room.roomId;
+		res.npcRoomId = room.npcRoomId;
 		res.generateId();
 
 		return res;

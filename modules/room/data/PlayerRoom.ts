@@ -1,6 +1,7 @@
 import {BaseData} from "../../core/data/BaseData";
 import {field} from "../../core/data/DataLoader";
 import {PlayerData} from "../../player/data/Player";
+import {playerData} from "../../player/managers/PlayerManager";
 
 export interface IRoomIndex {
 
@@ -73,6 +74,7 @@ export class RoomVisitRecord extends BaseData {
 	}
 }
 
+@playerData("PlayerRoom")
 export class PlayerRoom extends PlayerData {
 
 	@field([SkinBuyRecord])

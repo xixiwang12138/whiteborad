@@ -321,6 +321,7 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
       isShowResultWindow: false,
       // resAni: null
     });
+    this.playerPage.resetPlayer();
   }
 
   @pageFunc

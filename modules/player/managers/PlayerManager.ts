@@ -2,25 +2,33 @@ import {get, Itf, post} from "../../core/BaseAssist";
 import {BaseManager, getManager, manager} from "../../core/managers/BaseManager";
 import {appMgr} from "../../core/managers/AppManager";
 import {storageMgr} from "../../core/managers/StroageManager";
-import {Player, PlayerEditableInfo, WxUserInfo} from "../data/Player";
+import {Player, PlayerData, PlayerEditableInfo, WxUserInfo} from "../data/Player";
 import {PromiseUtils} from "../../../utils/PromiseUtils";
 import {blockLoading, showLoading} from "../../core/managers/LoadingManager";
 import {DataLoader} from "../../core/data/DataLoader";
 import {handleError} from "../../core/managers/ErrorManager";
+import {Constructor} from "../../core/BaseContext";
 
 const Login: Itf<
   {openid: string, userInfo: WxUserInfo},
-  {player: Player, token: string}>
+  {player: Player, token: string, data: {[T: string]: PlayerData}, extra: any}>
   = post("/player/player/login", false);
 const Logout: Itf = post("/player/player/logout");
 const GetOpenid: Itf<{code: string}, {openid: string}>
   = post("/player/openid/get", false);
 const GetPhone: Itf<{code: string}, {phone: string}>
   = post("/player/phone/get");
+const GetPlayerData: Itf<{}, {data: {[T: string]: PlayerData}}>
+  = post("/player/player_data/get");
 const GetPlayerInfo: Itf<{}, {player: Player}>
   = get("/player/player_info/get");
 const EditPlayerInfo: Itf<{info: PlayerEditableInfo}, {}>
   = post("/player/player_info/edit");
+
+export function playerData<T extends PlayerData>(name: string) {
+  return (clazz: Constructor<T>) =>
+    playerMgr().registerData(clazz, name);
+}
 
 export function waitForLogin(obj, key, desc) {
   const oriFunc = desc.value;
@@ -63,6 +71,12 @@ export class PlayerManager extends BaseManager {
     storageMgr().setData(OpenidKey, this._openid = val);
   }
 
+  /**
+   * 玩家数据
+   */
+  public playerData: {[T: string]: PlayerData} = {};
+  public playerDataClasses: {[T: string]: Constructor<any>} = {};
+
   // region 用户操作
 
   /**
@@ -93,6 +107,8 @@ export class PlayerManager extends BaseManager {
     const res = await Login({
       openid: this.openid, userInfo
     });
+    this.setAllData(res.data);
+
     appMgr().setupToken(res.token);
 
     userInfo = DataLoader.load(Player, res.player);
@@ -154,6 +170,79 @@ export class PlayerManager extends BaseManager {
     return new Promise<any>(resolve => {
       wx.login({success: resolve});
     })
+  }
+
+  // endregion
+
+  // region 玩家数据操作
+
+  /**
+   * 注册玩家数据
+   */
+  public registerData<T extends PlayerData>(
+    clazz: Constructor<T>, name: string) {
+    this.playerDataClasses[name] = clazz;
+  }
+
+  /**
+   * 获取玩家数据名
+   */
+  public getDataName<T extends PlayerData>(
+    clazz: Constructor<T>) {
+    for (const key in this.playerDataClasses) {
+      const pdClazz = this.playerDataClasses[key];
+      if (clazz == pdClazz) return key;
+    }
+  }
+
+  /**
+   * 获取玩家数据类
+   */
+  public getDataClass<T extends PlayerData>(name: string) {
+    return this.playerDataClasses[name];
+  }
+
+  /**
+   * 获取玩家数据
+   * @param clazz 需要获取的数据类型
+   */
+  public getData<T extends PlayerData>(clazz: Constructor<T>): T {
+    return this.playerData[this.getDataName(clazz)] as T;
+  }
+
+  /**
+   * 刷新玩家数据
+   * @param clazz 需要刷新的数据类型，默认刷新全部数据
+   */
+  public async refreshData<T extends PlayerData>(
+    clazz?: Constructor<T>) {
+    if (clazz) {
+      const name = this.getDataName(clazz);
+      const res = await GetPlayerData({name});
+      this.setData(clazz, res.data);
+    } else {
+      const res = await GetPlayerData();
+      this.setAllData(res.data);
+    }
+  }
+
+  /**
+   * 设置玩家数据
+   */
+  public setData<T extends PlayerData>(
+    clazz: Constructor<T>, data: object) {
+    const name = this.getDataName(clazz);
+    if (name) this.playerData[name] = DataLoader.load(clazz, data);
+  }
+
+  /**
+   * 设置玩家数据
+   */
+  public setAllData<T extends PlayerData>(dict: object) {
+    for (const key in dict) {
+      const clazz = this.getDataClass(key);
+      if (clazz) this.setData(clazz, dict[key]);
+    }
   }
 
   // endregion

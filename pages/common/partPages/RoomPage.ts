@@ -73,12 +73,26 @@ export class RoomDrawingPage extends CanvasPage {
 		duration: 0
 	};
 
+	private position = [0.5, 0.5];
+	private scale = 1;
+
+	private get defaultScale() {
+		return DefaultHouseScale * this.scale;
+	}
+	private get focusingScale() {
+		return FocusingHouseScale * this.scale;
+	}
+
 	// endregion
 
 	// region 基本绘制
 
-	public async draw(room: Room) {
+	public async draw(room: Room,
+										position = [0.5, 0.5],
+										scale = 1) {
 		this.room = room;
+		this.position = position;
+		this.scale = scale;
 		await this.waitForCanvasSetup();
 		await this.drawBackground();
 		await this.drawHouse();
@@ -126,10 +140,11 @@ export class RoomDrawingPage extends CanvasPage {
 	private createHouse() {
 		const res = this.createContainer();
 
-		res.x = this.width / 2; res.y = this.height / 2;
+		res.x = this.width * this.position[0];
+		res.y = this.height * this.position[1];
 		res.width = this.width; res.height = this.height;
 
-		res.scale.x = res.scale.y = DefaultHouseScale;
+		res.scale.x = res.scale.y = this.defaultScale;
 		res.pivot.x = res.pivot.y = 0.5;
 
 		return this.base.house = res;
@@ -197,8 +212,8 @@ export class RoomDrawingPage extends CanvasPage {
 		if (!this.base.house) return;
 
 		let dtScale = this.focusing ?
-			(FocusingHouseScale - this.base.house.scale.x) / 24 :
-			(DefaultHouseScale - this.base.house.scale.x) / 8;
+			(this.focusingScale - this.base.house.scale.x) / 24 :
+			(this.defaultScale - this.base.house.scale.x) / 8;
 
 		if (Math.abs(dtScale) <= 0.00001) return;
 

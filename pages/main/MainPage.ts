@@ -77,8 +77,6 @@ class Data extends BasePageData {
   item: Room
   @field(Focus)
   focus: Focus
-  @field(RewardGroup)
-  rewards: RewardGroup
 
   @field
   isShowStartWindow: boolean = false
@@ -95,12 +93,8 @@ class Data extends BasePageData {
   @field(RuntimeFocus)
   runtimeFocus: RuntimeFocus
 
-  // region 结算动画数据
-
   @field(ResultAnimation)
   resAni: ResultAnimation;
-
-  // endregion
 
   @field
   isDown: boolean = false
@@ -112,7 +106,7 @@ export const RoomType = "room";
 const FocusUpdateInterval = 10000; // 5秒更新一次
 
 @page("main", "主页")
-export class MainPage extends ItemDetailPage<Data, Room> {
+export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
 
   public data = new Data();
 
@@ -131,6 +125,18 @@ export class MainPage extends ItemDetailPage<Data, Room> {
   async onLoad(e) {
     await super.onLoad(e);
     await this.initialize();
+
+    // 测试
+    wx.onAppHide(() => {
+      console.log("onAppHide")
+    })
+    wx.onAppShow(() => {
+      console.log("onAppShow")
+    })
+  }
+
+  async onUnload() {
+    wx.offAccelerometerChange(() => {});
   }
 
   @waitForLogin
@@ -141,11 +147,18 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     await this.roomDrawingPage.draw(this.item);
   }
 
+  protected getRoom() {
+    return roomMgr().getSelfRoom();
+  }
+  protected get roomIndex() {
+    return {roomId: this.item.roomId}
+  }
+
   private async loadRoom() {
     // const room = Room.testData();
-    const room = await roomMgr().getSelfRoom();
+    const room = await this.getRoom();
     await this.setItem(room);
-    await roomMgr().enterRoom(room,
+    await roomMgr().enterRoom(this.roomIndex,
         e => this.onRoomMessage(e))
   }
 

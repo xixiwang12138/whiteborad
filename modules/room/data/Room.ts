@@ -196,6 +196,11 @@ export class RoomInfo extends BaseData {
 	@field(String)
 	public playerAvatar: string
 
+	@field(String)
+	@occasion(DataOccasion.Extra)
+	public get thumbnail() {
+		return this.skinId && roomSkinRepo().getById(this.skinId).thumbnail
+	}
 }
 
 // export class RoomData extends BaseData {

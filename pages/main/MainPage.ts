@@ -207,6 +207,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     } else if (runtimeFocus.isFailed) {
       this.onFailed();
       this.setData({ runtimeFocus: null });
+      alertMgr().showToast("好遗憾，专注失败了，调整状态再来一次吧！");
     } else
       this.setData({ runtimeFocus });
   }
@@ -311,8 +312,18 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     await focusMgr().editFocus(id, tagIdx, note);
     await this.setData({
       isShowResultWindow: false,
-      resAni: null
+      // resAni: null
     });
+  }
+
+  @pageFunc
+  private async onCancelTap() {
+    const res = await alertMgr().showAlert(
+      "确定要取消专注吗？取消专注将不会获得任何奖励", true);
+    if (res.confirm) {
+      await this.onFailed("用户取消专注");
+      await alertMgr().showToast("您已取消专注");
+    }
   }
 
   private async onSuccess() {
@@ -327,10 +338,9 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     })
   }
 
-  private async onFailed() {
+  private async onFailed(reason = "专注失败") {
     const focus = await focusMgr().cancelFocus("专注失败");
     await this.setData({ focus, runtimeFocus: null })
-    await alertMgr().showToast("好遗憾，专注失败了，调整状态再来一次吧！");
   }
 
   // endregion

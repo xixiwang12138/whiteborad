@@ -1,14 +1,14 @@
 
 // const Host = "https://www.exermon.com:8086";
-import {BaseManager, getManager, manager} from "./BaseManager";
-import {DataLoader} from "../data/DataLoader";
-import {StringUtils} from "../../../utils/StringUtils";
-import {alertMgr} from "./AlertManager";
-import {loadingMgr, LoadingOptions, LoadingParam} from "./LoadingManager";
-import {loading} from "../BaseAssist";
+import { BaseManager, getManager, manager } from "./BaseManager";
+import { DataLoader } from "../data/DataLoader";
+import { StringUtils } from "../../../utils/StringUtils";
+import { alertMgr } from "./AlertManager";
+import { loadingMgr, LoadingOptions, LoadingParam } from "./LoadingManager";
+import { loading } from "../BaseAssist";
 
-const Host = "https://homi-http-server-1836805-1255510304.ap-shanghai.run.tcloudbase.com";
-// const Host = "http://localhost:8090";
+//const Host = "https://homi-http-server-1836805-1255510304.ap-shanghai.run.tcloudbase.com";
+const Host = "http://localhost:8090";
 
 const Request = loading(100001, "请求中", true);
 const DefaultTimeOut = 120000;
@@ -39,8 +39,8 @@ export class Interface implements InterfaceOptions {
   public useEncrypt: boolean = true;
   public loading: InterfaceLoading = true;
 
-  public get isGet() {return this.method == 'GET'}
-  public get isPost() {return this.method == 'POST'}
+  public get isGet() { return this.method == 'GET' }
+  public get isPost() { return this.method == 'POST' }
 
   private _loadingSetting: LoadingOptions = null;
   public get loadingSetting(): LoadingOptions {
@@ -105,7 +105,7 @@ class RequestErrorHandler {
   }
 
   public register(func: RequestErrorHandleFunc, interface_: Interface | RequestErrorData,
-                  status?: number, code?: number) {
+    status?: number, code?: number) {
     if (interface_ instanceof Interface) {
       const key = this.getKey(interface_);
       this.funcDict[key] ||= {};
@@ -117,7 +117,7 @@ class RequestErrorHandler {
   }
 
   public getHandler(interface_: Interface | RequestErrorData,
-                    status?: number, code?: number): RequestErrorHandleFunc {
+    status?: number, code?: number): RequestErrorHandleFunc {
     if (interface_ instanceof Interface) {
       const key = this.getKey(interface_);
       if (!this.funcDict[key]) return null;
@@ -239,5 +239,5 @@ class NetworkManager extends BaseManager {
   }
 }
 
-import {appMgr} from "./AppManager";
-import {ErrorData} from "./ErrorManager";
+import { appMgr } from "./AppManager";
+import { ErrorData } from "./ErrorManager";

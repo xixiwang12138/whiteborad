@@ -56,8 +56,8 @@ export class RoomManager extends BaseManager {
       DataLoader.load(NPCRoom, response.npcRoom);
   }
   public async getRooms(offset: number, count: number,
-                        filter?: any, text?: string) {
-    const response = await GetRooms({offset, count, filter, text});
+                        text?: string,filter?: any) {
+    const response = await GetRooms({offset, count, text, filter});
     return {
       rooms: response.rooms.map(r => DataLoader.load(RoomInfo, r)),
       npcRooms: response.npcRooms.map(r => DataLoader.load(NPCRoom, r))

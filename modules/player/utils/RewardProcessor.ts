@@ -26,7 +26,7 @@ export abstract class RewardProcessor {
 
 	public get value() { return this.reward.value; }
 
-	public player() { return playerMgr().player }
+	public get player() { return playerMgr().player }
 
 	public abstract invoke(rate?);
 }
@@ -35,16 +35,13 @@ export abstract class RewardProcessor {
 class GoldRewardProcessor extends RewardProcessor {
 
 	async invoke(rate?) {
-		const player = await this.player();
-		player.gainGold(this.value);
+		this.player?.gainGold(this.value);
 	}
 }
-
 @rewardProcessor(RewardType.Exp)
 class ExpRewardProcessor extends RewardProcessor {
 
 	async invoke(rate?) {
-		const player = await this.player();
-		player.gainExp(this.value);
+		this.player?.gainExp(this.value);
 	}
 }

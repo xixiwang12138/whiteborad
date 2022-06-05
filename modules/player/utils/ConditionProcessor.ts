@@ -1,5 +1,6 @@
 import {Condition, ConditionType} from "../data/Condition";
 import {Constructor} from "../../core/BaseContext";
+import {playerMgr} from "../managers/PlayerManager";
 
 export function conditionProcessor(type: ConditionType) {
 	return (clazz) => {
@@ -33,6 +34,8 @@ export abstract class ConditionProcessor {
 
 	protected abstract get playerValue(): number;
 	protected abstract get throwFunc(): Function;
+
+	public get player() { return playerMgr().player }
 
 	/**
 	 * 条件判断
@@ -86,5 +89,24 @@ class FuncConditionProcessor extends ConditionProcessor {
 	judge(): boolean {
 		return this.condition.params.jFunc();
 	}
+
+}
+@conditionProcessor(ConditionType.Gold)
+class GoldConditionProcessor extends ConditionProcessor {
+
+	protected get playerValue(): number { return this.player?.gold; }
+	protected get throwFunc(): Function { return this.condition.params.throwFunc; }
+
+	protected doConsume() {
+		super.doConsume();
+		this.player?.gainGold(-this.value);
+	}
+
+}
+@conditionProcessor(ConditionType.Level)
+class LevelConditionProcessor extends ConditionProcessor {
+
+	protected get playerValue(): number { return this.player?.level; }
+	protected get throwFunc(): Function { return this.condition.params.throwFunc; }
 
 }

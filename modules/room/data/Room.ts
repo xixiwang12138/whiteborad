@@ -142,15 +142,6 @@ export class Room extends DynamicData implements IRoomDrawable {
 
 	// endregion
 
-	// region 皮肤控制
-
-	public switchSkin(skinId: number) {
-		this.skinId = skinId;
-		this.starId = this.skin.level;
-	}
-
-	// endregion
-
 	// region 属性控制
 
 	/**
@@ -165,6 +156,19 @@ export class Room extends DynamicData implements IRoomDrawable {
 	 */
 	public get gb() { return this.param(ParamType.GB) }
 	public get eb() { return this.param(ParamType.EB) }
+
+	// endregion
+
+	// region 业务操作
+
+	public editInfo(info: RoomEditableInfo) {
+		Object.assign(this, info);
+	}
+
+	public switchSkin(skinId: number) {
+		this.skinId = skinId;
+		this.starId = this.skin.level;
+	}
 
 	// endregion
 

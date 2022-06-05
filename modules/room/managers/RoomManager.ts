@@ -1,5 +1,5 @@
 import {get, Itf, post} from "../../core/BaseAssist";
-import {IRoomIndex} from "../data/PlayerRoom";
+import {IRoomIndex, PlayerRoom} from "../data/PlayerRoom";
 import {Room, RoomEditableInfo, RoomInfo} from "../data/Room";
 import {NPCRoom} from "../data/NPCRoom";
 import {BaseManager, getManager, manager} from "../../core/managers/BaseManager";
@@ -8,6 +8,8 @@ import {wsMgr} from "../../websocket/WebSocketManager";
 import {RoomType} from "../../../pages/main/MainPage";
 import {PlayerBaseInfo} from "../../player/data/Player";
 import SocketTask = WechatMiniprogram.SocketTask;
+import {roomSkinRepo} from "../data/RoomSkin";
+import {playerMgr} from "../../player/managers/PlayerManager";
 
 const GetRoom: Itf<{room: IRoomIndex},
   {room?: Partial<Room>, npcRoom?: Partial<NPCRoom>}>
@@ -70,11 +72,19 @@ export class RoomManager extends BaseManager {
 
   public async editRoomInfo(info: RoomEditableInfo) {
     await EditRoomInfo({info});
-    // TODO: 添加前端实现
+    const room = await roomMgr().getSelfRoom();
+    room.editInfo(info);
   }
   public async buySkin(skinId: number) {
+    const skin = roomSkinRepo().getById(skinId);
+    const cond = skin.buyConditions();
+    await cond.check();
+
     await BuySkin({skinId});
-    // TODO: 添加前端实现
+
+    await cond.process();
+    const pr = playerMgr().getData(PlayerRoom);
+    pr.buy(skinId);
   }
   public async switchSkin(skinId: number) {
     await SwitchSkin({skinId});

@@ -3,11 +3,12 @@ import {StaticData} from "../../core/data/StaticData";
 import {BaseRepository, getRepository, repository} from "../../core/data/BaseRepository";
 import {DataOccasion, field, occasion} from "../../core/data/DataLoader";
 import {Animation, IRoomDrawable, PictureLayer} from "./IRoomDrawable";
-import {Condition, ConditionGroup} from "../../player/data/Condition";
+import {cGte, Condition, ConditionGroup, ConditionType} from "../../player/data/Condition";
 import {CloudFileUtils} from "../../../utils/CloudFileUtils";
 import {playerMgr} from "../../player/managers/PlayerManager";
 import {PlayerRoom} from "./PlayerRoom";
 import {roomMgr} from "../managers/RoomManager";
+import {Constructor} from "../../core/BaseContext";
 
 export type Color = string;
 
@@ -81,7 +82,8 @@ export class RoomSkin extends StaticData implements IRoomDrawable {
 		const pr = playerMgr().getData(PlayerRoom);
 		const lastSkinId = this.lastLevelSkin?.id;
 
-		const condGroup = this.conditionGroup();
+		// TODO: 封装前置解锁条件
+		const condGroup = this.unlockConditions();
 		const buyLast = !lastSkinId || !!pr.getBuy(lastSkinId);
 
 		this.isUsing = room.skinId == this.id;
@@ -101,8 +103,14 @@ export class RoomSkin extends StaticData implements IRoomDrawable {
 			.findOneByBaseIdAndLevel(this.baseId, this.level - 1);
 	}
 
-	public conditionGroup() {
+	public unlockConditions() {
+		// TODO: 补充前置解锁条件
 		return ConditionGroup.create(...(this.conditions || []))
+	}
+	public buyConditions() {
+		return ConditionGroup.create(
+			this.unlockConditions(),
+			cGte(ConditionType.Gold, this.price));
 	}
 
 }
@@ -113,9 +121,8 @@ export function roomSkinRepo() {
 
 @repository
 class RoomSkinRepo extends BaseRepository<RoomSkin> {
-	get clazz() {
-		return RoomSkin;
-	}
+	get clazz(): Constructor<RoomSkin> { return RoomSkin; }
+
 
 	// @ts-ignore
 	public findOneByBaseIdAndLevel(baseId: number, level: number): RoomSkin {}

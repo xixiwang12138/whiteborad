@@ -126,6 +126,10 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
     await super.onLoad(e);
     await this.initialize();
   }
+  async onShow() {
+    await super.onShow();
+    await this.refresh();
+  }
 
   async onUnload() {
     wx.offAccelerometerChange(() => {});
@@ -136,8 +140,13 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
   @waitForLogin
   @waitForDataLoad
   private async initialize() {
-    await this.loadRoom();
+    await this.refresh();
     this.setupWxListeners();
+  }
+
+  private async refresh() {
+    await this.loadRoom();
+    await this.playerPage.resetPlayer();
     await this.roomDrawingPage.draw(this.item);
   }
 
@@ -357,17 +366,10 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
 
   @pageFunc
   @blockLoading
-  onRoomNameBlur(e: CustomEvent) {
-    console.log("onRoomNameBlur", e);
+  async onRoomNameBlur(e: CustomEvent) {
     const name = e.detail.value;
-    wx.showToast({title:"修改房间名成功",icon:'success'})
-    this.editRoomName(name);
-
-
-  }
-
-  private async editRoomName(name:string){
     await roomMgr().editRoomInfo({name});
+    await alertMgr().showToast("修改房间名成功", "success")
   }
 
   @pageFunc

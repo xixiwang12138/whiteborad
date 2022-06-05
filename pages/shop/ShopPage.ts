@@ -129,6 +129,9 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 	public async refresh() {
 		await this.roomDrawingPage.draw(
 			this.item, RoomPosition, RoomScale);
+		await this.setData({
+			skins: this.data.skins
+		})
 	}
 
 	// endregion

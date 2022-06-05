@@ -78,7 +78,8 @@ export class RoomManager extends BaseManager {
   }
   public async switchSkin(skinId: number) {
     await SwitchSkin({skinId});
-    // TODO: 添加前端实现
+    const room = await roomMgr().getSelfRoom();
+    room.switchSkin(skinId);
   }
 
   public async enterRoom(room: IRoomIndex,

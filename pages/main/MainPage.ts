@@ -360,7 +360,14 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
   onRoomNameBlur(e: CustomEvent) {
     console.log("onRoomNameBlur", e);
     const name = e.detail.value;
+    wx.showToast({title:"修改房间名成功",icon:'success'})
+    this.editRoomName(name);
 
+
+  }
+
+  private async editRoomName(name:string){
+    await roomMgr().editRoomInfo({name});
   }
 
   @pageFunc

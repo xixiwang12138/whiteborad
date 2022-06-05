@@ -195,6 +195,8 @@ export class RoomInfo extends BaseData {
 	public playerName: string
 	@field(String)
 	public playerAvatar: string
+	// @field(Number)
+	// public playerLevel: number
 
 	@field(String)
 	@occasion(DataOccasion.Extra)

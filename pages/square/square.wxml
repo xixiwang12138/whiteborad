@@ -5,10 +5,10 @@
     <avatar-display avatar="{{player.avatarUrl}}" name="{{player.name}}" />
   </view>
   <gold-level-display gold="{{player.gold}}" level="99" expRate="0.2333" />
-  <view class="search">
+  <!-- <view class="search">
     <input value="输入id搜索" />
     <image class="img" src="../../assets/square/search.png" mode="widthFix"></image>
-  </view>
+  </view> -->
   <scroll-view class="room-list" scroll-y="true">
     <view class="room-list-content">
       <view class="room" wx:for="{{roomList}}" bindtap="toVisit">
@@ -16,7 +16,7 @@
         <view class="room-desc">
           <text class="room-user-name">{{item.playerName}}'s</text>
           <view class="room-level-name">
-            <text class="room-level">{{item.playerLevel}}</text>
+            <text class="room-level">{{item.starId}}</text>
             <text class="room-name">{{item.name}}</text>
           </view>
         </view>

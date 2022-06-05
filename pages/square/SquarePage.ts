@@ -47,8 +47,8 @@ export class SquarePage extends BasePage<Data> {
 
 	async refreshRooms(){
 		this.offset=0;
-		this.setData({
-			roomList:[]
+		await this.setData({
+			roomList: []
 		})
 		await this.getRoomsList();
 
@@ -61,22 +61,17 @@ export class SquarePage extends BasePage<Data> {
 		const tempRoomList:RoomInfo[] = tempRoomAndNPCList.rooms;
 
 		//判断是否到达房间列表底部
-		if(tempRoomList.length < count)this.setData({
+		if(tempRoomList.length < count)await this.setData({
 			isGetAllRooms: true
 		});
+		this.offset += tempRoomList.length;
 
 		let roomList:RoomInfo[] = this.data.roomList;
 		tempRoomList.forEach((value,index)=>{
 			roomList.push(value);
 		});
 
-		this.setData({roomList});
+		await this.setData({roomList});
 		}
-
-
-
-
-
-
 	}
 }

@@ -22,8 +22,16 @@ export class CloudFileUtils {
 	/**
 	 * 下载图片
 	 */
+	public static pathToFileId(path: string) {
+		if (path.startsWith("@")) path = path.slice(1);
+		return BasePath + path;
+	}
+
+	/**
+	 * 下载图片
+	 */
 	public static async downloadFile(path) {
-		const fileID = BasePath + path;
+		const fileID = this.pathToFileId(path);
 		console.log("downloadFile: ", fileID)
 		const res = await wx.cloud.downloadFile({fileID})
 			.then(res => {console.log(res); return res})

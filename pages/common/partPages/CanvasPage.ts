@@ -123,7 +123,7 @@ export class CanvasPage<T extends BaseData = Data> extends PartialPage<T> {
 		if (typeof urlOrCanvas == "string") {
 			const oriUrl = urlOrCanvas;
 			if (urlOrCanvas.startsWith("@")) // 远程文件
-				urlOrCanvas = await CloudFileUtils.downloadFile(urlOrCanvas.slice(1));
+				urlOrCanvas = await CloudFileUtils.downloadFile(urlOrCanvas);
 
 			const res: Texture = this.pixi.Texture.from(urlOrCanvas);
 			if (waitFor) await PromiseUtils.waitFor(() => res.valid,
@@ -178,12 +178,12 @@ export class CanvasPage<T extends BaseData = Data> extends PartialPage<T> {
 
 	// region Stage操作
 
-	public add(obj) { this.stage.addChild(obj); }
-	public remove(obj) { this.stage.removeChild(obj); }
+	public add(obj) { obj && this.stage.addChild(obj); }
+	public remove(obj) { obj && this.stage.removeChild(obj); }
 
 	// endregion
 
-	// region 渲染 
+	// region 渲染
 
 	public render() {
 		this.renderer?.render(this.stage);

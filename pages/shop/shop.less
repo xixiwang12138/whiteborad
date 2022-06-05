@@ -83,7 +83,7 @@
         top: 0.35vh;
       }
     }
-    .others {
+    .motions {
       height: 63rpx;
       border-radius: 26rpx;
       background-color: rgba(255,255,255,0.5);
@@ -100,7 +100,7 @@
     }
   }
 }
-.Shelf {
+.shelf {
   height: 50vh;
   background-color: rgba(0,0,0,0.29);
   display: flex;
@@ -108,7 +108,7 @@
   width: 100%;
   position: absolute;
   top: 56.5vh;
-  .Detail {
+  .detail {
     width: 95%;
     height: 647rpx;
     display: flex;
@@ -116,11 +116,11 @@
     justify-content: space-between;
     margin-left: 6.8vw;
     margin-top: 2vh;
-    .roomsDetail {
+    .room-container {
       flex-wrap: wrap;
       display: flex;
       flex-direction: row;
-      .rooms {
+      .room {
         height: 216rpx;
         border-radius: 16rpx;
         display: flex;
@@ -130,7 +130,7 @@
         margin-bottom: 2vh;
         background: rgba(255,255,255,1);
         margin-right: 6.2vw;
-        .roomImg {
+        .room-img {
           margin:5rpx 0 0 8rpx;
           width: 23.5vw;
           height: 25vw;
@@ -150,42 +150,48 @@
           bottom: 0.5vh;
           font-size: 25rpx;
         }
-      .priceBox {
-        width: 90rpx;
-        height: 25rpx;
-        flex-direction: row;
-        display: flex;
-        justify-content: space-between;
-        margin-left: auto;
-        margin-right: auto;
-        position: absolute;
-        top: 11vh;
-        left: 6vw;
-        .price {
-          color: rgba(0,0,0,1);
-          font-size: 28rpx;
-          text-align: left;
+        .price-box {
+          width: 90rpx;
+          height: 25rpx;
+          flex-direction: row;
+          display: flex;
+          justify-content: space-between;
+          margin-left: auto;
+          margin-right: auto;
+          position: absolute;
+          top: 11vh;
+          left: 6vw;
+          image {
+            width: 24rpx; height: 24rpx;
+          }
+          .price {
+            color: rgba(0,0,0,1);
+            font-size: 28rpx;
+            text-align: left;
+            position: relative;
+            bottom: 0.3vh;
+          }
+        }
+        .unlock{
           position: relative;
-          bottom: 0.3vh;
+          bottom: 6vh;
+          padding-left: 1vw;
+          width: 170rpx;
+          height: 35rpx;
+          color: rgba(255,255,255,1);
+          font-size: 25rpx;
+          text-align: left;
         }
       }
-      .unlock{
-        position: relative;
-        bottom: 6vh;
-        padding-left: 1vw;
-        width: 170rpx;
-        height: 35rpx;
-        color: rgba(255,255,255,1);
-        font-size: 25rpx;
-        text-align: left;
-      }
+      .using {
+        background-color: rgba(0,0,0,0.46);
       }
     }
-    .othersDetail{
+    .motion-container{
       flex-wrap: wrap;
       display: flex;
       flex-direction: row;
-      .others{
+      .motions{
         height: 216rpx;
         border-radius: 16rpx;
         display: flex;
@@ -207,7 +213,7 @@
           bottom: 0.5vh;
           font-size: 25rpx;
         }
-        .priceBox {
+        .price-box {
           width: 90rpx;
           height: 25rpx;
           flex-direction: row;

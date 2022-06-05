@@ -34,19 +34,27 @@ export class PictureLayer extends BaseData {
 	@field([Number])
 	public anchor: [number, number] = [0.5, 0.5]; // 锚点
 
-	parent: IRoomDrawable
+	// _parent: IRoomDrawable
+	// public get parent() {return this._parent}
+	// public set parent(value) {this._parent = value}
+
+	public isNPCRoom;
+	public parentId;
 
 	constructor(index, parent: IRoomDrawable) {
 		super(index);
-		this.parent = parent;
+		if (parent) {
+			this.parentId = parent.id;
+			this.isNPCRoom = parent instanceof NPCRoom;
+		}
 	}
 
-	public get isNPCRoom() { return this.parent instanceof NPCRoom }
-	public get isRoomSkin() { return this.parent instanceof RoomSkin }
+	// public get isNPCRoom() { return this.parent instanceof NPCRoom }
+	// public get isRoomSkin() { return this.parent instanceof RoomSkin }
 
 	public get pictureUrl() {
 		const root = this.isNPCRoom ? "npcRooms" : "roomSkins";
-		return this.picture || `@/${root}/layers/${this.parent.id}-${this.index}.png`;
+		return this.picture || `@/${root}/layers/${this.parentId}-${this.index}.png`;
 	}
 }
 
@@ -79,15 +87,26 @@ export class Animation extends BaseData {
 	@field([Number])
 	public anchor: [number, number] = [0.5, 0.5]; // 锚点
 
-	parent: IRoomDrawable
+	// _parent: IRoomDrawable
+	// public get parent() {return this._parent}
+	// public set parent(value) {
+	// 	console.error("parent", this, value);
+	// 	this._parent = value
+	// }
+
+	public isNPCRoom;
+	public parentId;
 
 	constructor(index, parent: IRoomDrawable) {
 		super(index);
-		this.parent = parent;
+		if (parent) {
+			this.parentId = parent.id;
+			this.isNPCRoom = parent instanceof NPCRoom;
+		}
 	}
 
-	public get isNPCRoom() { return this.parent instanceof NPCRoom }
-	public get isRoomSkin() { return this.parent instanceof RoomSkin }
+	// public get isNPCRoom() { return this.parent instanceof NPCRoom }
+	// public get isRoomSkin() { return this.parent instanceof RoomSkin }
 
 	public get motion() { return motionRepo().getById(this.motionId); }
 
@@ -95,7 +114,7 @@ export class Animation extends BaseData {
 
 	public pictureUrl(gender = 0) {
 		const root = this.isNPCRoom ? "npcRooms" : "roomSkins";
-		return `@/${root}/animations/${this.parent.id}-${this.index}` +
+		return `@/${root}/animations/${this.parentId}-${this.index}` +
 			(this.isCharacter && gender > 0 ? `-${gender}.png` : `.png`)
 	}
 

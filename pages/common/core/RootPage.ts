@@ -83,8 +83,7 @@ export abstract class RootPage<D extends BaseData = any>
 		await this.refreshData(root);
 	}
 	private async refreshData(data, vis = []) {
-		if (!data || typeof data != "object" ||
-			vis.includes(data)) return;
+		if (!data || typeof data != "object" || vis.includes(data)) return;
 
 		vis.push(data);
 		if (data.refresh instanceof Function) await data.refresh();

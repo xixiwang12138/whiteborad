@@ -83,6 +83,16 @@ export class RoomDrawingPage extends CanvasPage {
 		return FocusingHouseScale * this.scale;
 	}
 
+	public clearData() {
+		this.base = { layers: [] };
+		this.motion = {
+			aniTime: 0,
+			animations: [],
+			curMotionId: 1,
+			duration: 0
+		}
+	}
+
 	// endregion
 
 	// region 基本绘制
@@ -90,6 +100,7 @@ export class RoomDrawingPage extends CanvasPage {
 	public async draw(room: Room,
 										position = [0.5, 0.5],
 										scale = 1) {
+		this.clear();
 		this.room = room;
 		this.position = position;
 		this.scale = scale;
@@ -195,11 +206,21 @@ export class RoomDrawingPage extends CanvasPage {
 		}
 	}
 
+	public clear() {
+		this.remove(this.base.background);
+		this.remove(this.base.house);
+		this.clearData();
+	}
+
+	// endregion
+
+	// region 修改
+
 	// endregion
 
 	// region 更新
 
-	update(focusing) {
+	update(focusing = false) {
 		this.focusing = focusing;
 		this.updateHouseScale();
 		this.updateMotions();

@@ -12,6 +12,9 @@ import {RoomSkin, roomSkinRepo} from "../../modules/room/data/RoomSkin";
 import {Motion, motionRepo} from "../../modules/room/data/Motion";
 import {PlayerRoom} from "../../modules/room/data/PlayerRoom";
 
+const RoomPosition = [0.5, 0.75];
+const RoomScale = 0.9;
+
 class Data extends BasePageData {
 
 	@field(Room)
@@ -24,6 +27,9 @@ class Data extends BasePageData {
 
 	@field(PlayerRoom)
 	playerRoom: PlayerRoom
+
+	@field(Number)
+	tab: number = 1
 
 	@field(Array)
 	Rooms= [{
@@ -51,7 +57,6 @@ class Data extends BasePageData {
 	},]
 }
 
-// const isRooms=true;
 @page("shop", "商城")
 export class ShopPage extends ItemDetailPage<Data, Room>{
 
@@ -68,35 +73,63 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 	@waitForLogin
 	@waitForDataLoad
 	private async initialize() {
-		this.loadData();
 		await this.loadRoom();
-		await this.roomDrawingPage.draw(this.item);
+		await this.loadData();
+		await this.refresh();
 	}
-	private loadData() {
+	private async loadData() {
 		const skins = roomSkinRepo().list;
 		const motions = motionRepo().list;
 		const playerRoom = playerMgr().getData(PlayerRoom);
-		this.setData({skins, motions, playerRoom});
+		await this.setData({skins});
 	}
 	private async loadRoom() {
-		// const room = Room.testData();
 		const room = await roomMgr().getSelfRoom();
 		await this.setItem(room.clone());
 	}
 
+	// region 事件
+
+	/**
+	 * 选择一个皮肤
+	 */
 	@pageFunc
-		//切换小屋
-		public tapToChange1(){
-			this.setData({
-				isRooms:true
-			})
-		}
-		@pageFunc
-		//切换小屋
-		public tapToChange2(){
-			this.setData({
-				isRooms:false
-			})
-		}
+	public onSkinTap(e) {
+		// 换装
+		this.item.skinId = Number(e.currentTarget.dataset.skinId);
+		this.refresh();
+	}
+
+	/**
+	 * Tab页面切换
+	 */
+	@pageFunc
+	public onSkinTab(){
+		this.setData({ tab: 1 })
+	}
+	@pageFunc
+	public onMotionTab(){
+		this.setData({ tab: 2 })
+	}
+
+	// endregion
+
+	// region 更新
+
+	update() {
+		super.update();
+		this.roomDrawingPage.update();
+	}
+
+	// endregion
+
+	// region 绘制
+
+	public async refresh() {
+		await this.roomDrawingPage.draw(
+			this.item, RoomPosition, RoomScale);
+	}
+
+	// endregion
 }
 

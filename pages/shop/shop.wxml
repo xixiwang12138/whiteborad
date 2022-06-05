@@ -20,31 +20,31 @@
     <view class="rooms" style="background-color:rgba(255,255,255,{{isRooms?'1':'0.5'}});" bindtap="tapToChange1">
       <text>小屋</text>
     </view>
-    <view class="others" style="background-color:rgba(255,255,255,{{isRooms?'0.5':'1'}})" bindtap="tapToChange2">
+    <view class="motions" style="background-color:rgba(255,255,255,{{isRooms?'0.5':'1'}})" bindtap="tapToChange2">
       <text>其他</text>
     </view>
   </view>
-  <view class="Shelf">
-    <view class="Detail">
-      <view class="roomsDetail" wx:if="{{isRooms}}">
-        <block wx:for="{{Rooms}}">
-          <view class="rooms" style="background-color: {{item.roomStatus=='using'?'rgba(0,0,0,0.46)':item.roomStatus=='locked'?'rgba(255,255,255,0.4)':'rgba(255,255,255,1)'}};">
-            <image class="roomImg" src="../../images/room1.jpg" mode="aspectFit"></image>
-            <view wx:if="{{item.roomStatus=='purchasable'||item.roomStatus=='locked'}}" class="priceBox">
-              <image src="../../images/coins.png" style="width: 25rpx;height: 25rpx;"></image>
+  <view class="shelf">
+    <view class="detail">
+      <view class="room-container" wx:if="{{tab == 1}}">
+        <block wx:for="{{skins}}" bind:tap="onSkinTap" data-id="{{item.id}}">
+          <view class="room {{item.isUsing && 'using'}}" style="background-color: {{item.roomStatus=='using'?'rgba(0,0,0,0.46)':item.roomStatus=='locked'?'rgba(255,255,255,0.4)':'rgba(255,255,255,1)'}};">
+            <image class="room-img" src="{{item.thumbnailFileId}}" mode="aspectFit"></image>
+            <view wx:if="{{item.isUnlock && !item.isBought}}" class="price-box">
+              <image src="../../images/coins.png"></image>
               <text class="price">{{item.price}}</text>
             </view>
-            <view wx:if="{{item.roomStatus=='using'}}" class="tap1">使用中</view>
-            <view wx:if="{{item.roomStatus=='changeable'}}" class="tap2">点击更换</view>
-            <text wx:if="{{item.roomStatus=='locked'}}" class="unlock">{{item.unlock}}</text>
+            <view wx:if="{{item.isUsing}}" class="tap1">使用中</view>
+            <view wx:if="{{!item.isUsing && item.isBought}}" class="tap2">点击更换</view>
+            <text wx:if="{{!item.isUnlock}}" class="unlock">{{item.unlock}}</text>
           </view>
         </block>
       </view>
-      <view class="othersDetail" wx:if="{{!isRooms}}">
-        <block wx:for="{{Others}}">
-          <view class="others" style="background-color: {{item.roomStatus=='locked'?'rgba(255,255,255,0.4)':'rgba(255,255,255,1)'}};">
+      <view class="motion-container" wx:if="{{tab == 2}}">
+        <block wx:for="{{motions}}">
+          <view class="motions" style="background-color: {{item.roomStatus=='locked'?'rgba(255,255,255,0.4)':'rgba(255,255,255,1)'}};">
             <image class="roomImg" src="../../images/room1.jpg" mode="aspectFit"></image>
-            <view wx:if="{{item.roomStatus=='purchasable'||item.roomStatus=='locked'}}" class="priceBox">
+            <view wx:if="{{item.roomStatus=='purchasable'||item.roomStatus=='locked'}}" class="price-box">
               <image src="../../images/coins.png" style="width: 25rpx;height: 25rpx;"></image>
               <text class="price">{{item.price}}</text>
             </view>

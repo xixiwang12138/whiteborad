@@ -1,9 +1,13 @@
 import {dataClass} from "../../core/managers/DataManager";
 import {StaticData} from "../../core/data/StaticData";
 import {BaseRepository, getRepository, repository} from "../../core/data/BaseRepository";
-import {field} from "../../core/data/DataLoader";
+import {DataOccasion, field, occasion} from "../../core/data/DataLoader";
 import {Animation, IRoomDrawable, PictureLayer} from "./IRoomDrawable";
-import {Condition} from "../../player/data/Condition";
+import {Condition, ConditionGroup} from "../../player/data/Condition";
+import {CloudFileUtils} from "../../../utils/CloudFileUtils";
+import {playerMgr} from "../../player/managers/PlayerManager";
+import {PlayerRoom} from "./PlayerRoom";
+import {roomMgr} from "../managers/RoomManager";
 
 export type Color = string;
 
@@ -38,7 +42,7 @@ export class RoomSkin extends StaticData implements IRoomDrawable {
 	public backgroundColors: [Color, Color] = ["FFFFFF", "000000"]; // 房间背景颜色（渐变）
 
 	@field([Condition])
-	public conditions: Condition[]; // 解锁条件
+	public conditions: Condition[] = []; // 解锁条件
 
 	@field(Number)
 	public price: number;
@@ -48,6 +52,39 @@ export class RoomSkin extends StaticData implements IRoomDrawable {
 	}
 	public get pictureUrl() {
 		return this.picture || `@/roomSkins/pictures/${this.id}.png`;
+	}
+
+	// region 额外数据
+
+	@field(String)
+	@occasion(DataOccasion.Extra)
+	thumbnailFileId: string;
+	@field(Boolean)
+	@occasion(DataOccasion.Extra)
+	isUsing: boolean;
+	@field(Boolean)
+	@occasion(DataOccasion.Extra)
+	isBought: boolean;
+	@field(Boolean)
+	@occasion(DataOccasion.Extra)
+	isUnlock: boolean;
+
+	public async refresh() {
+		const url = this.thumbnailUrl;
+		this.thumbnailFileId = url.startsWith("@") ?
+			CloudFileUtils.pathToFileId(url) : url;
+
+		const room = await roomMgr().getSelfRoom();
+		const pr = playerMgr().getData(PlayerRoom);
+		this.isUsing = room.skinId == this.id;
+		this.isBought = this.isUsing || this.price <= 0 || !!pr.getBuy(this.id);
+		this.isUnlock = this.isBought || this.conditionGroup().judge();
+	}
+
+	// endregion
+
+	public conditionGroup() {
+		return ConditionGroup.create(...(this.conditions || []))
 	}
 
 }

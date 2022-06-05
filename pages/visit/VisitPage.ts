@@ -5,18 +5,17 @@ import {field} from "../../modules/core/data/DataLoader";
 import {roomMgr} from "../../modules/room/managers/RoomManager";
 import {Room} from "../../modules/room/data/Room";
 
-class Params extends BaseData {
+class Params {
 	@field(String)
-	roomId?: string
+	roomId: string
 }
 
 @page("visit", "他人房间")
 export class VisitPage extends MainPage<Params> {
 
 	async onLoad(e: Params) {
-		await super.onLoad(e);
 		if (e.roomId) this.params.roomId ||= e.roomId;
-
+		await super.onLoad(e);
 	}
 
 	protected getRoom() {

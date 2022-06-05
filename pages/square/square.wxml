@@ -11,8 +11,8 @@
   </view> -->
   <scroll-view class="room-list" scroll-y="true">
     <view class="room-list-content">
-      <view class="room" wx:for="{{roomList}}" bindtap="toVisit">
-        <image src="{{item.thumbnail?item.thumbnail:'../../assets/common/3.png'}}" mode="widthFix" class="room-thumbnail" />
+      <view class="room" wx:for="{{rooms}}" bindtap="onRoomTap" data-id="{{item.roomId}}">
+        <image src="{{item.thumbnail}}" mode="widthFix" class="room-thumbnail" />
         <view class="room-desc">
           <text class="room-user-name">{{item.playerName}}'s</text>
           <view class="room-level-name">

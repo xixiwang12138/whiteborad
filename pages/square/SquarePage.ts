@@ -12,9 +12,11 @@ import {Room, RoomInfo} from "../../modules/room/data/Room";
 class Data extends BasePageData {
 
 	@field([Object])
-	roomList: RoomInfo[];
+	rooms: RoomInfo[];
 	isGetAllRooms:boolean = false;
 }
+
+const PageCount = 12;
 
 @page("square", "广场")
 export class SquarePage extends BasePage<Data> {
@@ -41,37 +43,32 @@ export class SquarePage extends BasePage<Data> {
 	}
 
 	@pageFunc
-	toVisit(){
-		pageMgr().push<any, BasePage>(VisitPage)
+	onRoomTap(e){
+		const roomId: string = e.currentTarget.dataset.id;
+		pageMgr().push(VisitPage, { roomId })
 	}
 
 	async refreshRooms(){
-		this.offset=0;
-		await this.setData({
-			roomList: []
-		})
+		this.offset = 0;
+		await this.setData({ rooms: [] })
 		await this.getRoomsList();
 	}
 
 	async getRoomsList(){
-		const count:number = 12;		//单次获取房间列表长度
 		if (this.data.isGetAllRooms) return;
 
-		const tempRoomAndNPCList = await roomMgr()
-			.getRooms(this.offset, count);
-		const tempRoomList:RoomInfo[] = tempRoomAndNPCList.rooms;
+		const roomsRes = await roomMgr()
+			.getRooms(this.offset, PageCount);
+		let rooms: RoomInfo[] = roomsRes.rooms;
 
-		//判断是否到达房间列表底部
-		if(tempRoomList.length < count)await this.setData({
-			isGetAllRooms: true
+		// 判断是否到达房间列表底部
+		const isGetAllRooms = rooms.length < PageCount;
+		this.offset += rooms.length;
+
+		let curRooms: RoomInfo[] = this.data.rooms;
+		rooms = curRooms.concat(rooms);
+		await this.setData({
+			rooms, isGetAllRooms
 		});
-		this.offset += tempRoomList.length;
-
-		let roomList:RoomInfo[] = this.data.roomList;
-		tempRoomList.forEach((value,index)=>{
-			roomList.push(value);
-		});
-
-		await this.setData({roomList});
 	}
 }

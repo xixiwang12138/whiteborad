@@ -11,8 +11,9 @@ import {waitForDataLoad} from "../../modules/core/managers/DataManager";
 import {RoomSkin, roomSkinRepo} from "../../modules/room/data/RoomSkin";
 import {Motion, motionRepo} from "../../modules/room/data/Motion";
 import {PlayerRoom} from "../../modules/room/data/PlayerRoom";
+import {handleError} from "../../modules/core/managers/ErrorManager";
 
-const RoomPosition = [0.5, 0.75];
+const RoomPosition = [0.5, 0.3];
 const RoomScale = 0.9;
 
 class Data extends BasePageData {
@@ -31,30 +32,12 @@ class Data extends BasePageData {
 	@field(Number)
 	tab: number = 1
 
-	@field(Array)
-	Rooms= [{
-		roomStatus: 'changeable'
-	},{
-		roomStatus: 'using'
-	},{
-		roomStatus: 'purchasable',price: "4396"
-	},{
-		roomStatus: 'locked',price: "4396",unlock:"10级解锁购买"
-	},{
-		roomStatus: 'locked',price: "4396",unlock:"15级解锁购买"
-	},]
-	@field(Array)
-	Others= [{
-		roomStatus: 'purchasable',price: "4396"
-	},{
-		roomStatus: 'owned'
-	},{
-		roomStatus: 'owned'
-	},{
-		roomStatus: 'locked',price: "4396",unlock:"解锁房间购买"
-	},{
-		roomStatus: 'locked',price: "4396",unlock:"解锁房间购买"
-	},]
+	@field(Number)
+	curSkinId: number
+
+	@field
+	showBuyButton: boolean = false;
+
 }
 
 @page("shop", "商城")
@@ -81,7 +64,7 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 		const skins = roomSkinRepo().list;
 		const motions = motionRepo().list;
 		const playerRoom = playerMgr().getData(PlayerRoom);
-		await this.setData({skins});
+		await this.setData({skins, motions, playerRoom});
 	}
 	private async loadRoom() {
 		const room = await roomMgr().getSelfRoom();
@@ -94,10 +77,18 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 	 * 选择一个皮肤
 	 */
 	@pageFunc
-	public onSkinTap(e) {
-		// 换装
-		this.item.skinId = Number(e.currentTarget.dataset.skinId);
-		this.refresh();
+	public async onSkinTap(e) {
+		const skinId = Number(e.currentTarget.dataset.id);
+		const skin = roomSkinRepo().getById(skinId);
+		if (!skin.isUnlock) return; // 未解锁，无法预览
+
+		await this.setData({
+			curSkinId: this.item.skinId = skinId,
+			showBuyButton: !skin.isBought
+		});
+		if (skin.isBought) // 已经购买了，直接切换
+			await roomMgr().switchSkin(skinId);
+		await this.refresh();
 	}
 
 	/**
@@ -110,6 +101,16 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 	@pageFunc
 	public onMotionTab(){
 		this.setData({ tab: 2 })
+	}
+
+	@pageFunc
+	@handleError
+	public async onBuyTap() {
+		const skinId = this.data.curSkinId;
+		await roomMgr().buySkin(skinId);
+		await roomMgr().switchSkin(skinId);
+		await this.playerPage.resetPlayer();
+		await this.refresh();
 	}
 
 	// endregion

@@ -2,58 +2,70 @@
   <canvas type='webgl' id="main-canvas"></canvas>
   <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}"/>
   <image class="back-button" src="../../assets/shop/back.png" mode="heightFix" bind:tap="back"></image>
-  <image class="room" src="../../images/room1.jpg"></image>
-  <view class="column">
-    <view class="return">
-      <image src="../../images/return.png" style="width: 60rpx;height: 55rpx;"></image>
-      <image src="../../images/return1.png" style="width: 60rpx;height: 55rpx;"></image>
+  <view class="confirm-button" wx:if="{{showBuyButton}}"
+        bind:tap="onBuyTap">确认购买并使用</view>
+  <view class="control-panel">
+    <view class="tab-buttons">
+      <view class="tab-button {{tab == 1 && 'selected'}}" bindtap="onSkinTab">小屋</view>
+      <view class="tab-button {{tab == 2 && 'selected'}}" bindtap="onMotionTab">其他</view>
     </view>
-    <view class="sum">
-      <view class="box1">
-        <image src="../../images/coins.png" class="coins"></image>
-        <text class="coinsText">4396</text>
-      </view>
-    </view>
-    <image class="back" src="../../images/back.png" style=" width: 65rpx;height: 65rpx;"></image>
-  </view>
-  <view class="choose">
-    <view class="rooms" style="background-color:rgba(255,255,255,{{isRooms?'1':'0.5'}});" bindtap="tapToChange1">
-      <text>小屋</text>
-    </view>
-    <view class="motions" style="background-color:rgba(255,255,255,{{isRooms?'0.5':'1'}})" bindtap="tapToChange2">
-      <text>其他</text>
-    </view>
-  </view>
-  <view class="shelf">
-    <view class="detail">
-      <view class="room-container" wx:if="{{tab == 1}}">
-        <block wx:for="{{skins}}" bind:tap="onSkinTap" data-id="{{item.id}}">
-          <view class="room {{item.isUsing && 'using'}}" style="background-color: {{item.roomStatus=='using'?'rgba(0,0,0,0.46)':item.roomStatus=='locked'?'rgba(255,255,255,0.4)':'rgba(255,255,255,1)'}};">
+    <scroll-view class="shelf" scroll-y="true">
+      <view class="detail">
+        <view class="shop-container" wx:if="{{tab == 1}}">
+          <view wx:for="{{skins}}" bind:tap="onSkinTap" data-id="{{item.id}}"
+                class="room {{item.isUsing && 'using'}} {{!item.isUnlock && 'locked'}} {{item.id == curSkinId && 'selected'}}">
             <image class="room-img" src="{{item.thumbnailFileId}}" mode="aspectFit"></image>
-            <view wx:if="{{item.isUnlock && !item.isBought}}" class="price-box">
-              <image src="../../images/coins.png"></image>
-              <text class="price">{{item.price}}</text>
+            <view class="bottom">
+              <view wx:if="{{item.isUnlock && !item.isBought}}" class="price-box">
+                <image src="../../images/coins.png"></image>
+                <text class="price">{{item.price}}</text>
+              </view>
+              <view wx:if="{{item.isUsing}}" class="using-flag">使用中</view>
+              <view wx:if="{{!item.isUsing && item.isBought}}" class="switch-flag">点击更换</view>
             </view>
-            <view wx:if="{{item.isUsing}}" class="tap1">使用中</view>
-            <view wx:if="{{!item.isUsing && item.isBought}}" class="tap2">点击更换</view>
-            <text wx:if="{{!item.isUnlock}}" class="unlock">{{item.unlock}}</text>
-          </view>
-        </block>
-      </view>
-      <view class="motion-container" wx:if="{{tab == 2}}">
-        <block wx:for="{{motions}}">
-          <view class="motions" style="background-color: {{item.roomStatus=='locked'?'rgba(255,255,255,0.4)':'rgba(255,255,255,1)'}};">
-            <image class="roomImg" src="../../images/room1.jpg" mode="aspectFit"></image>
-            <view wx:if="{{item.roomStatus=='purchasable'||item.roomStatus=='locked'}}" class="price-box">
-              <image src="../../images/coins.png" style="width: 25rpx;height: 25rpx;"></image>
-              <text class="price">{{item.price}}</text>
+            <view wx:if="{{!item.isUnlock}}" class="locked-flag">
+              <text>{{item.unlockText}}</text>
             </view>
-            <view wx:if="{{item.roomStatus=='owned'}}" class="tap2">已拥有</view>
-            <text wx:if="{{item.roomStatus=='locked'}}" class="unlock">{{item.unlock}}</text>
           </view>
-        </block>
+        </view>
+<!--        <view class="motion-container" wx:if="{{tab == 2}}">-->
+<!--          <block wx:for="{{motions}}">-->
+<!--            <view class="motions" style="background-color: {{item.roomStatus=='locked'?'rgba(255,255,255,0.4)':'rgba(255,255,255,1)'}};">-->
+<!--              <image class="roomImg" src="../../images/room1.jpg" mode="aspectFit"></image>-->
+<!--              <view wx:if="{{item.roomStatus=='purchasable'||item.roomStatus=='locked'}}" class="price-box">-->
+<!--                <image src="../../images/coins.png" style="width: 25rpx;height: 25rpx;"></image>-->
+<!--                <text class="price">{{item.price}}</text>-->
+<!--              </view>-->
+<!--              <view wx:if="{{item.roomStatus=='owned'}}" class="tap2">已拥有</view>-->
+<!--              <text wx:if="{{item.roomStatus=='locked'}}" class="unlock">{{item.unlock}}</text>-->
+<!--            </view>-->
+<!--          </block>-->
+<!--        </view>-->
       </view>
-    </view>
+    </scroll-view>
+  
+    <!--    <view class="top-control">-->
+<!--      <image class="undo" src="../../images/return.png" style="width: 60rpx;height: 55rpx;"></image>-->
+<!--      <image class="redo" src="../../images/return1.png" style="width: 60rpx;height: 55rpx;"></image>-->
+<!--      <view class="gold">-->
+<!--        <image src="../../images/coins.png" class="coins"></image>-->
+<!--        <text class="coinsText">4396</text>-->
+<!--      </view>-->
+<!--      <image class="reset" src="../../images/back.png" style=" width: 65rpx;height: 65rpx;"></image>-->
+<!--    </view>-->
   </view>
+<!--  <view class="column">-->
+<!--    <view class="return">-->
+<!--      <image src="../../images/return.png" style="width: 60rpx;height: 55rpx;"></image>-->
+<!--      <image src="../../images/return1.png" style="width: 60rpx;height: 55rpx;"></image>-->
+<!--    </view>-->
+<!--    <view class="sum">-->
+<!--      <view class="box1">-->
+<!--        <image src="../../images/coins.png" class="coins"></image>-->
+<!--        <text class="coinsText">4396</text>-->
+<!--      </view>-->
+<!--    </view>-->
+<!--    <image class="back" src="../../images/back.png" style=" width: 65rpx;height: 65rpx;"></image>-->
+<!--  </view>-->
 </view>
 

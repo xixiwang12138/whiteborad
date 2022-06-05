@@ -119,7 +119,6 @@ van-dialog {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80%;
 
   .start-config {
     border-radius: 64rpx;
@@ -200,7 +199,6 @@ van-dialog {
     }
   }
   .tags-config {
-
     border-radius: 64rpx;
     background-color: white;
     margin: auto auto;
@@ -210,7 +208,8 @@ van-dialog {
     align-items: center;
     z-index: 2;
 
-    .content {
+    .tags-content {
+      width: 100%;
       height: fit-content;
       display: flex;
       justify-content: center;
@@ -309,7 +308,7 @@ van-dialog {
     flex-direction: column;
     align-items: center;
     .focus-title {
-      width: 66.67%; height: 42rpx;
+      width: 70%; height: 42rpx;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -318,13 +317,15 @@ van-dialog {
         width: 50%; height: 100%;
         font-size: 28rpx;
         text-align: center;
+        white-space: nowrap;
+        overflow-x: visible;
       }
       .tag {
         width: 40%;
       }
     }
     .focus-val {
-      width: 66.67%; height: 56rpx;
+      width: 70%; height: 56rpx;
 
       display: flex;
       flex-direction: row;
@@ -355,7 +356,7 @@ van-dialog {
       border-radius: 14rpx;
       background-color: rgba(242,242,242,1);
       font-size: 24rpx;
-      margin: 14rpx auto 0;
+      margin: 16rpx auto 0;
       padding: 16rpx;
     }
     .result-config-top{
@@ -363,7 +364,7 @@ van-dialog {
       display: flex;
       flex-direction: column;
 
-      width: 75%;
+      width: 80%;
       margin-top: 32rpx;
       padding: 24rpx 0 48rpx;
 

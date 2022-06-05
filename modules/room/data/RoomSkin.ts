@@ -68,6 +68,9 @@ export class RoomSkin extends StaticData implements IRoomDrawable {
 	@field(Boolean)
 	@occasion(DataOccasion.Extra)
 	isUnlock: boolean;
+	@field(String)
+	@occasion(DataOccasion.Extra)
+	unlockText: string;
 
 	public async refresh() {
 		const url = this.thumbnailUrl;
@@ -76,12 +79,27 @@ export class RoomSkin extends StaticData implements IRoomDrawable {
 
 		const room = await roomMgr().getSelfRoom();
 		const pr = playerMgr().getData(PlayerRoom);
+		const lastSkinId = this.lastLevelSkin?.id;
+
+		const condGroup = this.conditionGroup();
+		const buyLast = !lastSkinId || !!pr.getBuy(lastSkinId);
+
 		this.isUsing = room.skinId == this.id;
-		this.isBought = this.isUsing || this.price <= 0 || !!pr.getBuy(this.id);
-		this.isUnlock = this.isBought || this.conditionGroup().judge();
+		this.isBought = !!pr.getBuy(this.id);
+		this.isUnlock = condGroup.judge() && buyLast;
+		if (!this.isUnlock)
+			this.unlockText = buyLast ?
+				`等级达到${condGroup.level?.value || 0}后解锁` :
+				`购买上一等级皮肤后解锁`;
 	}
 
 	// endregion
+
+	private _lastLevelSkin: RoomSkin;
+	public get lastLevelSkin() {
+		return this._lastLevelSkin ||= roomSkinRepo()
+			.findOneByBaseIdAndLevel(this.baseId, this.level - 1);
+	}
 
 	public conditionGroup() {
 		return ConditionGroup.create(...(this.conditions || []))
@@ -98,4 +116,7 @@ class RoomSkinRepo extends BaseRepository<RoomSkin> {
 	get clazz() {
 		return RoomSkin;
 	}
+
+	// @ts-ignore
+	public findOneByBaseIdAndLevel(baseId: number, level: number): RoomSkin {}
 }

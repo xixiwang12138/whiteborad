@@ -16,7 +16,7 @@ const AniColCount = 4;
 const MotionDuration = 60;
 const DefaultHouseScale = 0.3;
 const FocusingHouseScale = 0.4;
-const DebugAlpha = 0.1;
+const DebugAlpha = 0.33;
 
 type RuntimeAnimation = {
 	animation: Animation

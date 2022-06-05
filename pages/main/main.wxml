@@ -179,9 +179,9 @@
             show-confirm-button="{{false}}"
             bind:close="onClickHide"
             close-on-click-overlay
-            data-window="Tags">
+            width="85%" data-window="Tags">
   <view class="tags-config">
-    <view class="content">
+    <view class="tags-content">
       <view wx:for="{{focusTags}}"
             class="btn {{focus.tagIdx == index ? 'selected' : ''}}"
             bind:tap="onTagTab" data-index="{{index}}">{{item}}</view>

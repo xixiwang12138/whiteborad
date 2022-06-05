@@ -3,56 +3,44 @@
   <canvas type='webgl' id="main-canvas"></canvas>
   <view class="content">
     <view class="container-top">
-      <avatar-display wx:if="{{!runtimeFocus}}"
-                      avatar="{{player.avatarUrl}}" name="{{player.name}}" />
+      <avatar-display wx:if="{{!runtimeFocus}}" avatar="{{player.avatarUrl}}" name="{{player.name}}" />
     </view>
-    <gold-level-display wx:if="{{!runtimeFocus}}"
-                        gold="{{player.gold}}" level="{{player.level}}"
-                        expRate="{{player.expRate}}" />
+    <gold-level-display wx:if="{{!runtimeFocus}}" gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
     <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">
       <text class="top-player-name" wx:if="{{runtimeFocus}}">{{player.name}}'s</text>
       <view class="room-name">
-        <input class="text" maxlength="8" value="{{item.name}}"
-               placeholder="输入房间名~" disabled="{{runtimeFocus}}"
-               bind:blur="onRoomNameBlur"/>
+        <input class="text" maxlength="8" value="{{item.name}}" placeholder="输入房间名~" disabled="{{runtimeFocus}}" bind:blur="onRoomNameBlur" />
       </view>
       <text class="rest-time">{{runtimeFocus.restTime}}</text>
     </view>
-    <image wx:if="{{!runtimeFocus}}" class="toShop"
-           src="../../assets/main/shop.png" mode="aspectFit"
-           bind:tap="onShopTap"/>
-    <image wx:if="{{!runtimeFocus}}" class="toSetting"
+    <image wx:if="{{!runtimeFocus}}" class="toShop" src="../../assets/main/shop.png" mode="aspectFit" bind:tap="onShopTap" />
+    <!-- <image wx:if="{{!runtimeFocus}}" class="toSetting"
            src="../../assets/main/setting.png" mode="aspectFit"
-           bind:tap="onClickShow" data-window="Room"/>
-    <view wx:if="{{!runtimeFocus}}" class="focus-btn"
-          bindtap="onClickShow" data-window="Start">
+           bind:tap="onClickShow" data-window="Room"/> -->
+    <view wx:if="{{!runtimeFocus}}" class="focus-btn" bindtap="onClickShow" data-window="Start">
       <view class="text">专注</view>
     </view>
   </view>
-  
+
   <view class="focus-bottom" wx:if="{{runtimeFocus}}">
     <view class="weather-status">
-      <image src="../../assets/main/thunder.png"
-             class="weather" mode="heightFix"/>
-      <image src="../../assets/main/thunder.png"
-             class="weather" mode="heightFix"/>
-      <image src="../../assets/main/rainy.png"
-             class="weather" mode="heightFix"/>
-      <image src="../../assets/main/rainy.png"
-             class="weather" mode="heightFix"/>
+      <image src="../../assets/main/thunder.png" class="weather" mode="heightFix" />
+      <image src="../../assets/main/thunder.png" class="weather" mode="heightFix" />
+      <image src="../../assets/main/rainy.png" class="weather" mode="heightFix" />
+      <image src="../../assets/main/rainy.png" class="weather" mode="heightFix" />
     </view>
     <view class="bottom-info">
-        <view class="player-info">
-          <image class="avatar" src="{{player.avatarUrl}}"></image>
-          <text class="player-name">{{player.name}}</text>
-        </view>
-        <view class="slogan">好好学习加油买房！</view>
+      <view class="player-info">
+        <image class="avatar" src="{{player.avatarUrl}}"></image>
+        <text class="player-name">{{player.name}}</text>
+      </view>
+      <view class="slogan">好好学习加油买房！</view>
     </view>
     <view class="room-status">
-  <!--      <text class="status-text">3人正在专注中</text>-->
-  <!--      <text class="status-text">小黑已开始专注</text>-->
-  <!--      <text class="status-text">小黑已结束专注</text>-->
-  <!--      <text class="status-text">小黑已离开房间</text>-->
+      <!--      <text class="status-text">3人正在专注中</text>-->
+      <!--      <text class="status-text">小黑已开始专注</text>-->
+      <!--      <text class="status-text">小黑已结束专注</text>-->
+      <!--      <text class="status-text">小黑已离开房间</text>-->
     </view>
   </view>
 
@@ -70,25 +58,16 @@
   </view>
 </view>
 
-<view wx:if="{{runtimeFocus}}" class="cancel-button"
-      bind:tap="onCancelTap">取消专注</view>
+<view wx:if="{{runtimeFocus}}" class="cancel-button" bind:tap="onCancelTap">取消专注</view>
 
-<van-dialog use-slot show="{{ isShowStartWindow }}"
-            show-confirm-button="{{false}}"
-            bind:close="onClickHide"
-            close-on-click-overlay
-            data-window="Start">
+<van-dialog use-slot show="{{ isShowStartWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Start">
   <view class="start-config">
     <view class="start-config-top">
-      <image class="top-img" src="/assets/main/desc.png" mode="heightFix"/>
-      <image class="top-img" src="/assets/main/close.png" mode="heightFix"
-             bindtap="onClickHide" data-window="Start"/>
+      <image class="top-img" src="/assets/main/desc.png" mode="heightFix" />
+      <image class="top-img" src="/assets/main/close.png" mode="heightFix" bindtap="onClickHide" data-window="Start" />
     </view>
-    <image class="clock-img" src="/assets/main/clock.png" mode="widthFix"/>
-    <van-slider value="{{focus.duration}}"
-                min="{{item.minDuration}}"
-                max="{{item.maxDuration}}"
-                bind:drag="onDragTime"/>
+    <image class="clock-img" src="/assets/main/clock.png" mode="widthFix" />
+    <van-slider value="{{focus.duration}}" min="{{item.minDuration}}" max="{{item.maxDuration}}" bind:drag="onDragTime" />
     <view class="time">
       专注时长
       <text>{{focus.duration}}</text>
@@ -96,25 +75,18 @@
     </view>
     <view class="content">
       <view class="desc">专注内容</view>
-      <view class="btn" bindtap="onClickShow"
-            data-window="Tags">{{focusTags[focus.tagIdx]}}</view>
+      <view class="btn" bindtap="onClickShow" data-window="Tags">{{focusTags[focus.tagIdx]}}</view>
     </view>
     <view class="mode-set">
-      <view class="mode {{focus.mode == 0 ? 'selected' : ''}}"
-            bind:tap="onModeTab" data-index="{{0}}">基础模式</view>
-      <view class="mode {{focus.mode == 1 ? 'selected' : ''}}"
-            bind:tap="onModeTab" data-index="{{1}}">反盖模式</view>
+      <view class="mode {{focus.mode == 0 ? 'selected' : ''}}" bind:tap="onModeTab" data-index="{{0}}">基础模式</view>
+      <view class="mode {{focus.mode == 1 ? 'selected' : ''}}" bind:tap="onModeTab" data-index="{{1}}">反盖模式</view>
     </view>
     <view class="text">预计经验+{{focus.expectExpReward}} 金币+{{focus.expectGoldReward}}</view>
-<!--    <view class="text">超时后可以继续获得奖励哦～</view>-->
+    <!--    <view class="text">超时后可以继续获得奖励哦～</view>-->
     <view class="start-btn" bind:tap="onSubmit">开始专注</view>
   </view>
 </van-dialog>
-<van-dialog use-slot show="{{ isShowRoomWindow }}"
-            show-confirm-button="{{false}}"
-            bind:close="onClickHide"
-            close-on-click-overlay
-            data-window="Room">
+<van-dialog use-slot show="{{ isShowRoomWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Room">
   <view class="room-config">
     <view class="color-block">
       <view class="color-topic">主题色</view>
@@ -134,31 +106,22 @@
     </view>
   </view>
 </van-dialog>
-<van-dialog use-slot show="{{ isShowResultWindow }}"
-            show-confirm-button="{{false}}"
-            bind:close="onClickHide"
-            close-on-click-overlay
-            data-window="Result">
+<van-dialog use-slot show="{{ isShowResultWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Result">
   <view class="result-config">
     <view class="focus-title">
-      <text lines="1" >本次专注时长</text>
+      <text lines="1">本次专注时长</text>
       <text lines="1" class="tag">本次专注内容</text>
     </view>
     <view class="focus-val">
-      <text lines="1" >{{focus.realDuration}}min</text>
-      <view class="focus-type" bindtap="onClickShow"
-            data-window="Tags">
+      <text lines="1">{{focus.realDuration}}min</text>
+      <view class="focus-type" bindtap="onClickShow" data-window="Tags">
         {{focusTags[focus.tagIdx]}}
       </view>
     </view>
-    <textarea class="focus-content" lines="1"
-              placeholder="专注内容备注…"
-              placeholder-style="font-size: 24rpx"
-              value="{{focus.note}}"
-              bind:input="onNoteInput"/>
+    <textarea class="focus-content" lines="1" placeholder="专注内容备注…" placeholder-style="font-size: 24rpx" value="{{focus.note}}" bind:input="onNoteInput" />
     <view class="result-config-top">
       <view class="gold-reward">
-        <image class="coins" src="/assets/square/gold.png" mode="aspectFit"/>
+        <image class="coins" src="/assets/square/gold.png" mode="aspectFit" />
         <text>+{{resAni.gold}}</text>
       </view>
       <view class="upgrade">
@@ -175,19 +138,12 @@
     <view class="result-btn" bind:tap="onFinalConfirm" data-window="Result">完成</view>
   </view>
 </van-dialog>
-<van-dialog use-slot show="{{ isShowTagsWindow }}"
-            show-confirm-button="{{false}}"
-            bind:close="onClickHide"
-            close-on-click-overlay
-            data-window="Tags">
+<van-dialog use-slot show="{{ isShowTagsWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Tags">
   <view class="tags-config">
     <view class="content">
-      <view wx:for="{{focusTags}}"
-            class="btn {{focus.tagIdx == index ? 'selected' : ''}}"
-            bind:tap="onTagTab" data-index="{{index}}">{{item}}</view>
+      <view wx:for="{{focusTags}}" class="btn {{focus.tagIdx == index ? 'selected' : ''}}" bind:tap="onTagTab" data-index="{{index}}">{{item}}</view>
     </view>
-    <view class="selector-btn" bindtap="onClickHide"
-          data-window="Tags">完成</view>
+    <view class="selector-btn" bindtap="onClickHide" data-window="Tags">完成</view>
   </view>
 </van-dialog>
 

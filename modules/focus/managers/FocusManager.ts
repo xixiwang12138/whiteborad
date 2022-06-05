@@ -10,9 +10,10 @@ import {RewardGroup} from "../../player/data/Reward";
 const StartFocus: Itf<
   {room: IRoomIndex, mode: FocusMode, tagIdx?: number, duration?: number},
   {focus: Partial<Focus>}> = post("/focus/focus/start");
-const EndFocus: Itf<
-  {runtime: RuntimeFocus, tagIdx?: number, note?: string},
+const EndFocus: Itf<{runtime: RuntimeFocus},
   {focus: Partial<Focus>}> = post("/focus/focus/end");
+const EditFocus: Itf<{focusId: string, tagIdx: number, note: string}>
+  = post("/focus/focus/edit");
 const UpdateFocus: Itf<{runtime: RuntimeFocus}>
   = post("/focus/focus/update");
 const CancelFocus: Itf<{reason?: string}, {focus: Partial<Focus>}>
@@ -47,7 +48,7 @@ export class FocusManager extends BaseManager {
    * 结束专注
    */
   public async endFocus(runtime: RuntimeFocus, tagIdx?: number, note?: string) {
-    const response = await EndFocus({runtime, tagIdx, note});
+    const response = await EndFocus({runtime});
 
     roomMgr().onFocusEnd();
 
@@ -57,6 +58,13 @@ export class FocusManager extends BaseManager {
 
     this.curFocus = null;
     return res;
+  }
+
+  /**
+   * 修改专注
+   */
+  public async editFocus(focusId: string, tagIdx: number, note: string) {
+    await EditFocus({focusId, tagIdx, note});
   }
 
   /**

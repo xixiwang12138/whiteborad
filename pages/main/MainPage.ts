@@ -258,9 +258,6 @@ export class MainPage extends ItemDetailPage<Data, Room> {
       })
     await this.setData({focus});
   }
-  async onResultWindowHide() {
-    await this.setData({resAni: null});
-  }
 
   // endregion
 
@@ -308,11 +305,20 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     })
   }
 
+  @pageFunc
+  private async onFinalConfirm() {
+    const {id, tagIdx, note} = this.data.focus;
+    await focusMgr().editFocus(id, tagIdx, note);
+    await this.setData({
+      isShowResultWindow: false,
+      resAni: null
+    });
+  }
+
   private async onSuccess() {
-    const {tagIdx, note} = this.data.focus;
     const baseExp = this.playerPage.player.exp;
     const focus = await focusMgr().endFocus(
-      this.data.runtimeFocus, tagIdx, note);
+      this.data.runtimeFocus);
     const exp = focusMgr().curRewards.exp.realValue;
     const gold = focusMgr().curRewards.gold.realValue;
     await this.setData({

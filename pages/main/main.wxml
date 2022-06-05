@@ -168,7 +168,7 @@
         </view>
       </view>
     </view>
-    <view class="result-btn" bind:tap="onClickHide" data-window="Result">完成</view>
+    <view class="result-btn" bind:tap="onFinalConfirm" data-window="Result">完成</view>
   </view>
 </van-dialog>
 <van-dialog use-slot show="{{ isShowTagsWindow }}"

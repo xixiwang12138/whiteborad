@@ -51,13 +51,14 @@ export class SquarePage extends BasePage<Data> {
 			roomList: []
 		})
 		await this.getRoomsList();
-
 	}
 
 	async getRoomsList(){
 		const count:number = 12;		//单次获取房间列表长度
-		if(!this.data.isGetAllRooms){
-		const tempRoomAndNPCList = await roomMgr().getRooms(this.offset,count,"",{});
+		if (this.data.isGetAllRooms) return;
+
+		const tempRoomAndNPCList = await roomMgr()
+			.getRooms(this.offset, count);
 		const tempRoomList:RoomInfo[] = tempRoomAndNPCList.rooms;
 
 		//判断是否到达房间列表底部
@@ -72,6 +73,5 @@ export class SquarePage extends BasePage<Data> {
 		});
 
 		await this.setData({roomList});
-		}
 	}
 }

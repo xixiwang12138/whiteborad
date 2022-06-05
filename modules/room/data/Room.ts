@@ -7,6 +7,7 @@ import {IRoomDrawable} from "./IRoomDrawable";
 import {Effect} from "./Effect";
 import {roomSkinRepo} from "./RoomSkin";
 import {roomStarRepo} from "./RoomStar";
+import {CloudFileUtils} from "../../../utils/CloudFileUtils";
 
 export enum RoomState {
 	Uncreated, Created, Banned
@@ -204,8 +205,12 @@ export class RoomInfo extends BaseData {
 
 	@field(String)
 	@occasion(DataOccasion.Extra)
-	public get thumbnail() {
-		return this.skinId && roomSkinRepo().getById(this.skinId).thumbnail
+	public thumbnail: string;
+
+	public refresh() {
+		const url = this.skinId && roomSkinRepo().getById(this.skinId).thumbnailUrl;
+		this.thumbnail = url.startsWith("@") ?
+			CloudFileUtils.pathToFileId(url) : url;
 	}
 }
 

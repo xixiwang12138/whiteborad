@@ -12,22 +12,64 @@ import {focusMgr} from "../../modules/focus/managers/FocusManager";
 import {pageMgr} from "../../modules/core/managers/PageManager";
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {ShopPage} from "../shop/ShopPage";
-import {Container, Rectangle, Sprite} from "pixi.js";
 import {blockLoading} from "../../modules/core/managers/LoadingManager";
 import {roomMgr} from "../../modules/room/managers/RoomManager";
-import {Animation} from "../../modules/room/data/IRoomDrawable";
-import {MathUtils} from "../../utils/MathUtils";
-import {Constructor} from "../../modules/core/BaseContext";
 import SystemInfo = WechatMiniprogram.SystemInfo;
 import CustomEvent = WechatMiniprogram.CustomEvent;
 import {RoomDrawingPage, RoomPage} from "../common/partPages/RoomPage";
 import {appMgr} from "../../modules/core/managers/AppManager";
 import {RewardGroup} from "../../modules/player/data/Reward";
+import {BaseData} from "../../modules/core/data/BaseData";
+import {LevelCalculator} from "../../modules/player/utils/LevelCalculator";
 
 type WindowType = "Start" | "Room" | "Tags";
 
 const AccThreshold = 0.3;
-const TimeRate = 100;
+const DebugTimeRate = 1000;
+
+class ResultAnimation extends BaseData {
+
+  @field(Number)
+  gold: number = 0
+  @field(Number)
+  exp: number = 0
+  @field(Number)
+  expRate: number
+  @field(Number)
+  restExp: number
+  @field(Number)
+  level: number
+
+  private curExp: number = 0
+  private curGold: number = 0
+  private targetExp: number
+  private targetGold: number
+  private baseExp: number
+
+  public static create(exp, gold, baseExp) {
+    const res = new ResultAnimation();
+    res.targetExp = exp;
+    res.targetGold = gold;
+    res.baseExp = baseExp;
+    return res;
+  }
+
+  public update() {
+    let rate = (this.targetGold - this.curGold) / 16;
+    if (rate >= 0.0001) this.curGold += rate;
+    rate = (this.targetExp - this.exp) / 16;
+    if (rate >= 0.0001) this.curExp += rate;
+    this.gold = Math.round(this.curGold);
+    this.exp = Math.round(this.curExp);
+  }
+
+  public refresh() {
+    const exp = this.baseExp + this.exp;
+    this.level = LevelCalculator.level(exp);
+    this.expRate = LevelCalculator.expRate(exp);
+    this.restExp = LevelCalculator.restExp(exp);
+  }
+}
 
 class Data extends BasePageData {
 
@@ -54,6 +96,9 @@ class Data extends BasePageData {
   runtimeFocus: RuntimeFocus
 
   // region 结算动画数据
+
+  @field(ResultAnimation)
+  resAni: ResultAnimation;
 
   // endregion
 
@@ -130,21 +175,20 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     this.updateDown();
     this.updateTime();
     this.updateFocus();
+    this.updateResult();
     this.roomDrawingPage.update(this.isFocusing);
   }
-
-  updateDown() {
+  private updateDown() {
     const runtimeFocus = this.data.runtimeFocus;
     if (!runtimeFocus) return;
     runtimeFocus.isDown = this.data.isDown;
     this.setData({ runtimeFocus })
   }
-
-  updateTime() {
+  private updateTime() {
     const runtimeFocus = this.data.runtimeFocus;
     if (!runtimeFocus) return;
 
-    const rate = appMgr().isDebug ? TimeRate : 1;
+    const rate = appMgr().isDebug ? DebugTimeRate : 1;
     const dt = pageMgr().deltaTime * rate;
 
     if (!runtimeFocus.isValid) {
@@ -166,8 +210,7 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     } else
       this.setData({ runtimeFocus });
   }
-
-  updateFocus() {
+  private updateFocus() {
     const runtimeFocus = this.data.runtimeFocus;
     if (!runtimeFocus) return;
 
@@ -177,6 +220,12 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     this.lastFocusUpdateTime = now;
 
     focusMgr().updateFocus(runtimeFocus);
+  }
+  private updateResult() {
+    const resAni = this.data.resAni;
+    if (!resAni) return;
+    resAni.update();
+    this.setData({resAni});
   }
 
   // endregion
@@ -196,9 +245,10 @@ export class MainPage extends ItemDetailPage<Data, Room> {
     await this.setData({ [`isShow${window}Window`]: true })
   }
   @pageFunc
-  onClickHide(e) {
+  async onClickHide(e) {
     const window = e.currentTarget.dataset.window;
-    this.setData({ [`isShow${window}Window`]: false })
+    await this[`on${window}WindowHide`]?.();
+    await this.setData({ [`isShow${window}Window`]: false })
   }
 
   async onStartWindowShow() {
@@ -207,6 +257,9 @@ export class MainPage extends ItemDetailPage<Data, Room> {
         roomId: this.item.roomId
       })
     await this.setData({focus});
+  }
+  async onResultWindowHide() {
+    await this.setData({resAni: null});
   }
 
   // endregion
@@ -257,12 +310,14 @@ export class MainPage extends ItemDetailPage<Data, Room> {
 
   private async onSuccess() {
     const {tagIdx, note} = this.data.focus;
+    const baseExp = this.playerPage.player.exp;
     const focus = await focusMgr().endFocus(
       this.data.runtimeFocus, tagIdx, note);
+    const exp = focusMgr().curRewards.exp.realValue;
+    const gold = focusMgr().curRewards.gold.realValue;
     await this.setData({
-      focus, runtimeFocus: null,
-      isShowResultWindow: true,
-      rewards: focusMgr().curRewards
+      focus, runtimeFocus: null, isShowResultWindow: true,
+      resAni: ResultAnimation.create(exp, gold, baseExp)
     })
   }
 

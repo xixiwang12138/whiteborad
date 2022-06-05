@@ -7,7 +7,7 @@
                       avatar="{{player.avatarUrl}}" name="{{player.name}}" />
     </view>
     <gold-level-display wx:if="{{!runtimeFocus}}"
-                        gold="{{player.gold}}" level="{{player.levelStr}}"
+                        gold="{{player.gold}}" level="{{player.level}}"
                         expRate="{{player.expRate}}" />
     <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">
       <text class="top-player-name" wx:if="{{runtimeFocus}}">{{player.name}}'s</text>
@@ -131,6 +131,46 @@
     </view>
   </view>
 </van-dialog>
+<van-dialog use-slot show="{{ isShowResultWindow }}"
+            show-confirm-button="{{false}}"
+            bind:close="onClickHide"
+            close-on-click-overlay
+            data-window="Result">
+  <view class="result-config">
+    <view class="focus-title">
+      <text lines="1" >本次专注时长</text>
+      <text lines="1" class="tag">本次专注内容</text>
+    </view>
+    <view class="focus-val">
+      <text lines="1" >{{focus.realDuration}}min</text>
+      <view class="focus-type" bindtap="onClickShow"
+            data-window="Tags">
+        {{focusTags[focus.tagIdx]}}
+      </view>
+    </view>
+    <textarea class="focus-content" lines="1"
+              placeholder="专注内容备注…"
+              placeholder-style="font-size: 24rpx"
+              bind:input="onNoteInput"/>
+    <view class="result-config-top">
+      <view class="gold-reward">
+        <image class="coins" src="/assets/square/gold.png" mode="aspectFit"/>
+        <text>+{{resAni.gold}}</text>
+      </view>
+      <view class="upgrade">
+        <view class="level">{{resAni.level}}级</view>
+        <view class="experience">
+          <view class="progress" style="width: {{resAni.expRate * 100}}%"></view>
+          <text class="add">+{{resAni.exp}}</text>
+          <view class="tips">
+            距离升级还需{{resAni.restExp}}
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="result-btn" bind:tap="onClickHide" data-window="Result">完成</view>
+  </view>
+</van-dialog>
 <van-dialog use-slot show="{{ isShowTagsWindow }}"
             show-confirm-button="{{false}}"
             bind:close="onClickHide"
@@ -144,48 +184,6 @@
     </view>
     <view class="selector-btn" bindtap="onClickHide"
           data-window="Tags">完成</view>
-  </view>
-</van-dialog>
-<van-dialog use-slot show="{{ isShowResultWindow }}"
-            show-confirm-button="{{false}}"
-            bind:close="onClickHide"
-            close-on-click-overlay
-            data-window="Result">
-  <view class="result-config">
-    <view class="focus-title">
-      <text lines="1" >本次专注时长</text>
-      <text lines="1" >本次专注内容</text>
-    </view>
-    <view class="focus-val">
-      <text lines="1" >{{focus.realDuration}}min</text>
-      <view class="focus-type" bindtap="onClickShow"
-            data-window="Tags">
-        <text lines="1">{{focusTags[focus.tagIdx]}}</text>
-      </view>
-    </view>
-    <view class="focus-content">
-      <textarea lines="1" class="word5" placeholder="专注内容备注…"
-                bind:input="onNoteInput"/>
-    </view>
-    <view class="result-config-top">
-      <view class="coinGain">
-        <image class="coins" src="/assets/square/gold.png" mode="heightFix" style="height: 88rpx;width: 109rpx;"/>
-        <text>+1200</text>
-      </view>
-      <view class="upgrade">
-        <view class="level">
-        <text>2级</text>
-      </view>
-      <view class="experience">
-      <view class="progress"></view>
-      </view>
-      </view>
-      <view class="tips">
-        <text>距离升级还需xxmin</text>
-      </view>
-      <text class="add">+12</text>
-    </view>
-    <view class="result-btn" bind:tap="onClickHide" data-window="Result">完成</view>
   </view>
 </van-dialog>
 

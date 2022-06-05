@@ -1,11 +1,9 @@
 import {BaseData, StateData} from "../../core/data/BaseData";
 import {DataOccasion, dataPK, field, occasion} from "../../core/data/DataLoader";
 import {DynamicData} from "../../core/data/DynamicData";
+import {LevelCalculator} from "../utils/LevelCalculator";
 
 const DefaultGold = 100;
-const ExpCalc = {
-	A: 5, B: 15, C: 150
-};
 
 export type WxUserInfo = {
 	nickName: string,
@@ -89,17 +87,8 @@ export class Player extends StateData<PlayerState> {
 
 	// region 额外数据
 
-	@field(String)
-	@occasion(DataOccasion.Extra)
-	public levelStr: string
-	@field(Number)
-	@occasion(DataOccasion.Extra)
-	public expRate: number
-
 	public refreshExtra() {
-		const level = this.level;
-		this.levelStr = level.toString();
-		this.expRate = this.curExp / this.calcNeedExp(level);
+
 	}
 
 	// endregion
@@ -117,27 +106,25 @@ export class Player extends StateData<PlayerState> {
 
 	// region 等级控制
 
+	@field(Number)
+	@occasion(DataOccasion.Extra)
 	public get level() {
-		let res = 0, exp = this.exp;
-		while ((exp -= this.calcNeedExp(++res)) > 0) {}
-		return res;
+		return LevelCalculator.level(this.exp);
 	}
+	@field(Number)
+	@occasion(DataOccasion.Extra)
 	public get curExp() {
-		let level = 0, exp = this.exp;
-		while ((exp -= this.calcNeedExp(++level)) > 0) {}
-		return exp + this.calcNeedExp(level);
+		return LevelCalculator.curExp(this.exp);
 	}
+	@field(Number)
+	@occasion(DataOccasion.Extra)
 	public get restExp() {
-		let level = 0, exp = this.exp;
-		while ((exp -= this.calcNeedExp(++level)) > 0) {}
-		return -exp; // 剩余经验
+		return LevelCalculator.restExp(this.exp);
 	}
-
-	/**
-	 * 计算当前等级升级所需经验值
-	 */
-	public calcNeedExp(level) {
-		return ExpCalc.A * level * level + ExpCalc.B * level + ExpCalc.C;
+	@field(Number)
+	@occasion(DataOccasion.Extra)
+	public get expRate() {
+		return LevelCalculator.expRate(this.exp);
 	}
 
 	/**

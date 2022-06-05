@@ -304,187 +304,144 @@ van-dialog {
     }
   }
   .result-config {
-    border-radius: 150rpx;
-    background-color: white;
-    margin: auto auto;
-    padding-top: 32rpx;
+    padding: 36rpx 0 12rpx;
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 2;
     .focus-title {
-      width: 411rpx;
-      height: 39rpx;
-      // margin-left: 10rpx;
-      flex-direction: row;
+      width: 66.67%; height: 42rpx;
       display: flex;
+      flex-direction: row;
       justify-content: space-between;
-      text{
-        width: 168rpx;
-        height: 39rpx;
-        display: block;
-        overflow-wrap: break-word;
-        font-size: 30rpx;
-        white-space: nowrap;
-        line-height: 39rpx;
+
+      text {
+        width: 50%; height: 100%;
+        font-size: 28rpx;
         text-align: center;
+      }
+      .tag {
+        width: 40%;
       }
     }
     .focus-val {
-      width: 361rpx;
-      height: 54rpx;
-      flex-direction: row;
+      width: 66.67%; height: 56rpx;
+
       display: flex;
+      flex-direction: row;
       justify-content: space-between;
-      margin: 5rpx 0 0 23rpx;
-      text{
-        width: 123rpx;
-        height: 51rpx;
-        display: block;
-        overflow-wrap: break-word;
+      align-items: center;
+
+      margin: 4rpx 0;
+
+      text {
+        width: 50%;
         color: rgba(76,127,179,1);
-        font-size: 37rpx;
-        white-space: nowrap;
-        line-height: 51rpx;
+        font-size: 36rpx;
         text-align: center;
-        margin-top: 2rpx;
       }
       .focus-type {
-        height: 54rpx;
-        border-radius: 5rpx;
+        width: 40%; height: 56rpx;
+        border-radius: 8rpx;
         background-color: rgba(202,220,239,1);
-        display: flex;
-        flex-direction: column;
-        width: 133rpx;
-        text{
-          width: 98rpx;
-          height: 35rpx;
-          display: block;
-          overflow-wrap: break-word;
-          font-size: 25rpx;
-          white-space: nowrap;
-          line-height: 35rpx;
-          text-align: center;
-          margin: 9rpx 0 0 19rpx;
-        }
+
+        font-size: 28rpx;
+        line-height: 56rpx;
+        text-align: center;
       }
     }
     .focus-content {
-      height: 98rpx;
+      width: 60%;
+      height: 96rpx;
       border-radius: 14rpx;
       background-color: rgba(242,242,242,1);
-      display: flex;
-      flex-direction: column;
-      width: 426rpx;
-      margin: 14rpx 0 0 0;
-      text{
-        width: 147rpx;
-        height: 30rpx;
-        display: block;
-        overflow-wrap: break-word;
-        color: rgba(123,123,123,1);
-        font-size: 21rpx;
-        white-space: nowrap;
-        line-height: 30rpx;
-        text-align: center;
-        margin: 7rpx 0 0 16rpx;
-      }
+      font-size: 24rpx;
+      margin: 14rpx auto 0;
+      padding: 16rpx;
     }
     .result-config-top{
-      margin-top: 2vh;
-      z-index: 72;
-      height: 16vh;
-      border-radius: 20px;
-      background-color: rgba(237,237,237,1);
-      width: 65vw;
       position: relative;
       display: flex;
       flex-direction: column;
 
-      .coinGain {
-        width: 329rpx;
-        height: 88rpx;
-        flex-direction: row;
+      width: 75%;
+      margin-top: 32rpx;
+      padding: 24rpx 0 48rpx;
+
+      border-radius: 16px;
+      background-color: rgba(237,237,237,1);
+
+      .gold-reward {
+        height: 96rpx;
+
         display: flex;
+        flex-direction: row;
+        align-items: center;
         justify-content: space-between;
-        margin: 33rpx 0 0 40rpx;
+
+        margin: 0 32rpx 24rpx;
+
+        .coins {
+          width: 30%;
+          height: 100%;
+        }
         text {
-          font-size: 37rpx;
+          width: 60%;
+          font-size: 36rpx;
           text-align: center;
-          margin-top: 19rpx;
         }
       }
 
       .upgrade {
-        width: 401rpx;
-        height: 53rpx;
-        flex-direction: row;
+        height: 56rpx;
+
         display: flex;
+        flex-direction: row;
+        align-items: center;
         justify-content: space-between;
-        margin: 37rpx 0 0 39rpx;
+
+        margin: 0 32rpx;
+
         .level {
-          height: 53rpx;
-          border-radius: 26rpx;
+          width: 30%;
+          height: 100%;
+          border-radius: 28rpx;
           background-color: rgba(216,216,216,1);
-          display: flex;
-          flex-direction: column;
-          width: 112rpx;
-          text{
-            width: 40rpx;
-            height: 35rpx;
-            display: block;
-            overflow-wrap: break-word;
-            font-size: 25rpx;
-            line-height: 35rpx;
-            text-align: left;
-            margin: 9rpx 0 0 37rpx;
-          }
+          text-align: center;
+          font-size: 28rpx;
+          line-height: 56rpx;
         }
         .experience {
-          height: 49rpx;
-          border-radius: 6px;
+          position: relative;
+          width: 60%;
+          height: 42rpx;
+          border-radius: 8px;
           background-color: rgba(255,255,255,1);
-          display: flex;
-          flex-direction: column;
-          width: 216rpx;
+
           .progress {
-            width: 158rpx;
-            height: 49rpx;
-            border-radius: 6px;
+            height: 100%;
+            border-radius: 8px;
             background-color: rgba(179,179,179,1);
-            display: flex;
-            flex-direction: column;
+          }
+          .add {
+            position: absolute;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+
+            font-size: 32rpx;
+            line-height: 42rpx;
+            text-align: center;
+          }
+          .tips {
+            position: absolute;
+            width: 100%; height: 32rpx;
+            left: 0; top: 100%;
+
+            margin-top: 4rpx;
+            font-size: 22rpx;
+            text-align: right;
           }
         }
       }
-
-      .tips {
-        width: 184rpx;
-        height: 30rpx;
-        display: flex;
-        flex-direction: row;
-        margin: 0 0 16rpx 277rpx;
-        text {
-          width: 184rpx;
-          height: 30rpx;
-          font-size: 21rpx;
-          text-align: left;
-        }
-      }
-    }
-    .add {
-      z-index: 75;
-      position: absolute;
-      left: 293rpx;
-      top: 156rpx;
-      width: 60rpx;
-      height: 51rpx;
-      display: block;
-      overflow-wrap: break-word;
-      font-size: 37rpx;
-      white-space: nowrap;
-      line-height: 51rpx;
-      text-align: center;
     }
     // .content {
     //   width: 80%;

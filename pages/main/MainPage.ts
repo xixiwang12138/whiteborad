@@ -123,12 +123,19 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
   // region 初始化
 
   async onLoad(e) {
+    console.log("onLoad")
     await super.onLoad(e);
     await this.initialize();
   }
   async onShow() {
+    console.log("onShow")
     await super.onShow();
     await this.refresh();
+    await this.enterRoom();
+  }
+  async onHide() {
+    await super.onHide();
+    await this.leaveRoom();
   }
 
   async onUnload() {
@@ -137,13 +144,13 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
     await alertMgr().showToast("由于页面退出，您已取消专注");
   }
 
-  @waitForLogin
-  @waitForDataLoad
   private async initialize() {
-    await this.refresh();
+    // await this.refresh();
     this.setupWxListeners();
   }
 
+  @waitForLogin
+  @waitForDataLoad
   private async refresh() {
     await this.loadRoom();
     await this.playerPage.resetPlayer();
@@ -161,8 +168,6 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
     // const room = Room.testData();
     const room = await this.getRoom();
     await this.setItem(room);
-    await roomMgr().enterRoom(this.roomIndex,
-        e => this.onRoomMessage(e))
   }
 
   private setupWxListeners() {
@@ -180,6 +185,19 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
 
   public get isFocusing() {
     return this.data.runtimeFocus?.isValid;
+  }
+
+  // endregion
+
+  // region 房间操作
+
+  public async enterRoom() {
+    await roomMgr().enterRoom(this.roomIndex,
+      e => this.onRoomMessage(e))
+  }
+
+  public async leaveRoom() {
+    await roomMgr().leaveRoom();
   }
 
   // endregion
@@ -378,27 +396,4 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
   // endregion
 
   // endregion
-
-  // // region 界面绘制
-  //
-  // private pixiObj: {
-  //   aniTime: number
-  //   background?: Sprite
-  //   house?: Container
-  //   layers: Sprite[]
-  //   animations: RuntimeAnimation[]
-  // } = {
-  //   aniTime: 0,
-  //   layers: [],
-  //   animations: []
-  // };
-  //
-  // private motionData = {
-  //   motionId: 1,
-  //   duration: 0
-  // };
-  //
-  // public get isDebug() { return this.sys.platform == 'devtools'; }
-  //
-  // // endregion
 }

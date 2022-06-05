@@ -125,18 +125,12 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
   async onLoad(e) {
     await super.onLoad(e);
     await this.initialize();
-
-    // 测试
-    wx.onAppHide(() => {
-      console.log("onAppHide")
-    })
-    wx.onAppShow(() => {
-      console.log("onAppShow")
-    })
   }
 
   async onUnload() {
     wx.offAccelerometerChange(() => {});
+    await this.onFailed("界面退出");
+    await alertMgr().showToast("由于页面退出，您已取消专注");
   }
 
   @waitForLogin

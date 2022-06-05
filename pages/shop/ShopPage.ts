@@ -38,6 +38,8 @@ export class ShopPage extends BasePage<Data>{
 
 	public data = new Data();
 
+	public playerPage: PlayerPage = new PlayerPage();
+
 	async onLoad(e) {
 		this.setData({
 			isRooms:true

@@ -1,4 +1,5 @@
 <view class="page">
+  <canvas type='webgl' id="main-canvas"></canvas>
   <gold-level-display gold="50000" level="99" expRate="0.2333"/>
   <image class="room" src="../../images/room1.jpg"></image>
   <view class="column">

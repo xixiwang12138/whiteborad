@@ -57,5 +57,11 @@ export class ShopPage extends BasePage<Data>{
 				isRooms:false
 			})
 		}
+		@pageFunc
+		public tapToReturn(){
+			wx.switchTab({
+				url:"../main/main"
+			})
+		}
 }
 

@@ -66,7 +66,10 @@ export class SquarePage extends BasePage<Data> {
 		this.offset += rooms.length;
 
 		let curRooms: RoomInfo[] = this.data.rooms;
+		// 自己的房间不能出现 TODO: 后端实现
+		rooms = rooms.filter(r => r.openid != this.playerPage.openid);
 		rooms = curRooms.concat(rooms);
+
 		await this.setData({
 			rooms, isGetAllRooms
 		});

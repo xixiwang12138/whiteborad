@@ -185,7 +185,7 @@ export class RoomInfo extends BaseData {
 	public name: string = "";
 	@field(String)
 	public ownerAccount: string;
-	@field(pkType())
+	@field(String)
 	public openid: string;
 
 	@field

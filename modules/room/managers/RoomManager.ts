@@ -33,10 +33,11 @@ const SwitchSkin: Itf<{skinId: number}> = post("/room/skin/switch");
 const EnterRoom: Itf<{room: IRoomIndex}> = post("/room/room/enter");
 const LeaveRoom: Itf = post("/room/room/leave");
 
-export type RoomMessageType = "enter" | "leave" | "focusStart" | "focusEnd";
+export type RoomMessageType = "enter" | "leave" | "focusStart" | "focusEnd" | "focusing";
 export type RoomMessage = {
-  type: RoomMessageType,
-  time: number, player: PlayerBaseInfo
+  type: RoomMessageType, time: number,
+  player?: PlayerBaseInfo,
+  count?: number
 }
 
 const CloseCode = 3005;

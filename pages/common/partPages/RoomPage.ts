@@ -14,8 +14,8 @@ import {appMgr} from "../../../modules/core/managers/AppManager";
 const TimeRate = 100;
 const AniColCount = 4;
 const MotionDuration = 60;
-const DefaultHouseScale = 0.3;
-const FocusingHouseScale = 0.4;
+const DefaultHouseScale = 0.6;
+const FocusingHouseScale = 0.8;
 const DebugAlpha = 0.33;
 
 type RuntimeAnimation = {

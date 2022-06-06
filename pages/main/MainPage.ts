@@ -13,7 +13,7 @@ import {pageMgr} from "../../modules/core/managers/PageManager";
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {ShopPage} from "../shop/ShopPage";
 import {blockLoading} from "../../modules/core/managers/LoadingManager";
-import {roomMgr} from "../../modules/room/managers/RoomManager";
+import {RoomMessage, roomMgr} from "../../modules/room/managers/RoomManager";
 import SystemInfo = WechatMiniprogram.SystemInfo;
 import CustomEvent = WechatMiniprogram.CustomEvent;
 import {RoomDrawingPage, RoomPage} from "../common/partPages/RoomPage";
@@ -269,7 +269,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   // region 事件
 
-  private onRoomMessage(data) {
+  private onRoomMessage(data: RoomMessage) {
     console.log("onRoomMessage", data);
   }
 

@@ -4,7 +4,12 @@
 <view class="content">
   <image class="back-button" src="../../assets/shop/back.png" mode="heightFix" bind:tap="back"></image>
   <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
-  <view class="room-name">{{item.name}}</view>
+
+  <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">
+    <view class="room-name">{{item.name}}</view>
+    <text wx:if="{{runtimeFocus}}" class="rest-time">{{runtimeFocus.restTime}}</text>
+  </view>
+  
   <view wx:if="{{!runtimeFocus}}" class="focus-btn"
         bind:tap="onClickShow" data-window="Start">
     <view class="text">专注</view>

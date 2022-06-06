@@ -10,18 +10,18 @@
    </view>
   <scroll-view class="room-list" scroll-y="{{true}}" >
     <text class="label">我的收藏</text>
-    <view wx:for="{{collectedRooms}}" class="room-card">
-      <image class="room" src="../../assets/common/3.png" mode="heightFix"></image>
-      <view class="info">
-        <text class="user">{{item.userName}}｜{{item.level}}</text>
-        <text class="name">{{item.name}}</text>
-      </view>
-      <view class="enter-tips">
-        <text>进入房间</text>
-        <image class="enter" src="../../images/enter.png"></image>
-      </view>
-      <image class="star" src="../../images/star.png"></image>
-    </view>
+<!--    <view wx:for="{{collectedRooms}}" class="room-card">-->
+<!--      <image class="room" src="../../assets/common/3.png" mode="heightFix"></image>-->
+<!--      <view class="info">-->
+<!--        <text class="user">{{item.userName}}｜{{item.level}}</text>-->
+<!--        <text class="name">{{item.name}}</text>-->
+<!--      </view>-->
+<!--      <view class="enter-tips">-->
+<!--        <text>进入房间</text>-->
+<!--        <image class="enter" src="../../images/enter.png"></image>-->
+<!--      </view>-->
+<!--      <image class="star" src="../../images/star.png"></image>-->
+<!--    </view>-->
   </scroll-view>
  </view>
 </view>

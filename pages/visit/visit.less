@@ -6,29 +6,63 @@
     width: fit-content; height: 42rpx;
   }
 
-  .room-name {
-    position: fixed;
-    left: 32%;
-    right: 32%;
-    top: 13%;
+  .room-info {
+    margin-top: 15%;
+    width: 100%;
+    transition: all 1s ease 0s;
 
-    width: 36%;
-    height: 5%;
-
-    display: flex;
     text-align: center;
-    align-items: center;
-    justify-content: center;
 
-    background-color: white;
+    .room-name {
+      width: 296rpx; height: 80rpx;
+      margin: 12rpx auto;
 
-    border-radius: 32rpx;
+      text-align: center;
 
-    .text {
-      height: fit-content;
-      font-size: 32rpx;
+      background-color: white;
+      border-radius: 32rpx;
+
+      .text {
+        width: fit-content;
+        height: 100%;
+        font-size: 32rpx;
+        line-height: 80rpx;
+        margin: 12rpx auto;
+      }
+    }
+    .rest-time {
+      width: fit-content;
+      margin: 32rpx auto;
+      font-size: 96rpx;
     }
   }
+  .room-info.focusing {
+    margin-top: 12%;
+  }
+
+  //.room-name {
+  //  position: fixed;
+  //  left: 32%;
+  //  right: 32%;
+  //  top: 13%;
+  //
+  //  width: 36%;
+  //  height: 5%;
+  //
+  //  display: flex;
+  //  text-align: center;
+  //  align-items: center;
+  //  justify-content: center;
+  //
+  //  background-color: white;
+  //
+  //  border-radius: 32rpx;
+  //
+  //  .text {
+  //    height: fit-content;
+  //    font-size: 32rpx;
+  //  }
+  //}
 
   .focus-btn {
     position: fixed;

@@ -68,7 +68,7 @@ export class Room extends DynamicData implements IRoomDrawable {
 	public createTime: number;
 
 	@field(PlayerBaseInfo)
-	@occasion(DataOccasion.Interface)
+	@occasion(DataOccasion.Interface, DataOccasion.Extra)
 	public player?: PlayerBaseInfo;
 
 	// region 额外数据

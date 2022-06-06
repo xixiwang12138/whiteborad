@@ -27,7 +27,7 @@ type WindowType = "Start" | "Room" | "Tags";
 const AccThreshold = 0.3;
 const DebugTimeRate = 1000;
 
-class ResultAnimation extends BaseData {
+export class ResultAnimation extends BaseData {
 
   @field(Number)
   gold: number = 0
@@ -71,7 +71,7 @@ class ResultAnimation extends BaseData {
   }
 }
 
-class Data extends BasePageData {
+export class MainPageData extends BasePageData {
 
   @field(Room)
   item: Room
@@ -106,9 +106,9 @@ export const RoomType = "room";
 const FocusUpdateInterval = 10000; // 5秒更新一次
 
 @page("main", "主页")
-export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
+export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
-  public data = new Data();
+  public data = new MainPageData();
 
   private sys: SystemInfo;
   private lastFocusUpdateTime = 0;
@@ -140,8 +140,10 @@ export class MainPage<P = {}> extends ItemDetailPage<Data, Room, P> {
 
   async onUnload() {
     wx.offAccelerometerChange(() => {});
-    await this.onFailed("界面退出");
-    await alertMgr().showToast("由于页面退出，您已取消专注");
+    if (this.data.runtimeFocus) {
+      await this.onFailed("界面退出");
+      await alertMgr().showToast("由于页面退出，您已取消专注");
+    }
   }
 
   private async initialize() {

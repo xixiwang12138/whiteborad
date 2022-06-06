@@ -1,19 +1,9 @@
-#main-canvas {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -100
-}
 
 .content {
-  .return {
+  .back-button {
     position: fixed;
-    left: 5%;
-
-    height: 80rpx;
-
+    left: 32rpx; top: 108rpx;
+    width: fit-content; height: 42rpx;
   }
 
   .room-name {
@@ -42,16 +32,12 @@
 
   .focus-btn {
     position: fixed;
-    left: 28%;
-    right: 28%;
-    bottom: 15%;
+    left: 28%; right: 28%; bottom: 15%;
 
-    width: 44%;
-    height: 8%;
+    width: 44%; height: 96rpx;
 
-    //background-color: white;
     background-color: white;
-    border-radius: 64rpx;
+    border-radius: 48rpx;
 
     display: flex;
     justify-content: center;
@@ -63,40 +49,125 @@
     }
   }
 
-  .content-bottom {
+  .focus-bottom{
     position: fixed;
-    bottom: 2%;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    height: 13%;
+    left: 0; bottom: 5vh;
     width: 100%;
 
-    .slogan {
-      background-color: rgba(0, 0, 0, 0.664);
-      width: 60%;
-      height: 40%;
+    pointer-events: none;
 
-      border-radius: 25rpx;
+    .weather-status {
+      animation: 1.5s linear 0.5s move-in both;
 
-      color: white;
-      font-size: 27rpx;
+      display: flex;
+      //flex-direction: column;
+      //justify-content: center;
+      align-items: center;
+      flex-direction: row;
+      justify-content: space-between;
 
-      padding: 20rpx 20rpx;
+      width: 312rpx; height: 72rpx;
+
+      border-radius: 16rpx;
+      background-color: rgba(0,0,0,0.19);
+
+      margin: 0 auto;
+      padding: 0 16rpx;
+
+      .weather { height: 56rpx; }
+    }
+    .bottom-info {
+      animation: 1s linear 0s move-in;
+      position: relative;
+      width: 100%;
+      height: 128rpx;
+      margin-top: 92rpx;
+      display: flex;
+      flex-direction: row;
+
+      .player-info {
+        position: absolute;
+
+        left: 24rpx;
+        width: 160rpx; height: fit-content;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .avatar {
+          width: 80rpx; height: 80rpx;
+          margin: 0 0 8rpx;
+          border-radius: 50%;
+          border: #F8D1DB solid 2px;
+        }
+        .player-name {
+          width: 100%; height: 32rpx;
+
+          color: white;
+          font-size: 24rpx;
+          text-align: center;
+
+          overflow: hidden; // 隐藏文字
+          white-space: nowrap; // 不换行
+          text-overflow: ellipsis;// 显示...
+        }
+      }
+      .slogan {
+        position: absolute;
+
+        left: 192rpx; right: 32rpx;
+        height: 80rpx;
+
+        border-radius: 14rpx;
+        background-color: rgba(0,0,0,0.13);
+
+        color: white;
+        font-size: 24rpx;
+        text-align: left;
+
+        padding: 16rpx 32rpx;
+      }
     }
   }
+  //.content-bottom {
+  //  position: fixed;
+  //  bottom: 2%;
+  //
+  //  display: flex;
+  //  justify-content: center;
+  //  align-items: center;
+  //
+  //  height: 13%;
+  //  width: 100%;
+  //
+  //  .slogan {
+  //    background-color: rgba(0, 0, 0, 0.664);
+  //    width: 60%;
+  //    height: 40%;
+  //
+  //    border-radius: 25rpx;
+  //
+  //    color: white;
+  //    font-size: 27rpx;
+  //
+  //    padding: 20rpx 20rpx;
+  //  }
+  //}
+}
+
+.cancel-button {
+  position: fixed;
+  left: 32rpx; top: 108rpx;
+  width: fit-content; height: 42rpx;
 }
 
 van-dialog {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 80%;
 
   .start-config {
-
     border-radius: 64rpx;
     background-color: white;
     margin: auto auto;
@@ -117,9 +188,7 @@ van-dialog {
       }
     }
 
-    .clock-img {
-      width: 270rpx;
-    }
+    .clock-img { width: 270rpx; }
 
     van-slider {
       width: 70%;
@@ -142,10 +211,7 @@ van-dialog {
       justify-content: center;
       align-items: center;
 
-      .desc {
-        font-size: 36rpx;
-      }
-
+      .desc { font-size: 32rpx; }
       .btn {
         margin-left: 48rpx;
         padding: 10rpx 20rpx;
@@ -157,7 +223,6 @@ van-dialog {
 
     .mode-set {
       width: 75%;
-
       margin-bottom: 21rpx;
 
       display: flex;
@@ -166,19 +231,12 @@ van-dialog {
       .mode {
         background-color: #D8D8D8;
         padding: 20rpx 42rpx;
-
         font-size: 30rpx;
-        font-weight: bold;
-
         border-radius: 16rpx;
       }
+      .selected { background-color: #C0A0C7; }
     }
-
-    .text {
-      font-size: 27rpx;
-      font-weight: bold;
-    }
-
+    .text { font-size: 27rpx; }
     .start-btn {
       background-color: #4C7FB3;
       color: white;
@@ -186,12 +244,8 @@ van-dialog {
       margin: 32rpx 32rpx;
       border-radius: 8rpx;
     }
-
-
   }
-
-  .selector-config {
-
+  .tags-config {
     border-radius: 64rpx;
     background-color: white;
     margin: auto auto;
@@ -201,7 +255,8 @@ van-dialog {
     align-items: center;
     z-index: 2;
 
-    .content {
+    .tags-content {
+      width: 100%;
       height: fit-content;
       display: flex;
       justify-content: center;
@@ -209,13 +264,15 @@ van-dialog {
       flex-wrap: wrap;
 
       .btn {
-        margin: 28rpx 24rpx;
-        padding: 10rpx 20rpx;
-        background-color: #CADCEF;
+        margin: 16rpx;
+        padding: 12rpx 24rpx;
+        background-color: #D8D8D8;
         border-radius: 8rpx;
 
-        font-size: 34rpx;
-        font-weight: bold;
+        font-size: 32rpx;
+      }
+      .selected {
+        background-color: #CADCEF;
       }
     }
 
@@ -227,6 +284,271 @@ van-dialog {
       border-radius: 8rpx;
     }
   }
+  .result-config {
+    padding: 36rpx 0 12rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .focus-title {
+      width: 70%; height: 42rpx;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
 
+      text {
+        width: 50%; height: 100%;
+        font-size: 28rpx;
+        text-align: center;
+        white-space: nowrap;
+        overflow-x: visible;
+      }
+      .tag {
+        width: 40%;
+      }
+    }
+    .focus-val {
+      width: 70%; height: 56rpx;
 
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+
+      margin: 4rpx 0;
+
+      text {
+        width: 50%;
+        color: rgba(76,127,179,1);
+        font-size: 36rpx;
+        text-align: center;
+      }
+      .focus-type {
+        width: 40%; height: 56rpx;
+        border-radius: 8rpx;
+        background-color: rgba(202,220,239,1);
+
+        font-size: 28rpx;
+        line-height: 56rpx;
+        text-align: center;
+      }
+    }
+    .focus-content {
+      width: 60%;
+      height: 96rpx;
+      border-radius: 14rpx;
+      background-color: rgba(242,242,242,1);
+      font-size: 24rpx;
+      margin: 16rpx auto 0;
+      padding: 16rpx;
+    }
+    .result-config-top{
+      position: relative;
+      display: flex;
+      flex-direction: column;
+
+      width: 80%;
+      margin-top: 32rpx;
+      padding: 24rpx 0 48rpx;
+
+      border-radius: 16px;
+      background-color: rgba(237,237,237,1);
+
+      .gold-reward {
+        height: 96rpx;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        margin: 0 32rpx 24rpx;
+
+        .coins {
+          width: 30%;
+          height: 100%;
+        }
+        text {
+          width: 60%;
+          font-size: 36rpx;
+          text-align: center;
+        }
+      }
+
+      .upgrade {
+        height: 56rpx;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        margin: 0 32rpx;
+
+        .level {
+          width: 30%;
+          height: 100%;
+          border-radius: 28rpx;
+          background-color: rgba(216,216,216,1);
+          text-align: center;
+          font-size: 28rpx;
+          line-height: 56rpx;
+        }
+        .experience {
+          position: relative;
+          width: 60%;
+          height: 42rpx;
+          border-radius: 8px;
+          background-color: rgba(255,255,255,1);
+
+          .progress {
+            height: 100%;
+            border-radius: 8px;
+            background-color: rgba(179,179,179,1);
+          }
+          .add {
+            position: absolute;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+
+            font-size: 32rpx;
+            line-height: 42rpx;
+            text-align: center;
+          }
+          .tips {
+            position: absolute;
+            width: 100%; height: 32rpx;
+            left: 0; top: 100%;
+
+            margin-top: 4rpx;
+            font-size: 22rpx;
+            text-align: right;
+          }
+        }
+      }
+    }
+
+    .result-btn {
+      background-color: #4C7FB3;
+      color: white;
+      padding: 16rpx 140rpx;
+      margin: 32rpx;
+      border-radius: 8rpx;
+    }
+  }
+}
+
+.focus-bottom{
+  position: fixed;
+  left: 0; bottom: 5vh;
+  width: 100%;
+
+  .weather-status {
+    animation: 1.5s linear 0.5s move-in both;
+
+    display: flex;
+    //flex-direction: column;
+    //justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+
+    width: 312rpx; height: 72rpx;
+
+    border-radius: 16rpx;
+    background-color: rgba(0,0,0,0.19);
+
+    margin: 0 auto;
+    padding: 0 16rpx;
+
+    .weather { height: 56rpx; }
+  }
+  .bottom-info {
+    animation: 1s linear 0s move-in;
+    position: relative;
+    width: 100%;
+    height: 128rpx;
+    margin-top: 92rpx;
+    display: flex;
+    flex-direction: row;
+
+    .player-info {
+      position: absolute;
+
+      left: 24rpx;
+      width: 160rpx; height: fit-content;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .avatar {
+        width: 80rpx; height: 80rpx;
+        margin: 0 0 8rpx;
+        border-radius: 50%;
+        border: #F8D1DB solid 2px;
+      }
+      .player-name {
+        width: 100%; height: 32rpx;
+
+        color: white;
+        font-size: 24rpx;
+        text-align: center;
+
+        overflow: hidden; // 隐藏文字
+        white-space: nowrap; // 不换行
+        text-overflow: ellipsis;// 显示...
+      }
+    }
+    .slogan {
+      position: absolute;
+
+      left: 192rpx; right: 32rpx;
+      height: 80rpx;
+
+      border-radius: 14rpx;
+      background-color: rgba(0,0,0,0.13);
+
+      color: white;
+      font-size: 24rpx;
+      text-align: left;
+
+      padding: 16rpx 32rpx;
+    }
+  }
+  .room-status{
+    animation: 2s linear 0s move-in;
+    position: absolute;
+    left: 74vw;
+    bottom: 25vh;
+    width: 30vw;
+    font-size: 3vw;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.remind{
+  position: fixed;
+  width: 50%;
+  left: 25%;
+  bottom: 30%;
+  height: 12vh;
+  border-radius: 20px;
+  background-color: rgba(255,255,255,0.89);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  .remind-text1{
+    font-size: 28rpx;
+    padding-top: 2.2vh;
+  }
+  .remind-text2{
+    font-size: 28rpx;
+    padding-top: 1vh;
+  }
+  .remind-text3{
+    font-size: 21rpx;
+    padding-top: 2vh;
+  }
 }

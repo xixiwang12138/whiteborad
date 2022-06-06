@@ -1,0 +1,79 @@
+
+.start-config {
+  border-radius: 64rpx;
+  background-color: white;
+  margin: auto auto;
+  display: flex;
+  flex-direction: column;
+  //justify-content: center;
+  align-items: center;
+  z-index: 2;
+
+  .start-config-top {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .top-img {
+      height: 80rpx;
+      margin: 32rpx 32rpx;
+    }
+  }
+
+  .clock-img { width: 270rpx; }
+
+  van-slider {
+    width: 70%;
+    margin: 42rpx 0;
+  }
+
+  .time {
+    margin-bottom: 40rpx;
+
+    text {
+      color: #4895FF;
+      font-size: 35rpx;
+    }
+  }
+
+  .content {
+    height: fit-content;
+    margin-bottom: 40rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .desc { font-size: 32rpx; }
+    .btn {
+      margin-left: 48rpx;
+      padding: 10rpx 20rpx;
+      background-color: #CADCEF;
+
+      border-radius: 8rpx;
+    }
+  }
+
+  .mode-set {
+    width: 75%;
+    margin-bottom: 21rpx;
+
+    display: flex;
+    justify-content: space-between;
+
+    .mode {
+      background-color: #D8D8D8;
+      padding: 20rpx 42rpx;
+      font-size: 30rpx;
+      border-radius: 16rpx;
+    }
+    .selected { background-color: #C0A0C7; }
+  }
+  .text { font-size: 27rpx; }
+  .start-btn {
+    background-color: #4C7FB3;
+    color: white;
+    padding: 16rpx 110rpx;
+    margin: 32rpx 32rpx;
+    border-radius: 8rpx;
+  }
+}

@@ -10,11 +10,16 @@
     width: 100rpx;
   }
   .name {
-    width: 208rpx;
+    width: fit-content;
+    min-width: 128rpx;
+    max-width: 192rpx;
     height: 40rpx;
     line-height: 40rpx;
 
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     border: 1px solid gray;
     border-left: none;
@@ -22,5 +27,7 @@
     border-bottom-right-radius: 20rpx;
 
     font-size: 24rpx;
+
+    padding: 0 24rpx;
   }
 }

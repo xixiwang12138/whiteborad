@@ -1,0 +1,24 @@
+<view class="start-config">
+	<view class="start-config-top">
+		<image class="top-img" src="/assets/main/desc.png" mode="heightFix" />
+		<image class="top-img" src="/assets/main/close.png" mode="heightFix" bindtap="onClickHide" data-window="Start" />
+	</view>
+	<image class="clock-img" src="/assets/main/clock.png" mode="widthFix" />
+	<van-slider value="{{focus.duration}}" min="{{room.minDuration}}" max="{{room.maxDuration}}" bind:drag="onDragTime" />
+	<view class="time">
+		专注时长
+		<text>{{focus.duration}}</text>
+		/min
+	</view>
+	<view class="content">
+		<view class="desc">专注内容</view>
+		<view class="btn" bindtap="onClickShow" data-window="Tags">{{focusTags[focus.tagIdx]}}</view>
+	</view>
+	<view class="mode-set">
+		<view class="mode {{focus.mode == 0 ? 'selected' : ''}}" bind:tap="onModeTab" data-index="{{0}}">基础模式</view>
+		<view class="mode {{focus.mode == 1 ? 'selected' : ''}}" bind:tap="onModeTab" data-index="{{1}}">反盖模式</view>
+	</view>
+	<view class="text">预计经验+{{focus.expectExpReward}} 金币+{{focus.expectGoldReward}}</view>
+	<!--    <view class="text">超时后可以继续获得奖励哦～</view>-->
+	<view class="start-btn" bind:tap="onSubmit">开始专注</view>
+</view>

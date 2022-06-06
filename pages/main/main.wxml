@@ -13,37 +13,39 @@
       </view>
       <text class="rest-time">{{runtimeFocus.restTime}}</text>
     </view>
-    <image wx:if="{{!runtimeFocus}}" class="toShop" src="../../assets/main/shop.png" mode="aspectFit" bind:tap="onShopTap" />
-    <!-- <image wx:if="{{!runtimeFocus}}" class="toSetting"
+    <image wx:if="{{!runtimeFocus}}" class="shop-btn" src="../../assets/main/shop.png" mode="aspectFit" bind:tap="onShopTap" />
+    <!-- <image wx:if="{{!runtimeFocus}}" class="setting-btn"
            src="../../assets/main/setting.png" mode="aspectFit"
            bind:tap="onClickShow" data-window="Room"/> -->
-    <view wx:if="{{!runtimeFocus}}" class="focus-btn" bindtap="onClickShow" data-window="Start">
+    <view wx:if="{{!runtimeFocus}}" class="focus-btn"
+          bind:tap="onClickShow" data-window="Start">
       <view class="text">专注</view>
     </view>
   </view>
 
   <view class="focus-bottom" wx:if="{{runtimeFocus}}">
-    <view class="weather-status">
-      <image src="../../assets/main/thunder.png" class="weather" mode="heightFix" />
-      <image src="../../assets/main/thunder.png" class="weather" mode="heightFix" />
-      <image src="../../assets/main/rainy.png" class="weather" mode="heightFix" />
-      <image src="../../assets/main/rainy.png" class="weather" mode="heightFix" />
-    </view>
+<!--    <view class="weather-status">-->
+<!--      <image src="../../assets/main/thunder.png" class="weather" mode="heightFix" />-->
+<!--      <image src="../../assets/main/thunder.png" class="weather" mode="heightFix" />-->
+<!--      <image src="../../assets/main/rainy.png" class="weather" mode="heightFix" />-->
+<!--      <image src="../../assets/main/rainy.png" class="weather" mode="heightFix" />-->
+<!--    </view>-->
     <view class="bottom-info">
       <view class="player-info">
         <image class="avatar" src="{{player.avatarUrl}}"></image>
         <text class="player-name">{{player.name}}</text>
       </view>
-      <view class="slogan">好好学习加油买房！</view>
-    </view>
-    <view class="room-status">
-      <!--      <text class="status-text">3人正在专注中</text>-->
-      <!--      <text class="status-text">小黑已开始专注</text>-->
-      <!--      <text class="status-text">小黑已结束专注</text>-->
-      <!--      <text class="status-text">小黑已离开房间</text>-->
+      <view class="slogan">{{player.slogan}}</view>
     </view>
   </view>
-
+  
+  <view class="room-status">
+    <!--      <text class="status-text">3人正在专注中</text>-->
+    <!--      <text class="status-text">小黑已开始专注</text>-->
+    <!--      <text class="status-text">小黑已结束专注</text>-->
+    <!--      <text class="status-text">小黑已离开房间</text>-->
+  </view>
+  
   <view wx:if="{{runtimeFocus && focus.mode==1}}">
     <view class="remind" wx:if="{{!isDown && runtimeFocus.invalidCount <= 1}}">
       <text class="remind-text1">准备好了吗？</text>

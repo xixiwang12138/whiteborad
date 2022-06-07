@@ -1,5 +1,17 @@
 
+.container{
+  position: absolute;
+  left: 0; right: 0;
+  width: 100vw;
+  height: 100vh;
+  //background:-webkit-linear-gradient(top,#C7E1FA,#4F8DCC);
+  z-index: -100;
+}
+
 .content {
+
+  background-color: grey;
+
   .back-button {
     position: fixed;
     left: 32rpx; top: 108rpx;
@@ -17,18 +29,12 @@
       width: 296rpx; height: 80rpx;
       margin: 12rpx auto;
 
+      font-size: 32rpx;
+      line-height: 80rpx;
       text-align: center;
 
       background-color: white;
       border-radius: 32rpx;
-
-      .text {
-        width: fit-content;
-        height: 100%;
-        font-size: 32rpx;
-        line-height: 80rpx;
-        margin: 12rpx auto;
-      }
     }
     .rest-time {
       width: fit-content;
@@ -37,7 +43,7 @@
     }
   }
   .room-info.focusing {
-    margin-top: 12%;
+    margin-top: 4%;
   }
 
   //.room-name {

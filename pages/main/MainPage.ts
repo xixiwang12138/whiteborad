@@ -186,9 +186,6 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     wx.onAccelerometerChange(res =>
       this.setData({ isDown: res.z >= AccThreshold })
     );
-    wx.enableAlertBeforeUnload({
-      message: "退出将无法完成本次专注，您确定要退出吗？"
-    });
   }
 
   // endregion
@@ -408,6 +405,9 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
       focus, runtimeFocus: RuntimeFocus.create(focus),
       isShowStartWindow: false
     })
+    wx.enableAlertBeforeUnload({
+      message: "退出将无法完成本次专注，您确定要退出吗？"
+    });
   }
 
   @pageFunc
@@ -432,6 +432,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   }
 
   private async onSuccess() {
+    wx.disableAlertBeforeUnload();
     const baseExp = this.playerPage.player.exp;
     const focus = await focusMgr().endFocus(
       this.data.runtimeFocus);
@@ -444,6 +445,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   }
 
   private async onFailed(reason = "专注失败") {
+    wx.disableAlertBeforeUnload();
     const focus = await focusMgr().cancelFocus("专注失败");
     await this.setData({ focus, runtimeFocus: null })
   }

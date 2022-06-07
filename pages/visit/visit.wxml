@@ -2,7 +2,7 @@
 <canvas type='webgl' id="main-canvas"></canvas>
 
 <view class="content">
-  <image class="back-button" src="../../assets/shop/back.png" mode="heightFix" bind:tap="back"></image>
+  <image wx:if="{{!runtimeFocus}}" class="back-button" src="../../assets/shop/back.png" mode="heightFix" bind:tap="back"/>
   <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
 
   <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">

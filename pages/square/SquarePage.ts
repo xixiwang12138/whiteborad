@@ -18,8 +18,6 @@ class Data extends BasePageData {
 	queryText: string = "";
 }
 
-const PageCount = 12;
-
 @page("square", "广场")
 export class SquarePage extends BasePage<Data> {
 
@@ -29,19 +27,21 @@ export class SquarePage extends BasePage<Data> {
 	 * 部分页
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
-	public queryPage: QueryPage = new QueryPage(
-		this.loadRooms.bind(this)
+	public queryPage: QueryPage = new QueryPage<RoomInfo>(
+		(p) => this.loadRooms(p), "rooms"
 	)
 	public roomPage: RoomPage = new RoomPage();
 
-	private offset:number = 0;
+	onShow() {
+		super.onShow();
+		wx.pageScrollTo({
+			scrollTop: 0
+		})
+	}
 
 	public async onReady() {
 		super.onReady();
 		await this.onLogin();
-		wx.pageScrollTo({
-			scrollTop: 0
-		})
 	}
 
 	@waitForLogin
@@ -64,14 +64,23 @@ export class SquarePage extends BasePage<Data> {
 		// queryParams.filter.openid = [
 		// 	"_.neq", this.playerPage.openid
 		// ];
-		const roomsRes = await roomMgr()
-			.getRooms(queryParams.offset, queryParams.count,
-				this.data.queryText, queryParams.filter);
-		let rooms: RoomInfo[] = roomsRes.rooms;
-		let curRooms: RoomInfo[] = this.data.rooms;
-		rooms = rooms.filter(r => r.openid != this.playerPage.openid);
-		rooms = curRooms.concat(rooms);
-
-		await this.setData({ rooms });
+		return (await roomMgr().getRooms(
+			queryParams.offset, queryParams.count,
+			this.data.queryText, queryParams.filter)).rooms;
 	}
+
+	// private async loadRooms(queryParams: QueryParams) {
+	// 	queryParams.filter.openid = [
+	// 		"_.neq", this.playerPage.openid
+	// 	];
+	// 	const roomsRes = await roomMgr()
+	// 		.getRooms(queryParams.offset, queryParams.count,
+	// 			this.data.queryText, queryParams.filter);
+	// 	let rooms: RoomInfo[] = roomsRes.rooms;
+	// 	let curRooms: RoomInfo[] = this.data.rooms;
+	// 	rooms = rooms.filter(r => r.openid != this.playerPage.openid);
+	// 	rooms = curRooms.concat(rooms);
+	//
+	// 	await this.setData({ rooms });
+	// }
 }

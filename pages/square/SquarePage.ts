@@ -34,7 +34,7 @@ export class SquarePage extends BasePage<Data> {
 
 	public onShow() {
 		super.onShow();
-		wx.pageScrollTo({ scrollTop: 0 })
+		// wx.pageScrollTo({ scrollTop: 0 })
 	}
 
 	public async onLoad(e) {

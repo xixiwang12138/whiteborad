@@ -12,6 +12,7 @@ import {RoomSkin, roomSkinRepo} from "../../modules/room/data/RoomSkin";
 import {Motion, motionRepo} from "../../modules/room/data/Motion";
 import {PlayerRoom} from "../../modules/room/data/PlayerRoom";
 import {handleError} from "../../modules/core/managers/ErrorManager";
+import {alertMgr} from "../../modules/core/managers/AlertManager";
 
 const RoomPosition = [0.5, 0.3];
 const RoomScale = 0.9;
@@ -71,14 +72,9 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 		await this.setItem(room.clone());
 	}
 
-	// region 事件
+	// region 操作
 
-	/**
-	 * 选择一个皮肤
-	 */
-	@pageFunc
-	public async onSkinTap(e) {
-		const skinId = Number(e.currentTarget.dataset.id);
+	public async selectSkin(skinId) {
 		const skin = roomSkinRepo().getById(skinId);
 		if (!skin.isUnlock) return; // 未解锁，无法预览
 
@@ -89,6 +85,18 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 		if (skin.isBought) // 已经购买了，直接切换
 			await roomMgr().switchSkin(skinId);
 		await this.refresh();
+	}
+
+	// endregion
+
+	// region 事件
+
+	/**
+	 * 选择一个皮肤
+	 */
+	@pageFunc
+	public async onSkinTap(e) {
+		await this.selectSkin(Number(e.currentTarget.dataset.id))
 	}
 
 	/**
@@ -111,6 +119,10 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 		await roomMgr().switchSkin(skinId);
 		await this.playerPage.resetPlayer();
 		await this.refresh();
+		await this.setData({
+			showBuyButton: false
+		});
+		await alertMgr().showToast("购买成功", "success");
 	}
 
 	// endregion

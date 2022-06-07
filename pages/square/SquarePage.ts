@@ -8,12 +8,14 @@ import {RoomPage} from "../common/partPages/RoomPage";
 import {field} from "../../modules/core/data/DataLoader";
 import {roomMgr} from "../../modules/room/managers/RoomManager";
 import {Room, RoomInfo} from "../../modules/room/data/Room";
+import {QueryPage, QueryParams} from "../common/partPages/QueryPage";
 
 class Data extends BasePageData {
 
 	@field([Object])
-	rooms: RoomInfo[];
-	isGetAllRooms:boolean = false;
+	rooms: RoomInfo[] = [];
+	@field(String)
+	queryText: string = "";
 }
 
 const PageCount = 12;
@@ -27,51 +29,49 @@ export class SquarePage extends BasePage<Data> {
 	 * 部分页
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
+	public queryPage: QueryPage = new QueryPage(
+		this.loadRooms.bind(this)
+	)
 	public roomPage: RoomPage = new RoomPage();
 
 	private offset:number = 0;
 
-	async onReady() {
+	public async onReady() {
 		super.onReady();
 		await this.onLogin();
+		wx.pageScrollTo({
+			scrollTop: 0
+		})
 	}
 
 	@waitForLogin
-	async onLogin() {
+	private async onLogin() {
 		// await this.roomPage.loadSelfRoom();
 		await this.refreshRooms();
 	}
 
 	@pageFunc
-	onRoomTap(e){
+	private onRoomTap(e){
 		const roomId: string = e.currentTarget.dataset.id;
 		pageMgr().push(VisitPage, { roomId })
 	}
 
-	async refreshRooms(){
-		this.offset = 0;
-		await this.setData({ rooms: [] })
-		await this.getRoomsList();
+	private async refreshRooms(){
+		this.queryPage.resetPage();
+		await this.queryPage.refresh();
 	}
-
-	async getRoomsList(){
-		if (this.data.isGetAllRooms) return;
-
+	private async loadRooms(queryParams: QueryParams) {
+		// queryParams.filter.openid = [
+		// 	"_.neq", this.playerPage.openid
+		// ];
 		const roomsRes = await roomMgr()
-			.getRooms(this.offset, PageCount);
+			.getRooms(queryParams.offset, queryParams.count,
+				this.data.queryText, queryParams.filter);
 		let rooms: RoomInfo[] = roomsRes.rooms;
-
-		// 判断是否到达房间列表底部
-		const isGetAllRooms = rooms.length < PageCount;
-		this.offset += rooms.length;
-
 		let curRooms: RoomInfo[] = this.data.rooms;
-		// 自己的房间不能出现 TODO: 后端实现
 		rooms = rooms.filter(r => r.openid != this.playerPage.openid);
 		rooms = curRooms.concat(rooms);
 
-		await this.setData({
-			rooms, isGetAllRooms
-		});
+		await this.setData({ rooms });
 	}
 }

@@ -1,7 +1,11 @@
 import {PartialPage} from "../core/BasePage";
 import {pageFunc} from "../PageBuilder";
 
-const DefaultCount = 99;
+const DefaultCount = 8;
+
+export type QueryParams = {
+	offset: number, count: number, filter: any
+}
 
 export class QueryPage extends PartialPage {
 
@@ -33,7 +37,7 @@ export class QueryPage extends PartialPage {
 	/**
 	 * 查询参数
 	 */
-	public queryParams = {
+	public queryParams: QueryParams = {
 		offset: 0, count: 0, filter: {}
 	}
 

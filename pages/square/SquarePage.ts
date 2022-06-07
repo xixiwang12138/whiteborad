@@ -32,41 +32,31 @@ export class SquarePage extends BasePage<Data> {
 	)
 	public roomPage: RoomPage = new RoomPage();
 
-	onShow() {
+	public onShow() {
 		super.onShow();
-		wx.pageScrollTo({
-			scrollTop: 0
-		})
+		wx.pageScrollTo({ scrollTop: 0 })
 	}
 
 	public async onReady() {
 		super.onReady();
-		await this.onLogin();
+		this.queryPage.resetPage();
+		await this.queryPage.refresh();
 	}
 
 	@waitForLogin
-	private async onLogin() {
-		// await this.roomPage.loadSelfRoom();
-		await this.refreshRooms();
+	private async loadRooms(queryParams: QueryParams) {
+		queryParams.filter.openid = {
+			"$ne": this.playerPage.openid
+		};
+		return (await roomMgr().getRooms(
+			queryParams.offset, queryParams.count,
+			this.data.queryText, queryParams.filter)).rooms;
 	}
 
 	@pageFunc
 	private onRoomTap(e){
 		const roomId: string = e.currentTarget.dataset.id;
 		pageMgr().push(VisitPage, { roomId })
-	}
-
-	private async refreshRooms(){
-		this.queryPage.resetPage();
-		await this.queryPage.refresh();
-	}
-	private async loadRooms(queryParams: QueryParams) {
-		// queryParams.filter.openid = [
-		// 	"_.neq", this.playerPage.openid
-		// ];
-		return (await roomMgr().getRooms(
-			queryParams.offset, queryParams.count,
-			this.data.queryText, queryParams.filter)).rooms;
 	}
 
 	// private async loadRooms(queryParams: QueryParams) {

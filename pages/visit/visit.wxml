@@ -34,7 +34,7 @@
         <image class="avatar" src="{{item.player.avatarUrl}}"></image>
         <text class="player-name">{{item.player.name}}</text>
       </view>
-      <view class="slogan">{{item.notice}}</view>
+      <view class="slogan">{{item.player.slogan}}</view>
     </view>
   </view>
   

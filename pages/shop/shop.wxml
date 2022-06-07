@@ -1,7 +1,8 @@
 <view class="page">
   <canvas type='webgl' id="main-canvas"></canvas>
   <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}"/>
-  <image class="back-button" src="../../assets/shop/back.png" mode="heightFix" bind:tap="back"></image>
+  <image class="back-button" src="../../assets/common/back.png"
+         mode="heightFix" bind:tap="back"/>
   <view class="confirm-button" wx:if="{{showBuyButton}}"
         bind:tap="onBuyTap">确认购买并使用</view>
   <view class="control-panel">
@@ -17,7 +18,7 @@
             <image class="room-img" src="{{item.thumbnailFileId}}" mode="aspectFit"></image>
             <view class="bottom">
               <view wx:if="{{item.isUnlock && !item.isBought}}" class="price-box">
-                <image src="../../images/coins.png"></image>
+                <image src="/assets/common/gold.png"></image>
                 <text class="price">{{item.price}}</text>
               </view>
               <view wx:if="{{item.isUsing}}" class="using-flag">使用中</view>

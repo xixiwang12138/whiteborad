@@ -1,6 +1,6 @@
 
 <view class="gold-level">
-  <image src="../../images/coins.png"/>
+  <image src="/assets/common/gold.png"/>
   <text class="gold">{{gold}}</text>
   <text class="level">{{level}}级</text>
   <view class="exp-background">

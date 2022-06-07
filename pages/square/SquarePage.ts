@@ -28,7 +28,7 @@ export class SquarePage extends BasePage<Data> {
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
 	public queryPage: QueryPage = new QueryPage<RoomInfo>(
-		(p) => this.loadRooms(p), "rooms"
+		this.loadRooms.bind(this), "rooms"
 	)
 	public roomPage: RoomPage = new RoomPage();
 
@@ -37,8 +37,8 @@ export class SquarePage extends BasePage<Data> {
 		wx.pageScrollTo({ scrollTop: 0 })
 	}
 
-	public async onReady() {
-		super.onReady();
+	public async onLoad(e) {
+		await super.onLoad(e);
 		this.queryPage.resetPage();
 		await this.queryPage.refresh();
 	}
@@ -46,7 +46,7 @@ export class SquarePage extends BasePage<Data> {
 	@waitForLogin
 	private async loadRooms(queryParams: QueryParams) {
 		queryParams.filter.openid = {
-			"$ne": this.playerPage.openid
+			"$ne": playerMgr().openid
 		};
 		return (await roomMgr().getRooms(
 			queryParams.offset, queryParams.count,

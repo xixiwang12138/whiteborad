@@ -137,7 +137,7 @@
     <textarea class="focus-content" lines="1" placeholder="专注内容备注…" placeholder-style="font-size: 24rpx" value="{{focus.note}}" bind:input="onNoteInput" />
     <view class="result-config-top">
       <view class="gold-reward">
-        <image class="coins" src="/assets/square/gold.png" mode="aspectFit" />
+        <image class="coins" src="/assets/common/gold.png" mode="aspectFit" />
         <text>+{{resAni.gold}}</text>
       </view>
       <view class="upgrade">

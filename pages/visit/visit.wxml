@@ -2,7 +2,9 @@
 <canvas type='webgl' id="main-canvas"></canvas>
 
 <view class="content">
-  <image wx:if="{{!runtimeFocus}}" class="back-button" src="../../assets/shop/back.png" mode="heightFix" bind:tap="back"/>
+  <image wx:if="{{!runtimeFocus}}" class="back-button"
+         src="../../assets/common/back.png"
+         mode="heightFix" bind:tap="back"/>
   <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
 
   <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">
@@ -104,7 +106,7 @@
     <textarea class="focus-content" lines="1" placeholder="专注内容备注…" placeholder-style="font-size: 24rpx" value="{{focus.note}}" bind:input="onNoteInput" />
     <view class="result-config-top">
       <view class="gold-reward">
-        <image class="coins" src="/assets/square/gold.png" mode="aspectFit" />
+        <image class="coins" src="/assets/common/gold.png" mode="aspectFit" />
         <text>+{{resAni.gold}}</text>
       </view>
       <view class="upgrade">

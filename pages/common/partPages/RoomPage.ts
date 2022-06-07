@@ -195,8 +195,8 @@ export class RoomDrawingPage extends CanvasPage {
 			const sprite = await this.createSprite(animation.pictureUrl());
 			// const Rect = sprite.texture.frame.constructor sprite Constructor<Rectangle>;
 			const row = Math.ceil(animation.count / AniColCount);
-			const width = sprite.texture.width / AniColCount,
-				height = sprite.texture.height / row;
+			const width = sprite.texture.baseTexture.width / AniColCount;
+			const height = sprite.texture.baseTexture.height / row;
 
 			sprite.anchor.x = animation.anchor[0];
 			sprite.anchor.y = animation.anchor[1];

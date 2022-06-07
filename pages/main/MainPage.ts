@@ -13,7 +13,7 @@ import {pageMgr} from "../../modules/core/managers/PageManager";
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {ShopPage} from "../shop/ShopPage";
 import {blockLoading} from "../../modules/core/managers/LoadingManager";
-import {RoomMessage, roomMgr} from "../../modules/room/managers/RoomManager";
+import {RoomMessage, roomMgr,Messages} from "../../modules/room/managers/RoomManager";
 import SystemInfo = WechatMiniprogram.SystemInfo;
 import CustomEvent = WechatMiniprogram.CustomEvent;
 import {RoomDrawingPage, RoomPage} from "../common/partPages/RoomPage";
@@ -99,7 +99,12 @@ export class MainPageData extends BasePageData {
   @field
   isDown: boolean = false
 
+  @field
+  focusing:number;
+  @field(Array)
+  messages:Messages[]=[];
 }
+
 
 export const RoomType = "room";
 
@@ -269,8 +274,47 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   // region 事件
 
-  private onRoomMessage(data: RoomMessage) {
+  private async onRoomMessage(data: RoomMessage) {
     console.log("onRoomMessage", data);
+    const messages=this.data.messages
+    this.setData({
+      focusing:!(data.count)?0:(data.count!=0?data.count:(data.type=="focusing"?1:0))
+    })
+    console.log("focusing", this.data.focusing);
+    switch (data.type){
+      case "enter":
+        var obj1={
+          name:data.player.name,
+          status:"进入房间"
+        }
+        messages.unshift(obj1);
+        this.setData({messages})
+        break;
+      case "focusStart":
+        var obj2={
+          name:data.player.name,
+          status:"已开始专注"
+        }
+        messages.unshift(obj2);
+        this.setData({messages})
+        break;
+      case "focusEnd":
+        var obj3={
+          name:data.player.name,
+          status:"已结束专注"
+        }
+        messages.unshift(obj3);
+        this.setData({messages})
+        break;
+      case "leave":
+        var obj4={
+          name:data.player.name,
+          status:"已离开房间"
+        }
+        messages.unshift(obj4);
+        this.setData({messages})
+        break;
+    }
   }
 
   // region 窗口事件

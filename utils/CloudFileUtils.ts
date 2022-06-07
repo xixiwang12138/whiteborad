@@ -15,7 +15,7 @@ export type File = {
 	type: string
 }
 
-const BasePath = "cloud://env-8gbpg0wjca0c43ce.656e-env-8gbpg0wjca0c43ce-1255510304/homi/assets";
+const BasePath = "cloud://homi-2gy4vrcg19947ac0.686f-homi-2gy4vrcg19947ac0-1312366958";
 
 export class CloudFileUtils {
 

@@ -64,7 +64,11 @@
 
 <view wx:if="{{runtimeFocus}}" class="cancel-button" bind:tap="onCancelTap">取消专注</view>
 
-<van-dialog use-slot show="{{ isShowStartWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Start">
+<van-dialog use-slot show="{{ isShowStartWindow }}"
+            show-confirm-button="{{false}}"
+            bind:close="onClickHide"
+            close-on-click-overlay
+            width="80%" data-window="Start">
   <view class="start-config">
     <view class="start-config-top">
       <image class="top-img" src="/assets/main/desc.png" mode="heightFix" />
@@ -90,7 +94,11 @@
     <view class="start-btn" bind:tap="onSubmit">开始专注</view>
   </view>
 </van-dialog>
-<van-dialog use-slot show="{{ isShowRoomWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Room">
+<van-dialog use-slot show="{{ isShowRoomWindow }}"
+            show-confirm-button="{{false}}"
+            bind:close="onClickHide"
+            close-on-click-overlay
+            width="80%" data-window="Room">
   <view class="room-config">
     <view class="color-block">
       <view class="color-topic">主题色</view>
@@ -110,7 +118,11 @@
     </view>
   </view>
 </van-dialog>
-<van-dialog use-slot show="{{ isShowResultWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Result">
+<van-dialog use-slot show="{{ isShowResultWindow }}"
+            show-confirm-button="{{false}}"
+            bind:close="onClickHide"
+            close-on-click-overlay
+            width="80%" data-window="Result">
   <view class="result-config">
     <view class="focus-title">
       <text lines="1">本次专注时长</text>

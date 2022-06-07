@@ -42,7 +42,7 @@ class PageManager extends BaseManager {
 	 */
 	public update() {
 		super.update();
-		this.curPage.update();
+		this.curPage?.update();
 		// this.pages.forEach(p =>
 		// 	p == this.curPage() ? p.update() : p.updateOnHidden()
 		// )

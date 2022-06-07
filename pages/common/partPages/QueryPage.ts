@@ -85,8 +85,13 @@ export class QueryPage extends PartialPage {
 	 * 触底加载
 	 */
 	@pageFunc
-	private onReachBottom() {
+	private onReachBottom(e) {
+		console.log("onReachBottom", e);
 		this.nextPage(); this.refresh();
 	}
 
+	@pageFunc
+	private onPageScroll(e) {
+		console.log("onPageScroll", e);
+	}
 }

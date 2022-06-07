@@ -5,7 +5,7 @@
     "real-tab-bar": "../../components/real-tab-bar/real-tab-bar"
   },
   "navigationStyle": "custom",
-  "onReachBottomDistance": 300,
+  "onReachBottomDistance": 50,
   "enablePullDownRefresh": true
 
 }

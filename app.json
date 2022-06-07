@@ -5,18 +5,21 @@
     "pages/square/square",
     "pages/mine/mine",
     "pages/visit/visit",
-    "pages/shop/shop"
+    "pages/shop/shop",
+    "pages/test/test"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "Weixin",
-    "navigationBarTextStyle": "black"
+    "navigationBarTextStyle": "black",
+    "onReachBottomDistance": 50
   },
   "tabBar": {
     "custom": true,
     "backgroundColor": "#ffffff",
-    "list": [{
+    "list": [
+      {
         "pagePath": "pages/main/main",
         "text": "主页",
         "iconPath": "assets/tabbar/main.png",

@@ -49,7 +49,7 @@ export class MinePage extends BasePage<Data> {
 
 	@waitForLogin
 	async onLogin() {
-		const player = this.playerPage.player;
+		const player = playerMgr().player;
 		// await this.roomPage.loadSelfRoom();
 		await this.setData({
 			info: {
@@ -64,40 +64,37 @@ export class MinePage extends BasePage<Data> {
 	// region 事件
 
 	@pageFunc
-  public onAvatarTap(){
-    this.setData({ isEdit: true }).then()
+	public onAvatarTap(){
+		this.setData({ isEdit: true }).then()
 	}
 
-  @pageFunc
-  public onClose(){
+	@pageFunc
+	public onClose(){
 		this.setData({ isEdit: false }).then()
-	 }
+	}
 
-	 @pageFunc
-	 onMaleTap() {
-		 this.setData({ "info.gender": 1 });
-	 }
+	@pageFunc
+	onMaleTap() {
+		this.setData({ "info.gender": 1 });
+	}
 
-	 @pageFunc
-	 onFemaleTap() {
-		 this.setData({ "info.gender": 2 });
-	 }
+	@pageFunc
+	onFemaleTap() {
+		this.setData({ "info.gender": 2 });
+	}
 
-	 @pageFunc
-	 @input("info.name")
-	 onNameInput() {}
+	@pageFunc
+	@input("info.name")
+	onNameInput() {}
 
-	 @pageFunc
-	 @input("info.slogan")
-	 onSloganInput() {}
+	@pageFunc
+	@input("info.slogan")
+	onSloganInput() {}
 
-	 @pageFunc
-	 public async onSubmit() {
-		const player = this.playerPage.player;
-		 await playerMgr().editInfo(this.data.info);
-		 this.setData({
-			 isEdit:false,
-		 }),
-		 this.playerPage.resetPlayer()
-	 }
+	@pageFunc
+	public async onSubmit() {
+		await playerMgr().editInfo(this.data.info);
+		await this.setData({ isEdit: false })
+		this.playerPage.resetPlayer()
+	}
 }

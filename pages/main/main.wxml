@@ -167,4 +167,6 @@
   </view>
 </van-dialog>
 
+<loading wx:if="{{isLoading}}"/>
+
 <real-tab-bar curPageIndex="0" wx:if="{{!runtimeFocus}}"></real-tab-bar>

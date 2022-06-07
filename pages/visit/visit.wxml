@@ -135,3 +135,5 @@
     <view class="selector-btn" bindtap="onClickHide" data-window="Tags">完成</view>
   </view>
 </van-dialog>
+
+<loading wx:if="{{isLoading}}"/>

@@ -70,3 +70,4 @@
 <!--  </view>-->
 </view>
 
+<loading wx:if="{{isLoading}}"/>

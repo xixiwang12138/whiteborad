@@ -7,10 +7,10 @@
   <view class="bottom-mask"
         style="background: -webkit-linear-gradient(bottom, #{{room.gradientColors[1]}}, #{{room.gradientColors[1]}}, transparent)"/>
 
-  <view class="container-top">
-    <avatar-display avatar="{{player.avatarUrl}}" name="{{player.name}}" />
-  </view>
   <view class="absoluter">
+    <view class="container-top">
+      <avatar-display avatar="{{player.avatarUrl}}" name="{{player.name}}" />
+    </view>
     <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
     <real-tab-bar curPageIndex="1"></real-tab-bar>
   </view>

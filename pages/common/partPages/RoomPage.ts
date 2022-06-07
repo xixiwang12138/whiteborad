@@ -51,7 +51,15 @@ export class RoomPage extends PartialPage<Data> {
 	}
 }
 
-export class RoomDrawingPage extends CanvasPage {
+class DrawingData extends BaseData {
+
+	@field
+	isLoading: boolean = false;
+}
+
+export class RoomDrawingPage extends CanvasPage<DrawingData> {
+
+	public data = new DrawingData();
 
 	// region 绘制数据
 
@@ -107,13 +115,19 @@ export class RoomDrawingPage extends CanvasPage {
 										position = [0.5, 0.5],
 										scale = 1) {
 		this.clear();
-		this.room = room;
+
+		this.room = room; this.scale = scale;
 		this.position = position;
-		this.scale = scale;
+
+		await this.setData({isLoading: true})
+
 		await this.waitForCanvasSetup();
 		await this.drawBackground();
 		await this.drawHouse();
+
 		this.render();
+
+		await this.setData({isLoading: false})
 	}
 
 	private async drawBackground() {

@@ -31,7 +31,7 @@
            custom-class="popup">
   <view class="popup-content">
     <image class="avatar" src="{{info.avatarUrl}}" mode="aspectFill"/>
-    <input class="name" maxlength="8" value="{{info.name}}"bind:input="onNameInput" />
+    <input class="name" maxlength="8" value="{{info.name}}" bind:input="onNameInput" />
     <view class="gender-container">
       <view class="gender-box male {{info.gender == 1 ? 'selected' : ''}}"
             bind:tap="onMaleTap">男</view>

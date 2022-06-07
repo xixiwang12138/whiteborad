@@ -1,0 +1,34 @@
+
+.loading {
+  position: fixed;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+
+  z-index: 1000;
+
+  image {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
+  }
+
+  .circle {
+    width: 191rpx;
+    animation: 3s loading infinite ease-in-out;
+  }
+  .icon {
+    width: 150rpx;
+  }
+}
+
+@keyframes loading {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+    //animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+    //animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+}

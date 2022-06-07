@@ -1,0 +1,5 @@
+
+<view class="loading">
+  <image class="circle" src="/assets/common/loading-circle.png" mode="widthFix"/>
+  <image class="icon" src="/assets/common/loading-icon.png"  mode="widthFix"/>
+</view>

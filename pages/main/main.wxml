@@ -40,15 +40,12 @@
   </view>
   
   <view class="room-status">
-         <view class="status-text">{{focusing}}人正在专注中</view>
-         <scroll-view scroll-y="{{true}}" style="height: 6vh;">
-        <view class="status-text" wx:for="{{messages}}">
+    <view class="status-text">{{focusing}}人正在专注中</view>
+    <scroll-view scroll-y="{{true}}" style="height: 6vh;">
+      <view class="status-text" wx:for="{{messages}}">
         <text>{{item.name}}{{item.status}}</text>
-        </view>
-        </scroll-view> 
-        <!-- <view class="status-text">小黑已开始专注</view>
-         <view class="status-text">小黑已结束专注</view>
-         <view class="status-text">小黑已离开房间</view> -->    
+      </view>
+    </scroll-view>
   </view>
   
   <view wx:if="{{runtimeFocus && focus.mode==1}}">

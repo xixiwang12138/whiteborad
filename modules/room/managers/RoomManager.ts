@@ -39,10 +39,6 @@ export type RoomMessage = {
   player?: PlayerBaseInfo,
   count?: number
 }
-export type Messages={
-  name?:string,
-  status?:string
-}
 
 const CloseCode = 3005;
 

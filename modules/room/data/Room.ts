@@ -86,7 +86,15 @@ export class Room extends DynamicData implements IRoomDrawable {
 	@occasion(DataOccasion.Extra)
 	public gradientColors: string[];
 
+	@field(String)
+	@occasion(DataOccasion.Extra)
+	public thumbnailFileId: string;
+
 	public refresh() {
+		const url = this.thumbnailUrl;
+		this.thumbnailFileId = url.startsWith("@") ?
+			CloudFileUtils.pathToFileId(url) : url;
+
 		this.maxDuration = this.star.maxDuration;
 		// this.backgroundStyle = `-webkit-linear-gradient(top, #${
 		// 	this.skin.backgroundColors[0]}, #${this.skin.backgroundColors[1]});`

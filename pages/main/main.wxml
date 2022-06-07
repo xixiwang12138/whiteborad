@@ -74,7 +74,7 @@
       <image class="top-img" src="/assets/main/desc.png" mode="heightFix" />
       <image class="top-img" src="/assets/main/close.png" mode="heightFix" bindtap="onClickHide" data-window="Start" />
     </view>
-    <image class="clock-img" src="/assets/main/clock.png" mode="widthFix" />
+    <image class="clock-img" src="{{item.thumbnailFileId}}" mode="widthFix" />
     <van-slider value="{{focus.duration}}" min="{{item.minDuration}}" max="{{item.maxDuration}}" bind:drag="onDragTime" />
     <view class="time">
       专注时长

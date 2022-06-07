@@ -79,14 +79,18 @@ export class Room extends DynamicData implements IRoomDrawable {
 	@field
 	@occasion(DataOccasion.Extra)
 	public maxDuration: number = 90;
-	@field
+	// @field(String)
+	// @occasion(DataOccasion.Extra)
+	// public backgroundStyle: string;
+	@field([String])
 	@occasion(DataOccasion.Extra)
-	public backgroundStyle: string;
+	public gradientColors: string[];
 
 	public refresh() {
 		this.maxDuration = this.star.maxDuration;
-		this.backgroundStyle = `-webkit-linear-gradient(top, #${
-			this.skin.backgroundColors[0]}, #${this.skin.backgroundColors[1]});`
+		// this.backgroundStyle = `-webkit-linear-gradient(top, #${
+		// 	this.skin.backgroundColors[0]}, #${this.skin.backgroundColors[1]});`
+		this.gradientColors = this.skin.backgroundColors;
 	}
 
 	// endregion

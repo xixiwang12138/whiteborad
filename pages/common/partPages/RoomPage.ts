@@ -10,6 +10,8 @@ import {pageMgr} from "../../../modules/core/managers/PageManager";
 import {MathUtils} from "../../../utils/MathUtils";
 import {Constructor} from "../../../modules/core/BaseContext";
 import {appMgr} from "../../../modules/core/managers/AppManager";
+import {waitForLogin} from "../../../modules/player/managers/PlayerManager";
+import {pageFunc} from "../PageBuilder";
 
 const TimeRate = 100;
 const AniColCount = 4;
@@ -29,8 +31,6 @@ class Data extends BaseData {
 
 	@field(Room)
 	room: Room
-	@field(String)
-	backgroundStyle: string;
 }
 
 export class RoomPage extends PartialPage<Data> {
@@ -39,6 +39,12 @@ export class RoomPage extends PartialPage<Data> {
 
 	public get room() { return this.data.room }
 
+	@pageFunc
+	protected async onShow() {
+		await this.loadSelfRoom();
+	}
+
+	@waitForLogin
 	public async loadSelfRoom() {
 		const room = await roomMgr().getSelfRoom();
 		await this.setData({room});

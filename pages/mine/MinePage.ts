@@ -50,7 +50,7 @@ export class MinePage extends BasePage<Data> {
 	@waitForLogin
 	async onLogin() {
 		const player = this.playerPage.player;
-		await this.roomPage.loadSelfRoom();
+		// await this.roomPage.loadSelfRoom();
 		await this.setData({
 			info: {
 				name: player.name,

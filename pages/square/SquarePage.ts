@@ -38,7 +38,7 @@ export class SquarePage extends BasePage<Data> {
 
 	@waitForLogin
 	async onLogin() {
-		await this.roomPage.loadSelfRoom();
+		// await this.roomPage.loadSelfRoom();
 		await this.refreshRooms();
 	}
 

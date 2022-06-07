@@ -86,7 +86,7 @@ export class PageBuilder {
 	public static runtimeBuild<T extends BasePage>(
 		res, type: Constructor<T>, test = false) {
 		const page = test ? new type() :
-			(pageMgr().curPage() || pageMgr().setFirstPage(type));
+			(pageMgr().newestPage || new type());
 
 		res.pageObject = page;
 		page.pageData = res;

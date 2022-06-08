@@ -38,8 +38,7 @@
     "useCompilerPlugins": [
       "less"
     ],
-    "ignoreUploadUnusedFiles": true,
-    "useStaticServer": true
+    "ignoreUploadUnusedFiles": true
   },
   "compileType": "miniprogram",
   "editorSetting": {
@@ -51,7 +50,7 @@
     "ignore": [],
     "include": []
   },
-  "appid": "wxd1456ddc8b073f35",
+  "appid": "wxef246ad51fd70fdd",
   "projectname": "Homi",
   "condition": {}
 }

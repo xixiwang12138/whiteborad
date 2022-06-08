@@ -8,7 +8,7 @@
   <view class="control-panel">
     <view class="tab-buttons">
       <view class="tab-button {{tab == 1 && 'selected'}}" bindtap="onSkinTab">小屋</view>
-      <view class="tab-button {{tab == 2 && 'selected'}}" bindtap="onMotionTab">其他</view>
+      <view class="tab-button {{tab == 2 && 'selected'}}" bindtap="onMotionTab">动作</view>
     </view>
     <scroll-view class="shelf" scroll-y="true">
       <view class="detail">
@@ -29,19 +29,9 @@
             </view>
           </view>
         </view>
-<!--        <view class="motion-container" wx:if="{{tab == 2}}">-->
-<!--          <block wx:for="{{motions}}">-->
-<!--            <view class="motions" style="background-color: {{item.roomStatus=='locked'?'rgba(255,255,255,0.4)':'rgba(255,255,255,1)'}};">-->
-<!--              <image class="roomImg" src="../../images/room1.jpg" mode="aspectFit"></image>-->
-<!--              <view wx:if="{{item.roomStatus=='purchasable'||item.roomStatus=='locked'}}" class="price-box">-->
-<!--                <image src="../../images/coins.png" style="width: 25rpx;height: 25rpx;"></image>-->
-<!--                <text class="price">{{item.price}}</text>-->
-<!--              </view>-->
-<!--              <view wx:if="{{item.roomStatus=='owned'}}" class="tap2">已拥有</view>-->
-<!--              <text wx:if="{{item.roomStatus=='locked'}}" class="unlock">{{item.unlock}}</text>-->
-<!--            </view>-->
-<!--          </block>-->
-<!--        </view>-->
+        <view class="motion-container" wx:if="{{tab == 2}}">
+          <van-empty description="施工中，敬请期待哦~" />
+        </view>
       </view>
     </scroll-view>
   

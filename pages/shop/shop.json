@@ -1,7 +1,8 @@
 {
   "usingComponents": {
     "gold-level-display": "../../components/gold-level-display/gold-level-display",
-    "loading": "../../components/loading/loading"
+    "loading": "../../components/loading/loading",
+    "van-empty": "@vant/weapp/empty/index"
   },
   "navigationStyle": "custom"
 }

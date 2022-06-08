@@ -16,8 +16,8 @@ import {pageFunc} from "../PageBuilder";
 const TimeRate = 100;
 const AniColCount = 4;
 const MotionDuration = 60;
-const DefaultHouseScale = 0.6;
-const FocusingHouseScale = 0.8;
+const DefaultHouseScale = 0.5;
+const FocusingHouseScale = 0.75;
 const DebugAlpha = 0.33;
 
 type RuntimeAnimation = {

@@ -8,6 +8,7 @@
   <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
 
   <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">
+    <view class="room-display-id">房间ID：{{item.displayId}}</view>
     <view class="room-name">{{item.name}}</view>
     <text wx:if="{{runtimeFocus}}" class="rest-time">{{runtimeFocus.restTime}}</text>
   </view>

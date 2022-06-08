@@ -173,7 +173,7 @@
             show-confirm-button="{{false}}"
             bind:close="onClickHide"
             close-on-click-overlay
-            width="60%" data-window="Tips">
+            width="65%" data-window="Tips">
   <view class="tip-content">
     <view class="title">说明</view>
     <view class="line">基础模式：专注期间无任何限制，但如果频繁操作手机有可能导致专注中断</view>

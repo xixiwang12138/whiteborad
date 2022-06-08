@@ -22,7 +22,7 @@ import {RewardGroup} from "../../modules/player/data/Reward";
 import {BaseData} from "../../modules/core/data/BaseData";
 import {LevelCalculator} from "../../modules/player/utils/LevelCalculator";
 
-type WindowType = "Start" | "Room" | "Tags";
+// type WindowType = "Start" | "Room" | "Tags";
 
 const AccThreshold = 0.3;
 const DebugTimeRate = 1000;
@@ -91,6 +91,8 @@ export class MainPageData extends BasePageData {
   isShowTagsWindow: boolean = false
   @field
   isShowResultWindow: boolean = false
+  @field
+  isShowTipsWindow: boolean = false
 
   @field
   focusTags: string[] = FocusTags

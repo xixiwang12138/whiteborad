@@ -340,6 +340,18 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     // }
   }
 
+  //解决中文拼音输入受限问题
+  @pageFunc
+  private chan (e) {
+    let value = e.detail.value
+    if (value.length < 7) return
+    // 在长度超过十位时，对字符串进行截取，并重新赋值
+    value = value.substr(0, 6)
+    this.setData({
+      "item.name":value
+    })
+  }
+
   // region 窗口事件
 
   @pageFunc

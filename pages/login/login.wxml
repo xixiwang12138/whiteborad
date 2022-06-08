@@ -35,7 +35,7 @@
     <view class="slogan-container">
       <textarea class="slogan" placeholder="输入你的Slogan吧！"
                 adjust-position="{{false}}" focus="{{false}}"
-                maxlength="20" cursor-spacing="10"
+                maxlength="40" cursor-spacing="10"
                 value="{{info.slogan}}" bind:input="onSloganInput"/>
     </view>
     <view class="submit" bind:tap="onSubmit">完成</view>

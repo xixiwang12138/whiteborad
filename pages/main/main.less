@@ -27,7 +27,7 @@
     top: 80rpx;
   }
   .room-info {
-    margin-top: 15%;
+    margin-top: 12.5%;
     width: 100%;
     transition: all 1s ease 0s;
 
@@ -40,9 +40,13 @@
 
       transition: all 1.5s ease 0s;
     }
+    .room-display-id {
+      font-size: 20rpx;
+      margin-top: 12rpx;
+    }
     .room-name {
       width: 296rpx; height: 80rpx;
-      margin: 12rpx auto;
+      margin: 4rpx auto;
 
       text-align: center;
 
@@ -64,7 +68,7 @@
     }
   }
   .room-info.focusing {
-    margin-top: 12%;
+    margin-top: 10%;
   }
 
   .focus-btn {
@@ -93,7 +97,7 @@
     right: 4%;
     top: 11%;
     padding: 0.8vw;
-    background-color: #979797;
+    background-color: rgba(0,0,0,0.33);
     border-radius: 9px;
   }
   .setting-btn{
@@ -111,6 +115,10 @@
   position: fixed;
   left: 32rpx; top: 108rpx;
   width: fit-content; height: 42rpx;
+}
+
+.van-dialog {
+  width: 75vw !important;
 }
 
 van-dialog {
@@ -134,7 +142,7 @@ van-dialog {
       width: 100%;
 
       .top-img {
-        height: 80rpx;
+        height: 42rpx;
         margin: 32rpx 32rpx;
       }
     }
@@ -477,6 +485,18 @@ van-dialog {
       padding: 16rpx 140rpx;
       margin: 32rpx;
       border-radius: 8rpx;
+    }
+  }
+  .tip-content {
+    padding: 32rpx;
+    .title {
+      text-align: center;
+      margin: 0 auto 24rpx;
+      font-size: 28rpx;
+    }
+    .line {
+      margin: 0 auto 24rpx;
+      font-size: 24rpx;
     }
   }
 }

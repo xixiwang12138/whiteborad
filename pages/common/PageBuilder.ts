@@ -15,6 +15,16 @@ export function makePage<T extends BasePage>(clazz: Constructor<T>) {
 	PageBuilder.runtimeBuild(testPage, clazz, true);
 	console.log("Page", clazz.name, setting.title, testPage);
 
+	// 部分特殊函数需要这样来处理
+	if ("onReachBottom" in testPage)
+		config["onReachBottom"] = () => {
+			console.log("onReachBottom");
+		}
+	if ("onPageScroll" in testPage)
+		config["onPageScroll"] = (e) => {
+			console.log("onPageScroll", e);
+		}
+
 	Page(config)
 }
 
@@ -86,7 +96,7 @@ export class PageBuilder {
 	public static runtimeBuild<T extends BasePage>(
 		res, type: Constructor<T>, test = false) {
 		const page = test ? new type() :
-			(pageMgr().curPage() || pageMgr().setFirstPage(type));
+			(pageMgr().newestPage || new type());
 
 		res.pageObject = page;
 		page.pageData = res;

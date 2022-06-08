@@ -43,6 +43,8 @@ export class PlayerBaseInfo extends BaseData {
 	public avatarUrl: string
 	@field(Number)
 	public level: number
+	@field
+	public slogan: string
 }
 
 export class Player extends StateData<PlayerState> {

@@ -13,7 +13,7 @@ import {pageMgr} from "../../modules/core/managers/PageManager";
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {ShopPage} from "../shop/ShopPage";
 import {blockLoading} from "../../modules/core/managers/LoadingManager";
-import {RoomMessage, roomMgr,Messages} from "../../modules/room/managers/RoomManager";
+import {RoomMessage, roomMgr} from "../../modules/room/managers/RoomManager";
 import SystemInfo = WechatMiniprogram.SystemInfo;
 import CustomEvent = WechatMiniprogram.CustomEvent;
 import {RoomDrawingPage, RoomPage} from "../common/partPages/RoomPage";
@@ -22,10 +22,15 @@ import {RewardGroup} from "../../modules/player/data/Reward";
 import {BaseData} from "../../modules/core/data/BaseData";
 import {LevelCalculator} from "../../modules/player/utils/LevelCalculator";
 
-type WindowType = "Start" | "Room" | "Tags";
+// type WindowType = "Start" | "Room" | "Tags";
 
 const AccThreshold = 0.3;
-const DebugTimeRate = 1000;
+const DebugTimeRate = 10;
+
+type Message = {
+  name?: string
+  status?: string
+}
 
 export class ResultAnimation extends BaseData {
 
@@ -86,6 +91,8 @@ export class MainPageData extends BasePageData {
   isShowTagsWindow: boolean = false
   @field
   isShowResultWindow: boolean = false
+  @field
+  isShowTipsWindow: boolean = false
 
   @field
   focusTags: string[] = FocusTags
@@ -100,9 +107,9 @@ export class MainPageData extends BasePageData {
   isDown: boolean = false
 
   @field
-  focusing:number;
+  focusing: number = 0;
   @field(Array)
-  messages:Messages[]=[];
+  messages: Message[] = [];
 }
 
 
@@ -181,9 +188,6 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     wx.onAccelerometerChange(res =>
       this.setData({ isDown: res.z >= AccThreshold })
     );
-    wx.enableAlertBeforeUnload({
-      message: "退出将无法完成本次专注，您确定要退出吗？"
-    });
   }
 
   // endregion
@@ -276,45 +280,64 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   private async onRoomMessage(data: RoomMessage) {
     console.log("onRoomMessage", data);
-    const messages=this.data.messages
-    this.setData({
-      focusing:!(data.count)?0:(data.count!=0?data.count:(data.type=="focusing"?1:0))
+
+    await this.setData({
+      // 如果有人当前专注中的数据，使用之，否则如果当前玩家在专注，设置为1，否则为0
+      focusing: data.count || (this.data.runtimeFocus ? 1 : 0)
     })
-    console.log("focusing", this.data.focusing);
-    switch (data.type){
-      case "enter":
-        var obj1={
-          name:data.player.name,
-          status:"进入房间"
-        }
-        messages.unshift(obj1);
-        this.setData({messages})
-        break;
-      case "focusStart":
-        var obj2={
-          name:data.player.name,
-          status:"已开始专注"
-        }
-        messages.unshift(obj2);
-        this.setData({messages})
-        break;
-      case "focusEnd":
-        var obj3={
-          name:data.player.name,
-          status:"已结束专注"
-        }
-        messages.unshift(obj3);
-        this.setData({messages})
-        break;
-      case "leave":
-        var obj4={
-          name:data.player.name,
-          status:"已离开房间"
-        }
-        messages.unshift(obj4);
-        this.setData({messages})
-        break;
+
+    const name = data.player.name; let status;
+    switch (data.type) {
+      case "enter": status = "进入房间"; break
+      case "focusStart": status = "开始专注"; break
+      case "focusEnd": status = "结束专注"; break
+      case "leave": status = "离开房间"; break
     }
+    if (!status) return;
+
+    const messages = this.data.messages
+    messages.unshift({name, status});
+    await this.setData({ messages });
+
+    // const messages=this.data.messages
+    // this.setData({
+    //   focusing:!(data.count)?0:(data.count!=0?data.count:(data.type=="focusing"?1:0))
+    // })
+    // console.log("focusing", this.data.focusing);
+    // switch (data.type){
+    //   case "enter":
+    //     var obj1={
+    //       name:data.player.name,
+    //       status:"进入房间"
+    //     }
+    //     messages.unshift(obj1);
+    //     this.setData({messages})
+    //     break;
+    //   case "focusStart":
+    //     var obj2={
+    //       name:data.player.name,
+    //       status:"已开始专注"
+    //     }
+    //     messages.unshift(obj2);
+    //     this.setData({messages})
+    //     break;
+    //   case "focusEnd":
+    //     var obj3={
+    //       name:data.player.name,
+    //       status:"已结束专注"
+    //     }
+    //     messages.unshift(obj3);
+    //     this.setData({messages})
+    //     break;
+    //   case "leave":
+    //     var obj4={
+    //       name:data.player.name,
+    //       status:"已离开房间"
+    //     }
+    //     messages.unshift(obj4);
+    //     this.setData({messages})
+    //     break;
+    // }
   }
 
   // region 窗口事件
@@ -384,6 +407,9 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
       focus, runtimeFocus: RuntimeFocus.create(focus),
       isShowStartWindow: false
     })
+    wx.enableAlertBeforeUnload({
+      message: "退出将无法完成本次专注，您确定要退出吗？"
+    });
   }
 
   @pageFunc
@@ -408,6 +434,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   }
 
   private async onSuccess() {
+    wx.disableAlertBeforeUnload();
     const baseExp = this.playerPage.player.exp;
     const focus = await focusMgr().endFocus(
       this.data.runtimeFocus);
@@ -420,6 +447,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   }
 
   private async onFailed(reason = "专注失败") {
+    wx.disableAlertBeforeUnload();
     const focus = await focusMgr().cancelFocus("专注失败");
     await this.setData({ focus, runtimeFocus: null })
   }

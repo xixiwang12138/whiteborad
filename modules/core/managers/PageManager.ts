@@ -9,7 +9,7 @@ export function pageMgr() {
 @manager
 class PageManager extends BaseManager {
 
-	private pages: BasePage[] = [];
+	// private pages: BasePage[] = [];
 
 	// region 内部页面控制
 
@@ -31,40 +31,55 @@ class PageManager extends BaseManager {
 	/**
 	 * 设置初始页面
 	 */
-	public setFirstPage(type) {
-		const res = new type();
-		this.pages.push(res);
-		return res;
-	}
+	// public setFirstPage(type) {
+	// 	const res = new type();
+	// 	// this.pages.push(res);
+	// 	return res;
+	// }
 
 	/**
 	 * 更新每个页面
 	 */
 	public update() {
 		super.update();
-		this.pages.forEach(p =>
-			p == this.curPage() ? p.update() : p.updateOnHidden()
-		)
+		this.curPage?.update();
+		// this.pages.forEach(p =>
+		// 	p == this.curPage() ? p.update() : p.updateOnHidden()
+		// )
+	}
+
+	private _newestPage: BasePage;
+	public get newestPage() {
+		const res = this._newestPage;
+		this._newestPage = null;
+		return res;
+	}
+	private set newestPage(val) {
+		this._newestPage = val;
 	}
 
 	/**
 	 * 当前页面
 	 */
-	public curPage() {
-		return this.pages[this.pages.length - 1];
+	public get curPage(): BasePage {
+		return this.curWxPage?.pageObject;
+		// return this.pages[this.pages.length - 1];
 	}
 
 	// endregion
 
 	// region 页面导航控制
 
+	public get curWxPage() {
+		const pages = getCurrentPages();
+		return pages[pages.length - 1];
+	}
+
 	/**
 	 * 获取当前页面的名字
 	 */
 	public get curPageName() {
-		const pages = getCurrentPages();
-		const page = pages[pages.length - 1];
-		return this.getPageName(page.__route__);
+		return this.getPageName(this.curWxPage.__route__);
 	}
 
 	/**
@@ -76,7 +91,8 @@ class PageManager extends BaseManager {
 		if (!force && this.isCurPage(type)) return;
 
 		const page = new type(data);
-		this.pages.push(page);
+		this.newestPage = page;
+		// this.pages.push(page);
 
 		return this.doNav("navigateTo", page.path);
 	}
@@ -89,8 +105,9 @@ class PageManager extends BaseManager {
 		if (!force && this.isCurPage(type)) return;
 
 		const page = new type(data);
-		this.pages.pop();
-		this.pages.push(page);
+		this.newestPage = page;
+		// this.pages.pop();
+		// this.pages.push(page);
 
 		return this.doNav("redirectTo", page.path);
 	}
@@ -103,7 +120,8 @@ class PageManager extends BaseManager {
 		if (!force && this.isCurPage(type)) return;
 
 		const page = new type(data);
-		this.pages = [page];
+		this.newestPage = page;
+		// this.pages = [page];
 
 		return this.doNav("reLaunch", page.path);
 	}
@@ -113,8 +131,8 @@ class PageManager extends BaseManager {
 	 * @param delta 层数
 	 */
 	public pop(delta: number = 1) {
-		for (let i = 0; i < delta; i++)
-			this.pages.pop();
+		// for (let i = 0; i < delta; i++)
+		// 	this.pages.pop();
 
 		console.log("[Navigate] navigateBack", delta);
 		return wx.navigateBack({delta});
@@ -128,8 +146,9 @@ class PageManager extends BaseManager {
 		if (!force && this.isCurPage(type)) return;
 
 		const page = new type(data);
-		this.pages.pop();
-		this.pages.push(page);
+		this.newestPage = page;
+		// this.pages.pop();
+		// this.pages.push(page);
 
 		return this.doNav("switchTab", page.path);
 	}

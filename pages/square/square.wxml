@@ -1,29 +1,36 @@
 <!--square.wxml-->
-<view class="background" style="background: {{room.backgroundStyle}}" />
-<view class="container">
-  <view class="container-top">
-    <avatar-display avatar="{{player.avatarUrl}}" name="{{player.name}}" />
+<view class="background"
+      style="background: -webkit-linear-gradient(top, #{{room.gradientColors[0]}}, #{{room.gradientColors[1]}}" />
+<view class="mask">
+  <view class="top-mask"
+        style="background: -webkit-linear-gradient(top, #{{room.gradientColors[0]}}, #{{room.gradientColors[0]}}, transparent)"/>
+  <view class="bottom-mask"
+        style="background: -webkit-linear-gradient(bottom, #{{room.gradientColors[1]}}, #{{room.gradientColors[1]}}, transparent)"/>
+
+  <view class="absoluter">
+    <view class="container-top">
+      <avatar-display avatar="{{player.avatarUrl}}" name="{{player.name}}" />
+    </view>
+    <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
+    <real-tab-bar curPageIndex="1"></real-tab-bar>
   </view>
-  <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
   <!-- <view class="search">
     <input value="输入id搜索" />
     <image class="img" src="../../assets/square/search.png" mode="widthFix"></image>
   </view> -->
-  <scroll-view class="room-list" scroll-y="true">
-    <view class="room-list-content">
-      <view class="room" wx:for="{{rooms}}" bindtap="onRoomTap" data-id="{{item.roomId}}">
-        <image src="{{item.thumbnail}}" mode="widthFix" class="room-thumbnail" />
-        <view class="room-desc">
-          <text class="room-user-name">{{item.playerName}}'s</text>
-          <view class="room-level-name">
-            <text class="room-level">{{item.starId}}</text>
-            <text class="room-name">{{item.name}}</text>
-          </view>
-        </view>
+  
+</view>
 
+<view class="room-list-content">
+  <view class="room" wx:for="{{rooms}}" bindtap="onRoomTap" data-id="{{item.roomId}}">
+    <image src="{{item.thumbnail}}" mode="widthFix" class="room-thumbnail" />
+    <view class="room-desc">
+      <text class="room-user-name">{{item.playerName}}'s</text>
+      <view class="room-level-name">
+        <text class="room-level">{{item.starId}}</text>
+        <text class="room-name">{{item.name}}</text>
       </view>
     </view>
-  </scroll-view>
-
+  </view>
 </view>
-<real-tab-bar curPageIndex="1"></real-tab-bar>
+

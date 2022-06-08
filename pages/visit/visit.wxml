@@ -2,10 +2,13 @@
 <canvas type='webgl' id="main-canvas"></canvas>
 
 <view class="content">
-  <image class="back-button" src="../../assets/shop/back.png" mode="heightFix" bind:tap="back"></image>
+  <image wx:if="{{!runtimeFocus}}" class="back-button"
+         src="../../assets/common/back.png"
+         mode="heightFix" bind:tap="back"/>
   <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
 
   <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">
+    <view class="room-display-id">房间ID：{{item.displayId}}</view>
     <view class="room-name">{{item.name}}</view>
     <text wx:if="{{runtimeFocus}}" class="rest-time">{{runtimeFocus.restTime}}</text>
   </view>
@@ -34,15 +37,17 @@
         <image class="avatar" src="{{item.player.avatarUrl}}"></image>
         <text class="player-name">{{item.player.name}}</text>
       </view>
-      <view class="slogan">{{item.notice}}</view>
+      <view class="slogan">{{item.player.slogan}}</view>
     </view>
   </view>
   
   <view class="room-status">
-    <!--      <text class="status-text">3人正在专注中</text>-->
-    <!--      <text class="status-text">小黑已开始专注</text>-->
-    <!--      <text class="status-text">小黑已结束专注</text>-->
-    <!--      <text class="status-text">小黑已离开房间</text>-->
+    <view class="status-text">{{focusing}}人正在专注中</view>
+    <scroll-view scroll-y="{{true}}" style="height: 6vh;">
+      <view class="status-text" wx:for="{{messages}}">
+        <text>{{item.name}}{{item.status}}</text>
+      </view>
+    </scroll-view>
   </view>
   
   <view wx:if="{{runtimeFocus && focus.mode==1}}">
@@ -102,7 +107,7 @@
     <textarea class="focus-content" lines="1" placeholder="专注内容备注…" placeholder-style="font-size: 24rpx" value="{{focus.note}}" bind:input="onNoteInput" />
     <view class="result-config-top">
       <view class="gold-reward">
-        <image class="coins" src="/assets/square/gold.png" mode="aspectFit" />
+        <image class="coins" src="/assets/common/gold.png" mode="aspectFit" />
         <text>+{{resAni.gold}}</text>
       </view>
       <view class="upgrade">
@@ -131,3 +136,5 @@
     <view class="selector-btn" bindtap="onClickHide" data-window="Tags">完成</view>
   </view>
 </van-dialog>
+
+<loading wx:if="{{isLoading}}"/>

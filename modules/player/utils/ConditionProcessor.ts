@@ -1,6 +1,10 @@
 import {Condition, ConditionType} from "../data/Condition";
 import {Constructor} from "../../core/BaseContext";
 import {playerMgr} from "../managers/PlayerManager";
+import {error} from "../../core/BaseAssist";
+
+const GoldNotEnough = error(200031, "金币不足");
+const LevelNotEnough = error(200032, "等级不足");
 
 export function conditionProcessor(type: ConditionType) {
 	return (clazz) => {
@@ -95,7 +99,7 @@ class FuncConditionProcessor extends ConditionProcessor {
 class GoldConditionProcessor extends ConditionProcessor {
 
 	protected get playerValue(): number { return this.player?.gold; }
-	protected get throwFunc(): Function { return this.condition.params.throwFunc; }
+	protected get throwFunc(): Function { return GoldNotEnough; }
 
 	protected doConsume() {
 		super.doConsume();
@@ -107,6 +111,6 @@ class GoldConditionProcessor extends ConditionProcessor {
 class LevelConditionProcessor extends ConditionProcessor {
 
 	protected get playerValue(): number { return this.player?.level; }
-	protected get throwFunc(): Function { return this.condition.params.throwFunc; }
+	protected get throwFunc(): Function { return LevelNotEnough; }
 
 }

@@ -8,15 +8,15 @@ import {RoomPage} from "../common/partPages/RoomPage";
 import {field} from "../../modules/core/data/DataLoader";
 import {roomMgr} from "../../modules/room/managers/RoomManager";
 import {Room, RoomInfo} from "../../modules/room/data/Room";
+import {QueryPage, QueryParams} from "../common/partPages/QueryPage";
 
 class Data extends BasePageData {
 
 	@field([Object])
-	rooms: RoomInfo[];
-	isGetAllRooms:boolean = false;
+	rooms: RoomInfo[] = [];
+	@field(String)
+	queryText: string = "";
 }
-
-const PageCount = 12;
 
 @page("square", "广场")
 export class SquarePage extends BasePage<Data> {
@@ -27,51 +27,50 @@ export class SquarePage extends BasePage<Data> {
 	 * 部分页
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
+	public queryPage: QueryPage = new QueryPage<RoomInfo>(
+		this.loadRooms.bind(this), "rooms"
+	)
 	public roomPage: RoomPage = new RoomPage();
 
-	private offset:number = 0;
+	public onShow() {
+		super.onShow();
+		// wx.pageScrollTo({ scrollTop: 0 })
+	}
 
-	async onReady() {
-		super.onReady();
-		await this.onLogin();
+	public async onLoad(e) {
+		await super.onLoad(e);
+		this.queryPage.resetPage();
+		await this.queryPage.refresh();
 	}
 
 	@waitForLogin
-	async onLogin() {
-		await this.roomPage.loadSelfRoom();
-		await this.refreshRooms();
+	private async loadRooms(queryParams: QueryParams) {
+		queryParams.filter.openid = {
+			"$ne": playerMgr().openid
+		};
+		return (await roomMgr().getRooms(
+			queryParams.offset, queryParams.count,
+			this.data.queryText, queryParams.filter)).rooms;
 	}
 
 	@pageFunc
-	onRoomTap(e){
+	private onRoomTap(e){
 		const roomId: string = e.currentTarget.dataset.id;
 		pageMgr().push(VisitPage, { roomId })
 	}
 
-	async refreshRooms(){
-		this.offset = 0;
-		await this.setData({ rooms: [] })
-		await this.getRoomsList();
-	}
-
-	async getRoomsList(){
-		if (this.data.isGetAllRooms) return;
-
-		const roomsRes = await roomMgr()
-			.getRooms(this.offset, PageCount);
-		let rooms: RoomInfo[] = roomsRes.rooms;
-
-		// 判断是否到达房间列表底部
-		const isGetAllRooms = rooms.length < PageCount;
-		this.offset += rooms.length;
-
-		let curRooms: RoomInfo[] = this.data.rooms;
-		// 自己的房间不能出现 TODO: 后端实现
-		rooms = rooms.filter(r => r.openid != this.playerPage.openid);
-		rooms = curRooms.concat(rooms);
-
-		await this.setData({
-			rooms, isGetAllRooms
-		});
-	}
+	// private async loadRooms(queryParams: QueryParams) {
+	// 	queryParams.filter.openid = [
+	// 		"_.neq", this.playerPage.openid
+	// 	];
+	// 	const roomsRes = await roomMgr()
+	// 		.getRooms(queryParams.offset, queryParams.count,
+	// 			this.data.queryText, queryParams.filter);
+	// 	let rooms: RoomInfo[] = roomsRes.rooms;
+	// 	let curRooms: RoomInfo[] = this.data.rooms;
+	// 	rooms = rooms.filter(r => r.openid != this.playerPage.openid);
+	// 	rooms = curRooms.concat(rooms);
+	//
+	// 	await this.setData({ rooms });
+	// }
 }

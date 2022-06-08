@@ -7,7 +7,8 @@
     </view>
     <gold-level-display wx:if="{{!runtimeFocus}}" gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
     <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">
-      <text wx:if="{{runtimeFocus}}" class="top-player-name">{{player.name}}'s</text>
+<!--      <view wx:if="{{runtimeFocus}}" class="top-player-name">{{player.name}}'s</view>-->
+      <view class="room-display-id">房间ID：{{item.displayId}}</view>
       <view class="room-name">
         <input class="text" maxlength="6" value="{{item.name}}" placeholder="输入房间名~" disabled="{{runtimeFocus}}" bind:blur="onRoomNameBlur" />
       </view>
@@ -40,15 +41,12 @@
   </view>
   
   <view class="room-status">
-         <view class="status-text">{{focusing}}人正在专注中</view>
-         <scroll-view scroll-y="{{true}}" style="height: 6vh;">
-        <view class="status-text" wx:for="{{messages}}">
+    <view class="status-text">{{focusing}}人正在专注中</view>
+    <scroll-view scroll-y="{{true}}" style="height: 6vh;">
+      <view class="status-text" wx:for="{{messages}}">
         <text>{{item.name}}{{item.status}}</text>
-        </view>
-        </scroll-view> 
-        <!-- <view class="status-text">小黑已开始专注</view>
-         <view class="status-text">小黑已结束专注</view>
-         <view class="status-text">小黑已离开房间</view> -->    
+      </view>
+    </scroll-view>
   </view>
   
   <view wx:if="{{runtimeFocus && focus.mode==1}}">
@@ -67,13 +65,19 @@
 
 <view wx:if="{{runtimeFocus}}" class="cancel-button" bind:tap="onCancelTap">取消专注</view>
 
-<van-dialog use-slot show="{{ isShowStartWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Start">
+<van-dialog use-slot show="{{ isShowStartWindow }}"
+            show-confirm-button="{{false}}"
+            bind:close="onClickHide"
+            close-on-click-overlay
+            width="80%" data-window="Start">
   <view class="start-config">
     <view class="start-config-top">
-      <image class="top-img" src="/assets/main/desc.png" mode="heightFix" />
-      <image class="top-img" src="/assets/main/close.png" mode="heightFix" bindtap="onClickHide" data-window="Start" />
+      <image class="top-img" src="/assets/main/desc.png" mode="heightFix"
+             bind:tap="onClickShow" data-window="Tips"/>
+      <image class="top-img" src="/assets/main/close.png" mode="heightFix"
+             bind:tap="onClickHide" data-window="Start" />
     </view>
-    <image class="clock-img" src="/assets/main/clock.png" mode="widthFix" />
+    <image class="clock-img" src="{{item.thumbnailFileId}}" mode="widthFix" />
     <van-slider value="{{focus.duration}}" min="{{item.minDuration}}" max="{{item.maxDuration}}" bind:drag="onDragTime" />
     <view class="time">
       专注时长
@@ -93,7 +97,11 @@
     <view class="start-btn" bind:tap="onSubmit">开始专注</view>
   </view>
 </van-dialog>
-<van-dialog use-slot show="{{ isShowRoomWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Room">
+<van-dialog use-slot show="{{ isShowRoomWindow }}"
+            show-confirm-button="{{false}}"
+            bind:close="onClickHide"
+            close-on-click-overlay
+            width="80%" data-window="Room">
   <view class="room-config">
     <view class="color-block">
       <view class="color-topic">主题色</view>
@@ -113,7 +121,11 @@
     </view>
   </view>
 </van-dialog>
-<van-dialog use-slot show="{{ isShowResultWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Result">
+<van-dialog use-slot show="{{ isShowResultWindow }}"
+            show-confirm-button="{{false}}"
+            bind:close="onClickHide"
+            close-on-click-overlay
+            width="80%" data-window="Result">
   <view class="result-config">
     <view class="focus-title">
       <text lines="1">本次专注时长</text>
@@ -128,7 +140,7 @@
     <textarea class="focus-content" lines="1" placeholder="专注内容备注…" placeholder-style="font-size: 24rpx" value="{{focus.note}}" bind:input="onNoteInput" />
     <view class="result-config-top">
       <view class="gold-reward">
-        <image class="coins" src="/assets/square/gold.png" mode="aspectFit" />
+        <image class="coins" src="/assets/common/gold.png" mode="aspectFit" />
         <text>+{{resAni.gold}}</text>
       </view>
       <view class="upgrade">
@@ -157,5 +169,18 @@
     <view class="selector-btn" bindtap="onClickHide" data-window="Tags">完成</view>
   </view>
 </van-dialog>
+<van-dialog use-slot show="{{ isShowTipsWindow }}"
+            show-confirm-button="{{false}}"
+            bind:close="onClickHide"
+            close-on-click-overlay
+            width="65%" data-window="Tips">
+  <view class="tip-content">
+    <view class="title">说明</view>
+    <view class="line">基础模式：专注期间无任何限制，但如果频繁操作手机有可能导致专注中断</view>
+    <view class="line">反盖模式：需要将手机反扣在桌面上才能进行专注，从而防止自己使用手机</view>
+  </view>
+</van-dialog>
+
+<loading wx:if="{{isLoading}}"/>
 
 <real-tab-bar curPageIndex="0" wx:if="{{!runtimeFocus}}"></real-tab-bar>

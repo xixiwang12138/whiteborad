@@ -1,4 +1,5 @@
-<view class="background" style="background: {{room.backgroundStyle}}"/>
+<view class="background"
+      style="background: -webkit-linear-gradient(top, #{{room.gradientColors[0]}}, #{{room.gradientColors[1]}}" />
 <view class="content">
  <view class="page">
    <view class="player-info">
@@ -9,7 +10,9 @@
      <text class="slogan">{{player.slogan}}</text>
    </view>
   <scroll-view class="room-list" scroll-y="{{true}}" >
-    <text class="label">我的收藏</text>
+    <text class="label">更多功能</text>
+  
+    <van-empty description="施工中，敬请期待哦~" />
 <!--    <view wx:for="{{collectedRooms}}" class="room-card">-->
 <!--      <image class="room" src="../../assets/common/3.png" mode="heightFix"></image>-->
 <!--      <view class="info">-->
@@ -30,7 +33,7 @@
            custom-class="popup">
   <view class="popup-content">
     <image class="avatar" src="{{info.avatarUrl}}" mode="aspectFill"/>
-    <input class="name" maxlength="8" value="{{info.name}}"bind:input="onNameInput" />
+    <input class="name" maxlength="8" value="{{info.name}}" bind:input="onNameInput" />
     <view class="gender-container">
       <view class="gender-box male {{info.gender == 1 ? 'selected' : ''}}"
             bind:tap="onMaleTap">男</view>

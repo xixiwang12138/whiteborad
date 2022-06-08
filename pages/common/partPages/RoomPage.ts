@@ -10,12 +10,14 @@ import {pageMgr} from "../../../modules/core/managers/PageManager";
 import {MathUtils} from "../../../utils/MathUtils";
 import {Constructor} from "../../../modules/core/BaseContext";
 import {appMgr} from "../../../modules/core/managers/AppManager";
+import {waitForLogin} from "../../../modules/player/managers/PlayerManager";
+import {pageFunc} from "../PageBuilder";
 
 const TimeRate = 100;
 const AniColCount = 4;
 const MotionDuration = 60;
-const DefaultHouseScale = 0.6;
-const FocusingHouseScale = 0.8;
+const DefaultHouseScale = 0.5;
+const FocusingHouseScale = 0.75;
 const DebugAlpha = 0.33;
 
 type RuntimeAnimation = {
@@ -29,8 +31,6 @@ class Data extends BaseData {
 
 	@field(Room)
 	room: Room
-	@field(String)
-	backgroundStyle: string;
 }
 
 export class RoomPage extends PartialPage<Data> {
@@ -39,13 +39,27 @@ export class RoomPage extends PartialPage<Data> {
 
 	public get room() { return this.data.room }
 
+	@pageFunc
+	protected async onShow() {
+		await this.loadSelfRoom();
+	}
+
+	@waitForLogin
 	public async loadSelfRoom() {
 		const room = await roomMgr().getSelfRoom();
 		await this.setData({room});
 	}
 }
 
-export class RoomDrawingPage extends CanvasPage {
+class DrawingData extends BaseData {
+
+	@field
+	isLoading: boolean = false;
+}
+
+export class RoomDrawingPage extends CanvasPage<DrawingData> {
+
+	public data = new DrawingData();
 
 	// region 绘制数据
 
@@ -101,13 +115,19 @@ export class RoomDrawingPage extends CanvasPage {
 										position = [0.5, 0.5],
 										scale = 1) {
 		this.clear();
-		this.room = room;
+
+		this.room = room; this.scale = scale;
 		this.position = position;
-		this.scale = scale;
+
+		await this.setData({isLoading: true})
+
 		await this.waitForCanvasSetup();
 		await this.drawBackground();
 		await this.drawHouse();
+
 		this.render();
+
+		await this.setData({isLoading: false})
 	}
 
 	private async drawBackground() {
@@ -189,8 +209,8 @@ export class RoomDrawingPage extends CanvasPage {
 			const sprite = await this.createSprite(animation.pictureUrl());
 			// const Rect = sprite.texture.frame.constructor sprite Constructor<Rectangle>;
 			const row = Math.ceil(animation.count / AniColCount);
-			const width = sprite.texture.width / AniColCount,
-				height = sprite.texture.height / row;
+			const width = sprite.texture.baseTexture.width / AniColCount;
+			const height = sprite.texture.baseTexture.height / row;
 
 			sprite.anchor.x = animation.anchor[0];
 			sprite.anchor.y = animation.anchor[1];

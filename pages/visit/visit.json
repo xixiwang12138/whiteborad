@@ -2,6 +2,7 @@
   "usingComponents": {
     "avatar-display": "../../components/avatar-display/avatar-display",
     "gold-level-display": "../../components/gold-level-display/gold-level-display",
+    "loading": "../../components/loading/loading",
     "van-dialog": "@vant/weapp/dialog/index",
     "van-slider": "@vant/weapp/slider/index"
   },

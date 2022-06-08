@@ -1,6 +1,7 @@
 import {playerMgr} from "../modules/player/managers/PlayerManager";
 import {showLoading} from "../modules/core/managers/LoadingManager";
 import {handleError} from "../modules/core/managers/ErrorManager";
+import DownloadFileResult = ICloud.DownloadFileResult;
 
 export type MediaFile = {
 	size: number
@@ -15,9 +16,11 @@ export type File = {
 	type: string
 }
 
-const BasePath = "cloud://env-8gbpg0wjca0c43ce.656e-env-8gbpg0wjca0c43ce-1255510304/homi/assets";
+const BasePath = "cloud://homi-2gy4vrcg19947ac0.686f-homi-2gy4vrcg19947ac0-1312366958";
 
 export class CloudFileUtils {
+
+	private static cache: {[T: string]: DownloadFileResult} = {};
 
 	/**
 	 * 下载图片
@@ -32,11 +35,16 @@ export class CloudFileUtils {
 	 */
 	public static async downloadFile(path) {
 		const fileID = this.pathToFileId(path);
-		console.log("downloadFile: ", fileID)
+		const cache = this.cache[fileID];
+		console.log("downloadFile: ", fileID, cache)
+		if (cache) return cache.tempFilePath;
+
 		const res = await wx.cloud.downloadFile({fileID})
 			.then(res => {console.log(res); return res})
 			.catch(e => {console.error("catch", e); return null;})
 			.finally(() => console.log("finally"))
+		this.cache[fileID] = res;
+
 		return res.tempFilePath;
 	}
 

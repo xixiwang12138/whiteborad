@@ -1,5 +1,15 @@
 
+.container{
+  position: absolute;
+  left: 0; right: 0;
+  width: 100vw;
+  height: 100vh;
+  //background:-webkit-linear-gradient(top,#C7E1FA,#4F8DCC);
+  z-index: -100;
+}
+
 .content {
+
   .back-button {
     position: fixed;
     left: 32rpx; top: 108rpx;
@@ -7,28 +17,26 @@
   }
 
   .room-info {
-    margin-top: 15%;
+    margin-top: 12.5%;
     width: 100%;
     transition: all 1s ease 0s;
 
     text-align: center;
 
+    .room-display-id {
+      font-size: 20rpx;
+      margin-top: 12rpx;
+    }
     .room-name {
       width: 296rpx; height: 80rpx;
-      margin: 12rpx auto;
+      margin: 4rpx auto;
 
+      font-size: 32rpx;
+      line-height: 80rpx;
       text-align: center;
 
       background-color: white;
       border-radius: 32rpx;
-
-      .text {
-        width: fit-content;
-        height: 100%;
-        font-size: 32rpx;
-        line-height: 80rpx;
-        margin: 12rpx auto;
-      }
     }
     .rest-time {
       width: fit-content;
@@ -37,7 +45,7 @@
     }
   }
   .room-info.focusing {
-    margin-top: 12%;
+    margin-top: 4%;
   }
 
   //.room-name {
@@ -217,7 +225,7 @@ van-dialog {
       width: 100%;
 
       .top-img {
-        height: 80rpx;
+        height: 42rpx;
         margin: 32rpx 32rpx;
       }
     }
@@ -549,18 +557,35 @@ van-dialog {
       padding: 16rpx 32rpx;
     }
   }
-  .room-status{
-    animation: 2s linear 0s move-in;
-    position: absolute;
-    left: 74vw;
-    bottom: 25vh;
-    width: 30vw;
-    font-size: 3vw;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+
+}
+
+.room-status{
+  animation: 2s linear 0s move-in;
+  position: absolute;
+  left: 58vw;
+  bottom: 25vh;
+  width: 40vw;
+  font-size: 3vw;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  .status-text{
+    height: 2vh;
   }
 }
+
+//.room-status{
+//  animation: 2s linear 0s move-in;
+//  position: absolute;
+//  left: 74vw;
+//  bottom: 25vh;
+//  width: 30vw;
+//  font-size: 3vw;
+//  display: flex;
+//  flex-direction: column;
+//  text-align: center;
+//}
 
 .remind{
   position: fixed;

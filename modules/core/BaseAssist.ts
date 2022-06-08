@@ -4,8 +4,9 @@ export type Itf<I = any, O = any> = (data?: I) => Promise<O>
 
 export function error(code: number, errMsg?: string,
                       alert?: AlertParam, detail?: string) {
-  return new AppError(code, errMsg, alert, detail);
-}
+  return (_detail?, data?) => {
+    throw new AppError(code, errMsg, alert, detail, data);
+  }}
 
 export function loading(code: number, title?: string,
                         mask: boolean = false) {

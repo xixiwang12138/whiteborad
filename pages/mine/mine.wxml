@@ -42,9 +42,9 @@
             bind:tap="onFemaleTap">女</view>
     </view>
     <textarea class="slogan" placeholder="输入你的Slogan吧！"
-              adjust-position="{{false}}" focus="{{false}}"
-              maxlength="50" cursor-spacing="10"
-              value="{{info.slogan}}" bind:input="onSloganInput"/>
+                adjust-position="{{false}}" focus="{{false}}"
+                maxlength="40" cursor-spacing="10"
+                value="{{info.slogan}}" bind:input="onSloganInput"/>
     <view class="buttons">
       <view class="cancel" bindtap="onClose">取消</view>
       <view class="ok" bindtap="onSubmit">完成</view>

@@ -10,7 +10,7 @@
 <!--      <view wx:if="{{runtimeFocus}}" class="top-player-name">{{player.name}}'s</view>-->
       <view class="room-display-id">房间ID：{{item.displayId}}</view>
       <view class="room-name">
-        <input class="text" maxlength="6" value="{{item.name}}" placeholder="输入房间名~" disabled="{{runtimeFocus}}" bind:blur="onRoomNameBlur" />
+        <input class="text" placeholder="输入房间名~" disabled="{{runtimeFocus}}" model:value="{{item.name}}"bind:blur="onRoomNameBlur" bindchange="chan" />
       </view>
       <text wx:if="{{runtimeFocus}}" class="rest-time">{{runtimeFocus.restTime}}</text>
     </view>

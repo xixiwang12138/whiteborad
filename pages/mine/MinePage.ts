@@ -105,9 +105,11 @@ export class MinePage extends BasePage<Data> {
 			title: "请输入兑换码",
 			showCancel: true, editable: true
 		})
-		console.log(res.content);
-		const rc = await playerMgr().useRewardCode(res.content);
-		const desc = rc.rewardGroup().descriptions().join(" ");
-		await alertMgr().showAlert(`兑换成功！你已获得 ${desc}！`)
+		if (res.content) {
+			const rc = await playerMgr().useRewardCode(res.content);
+			const desc = rc.rewardGroup().descriptions().join(" ");
+			await alertMgr().showAlert(`兑换成功！你已获得 ${desc}！`)
+			this.playerPage.resetPlayer();
+		}
 	}
 }

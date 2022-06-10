@@ -88,7 +88,7 @@ export abstract class ConditionProcessor {
 class FuncConditionProcessor extends ConditionProcessor {
 
 	protected get playerValue(): number { return 0; }
-	protected get throwFunc(): Function { return this.condition.params.throwFunc; }
+	protected get throwFunc(): Function { return this.condition.params.tFunc; }
 
 	judge(): boolean {
 		return this.condition.params.jFunc();

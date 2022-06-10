@@ -17,6 +17,8 @@ class Data extends BasePageData {
 	isLogin: boolean = false;
 	@field
 	isNewer: boolean = false;
+	@field(String)
+	name: string = "";
 }
 
 @page("login", "登陆")
@@ -28,6 +30,13 @@ export class LoginPage extends BasePage<Data> {
 	 * 部分页
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
+
+	async onLoad(e): Promise<void> {
+		await super.onLoad(e);
+		const time = new Date(2022, 5, 10, 19, 0, 0);
+		if (Date.now() > time.getTime())
+			await this.setData({name: "元宇宙"})
+	}
 
 	onReady() {
 		super.onReady();

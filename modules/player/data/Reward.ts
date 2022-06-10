@@ -5,6 +5,13 @@ export enum RewardType {
 	Gold = "gold",
 	Exp = "exp",
 
+	RoomSkin = "roomSkin",
+	RoomStar = "roomStar",
+
+	Motion = "motion",
+
+	Score = "score",
+
 	// TODO: 补充更多
 }
 
@@ -82,10 +89,17 @@ export class RewardGroup extends BaseData {
 		this.rewards.push(reward);
 	}
 
+	public descriptions() {
+		const processors = this.rewards.map(
+			r => createProcessor(r));
+		return processors.map(p => p.description).filter(d => !!d);
+	}
+
 	public invoke(rate = 1) {
 		const processors = this.rewards.map(
 			r => createProcessor(r));
 
+		for (const p of processors) p.check();
 		for (const p of processors) p.invoke(rate);
 	}
 

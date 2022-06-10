@@ -25,7 +25,7 @@ import {LevelCalculator} from "../../modules/player/utils/LevelCalculator";
 // type WindowType = "Start" | "Room" | "Tags";
 
 const AccThreshold = 0.3;
-const DebugTimeRate = 10;
+const DebugTimeRate = 1;
 
 type Message = {
   name?: string

@@ -24,6 +24,8 @@ const GetPlayerInfo: Itf<{}, {player: Player}>
   = get("/player/player_info/get");
 const EditPlayerInfo: Itf<{info: PlayerEditableInfo}, {}>
   = post("/player/player_info/edit");
+const UseRewardCode: Itf<{code: string}, {data: Partial<RewardCode>}>
+  = post("/player/reward_code/use");
 
 export function playerData<T extends PlayerData>(name: string) {
   return (clazz: Constructor<T>) =>
@@ -254,5 +256,14 @@ export class PlayerManager extends BaseManager {
     this.player.edit(info);
   }
 
+  public async useRewardCode(code) {
+    const useRes = await UseRewardCode({code});
+    const res = DataLoader.load(RewardCode, useRes.data);
+    res.rewardGroup().invoke();
+    return res;
+  }
+
   // endregion
 }
+
+import {RewardCode} from "../data/RewardCode";

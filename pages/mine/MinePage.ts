@@ -6,6 +6,7 @@ import {field} from "../../modules/core/data/DataLoader";
 import {PlayerEditableInfo, PlayerState} from "../../modules/player/data/Player";
 import {input} from "../common/utils/PageUtils";
 import {RoomPage} from "../common/partPages/RoomPage";
+import {alertMgr} from "../../modules/core/managers/AlertManager";
 class Data extends BasePageData {
 
 	@field(Array)
@@ -96,5 +97,17 @@ export class MinePage extends BasePage<Data> {
 		await playerMgr().editInfo(this.data.info);
 		await this.setData({ isEdit: false })
 		this.playerPage.resetPlayer()
+	}
+
+	@pageFunc
+	public async onRewardCodeTap() {
+		const res = await alertMgr().showAlert({
+			title: "请输入兑换码",
+			showCancel: true, editable: true
+		})
+		console.log(res.content);
+		const rc = await playerMgr().useRewardCode(res.content);
+		const desc = rc.rewardGroup().descriptions().join(" ");
+		await alertMgr().showAlert(`兑换成功！你已获得 ${desc}！`)
 	}
 }

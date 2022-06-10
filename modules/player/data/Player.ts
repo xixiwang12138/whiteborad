@@ -75,6 +75,9 @@ export class Player extends StateData<PlayerState> {
 	@field
 	public exp: number = 0;
 
+	@field
+	public score: number = 0; // 贡献分
+
 	@field(String)
 	public inviteCode: string;
 
@@ -152,6 +155,14 @@ export class Player extends StateData<PlayerState> {
 	 * 升级回调
 	 */
 	protected onLevelUp(oldLevel, newLevel) { }
+
+	// endregion
+
+	// region 积分控制
+
+	public gainScore(score) {
+		this.score += score;
+	}
 
 	// endregion
 

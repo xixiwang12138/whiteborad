@@ -1,32 +1,33 @@
 <view class="background"
       style="background: -webkit-linear-gradient(top, #{{room.gradientColors[0]}}, #{{room.gradientColors[1]}}" />
 <view class="content">
- <view class="page">
-   <view class="player-info">
-     <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}"/>
-     <image class="avatar" src="{{player.avatarUrl}}"
-            mode="aspectFill" bind:tap="onAvatarTap"/>
-     <text class="name">{{player.name}}</text>
-     <text class="slogan">{{player.slogan}}</text>
-   </view>
-  <scroll-view class="room-list" scroll-y="{{true}}" >
-    <text class="label">更多功能</text>
-  
-    <van-empty description="施工中，敬请期待哦~" />
-<!--    <view wx:for="{{collectedRooms}}" class="room-card">-->
-<!--      <image class="room" src="../../assets/common/3.png" mode="heightFix"></image>-->
-<!--      <view class="info">-->
-<!--        <text class="user">{{item.userName}}｜{{item.level}}</text>-->
-<!--        <text class="name">{{item.name}}</text>-->
-<!--      </view>-->
-<!--      <view class="enter-tips">-->
-<!--        <text>进入房间</text>-->
-<!--        <image class="enter" src="../../images/enter.png"></image>-->
-<!--      </view>-->
-<!--      <image class="star" src="../../images/star.png"></image>-->
-<!--    </view>-->
-  </scroll-view>
- </view>
+  <view class="page">
+    <view class="player-info">
+      <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}"/>
+      <image class="avatar" src="{{player.avatarUrl}}"
+             mode="aspectFill" bind:tap="onAvatarTap"/>
+      <text class="name">{{player.name}}</text>
+      <text class="slogan">{{player.slogan}}</text>
+      <view class="reward-code" bind:tap="onRewardCodeTap">奖品兑换</view>
+    </view>
+    <scroll-view class="room-list" scroll-y="{{true}}" >
+      <text class="label">更多功能</text>
+      
+      <van-empty description="施工中，敬请期待哦~" />
+      <!--    <view wx:for="{{collectedRooms}}" class="room-card">-->
+      <!--      <image class="room" src="../../assets/common/3.png" mode="heightFix"></image>-->
+      <!--      <view class="info">-->
+      <!--        <text class="user">{{item.userName}}｜{{item.level}}</text>-->
+      <!--        <text class="name">{{item.name}}</text>-->
+      <!--      </view>-->
+      <!--      <view class="enter-tips">-->
+      <!--        <text>进入房间</text>-->
+      <!--        <image class="enter" src="../../images/enter.png"></image>-->
+      <!--      </view>-->
+      <!--      <image class="star" src="../../images/star.png"></image>-->
+      <!--    </view>-->
+    </scroll-view>
+  </view>
 </view>
 
 <van-popup show="{{isEdit}}" round bind:close="onClose"
@@ -41,9 +42,9 @@
             bind:tap="onFemaleTap">女</view>
     </view>
     <textarea class="slogan" placeholder="输入你的Slogan吧！"
-                adjust-position="{{false}}" focus="{{false}}"
-                maxlength="50" cursor-spacing="10"
-                value="{{info.slogan}}" bind:input="onSloganInput"/>
+              adjust-position="{{false}}" focus="{{false}}"
+              maxlength="50" cursor-spacing="10"
+              value="{{info.slogan}}" bind:input="onSloganInput"/>
     <view class="buttons">
       <view class="cancel" bindtap="onClose">取消</view>
       <view class="ok" bindtap="onSubmit">完成</view>

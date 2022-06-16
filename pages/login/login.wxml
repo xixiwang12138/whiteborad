@@ -6,7 +6,7 @@
       <image class="homi" src="../../assets/logo-text.png" mode="heightFix"></image>
     </view>
     <view class="login-block">
-      <text class="tips">点击进入Homi{{name}}</text>
+      <text class="tips">点击进入Homi元宇宙</text>
       <button class="button {{isLogin ? 'is-login' : ''}}"
               bindtap="tapToLogin">
         <view class="effect"/>

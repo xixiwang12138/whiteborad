@@ -21,6 +21,7 @@ import {appMgr} from "../../modules/core/managers/AppManager";
 import {RewardGroup} from "../../modules/player/data/Reward";
 import {BaseData} from "../../modules/core/data/BaseData";
 import {LevelCalculator} from "../../modules/player/utils/LevelCalculator";
+import {ShareAppPage} from "../common/partPages/SharePage";
 
 // type WindowType = "Start" | "Room" | "Tags";
 
@@ -131,6 +132,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   public playerPage: PlayerPage = new PlayerPage(true, true);
   // public roomPage: RoomPage = new RoomPage();
   public roomDrawingPage: RoomDrawingPage = new RoomDrawingPage();
+  public shareAppPage: ShareAppPage = new ShareAppPage()
 
   // region 初始化
 
@@ -138,6 +140,21 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     console.log("onLoad")
     await super.onLoad(e);
     await this.initialize();
+
+    // 测试代码
+    const audio = wx.getBackgroundAudioManager();
+    audio.title = "白噪音";
+    audio.epname = "白噪音";
+    audio.singer = "白噪音";
+    audio.src = "cloud://homi-2gy4vrcg19947ac0.686f-homi-2gy4vrcg19947ac0-1312366958/whiteNoises/test1.wav"
+    audio.onStop(() => {
+      console.log("onStop");
+      audio.play();
+    })
+    audio.onEnded(() => {
+      console.log("onEnded");
+      audio.src = "cloud://homi-2gy4vrcg19947ac0.686f-homi-2gy4vrcg19947ac0-1312366958/whiteNoises/test1.wav"
+    })
   }
   async onShow() {
     console.log("onShow")
@@ -151,11 +168,11 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   }
 
   async onUnload() {
-    wx.offAccelerometerChange(() => {});
     if (this.data.runtimeFocus) {
       await this.onFailed("界面退出");
       await alertMgr().showToast("由于页面退出，您已取消专注");
     }
+    this.releaseWxListeners();
   }
 
   private async initialize() {
@@ -185,9 +202,13 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   }
 
   private setupWxListeners() {
+    // 反扣传感器
     wx.onAccelerometerChange(res =>
       this.setData({ isDown: res.z >= AccThreshold })
     );
+  }
+  private releaseWxListeners() {
+    wx.offAccelerometerChange(() => {});
   }
 
   // endregion
@@ -298,46 +319,6 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     const messages = this.data.messages
     messages.unshift({name, status});
     await this.setData({ messages });
-
-    // const messages=this.data.messages
-    // this.setData({
-    //   focusing:!(data.count)?0:(data.count!=0?data.count:(data.type=="focusing"?1:0))
-    // })
-    // console.log("focusing", this.data.focusing);
-    // switch (data.type){
-    //   case "enter":
-    //     var obj1={
-    //       name:data.player.name,
-    //       status:"进入房间"
-    //     }
-    //     messages.unshift(obj1);
-    //     this.setData({messages})
-    //     break;
-    //   case "focusStart":
-    //     var obj2={
-    //       name:data.player.name,
-    //       status:"已开始专注"
-    //     }
-    //     messages.unshift(obj2);
-    //     this.setData({messages})
-    //     break;
-    //   case "focusEnd":
-    //     var obj3={
-    //       name:data.player.name,
-    //       status:"已结束专注"
-    //     }
-    //     messages.unshift(obj3);
-    //     this.setData({messages})
-    //     break;
-    //   case "leave":
-    //     var obj4={
-    //       name:data.player.name,
-    //       status:"已离开房间"
-    //     }
-    //     messages.unshift(obj4);
-    //     this.setData({messages})
-    //     break;
-    // }
   }
 
   //解决中文拼音输入受限问题

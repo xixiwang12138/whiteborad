@@ -15,6 +15,7 @@
     "navigationBarTextStyle": "black",
     "onReachBottomDistance": 50
   },
+  "requiredBackgroundModes": ["audio"],
   "tabBar": {
     "custom": true,
     "backgroundColor": "#ffffff",

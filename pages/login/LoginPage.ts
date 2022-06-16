@@ -17,8 +17,8 @@ class Data extends BasePageData {
 	isLogin: boolean = false;
 	@field
 	isNewer: boolean = false;
-	@field(String)
-	name: string = "";
+	// @field(String)
+	// name: string = "";
 }
 
 @page("login", "登陆")
@@ -33,15 +33,22 @@ export class LoginPage extends BasePage<Data> {
 
 	async onLoad(e): Promise<void> {
 		await super.onLoad(e);
-		const time = new Date(2022, 5, 10, 19, 0, 0);
-		if (Date.now() > time.getTime())
-			await this.setData({name: "元宇宙"})
+
+		// const time = new Date(2022, 5, 10, 19, 0, 0);
+		// if (Date.now() > time.getTime())
+		// 	await this.setData({name: "元宇宙"})
+		await this.processInvite();
 	}
 
 	onReady() {
 		super.onReady();
 		this.playerPage.registerOnLogin(
 			() => this.onLogin())
+	}
+
+	private async processInvite() {
+		const inviteCode = this.getExtra("code");
+		if (inviteCode) await playerMgr().invitePlayer(inviteCode);
 	}
 
 	// region 事件
@@ -62,6 +69,8 @@ export class LoginPage extends BasePage<Data> {
 		else
 			pageMgr().goto(MainPage);
 	}
+
+	// region 页面事件
 
 	@pageFunc
 	onMaleTap() {
@@ -101,6 +110,8 @@ export class LoginPage extends BasePage<Data> {
 		await playerMgr().editInfo(this.data.info);
 		await pageMgr().goto(MainPage);
 	}
+
+	// endregion
 
 	// endregion
 

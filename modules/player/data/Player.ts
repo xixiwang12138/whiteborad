@@ -80,6 +80,8 @@ export class Player extends StateData<PlayerState> {
 
 	@field(String)
 	public inviteCode: string;
+	@field(String)
+	public inviteeCode?: string; // 被邀请码
 
 	@field(Number)
 	public createTime: number;

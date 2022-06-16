@@ -136,6 +136,23 @@ export abstract class BasePage<
 
 	// endregion
 
+	// region 参数操作
+
+	public getExtra(key, _default?) {
+		return key in this.extra ? this.extra[key] : _default
+	}
+	public getNumberExtra(key, _default = 0) {
+		return Number(this.getExtra(key, _default));
+	}
+	public getBooleanExtra(key, _default = false) {
+		return Boolean(this.getExtra(key, _default));
+	}
+	public getObjectExtra(key, _default = null) {
+		return JSON.parse(this.getExtra(key, _default));
+	}
+
+	// endregion
+
 	// region 公用操作
 
 	/**

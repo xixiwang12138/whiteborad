@@ -2,9 +2,9 @@ import {get, Itf, post} from "../../core/BaseAssist";
 import {BaseManager, getManager, manager} from "../../core/managers/BaseManager";
 import {appMgr} from "../../core/managers/AppManager";
 import {storageMgr} from "../../core/managers/StroageManager";
-import {Player, PlayerData, PlayerEditableInfo, WxUserInfo} from "../data/Player";
+import {Player, PlayerData, PlayerEditableInfo, PlayerState, WxUserInfo} from "../data/Player";
 import {PromiseUtils} from "../../../utils/PromiseUtils";
-import {blockLoading, showLoading} from "../../core/managers/LoadingManager";
+import {blockLoading} from "../../core/managers/LoadingManager";
 import {DataLoader} from "../../core/data/DataLoader";
 import {handleError} from "../../core/managers/ErrorManager";
 import {Constructor} from "../../core/BaseContext";
@@ -24,6 +24,8 @@ const GetPlayerInfo: Itf<{}, {player: Player}>
   = get("/player/player_info/get");
 const EditPlayerInfo: Itf<{info: PlayerEditableInfo}, {}>
   = post("/player/player_info/edit");
+const InvitePlayer: Itf<{inviteCode: string}, {}>
+  = post("/player/player/invite");
 const UseRewardCode: Itf<{code: string}, {data: Partial<RewardCode>}>
   = post("/player/reward_code/use");
 
@@ -251,9 +253,22 @@ export class PlayerManager extends BaseManager {
 
   // region 业务逻辑
 
+  /**
+   * 修改信息
+   * @param info
+   */
   public async editInfo(info: PlayerEditableInfo) {
     await EditPlayerInfo({info})
     this.player.edit(info);
+  }
+
+  /**
+   * 邀请玩家（被邀请）
+   */
+  public async invitePlayer(inviteCode: string) {
+    if (this.player.state != PlayerState.Newer) return;
+    await InvitePlayer({inviteCode});
+    this.player.inviteeCode = inviteCode;
   }
 
   public async useRewardCode(code) {

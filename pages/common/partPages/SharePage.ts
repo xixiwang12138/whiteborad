@@ -6,8 +6,7 @@ import {StringUtils} from "../../../utils/StringUtils";
 import {LoginPage} from "../../login/LoginPage";
 
 const ShareTitles = [
-	"跟我来元宇宙小屋里一起学习吧！",
-	""
+	"跟我来元宇宙小屋里一起学习吧！"
 ]
 
 type ShareAppParams = {
@@ -40,7 +39,8 @@ export class ShareAppPage extends PartialPage {
 
 	@pageFunc
 	protected onShareAppMessage(obj: ShareAppParams) {
-		const path = this.path + "?" + StringUtils.makeQueryParam(this.extra);
+		const path = this.path.path + "?" + StringUtils.makeQueryParam(this.extra);
+		console.log("onShareAppMessage path", path);
 		return {
 			title: this.title, path, ...this.onShare?.(obj)
 		}
@@ -63,6 +63,7 @@ export class ShareTimelinePage extends PartialPage {
 	@pageFunc
 	protected onShareTimeline() {
 		const query = StringUtils.makeQueryParam(this.query);
+		console.log("onShareTimeline query", query);
 		return {
 			title: this.title, query, ...this.onShare?.()
 		}

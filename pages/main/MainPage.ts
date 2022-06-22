@@ -132,7 +132,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   // public roomPage: RoomPage = new RoomPage();
   public roomDrawingPage: RoomDrawingPage = new RoomDrawingPage();
   public shareAppPage: ShareAppPage = new ShareAppPage();
-  public shareTimelinePage: ShareTimelinePage = new ShareTimelinePage();
+  // public shareTimelinePage: ShareTimelinePage = new ShareTimelinePage();
 
   // region 测试代码
 
@@ -195,7 +195,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
    * 检查当前专注
    */
   private async checkCurFocusing() {
-    const focus = playerMgr().extra.focus;
+    const focus = playerMgr().extra?.focus;
     if (focus) await this.processCurFocusing(DataLoader.load(Focus, focus))
   }
   protected async processCurFocusing(focus: Focus) {

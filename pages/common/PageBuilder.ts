@@ -16,14 +16,11 @@ export function makePage<T extends BasePage>(clazz: Constructor<T>) {
 	console.log("Page", clazz.name, setting.title, testPage);
 
 	// 部分特殊函数需要这样来处理
-	if ("onReachBottom" in testPage)
-		config["onReachBottom"] = () => {
-			console.log("onReachBottom");
-		}
-	if ("onPageScroll" in testPage)
-		config["onPageScroll"] = (e) => {
-			console.log("onPageScroll", e);
-		}
+	const specialFuncs = ["onReachBottom", "onPageScroll",
+		"onShareAppMessage", "onShareTimeline"];
+	specialFuncs.forEach(key => {
+		if (key in testPage) config[key] = (e) => { console.log(key, e); }
+	})
 
 	Page(config)
 }

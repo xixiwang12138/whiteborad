@@ -1,4 +1,4 @@
-import {field} from "../../modules/core/data/DataLoader";
+import {DataLoader, field} from "../../modules/core/data/DataLoader";
 import {page, pageFunc} from "../common/PageBuilder";
 import {BasePageData} from "../common/core/BasePage";
 import {PlayerPage} from "../common/partPages/PlayerPage";
@@ -7,7 +7,7 @@ import {ItemDetailPage} from "../common/pages/ItemDetailPage";
 import {Room} from "../../modules/room/data/Room";
 import {Focus, FocusTags, RuntimeFocus} from "../../modules/focus/data/Focus";
 import {waitForDataLoad} from "../../modules/core/managers/DataManager";
-import {waitForLogin} from "../../modules/player/managers/PlayerManager";
+import {playerMgr, waitForLogin} from "../../modules/player/managers/PlayerManager";
 import {focusMgr} from "../../modules/focus/managers/FocusManager";
 import {pageMgr} from "../../modules/core/managers/PageManager";
 import {alertMgr} from "../../modules/core/managers/AlertManager";
@@ -21,7 +21,7 @@ import {appMgr} from "../../modules/core/managers/AppManager";
 import {RewardGroup} from "../../modules/player/data/Reward";
 import {BaseData} from "../../modules/core/data/BaseData";
 import {LevelCalculator} from "../../modules/player/utils/LevelCalculator";
-import {ShareAppPage} from "../common/partPages/SharePage";
+import {ShareAppPage, ShareTimelinePage} from "../common/partPages/SharePage";
 
 // type WindowType = "Start" | "Room" | "Tags";
 
@@ -123,13 +123,16 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   public data = new MainPageData();
 
+  protected isEntered = false;
+
   /**
    * 部分页
    */
   public playerPage: PlayerPage = new PlayerPage(true, true);
   // public roomPage: RoomPage = new RoomPage();
   public roomDrawingPage: RoomDrawingPage = new RoomDrawingPage();
-  public shareAppPage: ShareAppPage = new ShareAppPage()
+  public shareAppPage: ShareAppPage = new ShareAppPage();
+  public shareTimelinePage: ShareTimelinePage = new ShareTimelinePage();
 
   // region 测试代码
 
@@ -152,6 +155,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     console.log("onLoad")
     await super.onLoad(e);
     await this.initialize();
+    await this.checkCurFocusing();
     this.testAudio();
   }
   async onShow() {
@@ -190,8 +194,18 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   /**
    * 检查当前专注
    */
-  private checkCurFocusing() {
-
+  private async checkCurFocusing() {
+    const focus = playerMgr().extra.focus;
+    if (focus) await this.processCurFocusing(DataLoader.load(Focus, focus))
+  }
+  protected async processCurFocusing(focus: Focus) {
+    if (await focus.inSelfRoom()) {
+      await PromiseUtils.waitFor(() => this.item && this.isEntered);
+      await this.onFocusStart(focus)
+      playerMgr().extra.focus = null; // 处理完毕
+    } else if (!focus.inNPCRoom())
+      await pageMgr().push(VisitPage, {roomId: focus.roomId});
+    else {} // NPC房间
   }
 
   // endregion
@@ -237,11 +251,13 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   public async enterRoom() {
     await roomMgr().enterRoom(this.roomIndex,
-      e => this.onRoomMessage(e))
+      e => this.onRoomMessage(e));
+    this.isEntered = true;
   }
 
   public async leaveRoom() {
     await roomMgr().leaveRoom();
+    this.isEntered = false;
   }
 
   // endregion
@@ -334,10 +350,10 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   private async onRoomMessage(data: RoomMessage) {
     console.log("onRoomMessage", data);
 
-    await this.setData({
-      // 如果有人当前专注中的数据，使用之，否则如果当前玩家在专注，设置为1，否则为0
-      focusing: data.count || (this.data.runtimeFocus ? 1 : 0)
-    })
+    // await this.setData({
+    //   // 如果有人当前专注中的数据，使用之，否则如果当前玩家在专注，设置为1，否则为0
+    //   focusing: data.count // || (this.data.runtimeFocus ? 1 : 0)
+    // })
 
     const name = data.player.name; let status;
     switch (data.type) {
@@ -348,9 +364,11 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     }
     if (!status) return;
 
-    const messages = this.data.messages
+    const focusing = data.count == undefined ?
+      this.data.focusing : data.count;
+    const messages = this.data.messages;
     messages.unshift({name, status});
-    await this.setData({ messages });
+    await this.setData({ focusing, messages });
   }
 
   // region 窗口事件
@@ -436,13 +454,19 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     }
   }
 
-  private async onFocusStart(focus?) {
-    if (!focus) focus = this.data.focus;
-    const {tagIdx, mode, duration} = focus;
-    focus = await focusMgr().startFocus(tagIdx, mode, duration);
+  protected async onFocusStart(focus?) {
+    let runtimeFocus: RuntimeFocus;
+    if (!focus) {
+      const {tagIdx, mode, duration} = this.data.focus;
+      focus = await focusMgr().startFocus(
+        tagIdx, mode, duration, this.roomIndex);
+      runtimeFocus = RuntimeFocus.create(focus);
+    } else {
+      focus = await focusMgr().continueFocus();
+      runtimeFocus = focus.runtime;
+    }
     await this.setData({
-      focus, runtimeFocus: RuntimeFocus.create(focus),
-      isShowStartWindow: false
+      focus, runtimeFocus, isShowStartWindow: false
     })
     wx.enableAlertBeforeUnload({
       message: "退出将无法完成本次专注，您确定要退出吗？"
@@ -506,3 +530,5 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   // endregion
 }
+import {VisitPage} from "../visit/VisitPage";
+import {PromiseUtils} from "../../utils/PromiseUtils";

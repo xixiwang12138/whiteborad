@@ -11,6 +11,8 @@ import {wsMgr} from "../../websocket/WebSocketManager";
 const StartFocus: Itf<
   {room: IRoomIndex, mode: FocusMode, tagIdx?: number, duration?: number},
   {focus: Partial<Focus>}> = post("/focus/focus/start");
+const ContinueFocus: Itf<{}, {focus: Partial<Focus>}>
+  = post("/focus/focus/continue");
 const EndFocus: Itf<{runtime: RuntimeFocus},
   {focus: Partial<Focus>}> = post("/focus/focus/end");
 const EditFocus: Itf<{focusId: string, tagIdx: number, note: string}>
@@ -35,13 +37,22 @@ export class FocusManager extends BaseManager {
   /**
    * 开始专注
    */
-  public async startFocus(tagIdx: number, mode: FocusMode, duration: number) {
-    const room = await roomMgr().getSelfRoom();
+  public async startFocus(tagIdx: number, mode: FocusMode, duration: number,
+                          room?: IRoomIndex) {
+    room ||= await roomMgr().getSelfRoom();
     // const room = {roomId: "test123456789"}; // TODO: 测试房间，后面需要获取当前房间
     const response = await StartFocus({room, tagIdx, mode, duration});
 
     // roomMgr().onFocusStart();
 
+    return this.curFocus = DataLoader.load(Focus, response.focus);
+  }
+
+  /**
+   * 继续专注
+   */
+  public async continueFocus() {
+    const response = await ContinueFocus();
     return this.curFocus = DataLoader.load(Focus, response.focus);
   }
 

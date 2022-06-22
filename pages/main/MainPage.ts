@@ -187,6 +187,13 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     wx.offAccelerometerChange(() => {});
   }
 
+  /**
+   * 检查当前专注
+   */
+  private checkCurFocusing() {
+
+  }
+
   // endregion
 
   // region 绘制
@@ -269,7 +276,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   }
   private updateFocusTime(runtimeFocus, dt) {
     dt *= appMgr().isDebug ? DebugTimeRate : 1;
-    console.log("updateFocusTime", dt);
+    console.warn("updateFocusTime", dt);
 
     if (!runtimeFocus.isValid) {
       if (runtimeFocus.invalidTime == 0) // 初次

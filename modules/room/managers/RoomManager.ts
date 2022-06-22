@@ -127,8 +127,9 @@ export class RoomManager extends BaseManager {
     this.socket = null;
   }
 
-  public updateRoomFocus(runtimeFocus: RuntimeFocus) {
+  public updateRoomFocus(runtime: RuntimeFocus) {
     if (!this.socket) return;
+    const runtimeFocus = DataLoader.convert(runtime);
     const data = JSON.stringify({
       type: "focusUpdate", runtimeFocus
     })

@@ -10,6 +10,7 @@ import {PlayerBaseInfo} from "../../player/data/Player";
 import SocketTask = WechatMiniprogram.SocketTask;
 import {roomSkinRepo} from "../data/RoomSkin";
 import {playerMgr} from "../../player/managers/PlayerManager";
+import {RuntimeFocus} from "../../focus/data/Focus";
 
 const GetRoom: Itf<{room: IRoomIndex},
   {room?: Partial<Room>, npcRoom?: Partial<NPCRoom>}>
@@ -51,6 +52,23 @@ export class RoomManager extends BaseManager {
 
   public selfRoom: Room;
   public socket: SocketTask;
+
+  // region RoomIndex转化
+
+  public room2Str(room: IRoomIndex) {
+    return room.roomId || room.npcRoomId.toString();
+  }
+  public str2Room(strRoom: string): IRoomIndex {
+    if (!!Number(strRoom)) return {npcRoomId: Number(strRoom)};
+    return {roomId: strRoom};
+  }
+  public roomEql(room1: IRoomIndex, room2: IRoomIndex) {
+    return this.room2Str(room1) == this.room2Str(room2);
+  }
+
+  // endregion
+
+  // region 业务逻辑
 
   public async getRoom(room: IRoomIndex) {
     const response = await GetRoom({room});
@@ -95,30 +113,41 @@ export class RoomManager extends BaseManager {
 
   public async enterRoom(room: IRoomIndex,
                          onMessage: (data: RoomMessage) => any) {
-    await EnterRoom({room});
-    const wsRoomId = room.roomId || room.npcRoomId.toString();
+    if (this.socket) await this.leaveRoom();
+    // await EnterRoom({room});
+    const roomStr = this.room2Str(room);
     // TODO: 临时代码
-    this.socket = wsMgr().connect(RoomType, [wsRoomId], onMessage);
+    this.socket = wsMgr().connect(RoomType, [roomStr], onMessage);
   }
 
   public async leaveRoom() {
-    await LeaveRoom();
+    // await LeaveRoom();
     // TODO: 临时代码
     wsMgr().close(this.socket, CloseCode);
     this.socket = null;
   }
 
-  public onFocusStart() {
+  public updateRoomFocus(runtimeFocus: RuntimeFocus) {
     if (!this.socket) return;
-    // TODO: 临时代码
-    const data = JSON.stringify({type: "focusStart"});
+    const data = JSON.stringify({
+      type: "focusUpdate", runtimeFocus
+    })
     this.socket.send({data});
   }
-  public onFocusEnd() {
-    if (!this.socket) return;
-    // TODO: 临时代码
-    const data = JSON.stringify({type: "focusEnd"});
-    this.socket.send({data});
-  }
+
+  // endregion
+
+  // public onFocusStart() {
+  //   if (!this.socket) return;
+  //   // TODO: 临时代码
+  //   const data = JSON.stringify({type: "focusStart"});
+  //   this.socket.send({data});
+  // }
+  // public onFocusEnd() {
+  //   if (!this.socket) return;
+  //   // TODO: 临时代码
+  //   const data = JSON.stringify({type: "focusEnd"});
+  //   this.socket.send({data});
+  // }
 
 }

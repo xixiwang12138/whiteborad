@@ -6,6 +6,7 @@ import {IRoomIndex} from "../../room/data/PlayerRoom";
 import {blockLoading} from "../../core/managers/LoadingManager";
 import {roomMgr} from "../../room/managers/RoomManager";
 import {RewardGroup} from "../../player/data/Reward";
+import {wsMgr} from "../../websocket/WebSocketManager";
 
 const StartFocus: Itf<
   {room: IRoomIndex, mode: FocusMode, tagIdx?: number, duration?: number},
@@ -39,7 +40,7 @@ export class FocusManager extends BaseManager {
     // const room = {roomId: "test123456789"}; // TODO: 测试房间，后面需要获取当前房间
     const response = await StartFocus({room, tagIdx, mode, duration});
 
-    roomMgr().onFocusStart();
+    // roomMgr().onFocusStart();
 
     return this.curFocus = DataLoader.load(Focus, response.focus);
   }
@@ -50,7 +51,7 @@ export class FocusManager extends BaseManager {
   public async endFocus(runtime: RuntimeFocus, tagIdx?: number, note?: string) {
     const response = await EndFocus({runtime});
 
-    roomMgr().onFocusEnd();
+    // roomMgr().onFocusEnd();
 
     const res = DataLoader.load(Focus, response.focus);
     const rewards = this.curRewards = await res.realRewards();
@@ -68,11 +69,11 @@ export class FocusManager extends BaseManager {
   }
 
   /**
-   * 取消专注
+   * 更新专注
    */
-  @blockLoading
   public updateFocus(runtime: RuntimeFocus) {
-    return UpdateFocus({runtime});
+    // return UpdateFocus({runtime});
+    roomMgr().updateRoomFocus(runtime);
   }
 
   /**
@@ -81,7 +82,7 @@ export class FocusManager extends BaseManager {
   public async cancelFocus(reason?: string) {
     const response = await CancelFocus({reason});
 
-    roomMgr().onFocusEnd();
+    // roomMgr().onFocusEnd();
 
     const res = DataLoader.load(Focus, response.focus);
     this.curFocus = null;

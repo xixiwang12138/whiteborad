@@ -3,6 +3,10 @@ import {RootPage} from "./RootPage";
 import {BaseData} from "../../../modules/core/data/BaseData";
 import {field} from "../../../modules/core/data/DataLoader";
 import {pageMgr} from "../../../modules/core/managers/PageManager";
+import {
+	startUpdateContext,
+	stopUpdateContext
+} from "../../../modules/core/managers/BaseManager";
 
 // export enum PageState {
 // 	Unloaded, Shown, Hidden
@@ -28,10 +32,6 @@ export abstract class BasePage<
 	public extra: any; // extra是微信参数传递
 
 	public app;
-
-	// public status: PageState = PageState.Unloaded;
-
-	// private isLoaded = false;
 
 	constructor(params?: P) {
 		super();
@@ -91,6 +91,7 @@ export abstract class BasePage<
 	 */
 	@pageFunc
 	public onShow() {
+		startUpdateContext();
 		// this.status = PageState.Shown;
 	}
 
@@ -99,6 +100,7 @@ export abstract class BasePage<
 	 */
 	@pageFunc
 	public onHide() {
+		stopUpdateContext()
 		// this.status = PageState.Hidden;
 	}
 

@@ -116,15 +116,12 @@ export class MainPageData extends BasePageData {
 
 export const RoomType = "room";
 
-const FocusUpdateInterval = 10000; // 5秒更新一次
+const FocusUpdateInterval = 1000; // 1秒更新一次
 
 @page("main", "主页")
 export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   public data = new MainPageData();
-
-  private sys: SystemInfo;
-  private lastFocusUpdateTime = 0;
 
   /**
    * 部分页
@@ -134,27 +131,28 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   public roomDrawingPage: RoomDrawingPage = new RoomDrawingPage();
   public shareAppPage: ShareAppPage = new ShareAppPage()
 
+  // region 测试代码
+
+  private testAudio() {
+    const audio = wx.getBackgroundAudioManager();
+    audio.title = "白噪音";
+    audio.epname = "白噪音";
+    audio.singer = "白噪音";
+    audio.src = "cloud://homi-2gy4vrcg19947ac0.686f-homi-2gy4vrcg19947ac0-1312366958/whiteNoises/test2.wav"
+    audio.onEnded(() => {
+      audio.src = "cloud://homi-2gy4vrcg19947ac0.686f-homi-2gy4vrcg19947ac0-1312366958/whiteNoises/test2.wav"
+    })
+  }
+
+  // endregion
+
   // region 初始化
 
   async onLoad(e) {
     console.log("onLoad")
     await super.onLoad(e);
     await this.initialize();
-
-    // 测试代码
-    const audio = wx.getBackgroundAudioManager();
-    audio.title = "白噪音";
-    audio.epname = "白噪音";
-    audio.singer = "白噪音";
-    audio.src = "cloud://homi-2gy4vrcg19947ac0.686f-homi-2gy4vrcg19947ac0-1312366958/whiteNoises/test1.wav"
-    audio.onStop(() => {
-      console.log("onStop");
-      audio.play();
-    })
-    audio.onEnded(() => {
-      console.log("onEnded");
-      audio.src = "cloud://homi-2gy4vrcg19947ac0.686f-homi-2gy4vrcg19947ac0-1312366958/whiteNoises/test1.wav"
-    })
+    this.testAudio();
   }
   async onShow() {
     console.log("onShow")
@@ -169,7 +167,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   async onUnload() {
     if (this.data.runtimeFocus) {
-      await this.onFailed("界面退出");
+      await this.onFocusFailed("界面退出");
       await alertMgr().showToast("由于页面退出，您已取消专注");
     }
     this.releaseWxListeners();
@@ -179,28 +177,6 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     // await this.refresh();
     this.setupWxListeners();
   }
-
-  @waitForLogin
-  @waitForDataLoad
-  private async refresh() {
-    await this.loadRoom();
-    await this.playerPage.resetPlayer();
-    await this.roomDrawingPage.draw(this.item);
-  }
-
-  protected getRoom() {
-    return roomMgr().getSelfRoom();
-  }
-  protected get roomIndex() {
-    return {roomId: this.item.roomId}
-  }
-
-  private async loadRoom() {
-    // const room = Room.testData();
-    const room = await this.getRoom();
-    await this.setItem(room);
-  }
-
   private setupWxListeners() {
     // 反扣传感器
     wx.onAccelerometerChange(res =>
@@ -209,6 +185,18 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   }
   private releaseWxListeners() {
     wx.offAccelerometerChange(() => {});
+  }
+
+  // endregion
+
+  // region 绘制
+
+  @waitForLogin
+  @waitForDataLoad
+  private async refresh() {
+    await this.loadRoom();
+    await this.playerPage.resetPlayer();
+    await this.roomDrawingPage.draw(this.item);
   }
 
   // endregion
@@ -223,6 +211,23 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   // region 房间操作
 
+  // region 房间获取
+
+  protected getRoom() {
+    return roomMgr().getSelfRoom();
+  }
+  protected get roomIndex() {
+    return {roomId: this.item.roomId}
+  }
+
+  private async loadRoom() {
+    // const room = Room.testData();
+    const room = await this.getRoom();
+    await this.setItem(room);
+  }
+
+  // endregion
+
   public async enterRoom() {
     await roomMgr().enterRoom(this.roomIndex,
       e => this.onRoomMessage(e))
@@ -236,11 +241,12 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   // region 更新
 
+  private lastUpdateTime = 0;
+
   update() {
     super.update();
     this.updateDown();
     this.updateTime();
-    this.updateFocus();
     this.updateResult();
     this.roomDrawingPage.update(this.isFocusing);
   }
@@ -250,12 +256,20 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     runtimeFocus.isDown = this.data.isDown;
     this.setData({ runtimeFocus })
   }
-  private updateTime() {
-    const runtimeFocus = this.data.runtimeFocus;
+  private updateTime(runtimeFocus?) {
+    runtimeFocus ||= this.data.runtimeFocus;
     if (!runtimeFocus) return;
 
-    const rate = appMgr().isDebug ? DebugTimeRate : 1;
-    const dt = pageMgr().deltaTime * rate;
+    const now = Date.now();
+    if (this.lastUpdateTime > 0)
+      this.updateFocusTime(runtimeFocus,
+        now - this.lastUpdateTime);
+    this.lastUpdateTime = now;
+    // const dt = pageMgr().deltaTime * rate;
+  }
+  private updateFocusTime(runtimeFocus, dt) {
+    dt *= appMgr().isDebug ? DebugTimeRate : 1;
+    console.log("updateFocusTime", dt);
 
     if (!runtimeFocus.isValid) {
       if (runtimeFocus.invalidTime == 0) // 初次
@@ -268,25 +282,14 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     runtimeFocus.realTime += dt; // 实际经过的时间
 
     if (runtimeFocus.isSuccess) {
-      this.onSuccess();
-      this.setData({ runtimeFocus: null });
+      this.onFocusSuccess();
+      this.onFocusEnd();
     } else if (runtimeFocus.isFailed) {
-      this.onFailed();
-      this.setData({ runtimeFocus: null });
+      this.onFocusFailed();
+      this.onFocusEnd();
       alertMgr().showToast("好遗憾，专注失败了，调整状态再来一次吧！");
     } else
       this.setData({ runtimeFocus });
-  }
-  private updateFocus() {
-    const runtimeFocus = this.data.runtimeFocus;
-    if (!runtimeFocus) return;
-
-    const now = Date.now();
-    if (now - this.lastFocusUpdateTime
-      <= FocusUpdateInterval) return;
-    this.lastFocusUpdateTime = now;
-
-    focusMgr().updateFocus(runtimeFocus);
   }
   private updateResult() {
     const resAni = this.data.resAni;
@@ -294,6 +297,28 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     resAni.update();
     this.setData({resAni});
   }
+
+  // region 专注更新
+
+  private focusUpdateTask;
+  private startFocusUpdate() {
+    this.focusUpdateTask ||= setInterval(
+      () => this.updateFocus(), FocusUpdateInterval
+    )
+  }
+  private stopFocusUpdate() {
+    clearInterval(this.focusUpdateTask);
+    this.focusUpdateTask = null;
+  }
+  private updateFocus() {
+    const runtimeFocus = this.data.runtimeFocus;
+    if (!runtimeFocus) return;
+
+    this.updateTime(runtimeFocus);
+    focusMgr().updateFocus(runtimeFocus);
+  }
+
+  // endregion
 
   // endregion
 
@@ -319,18 +344,6 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     const messages = this.data.messages
     messages.unshift({name, status});
     await this.setData({ messages });
-  }
-
-  //解决中文拼音输入受限问题
-  @pageFunc
-  private chan (e) {
-    let value = e.detail.value
-    if (value.length < 7) return
-    // 在长度超过十位时，对字符串进行截取，并重新赋值
-    value = value.substr(0, 6)
-    this.setData({
-      "item.name":value
-    })
   }
 
   // region 窗口事件
@@ -392,17 +405,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   @pageFunc
   private async onSubmit() {
-    // const focus = this.data.focus;
-    // TODO: 离线测试
-    const {tagIdx, mode, duration} = this.data.focus;
-    const focus = await focusMgr().startFocus(tagIdx, mode, duration);
-    await this.setData({
-      focus, runtimeFocus: RuntimeFocus.create(focus),
-      isShowStartWindow: false
-    })
-    wx.enableAlertBeforeUnload({
-      message: "退出将无法完成本次专注，您确定要退出吗？"
-    });
+    await this.onFocusStart();
   }
 
   @pageFunc
@@ -421,13 +424,26 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     const res = await alertMgr().showAlert(
       "确定要取消专注吗？取消专注将不会获得任何奖励", true);
     if (res.confirm) {
-      await this.onFailed("用户取消专注");
+      await this.onFocusFailed("用户取消专注");
       await alertMgr().showToast("您已取消专注");
     }
   }
 
-  private async onSuccess() {
-    wx.disableAlertBeforeUnload();
+  private async onFocusStart(focus?) {
+    if (!focus) focus = this.data.focus;
+    const {tagIdx, mode, duration} = focus;
+    focus = await focusMgr().startFocus(tagIdx, mode, duration);
+    await this.setData({
+      focus, runtimeFocus: RuntimeFocus.create(focus),
+      isShowStartWindow: false
+    })
+    wx.enableAlertBeforeUnload({
+      message: "退出将无法完成本次专注，您确定要退出吗？"
+    });
+    this.startFocusUpdate();
+  }
+
+  private async onFocusSuccess() {
     const baseExp = this.playerPage.player.exp;
     const focus = await focusMgr().endFocus(
       this.data.runtimeFocus);
@@ -439,10 +455,17 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     })
   }
 
-  private async onFailed(reason = "专注失败") {
-    wx.disableAlertBeforeUnload();
+  private async onFocusFailed(reason = "专注失败") {
     const focus = await focusMgr().cancelFocus("专注失败");
-    await this.setData({ focus, runtimeFocus: null })
+    await this.setData({
+      focus, runtimeFocus: null
+    })
+  }
+
+  private onFocusEnd() {
+    wx.disableAlertBeforeUnload();
+    this.setData({ runtimeFocus: null })
+    this.stopFocusUpdate();
   }
 
   // endregion
@@ -455,6 +478,18 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     const name = e.detail.value;
     await roomMgr().editRoomInfo({name});
     await alertMgr().showToast("修改房间名成功", "success")
+  }
+
+  // 解决中文拼音输入受限问题
+  @pageFunc
+  private onRoomNameChange(e) {
+    let value = e.detail.value
+    if (value.length < 7) return
+    // 在长度超过十位时，对字符串进行截取，并重新赋值
+    value = value.substr(0, 6)
+    this.setData({
+      "item.name":value
+    })
   }
 
   @pageFunc

@@ -9,16 +9,23 @@ import {DataLoader} from "../../core/data/DataLoader";
 import {handleError} from "../../core/managers/ErrorManager";
 import {Constructor} from "../../core/BaseContext";
 
-const Login: Itf<
-  {openid: string, userInfo: WxUserInfo},
-  {player: Player, token: string, data: {[T: string]: PlayerData}, extra: any}>
-  = post("/player/player/login", false);
+export type LoginExtra = {
+  focus?: Partial<Focus>
+}
+
+const Login: Itf<{
+    openid: string, userInfo: WxUserInfo
+  }, {
+    player: Partial<Player>, token: string,
+    data: {[T: string]: Partial<PlayerData>},
+    extra: LoginExtra
+  }> = post("/player/player/login", false);
 const Logout: Itf = post("/player/player/logout");
 const GetOpenid: Itf<{code: string}, {openid: string}>
   = post("/player/openid/get", false);
 const GetPhone: Itf<{code: string}, {phone: string}>
   = post("/player/phone/get");
-const GetPlayerData: Itf<{}, {data: {[T: string]: PlayerData}}>
+const GetPlayerData: Itf<{}, {data: {[T: string]: Partial<PlayerData>}}>
   = post("/player/player_data/get");
 const GetPlayerInfo: Itf<{}, {player: Player}>
   = get("/player/player_info/get");
@@ -55,7 +62,6 @@ export class PlayerManager extends BaseManager {
   /**
    * 用户
    */
-    // TODO: 这种写法能否使用修饰器简化？
   private _player: Player;
   public get player(): Player {
     return this._player ||= storageMgr().getData(UserInfoKey, Player);
@@ -76,10 +82,15 @@ export class PlayerManager extends BaseManager {
   }
 
   /**
+   * 登陆额外数据
+   */
+  public extra: LoginExtra;
+
+  /**
    * 玩家数据
    */
   public playerData: {[T: string]: PlayerData} = {};
-  public playerDataClasses: {[T: string]: Constructor<any>} = {};
+  public playerDataClasses: {[T: string]: Constructor} = {};
 
   // region 用户操作
 
@@ -111,12 +122,9 @@ export class PlayerManager extends BaseManager {
     const res = await Login({
       openid: this.openid, userInfo
     });
-    this.setAllData(res.data);
-
     appMgr().setupToken(res.token);
-
-    userInfo = DataLoader.load(Player, res.player);
-    return this.player = userInfo as Player;
+    this.setAllData(res.data); this.extra = res.extra;
+    return this.player = DataLoader.load(Player, res.player);
   }
 
   /**
@@ -126,6 +134,7 @@ export class PlayerManager extends BaseManager {
     if (!this.isLogin) return;
     await Logout();
     appMgr().clearToken();
+    this.clearAllData();
     this.player = null;
   }
 
@@ -249,6 +258,13 @@ export class PlayerManager extends BaseManager {
     }
   }
 
+  /**
+   * 清除玩家数据
+   */
+  public clearAllData() {
+    this.playerData = {};
+  }
+
   // endregion
 
   // region 业务逻辑
@@ -282,3 +298,4 @@ export class PlayerManager extends BaseManager {
 }
 
 import {RewardCode} from "../data/RewardCode";
+import {Focus} from "../../focus/data/Focus";

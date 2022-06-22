@@ -33,10 +33,6 @@ export class LoginPage extends BasePage<Data> {
 
 	async onLoad(e): Promise<void> {
 		await super.onLoad(e);
-
-		// const time = new Date(2022, 5, 10, 19, 0, 0);
-		// if (Date.now() > time.getTime())
-		// 	await this.setData({name: "元宇宙"})
 		await this.processInvite();
 	}
 

@@ -63,7 +63,7 @@ abstract class PlayerRewardProcessor extends RewardProcessor {
 @rewardProcessor(RewardType.Gold)
 class GoldRewardProcessor extends PlayerRewardProcessor {
 
-	public get description() { return `金币：${this.value}`; }
+	public get description() { return `金币 ${this.value}`; }
 
 	public invoke(rate?) { this.player.gainGold(this.value); }
 }
@@ -71,7 +71,7 @@ class GoldRewardProcessor extends PlayerRewardProcessor {
 @rewardProcessor(RewardType.Exp)
 class ExpRewardProcessor extends PlayerRewardProcessor {
 
-	public get description() { return `经验：${this.value}`; }
+	public get description() { return `经验 ${this.value}`; }
 
 	public invoke(rate?) { this.player.gainExp(this.value); }
 }
@@ -88,7 +88,7 @@ class RoomSkinRewardProcessor extends RewardProcessor {
 	}
 
 	private get skin() { return roomSkinRepo().getById(this.value) }
-	public get description() { return `房间皮肤：${this.skin.name} 等级${this.skin.level}`; }
+	public get description() { return `${this.skin.name} 等级${this.skin.level}`; }
 
 	protected conditions(): ConditionGroup {
 		return ConditionGroup.create(cFun(
@@ -105,7 +105,7 @@ class RoomSkinRewardProcessor extends RewardProcessor {
 @rewardProcessor(RewardType.Score)
 class ScoreRewardProcessor extends PlayerRewardProcessor {
 
-	public get description() { return `积分：${this.value}`; }
+	// public get description() { return `积分：${this.value}`; }
 
 	invoke(rate?) {
 		this.player.gainScore(this.value);

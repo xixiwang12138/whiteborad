@@ -94,6 +94,9 @@ export class RewardGroup extends BaseData {
 			r => createProcessor(r));
 		return processors.map(p => p.description).filter(d => !!d);
 	}
+	public description(separator = " ") {
+		return this.descriptions().join(separator);
+	}
 
 	public invoke(rate = 1) {
 		const processors = this.rewards.map(

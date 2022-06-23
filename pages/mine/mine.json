@@ -3,7 +3,9 @@
     "van-popup": "@vant/weapp/popup/index",
     "gold-level-display": "../../components/gold-level-display/gold-level-display",
     "real-tab-bar": "../../components/real-tab-bar/real-tab-bar",
-    "van-empty": "@vant/weapp/empty/index"
+    "van-empty": "@vant/weapp/empty/index",
+    "van-grid": "@vant/weapp/grid/index",
+    "van-grid-item": "@vant/weapp/grid-item/index"
   },
   "navigationStyle": "custom"
 }

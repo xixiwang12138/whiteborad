@@ -292,7 +292,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   }
   private updateFocusTime(runtimeFocus, dt) {
     dt *= appMgr().isDebug ? DebugTimeRate : 1;
-    console.warn("updateFocusTime", dt);
+    // console.warn("updateFocusTime", dt);
 
     if (!runtimeFocus.isValid) {
       if (runtimeFocus.invalidTime == 0) // 初次
@@ -373,6 +373,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   // region 窗口事件
 
+  // WindowType = "Start" | "Room" | "Tags" | "Result";
   @pageFunc
   async onClickShow(e) {
     const window = e.currentTarget.dataset.window;

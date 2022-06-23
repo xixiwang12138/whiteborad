@@ -9,6 +9,7 @@ import {field} from "../../modules/core/data/DataLoader";
 import {roomMgr} from "../../modules/room/managers/RoomManager";
 import {Room, RoomInfo} from "../../modules/room/data/Room";
 import {QueryPage, QueryParams} from "../common/partPages/QueryPage";
+import {ShareAppPage} from "../common/partPages/SharePage";
 
 class Data extends BasePageData {
 
@@ -27,10 +28,11 @@ export class SquarePage extends BasePage<Data> {
 	 * 部分页
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
+	public roomPage: RoomPage = new RoomPage();
+	public shareAppPage: ShareAppPage = new ShareAppPage();
 	public queryPage: QueryPage = new QueryPage<RoomInfo>(
 		this.loadRooms.bind(this), "rooms"
 	)
-	public roomPage: RoomPage = new RoomPage();
 
 	public onShow() {
 		super.onShow();

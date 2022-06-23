@@ -20,8 +20,6 @@ import {DataLoader, DataOccasion} from "../data/DataLoader";
 
 const GetData: Itf<{}, {[T: string]: BaseData[]}>
 	= get("/core/data/get");
-// const GetConfig: Itf<{}, {[T: string]: BaseConfig[]}>
-// 	= get("/core/config/get");
 
 const ClazzDataKey = "dataName";
 

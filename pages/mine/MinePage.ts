@@ -2,34 +2,43 @@ import {page, pageFunc} from "../common/PageBuilder";
 import {BasePage, BasePageData} from "../common/core/BasePage";
 import {playerMgr, waitForLogin} from "../../modules/player/managers/PlayerManager";
 import {PlayerPage} from "../common/partPages/PlayerPage";
-import {field} from "../../modules/core/data/DataLoader";
-import {PlayerEditableInfo, PlayerState} from "../../modules/player/data/Player";
+import {DataOccasion, field, occasion} from "../../modules/core/data/DataLoader";
+import {PlayerEditableInfo} from "../../modules/player/data/Player";
 import {input} from "../common/utils/PageUtils";
 import {RoomPage} from "../common/partPages/RoomPage";
 import {alertMgr} from "../../modules/core/managers/AlertManager";
+import InviteConfig from "../../modules/player/config/InviteConfig";
+import {configMgr, waitForConfigLoad} from "../../modules/core/managers/ConfigManager";
+
 class Data extends BasePageData {
 
-	@field(Array)
-	collectedRooms = [{
-		userName: "测试君", level: 3, name: "摆烂12小屋"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋"
-	}];
+	// @field(Array)
+	// collectedRooms = [{
+	// 	userName: "测试君", level: 3, name: "摆烂12小屋"
+	// },{
+	// 	userName: "测试君", level: 3, name: "摆烂小屋"
+	// },{
+	// 	userName: "测试君", level: 3, name: "摆烂小屋"
+	// },{
+	// 	userName: "测试君", level: 3, name: "摆烂小屋"
+	// },{
+	// 	userName: "测试君", level: 3, name: "摆烂小屋"
+	// },{
+	// 	userName: "测试君", level: 3, name: "摆烂小屋"
+	// },{
+	// 	userName: "测试君", level: 3, name: "摆烂小屋"
+	// }];
 	@field
 	info: PlayerEditableInfo = {};
 	@field
-	isEdit = false;
+	isShowInfoWindow: boolean = false;
+	@field
+	isShowInviteWindow: boolean = false;
 
+	@field(InviteConfig)
+	inviteConfig: InviteConfig;
+	@field
+	inviteCount: number = 0;
 }
 
 @page("mine", "我的")
@@ -42,6 +51,18 @@ export class MinePage extends BasePage<Data> {
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
 	public roomPage: RoomPage = new RoomPage();
+
+	async onLoad(e): Promise<void> {
+		await super.onLoad(e);
+		await this.setupConfigs();
+	}
+
+	@waitForConfigLoad
+	private setupConfigs() {
+		this.setData({
+			inviteConfig: configMgr().config(InviteConfig)
+		})
+	}
 
 	async onReady() {
 		super.onReady();
@@ -64,30 +85,32 @@ export class MinePage extends BasePage<Data> {
 
 	// region 事件
 
+	// region 窗口事件
+
+	// WindowType = "Info" | "Invite";
 	@pageFunc
-	public onAvatarTap(){
-		this.setData({ isEdit: true }).then()
+	async onClickShow(e) {
+		const window = e.currentTarget.dataset.window;
+		await this[`on${window}WindowShow`]?.();
+		await this.setData({ [`isShow${window}Window`]: true })
+	}
+	@pageFunc
+	async onClickHide(e) {
+		const window = e.currentTarget.dataset.window;
+		await this[`on${window}WindowHide`]?.();
+		await this.setData({ [`isShow${window}Window`]: false })
 	}
 
-	@pageFunc
-	public onClose(){
-		this.setData({ isEdit: false }).then()
-	}
+	// endregion
 
 	@pageFunc
-	onMaleTap() {
-		this.setData({ "info.gender": 1 });
-	}
-
+	onMaleTap() { this.setData({ "info.gender": 1 }); }
 	@pageFunc
-	onFemaleTap() {
-		this.setData({ "info.gender": 2 });
-	}
+	onFemaleTap() { this.setData({ "info.gender": 2 }); }
 
 	@pageFunc
 	@input("info.name")
 	onNameInput() {}
-
 	@pageFunc
 	@input("info.slogan")
 	onSloganInput() {}
@@ -95,7 +118,7 @@ export class MinePage extends BasePage<Data> {
 	@pageFunc
 	public async onSubmit() {
 		await playerMgr().editInfo(this.data.info);
-		await this.setData({ isEdit: false })
+		await this.setData({ isShowInfoWindow: false })
 		this.playerPage.resetPlayer()
 	}
 
@@ -107,7 +130,7 @@ export class MinePage extends BasePage<Data> {
 		})
 		if (res.content) {
 			const rc = await playerMgr().useRewardCode(res.content);
-			const desc = rc.rewardGroup().descriptions().join(" ");
+			const desc = rc.rewardGroup().description();
 			await alertMgr().showAlert(`兑换成功！你已获得 ${desc}！`)
 			this.playerPage.resetPlayer();
 		}

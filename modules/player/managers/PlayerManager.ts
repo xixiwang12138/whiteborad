@@ -301,6 +301,9 @@ export class PlayerManager extends BaseManager {
    */
   public async claimInvite(index: number) {
     const pt = playerMgr().getData(PlayerTask);
+    if (pt.inviteTask.claimedRewards.includes(index))
+      throw "奖励已领取！";
+
     const config = configMgr().config(InviteConfig);
     // 处理条件
     config.conditions(index).process();

@@ -104,7 +104,7 @@
       <view wx:for="{{inviteConfig.data}}" class="row">
         <text class="left">{{item.count}}人</text>
         <text class="middle">{{item.rewardDescription}}</text>
-        <view wx:if="{{inviteTask.claimedRewards.includes(index)}}"
+        <view wx:if="{{item.isClaimed}}"
               class="right button disabled">已领取</view>
         <view wx:elif="{{inviteTask.count < item.count}}"
               class="right button disabled">未完成</view>

@@ -10,6 +10,7 @@ import {alertMgr} from "../../modules/core/managers/AlertManager";
 import InviteConfig from "../../modules/player/config/InviteConfig";
 import {configMgr, waitForConfigLoad} from "../../modules/core/managers/ConfigManager";
 import {PlayerInviteTask, PlayerTask} from "../../modules/player/data/PlayerTask";
+import {handleError} from "../../modules/core/managers/ErrorManager";
 
 class Data extends BasePageData {
 
@@ -58,6 +59,7 @@ export class MinePage extends BasePage<Data> {
 		await this.setupConfigs();
 	}
 
+	@waitForLogin
 	@waitForConfigLoad
 	private setupConfigs() {
 		this.setData({
@@ -126,6 +128,7 @@ export class MinePage extends BasePage<Data> {
 	}
 
 	@pageFunc
+	@handleError
 	public async onClaimInvite(e) {
 		const index = Number(e.currentTarget.dataset.index);
 		const pt = await playerMgr().claimInvite(index);
@@ -133,6 +136,8 @@ export class MinePage extends BasePage<Data> {
 		await this.setData({
 			inviteTask: pt.inviteTask
 		});
+		await this.setupConfigs();
+		await alertMgr().showToast(`领取成功！`, "success")
 	}
 
 	@pageFunc

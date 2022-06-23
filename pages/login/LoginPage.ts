@@ -31,27 +31,17 @@ export class LoginPage extends BasePage<Data> {
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
 
-	async onLoad(e): Promise<void> {
-		await super.onLoad(e);
-		await this.processInvite();
-	}
-
 	onReady() {
 		super.onReady();
 		this.playerPage.registerOnLogin(
 			() => this.onLogin())
 	}
 
-	private async processInvite() {
-		const inviteCode = this.getExtra("code");
-		if (inviteCode) await playerMgr().invitePlayer(inviteCode);
-	}
-
 	// region 事件
 
-	onLogin() {
+	async onLogin() {
 		const player = this.playerPage.player;
-		this.setData({
+		await this.setData({
 			info: {
 				name: player.name,
 				slogan: player.slogan,
@@ -60,10 +50,16 @@ export class LoginPage extends BasePage<Data> {
 			},
 			isLogin: true
 		});
-		if (player.state == PlayerState.Newer) // 如果是新人
-			this.setData({ isNewer: true });
-		else
-			pageMgr().goto(MainPage);
+		// 如果是新人
+		if (player.state == PlayerState.Newer) {
+			await this.setData({ isNewer: true });
+			await this.processInvite();
+		} else await pageMgr().goto(MainPage);
+	}
+
+	private async processInvite() {
+		const inviteCode = this.getExtra("code");
+		if (inviteCode) await playerMgr().invitePlayer(inviteCode);
 	}
 
 	// region 页面事件

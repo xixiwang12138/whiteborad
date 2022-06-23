@@ -21,10 +21,10 @@ type ShareTimelineContent = {
 
 export class ShareAppPage extends PartialPage {
 
-	private readonly sharePage: Constructor<BasePage>;
-	private readonly extra: any = {};
+	public sharePage: Constructor<BasePage>;
+	public extra: any = {};
 
-	public readonly onShare?: (ShareParams) => ShareAppContent;
+	public onShare?: (ShareParams) => ShareAppContent;
 
 	constructor(sharePage: Constructor<BasePage> = DefaultSharePage,
 							extra?) {
@@ -49,9 +49,8 @@ export class ShareAppPage extends PartialPage {
 
 export class ShareTimelinePage extends PartialPage {
 
-	private readonly query: any = {};
-
-	public readonly onShare?: () => ShareTimelineContent;
+	public query: any = {};
+	public onShare?: () => ShareTimelineContent;
 
 	constructor(query?) {
 		super();
@@ -70,4 +69,4 @@ export class ShareTimelinePage extends PartialPage {
 	}
 }
 
-const DefaultSharePage = LoginPage;
+export const DefaultSharePage = LoginPage;

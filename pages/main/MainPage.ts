@@ -218,6 +218,10 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     await this.loadRoom();
     await this.playerPage.resetPlayer();
     await this.roomDrawingPage.draw(this.item);
+
+    this.shareAppPage.extra = {
+      code: this.playerPage.player.inviteCode
+    };
   }
 
   // endregion

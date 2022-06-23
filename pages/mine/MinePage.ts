@@ -11,6 +11,7 @@ import InviteConfig from "../../modules/player/config/InviteConfig";
 import {configMgr, waitForConfigLoad} from "../../modules/core/managers/ConfigManager";
 import {PlayerInviteTask, PlayerTask} from "../../modules/player/data/PlayerTask";
 import {handleError} from "../../modules/core/managers/ErrorManager";
+import {DefaultSharePage, ShareAppPage} from "../common/partPages/SharePage";
 
 class Data extends BasePageData {
 
@@ -53,6 +54,7 @@ export class MinePage extends BasePage<Data> {
 	 */
 	public playerPage: PlayerPage = new PlayerPage();
 	public roomPage: RoomPage = new RoomPage();
+	public shareAppPage: ShareAppPage = new ShareAppPage();
 
 	async onLoad(e): Promise<void> {
 		await super.onLoad(e);
@@ -76,6 +78,9 @@ export class MinePage extends BasePage<Data> {
 	async onLogin() {
 		const player = playerMgr().player;
 		const pt = playerMgr().getData(PlayerTask);
+
+		this.shareAppPage.extra = {code: player.inviteCode};
+
 		// await this.roomPage.loadSelfRoom();
 		await this.setData({
 			info: {

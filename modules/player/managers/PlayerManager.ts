@@ -33,6 +33,8 @@ const EditPlayerInfo: Itf<{info: PlayerEditableInfo}, {}>
   = post("/player/player_info/edit");
 const InvitePlayer: Itf<{inviteCode: string}, {}>
   = post("/player/player/invite");
+const ClaimInvite: Itf<{index: number}>
+  = post("/player/task/claim_invite");
 const UseRewardCode: Itf<{code: string}, {data: Partial<RewardCode>}>
   = post("/player/reward_code/use");
 
@@ -294,8 +296,28 @@ export class PlayerManager extends BaseManager {
     return res;
   }
 
+  /**
+   * 邀请玩家
+   */
+  public async claimInvite(index: number) {
+    const pt = playerMgr().getData(PlayerTask);
+    const config = configMgr().config(InviteConfig);
+    // 处理条件
+    config.conditions(index).process();
+
+    await ClaimInvite({index});
+
+    pt.claim(index);
+    config.rewards(index).invoke();
+
+    return pt;
+  }
+
   // endregion
 }
 
 import {RewardCode} from "../data/RewardCode";
 import {Focus} from "../../focus/data/Focus";
+import {PlayerTask} from "../data/PlayerTask";
+import {configMgr} from "../../core/managers/ConfigManager";
+import InviteConfig from "../config/InviteConfig";

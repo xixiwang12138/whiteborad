@@ -126,6 +126,16 @@ export class MinePage extends BasePage<Data> {
 	}
 
 	@pageFunc
+	public async onClaimInvite(e) {
+		const index = Number(e.currentTarget.dataset.index);
+		const pt = await playerMgr().claimInvite(index);
+		this.playerPage.resetPlayer();
+		await this.setData({
+			inviteTask: pt.inviteTask
+		});
+	}
+
+	@pageFunc
 	public async onRewardCodeTap() {
 		const res = await alertMgr().showAlert({
 			title: "请输入兑换码",

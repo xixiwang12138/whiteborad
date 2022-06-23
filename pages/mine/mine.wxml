@@ -104,8 +104,13 @@
       <view wx:for="{{inviteConfig.data}}" class="row">
         <text class="left">{{item.count}}人</text>
         <text class="middle">{{item.rewardDescription}}</text>
-        <view class="right button {{inviteTask.claimedRewards.includes(index) || inviteTask.count < item.count ? 'disabled' : ''}}">
-          {{inviteTask.claimedRewards.includes(index) ? "已领取" : (inviteTask.count < item.count ? "未完成" : "领取")}}</view>
+        <view wx:if="{{inviteTask.claimedRewards.includes(index)}}"
+              class="right button disabled">已领取</view>
+        <view wx:elif="{{inviteTask.count < item.count}}"
+              class="right button disabled">未完成</view>
+        <view wx:else class="right button"
+              bind:tap="onClaimInvite"
+              data-index="{{index}}">领取</view>
       </view>
     </view>
     <view class="cur">当前已邀请：<text>{{inviteTask.count}}</text>人</view>

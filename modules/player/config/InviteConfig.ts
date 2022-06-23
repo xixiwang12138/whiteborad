@@ -2,6 +2,7 @@ import {BaseConfig, config} from "../../core/data/BaseConfig";
 import {BaseData} from "../../core/data/BaseData";
 import {DataLoader, DataOccasion, field, occasion} from "../../core/data/DataLoader";
 import {Reward, RewardGroup, RewardType} from "../data/Reward";
+import {cGte, ConditionGroup, ConditionType} from "../data/Condition";
 
 class InviteData extends BaseData {
 
@@ -72,5 +73,16 @@ export default class InviteConfig extends BaseConfig {
 		// 	type: RewardType.Score, value: 200
 		// }]),
 	]
+
+	public conditions(index) {
+		return ConditionGroup.create(
+			cGte(ConditionType.InviteCount, this.data[index]?.count || 99999)
+		);
+	}
+	public rewards(index) {
+		return RewardGroup.create(
+			...this.data[index]?.rewards
+		);
+	}
 
 }

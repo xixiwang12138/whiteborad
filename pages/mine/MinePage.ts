@@ -9,6 +9,7 @@ import {RoomPage} from "../common/partPages/RoomPage";
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import InviteConfig from "../../modules/player/config/InviteConfig";
 import {configMgr, waitForConfigLoad} from "../../modules/core/managers/ConfigManager";
+import {PlayerInviteTask, PlayerTask} from "../../modules/player/data/PlayerTask";
 
 class Data extends BasePageData {
 
@@ -37,8 +38,8 @@ class Data extends BasePageData {
 
 	@field(InviteConfig)
 	inviteConfig: InviteConfig;
-	@field
-	inviteCount: number = 0;
+	@field(PlayerInviteTask)
+	inviteTask: PlayerInviteTask;
 }
 
 @page("mine", "我的")
@@ -72,6 +73,7 @@ export class MinePage extends BasePage<Data> {
 	@waitForLogin
 	async onLogin() {
 		const player = playerMgr().player;
+		const pt = playerMgr().getData(PlayerTask);
 		// await this.roomPage.loadSelfRoom();
 		await this.setData({
 			info: {
@@ -80,6 +82,7 @@ export class MinePage extends BasePage<Data> {
 				gender: player.gender,
 				avatarUrl: player.avatarUrl
 			},
+			inviteTask: pt.inviteTask
 		});
 	}
 

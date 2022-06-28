@@ -8,6 +8,7 @@ import {Effect} from "./Effect";
 import {roomSkinRepo} from "./RoomSkin";
 import {roomStarRepo} from "./RoomStar";
 import {CloudFileUtils} from "../../../utils/CloudFileUtils";
+import {RuntimeRoom} from "../runtime/RuntimeRoom";
 
 export enum RoomState {
 	Uncreated, Created, Banned
@@ -214,6 +215,9 @@ export class RoomInfo extends BaseData {
 	public playerAvatar: string
 	// @field(Number)
 	// public playerLevel: number
+
+	@field(RuntimeRoom)
+	public runtimeRoom: RuntimeRoom
 
 	@field(String)
 	@occasion(DataOccasion.Extra)

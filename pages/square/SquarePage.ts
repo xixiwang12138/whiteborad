@@ -51,7 +51,7 @@ export class SquarePage extends BasePage<Data> {
 			"$ne": playerMgr().openid
 		};
 		this.shareAppPage.extra = {
-			code: this.playerPage.player.inviteCode
+			code: playerMgr().player.inviteCode
 		};
 		return (await roomMgr().getRooms(
 			queryParams.offset, queryParams.count,

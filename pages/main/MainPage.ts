@@ -26,7 +26,7 @@ import {ShareAppPage, ShareTimelinePage} from "../common/partPages/SharePage";
 // type WindowType = "Start" | "Room" | "Tags";
 
 const AccThreshold = 0.3;
-const DebugTimeRate = 1;
+const DebugTimeRate = 100;
 
 type Message = {
   name?: string
@@ -156,7 +156,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     await super.onLoad(e);
     await this.initialize();
     await this.checkCurFocusing();
-    this.testAudio();
+    // this.testAudio();
   }
   async onShow() {
     console.log("onShow")

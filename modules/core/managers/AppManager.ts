@@ -57,7 +57,10 @@ class AppManager extends BaseManager {
 		return this._sys ||= wx.getSystemInfoSync();
 	}
 
-	public get isDebug() { return this.sys.platform == 'devtools'; }
+	public get isDebug() {
+		return true;
+		// return this.sys.platform == 'devtools';
+	}
 
 	// region 更新
 

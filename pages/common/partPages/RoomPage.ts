@@ -13,11 +13,11 @@ import {appMgr} from "../../../modules/core/managers/AppManager";
 import {waitForLogin} from "../../../modules/player/managers/PlayerManager";
 import {pageFunc} from "../PageBuilder";
 
-const TimeRate = 100;
+const DebugTimeRate = 10;
 const AniColCount = 4;
 const MotionDuration = 60;
 const DefaultHouseScale = 0.5;
-const FocusingHouseScale = 0.75;
+const FocusingHouseScale = 0.7;
 const DebugAlpha = 0.33;
 
 type RuntimeAnimation = {
@@ -263,7 +263,7 @@ export class RoomDrawingPage extends CanvasPage<DrawingData> {
 	}
 
 	private updateMotions() {
-		const rate = appMgr().isDebug ? TimeRate : 1;
+		const rate = appMgr().isDebug ? DebugTimeRate : 1;
 		const dt = pageMgr().deltaTime * rate;
 
 		this.motion.duration += dt;
@@ -271,7 +271,7 @@ export class RoomDrawingPage extends CanvasPage<DrawingData> {
 			< MotionDuration * 1000) return;
 
 		this.motion.duration = 0;
-		this.motion.curMotionId = MathUtils.randomInt(1, 3);
+		this.motion.curMotionId = MathUtils.randomPick([1, 2, 4]);
 	}
 
 	private updateAnimations() {

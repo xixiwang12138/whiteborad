@@ -8,7 +8,7 @@ import {Effect} from "./Effect";
 import {roomSkinRepo} from "./RoomSkin";
 import {roomStarRepo} from "./RoomStar";
 import {CloudFileUtils} from "../../../utils/CloudFileUtils";
-import {RuntimeRoom} from "../runtime/RuntimeRoom";
+import {RuntimeRoom, VisitorState} from "../runtime/RuntimeRoom";
 
 export enum RoomState {
 	Uncreated, Created, Banned
@@ -222,11 +222,29 @@ export class RoomInfo extends BaseData {
 	@field(String)
 	@occasion(DataOccasion.Extra)
 	public thumbnail: string;
+	@field(Number)
+	@occasion(DataOccasion.Extra)
+	public visitorCount: number;
+	@field(Number)
+	@occasion(DataOccasion.Extra)
+	public focusingCount: number;
+	@field(Boolean)
+	@occasion(DataOccasion.Extra)
+	public anyFocusing: boolean;
+	@field(Boolean)
+	@occasion(DataOccasion.Extra)
+	public ownerOnline: boolean;
 
 	public refresh() {
 		const url = this.skinId && roomSkinRepo().getById(this.skinId).thumbnailUrl;
 		this.thumbnail = url.startsWith("@") ?
 			CloudFileUtils.pathToFileId(url) : url;
+		this.visitorCount = this.runtimeRoom.visitors.length;
+		this.focusingCount = this.runtimeRoom.visitors.filter(
+			v => v.state == VisitorState.Focusing).length;
+		this.anyFocusing = this.focusingCount > 0;
+		this.ownerOnline = !!this.runtimeRoom.visitors
+			.find(v => v.openid == this.openid);
 	}
 }
 

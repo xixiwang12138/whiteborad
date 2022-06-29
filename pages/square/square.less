@@ -101,6 +101,28 @@ page{
 
       .room-user-name {
         margin: 16rpx 0;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .point {
+          width: 20rpx; height: 20rpx;
+          border-radius: 50%;
+          border: white 1px solid;
+        }
+        .point.green {
+          background-color: darkseagreen;
+        }
+        .point.blue {
+          background-color: cornflowerblue;
+        }
+        .point.white {
+          background-color: white;
+        }
+        .name {
+          margin-left: 12rpx;
+        }
       }
 
       .room-level-name {

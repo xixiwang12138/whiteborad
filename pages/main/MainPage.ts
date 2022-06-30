@@ -484,7 +484,6 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     this.startFocusUpdate();
   }
 
-  @showLoading
   private async onFocusSuccess() {
     const baseExp = this.playerPage.player.exp;
     const focus = await focusMgr().endFocus(
@@ -497,7 +496,6 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     })
   }
 
-  @showLoading
   private async onFocusFailed(reason = "专注失败") {
     const focus = await focusMgr().cancelFocus("专注失败");
     await this.setData({

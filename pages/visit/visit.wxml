@@ -92,7 +92,10 @@
     <view class="start-btn" bind:tap="onSubmit">开始专注</view>
   </view>
 </van-dialog>
-<van-dialog use-slot show="{{ isShowResultWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Result">
+<van-dialog use-slot
+            show="{{ isShowResultWindow }}"
+            show-confirm-button="{{false}}"
+            data-window="Result">
   <view class="result-config">
     <view class="focus-title">
       <text lines="1">本次专注时长</text>

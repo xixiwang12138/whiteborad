@@ -70,7 +70,9 @@ class LoadingManager extends BaseManager {
 	public isLoading = false;
 	public isBlocked = false;
 
-	public async showLoading(config: LoadingOptions = {title: "加载中"}) {
+	public async showLoading(config: LoadingOptions = {
+		title: "加载中", mask: true
+	}) {
 		console.error("[S] showLoading", this.isBlocked, config)
 		if (this.isBlocked || !config ||
 			config?.enable === false) return false;

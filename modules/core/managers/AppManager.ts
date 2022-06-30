@@ -58,8 +58,8 @@ class AppManager extends BaseManager {
 	}
 
 	public get isDebug() {
-		return true;
-		// return this.sys.platform == 'devtools';
+		// return true;
+		return this.sys.platform == 'devtools';
 	}
 
 	// region 更新

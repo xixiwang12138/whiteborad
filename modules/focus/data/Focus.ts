@@ -142,7 +142,7 @@ export class Focus extends DynamicData {
 	@field(Number)
 	@occasion(DataOccasion.Extra)
 	public get realDuration() {
-		return Math.floor(this.runtime?.elapseTime / 1000 / 60);
+		return Math.floor(this.runtime?.realTime / 1000 / 60);
 	}
 
 	// region 拓展数据

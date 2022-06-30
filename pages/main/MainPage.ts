@@ -287,7 +287,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     runtimeFocus.isDown = this.data.isDown;
     this.setData({ runtimeFocus })
   }
-  private updateTime(runtimeFocus?) {
+  private updateTime(runtimeFocus?: RuntimeFocus) {
     runtimeFocus ||= this.data.runtimeFocus;
     if (!runtimeFocus) return;
 
@@ -298,7 +298,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     this.lastUpdateTime = now;
     // const dt = pageMgr().deltaTime * rate;
   }
-  private updateFocusTime(runtimeFocus, dt) {
+  private updateFocusTime(runtimeFocus: RuntimeFocus, dt) {
     dt *= appMgr().isDebug ? DebugTimeRate : 1;
     // console.warn("updateFocusTime", dt);
 
@@ -333,6 +333,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   private focusUpdateTask;
   private startFocusUpdate() {
+    this.lastUpdateTime = 0;
     this.focusUpdateTask ||= setInterval(
       () => this.updateFocus(), FocusUpdateInterval
     )

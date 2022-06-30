@@ -12,6 +12,7 @@ import {Constructor} from "../../../modules/core/BaseContext";
 import {appMgr} from "../../../modules/core/managers/AppManager";
 import {waitForLogin} from "../../../modules/player/managers/PlayerManager";
 import {pageFunc} from "../PageBuilder";
+import {showLoading} from "../../../modules/core/managers/LoadingManager";
 
 const DebugTimeRate = 10;
 const AniColCount = 4;

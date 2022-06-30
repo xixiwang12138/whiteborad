@@ -43,8 +43,6 @@ export class RuntimeFocus extends BaseData {
 	@field
 	public realTime: number = 0;
 
-	// @field
-	// public isPause: boolean = false;
 	@field
 	public isDown: boolean = false; // 朝下
 	@field

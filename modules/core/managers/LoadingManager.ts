@@ -26,7 +26,7 @@ export function showLoading(settingOrObj?: LoadingParam | object,
 														detailOrKey?: string, desc?: any): any {
 
 	// 不能加默认值，默认值在startLoading内加
-	let setting: LoadingOptions = null; // = CoreLoading.Default();
+	let setting: LoadingOptions = undefined; // = CoreLoading.Default();
 
 	const process = (obj, key, desc) => {
 		const oriFunc = desc.value;
@@ -70,10 +70,10 @@ class LoadingManager extends BaseManager {
 	public isLoading = false;
 	public isBlocked = false;
 
-	public async showLoading(config: LoadingOptions) {
+	public async showLoading(config: LoadingOptions = {title: "加载中"}) {
 		console.error("[S] showLoading", this.isBlocked, config)
 		if (this.isBlocked || !config ||
-			config.enable === false) return false;
+			config?.enable === false) return false;
 
 		await this.onShowLoading(config);
 		this.isLoading = true;

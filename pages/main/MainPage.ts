@@ -12,7 +12,7 @@ import {focusMgr} from "../../modules/focus/managers/FocusManager";
 import {pageMgr} from "../../modules/core/managers/PageManager";
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {ShopPage} from "../shop/ShopPage";
-import {blockLoading} from "../../modules/core/managers/LoadingManager";
+import {blockLoading, showLoading} from "../../modules/core/managers/LoadingManager";
 import {RoomMessage, roomMgr} from "../../modules/room/managers/RoomManager";
 import SystemInfo = WechatMiniprogram.SystemInfo;
 import CustomEvent = WechatMiniprogram.CustomEvent;
@@ -84,6 +84,8 @@ export class MainPageData extends BasePageData {
   @field(Focus)
   focus: Focus
 
+  // region 窗口
+
   @field
   isShowStartWindow: boolean = false
   @field
@@ -94,6 +96,8 @@ export class MainPageData extends BasePageData {
   isShowResultWindow: boolean = false
   @field
   isShowTipsWindow: boolean = false
+
+  // endregion
 
   @field
   focusTags: string[] = FocusTags
@@ -129,7 +133,6 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
    * 部分页
    */
   public playerPage: PlayerPage = new PlayerPage(true, true);
-  // public roomPage: RoomPage = new RoomPage();
   public roomDrawingPage: RoomDrawingPage = new RoomDrawingPage();
   public shareAppPage: ShareAppPage = new ShareAppPage();
   // public shareTimelinePage: ShareTimelinePage = new ShareTimelinePage();
@@ -212,6 +215,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   // region 绘制
 
+  @showLoading
   @waitForLogin
   @waitForDataLoad
   private async refresh() {
@@ -459,6 +463,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     }
   }
 
+  @showLoading
   protected async onFocusStart(focus?) {
     let runtimeFocus: RuntimeFocus;
     if (!focus) {
@@ -479,6 +484,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     this.startFocusUpdate();
   }
 
+  @showLoading
   private async onFocusSuccess() {
     const baseExp = this.playerPage.player.exp;
     const focus = await focusMgr().endFocus(
@@ -491,6 +497,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     })
   }
 
+  @showLoading
   private async onFocusFailed(reason = "专注失败") {
     const focus = await focusMgr().cancelFocus("专注失败");
     await this.setData({

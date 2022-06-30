@@ -13,6 +13,7 @@ import {Motion, motionRepo} from "../../modules/room/data/Motion";
 import {PlayerRoom} from "../../modules/room/data/PlayerRoom";
 import {handleError} from "../../modules/core/managers/ErrorManager";
 import {alertMgr} from "../../modules/core/managers/AlertManager";
+import {showLoading} from "../../modules/core/managers/LoadingManager";
 
 const RoomPosition = [0.5, 0.3];
 const RoomScale = 0.9;
@@ -113,6 +114,7 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 
 	@pageFunc
 	@handleError
+	@showLoading
 	public async onBuyTap() {
 		const skinId = this.data.curSkinId;
 		await roomMgr().buySkin(skinId);
@@ -138,6 +140,7 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 
 	// region 绘制
 
+	@showLoading
 	public async refresh() {
 		await this.roomDrawingPage.draw(
 			this.item, RoomPosition, RoomScale);

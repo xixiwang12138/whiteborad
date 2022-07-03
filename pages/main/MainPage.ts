@@ -149,9 +149,8 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   private audio: BackgroundAudioManager;
 
   public selectWhiteNoise(idx) {
-    this.setData({
-      curWhiteNoiseIdx: idx
-    })
+    if (this.data.curWhiteNoiseIdx == idx) idx = -1;
+    this.setData({ curWhiteNoiseIdx: idx })
     if (idx >= 0) {
       const wns = whiteNoiseRepo().findByType(idx);
       this.playAudio(MathUtils.randomPick(wns));
@@ -161,15 +160,15 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   private playAudio(wn: WhiteNoise) {
     if (!wn) return;
 
+    this.audio.src = wn.src;
     this.audio.title = wn.title;
     this.audio.epname = wn.epname;
     this.audio.singer = wn.singer;
-    this.audio.src = wn.src;
     this.audio.onEnded(() => this.audio.src = wn.src);
   }
   private stopAudio() {
     this.audio.stop();
-    this.audio.src = "";
+    // this.audio.src = null;
   }
 
   // endregion
@@ -532,6 +531,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     wx.disableAlertBeforeUnload();
     this.setData({ runtimeFocus: null })
     this.stopFocusUpdate();
+    this.stopAudio();
   }
 
   // endregion

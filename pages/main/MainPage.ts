@@ -99,6 +99,13 @@ export class MainPageData extends BasePageData {
 
   // endregion
 
+  @field([String])
+  whiteNoises = [
+    "whiteNoise1", "whiteNoise2", "whiteNoise3", "whiteNoise4"
+  ]
+  @field
+  curWhiteNoiseIdx = -1;
+
   @field
   focusTags: string[] = FocusTags
 
@@ -137,17 +144,32 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   public shareAppPage: ShareAppPage = new ShareAppPage();
   // public shareTimelinePage: ShareTimelinePage = new ShareTimelinePage();
 
-  // region 测试代码
+  // region 白噪音控制
 
-  private testAudio() {
-    const audio = wx.getBackgroundAudioManager();
-    audio.title = "白噪音";
-    audio.epname = "白噪音";
-    audio.singer = "白噪音";
-    audio.src = "cloud://homi-2gy4vrcg19947ac0.686f-homi-2gy4vrcg19947ac0-1312366958/whiteNoises/test2.wav"
-    audio.onEnded(() => {
-      audio.src = "cloud://homi-2gy4vrcg19947ac0.686f-homi-2gy4vrcg19947ac0-1312366958/whiteNoises/test2.wav"
+  private audio: BackgroundAudioManager;
+
+  public selectWhiteNoise(idx) {
+    this.setData({
+      curWhiteNoiseIdx: idx
     })
+    if (idx >= 0) {
+      const wns = whiteNoiseRepo().findByType(idx);
+      this.playAudio(MathUtils.randomPick(wns));
+    } else this.stopAudio();
+  }
+
+  private playAudio(wn: WhiteNoise) {
+    if (!wn) return;
+
+    this.audio.title = wn.title;
+    this.audio.epname = wn.epname;
+    this.audio.singer = wn.singer;
+    this.audio.src = wn.src;
+    this.audio.onEnded(() => this.audio.src = wn.src);
+  }
+  private stopAudio() {
+    this.audio.stop();
+    this.audio.src = "";
   }
 
   // endregion
@@ -156,6 +178,8 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   async onLoad(e) {
     console.log("onLoad")
+    this.audio = wx.getBackgroundAudioManager();
+
     await super.onLoad(e);
     await this.initialize();
     await this.checkCurFocusing();
@@ -515,6 +539,12 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   // region 其他事件
 
   @pageFunc
+  async onWhiteNoiseTap(e) {
+    const index = Number(e.currentTarget.dataset.index);
+    this.selectWhiteNoise(index);
+  }
+
+  @pageFunc
   @blockLoading
   async onRoomNameBlur(e: CustomEvent) {
     const name = e.detail.value;
@@ -543,3 +573,6 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 }
 import {VisitPage} from "../visit/VisitPage";
 import {PromiseUtils} from "../../utils/PromiseUtils";
+import {WhiteNoise, whiteNoiseRepo} from "../../modules/room/data/WhiteNoise";
+import {MathUtils} from "../../utils/MathUtils";
+import BackgroundAudioManager = WechatMiniprogram.BackgroundAudioManager;

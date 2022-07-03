@@ -26,12 +26,12 @@
 <!--  </view>-->
   
   <view class="focus-bottom">
-<!--    <view class="weather-status">-->
-<!--      <image src="../../assets/main/thunder.png" class="weather" mode="heightFix" />-->
-<!--      <image src="../../assets/main/thunder.png" class="weather" mode="heightFix" />-->
-<!--      <image src="../../assets/main/rainy.png" class="weather" mode="heightFix" />-->
-<!--      <image src="../../assets/main/rainy.png" class="weather" mode="heightFix" />-->
-<!--    </view>-->
+    <view class="white-noise-status" wx:if="{{runtimeFocus}}">
+      <image wx:for="{{whiteNoises}}"
+             class="white-noise {{index == curWhiteNoiseIdx && 'selected'}}"
+             src="../../assets/main/{{item}}.png" mode="heightFix"
+             bind:tap="onWhiteNoiseTap" data-index="{{index}}"/>
+    </view>
     <view class="bottom-info">
       <view class="player-info">
         <image class="avatar" src="{{item.player.avatarUrl}}"></image>

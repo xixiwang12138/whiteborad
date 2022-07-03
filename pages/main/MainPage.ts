@@ -484,6 +484,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     if (res.confirm) {
       await this.onFocusFailed("用户取消专注");
       await alertMgr().showToast("您已取消专注");
+      this.onFocusEnd();
     }
   }
 

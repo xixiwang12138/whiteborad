@@ -2,28 +2,41 @@ import {get, Itf, post} from "../../core/BaseAssist";
 import {BaseManager, getManager, manager} from "../../core/managers/BaseManager";
 import {appMgr} from "../../core/managers/AppManager";
 import {storageMgr} from "../../core/managers/StroageManager";
-import {Player, PlayerData, PlayerEditableInfo, WxUserInfo} from "../data/Player";
+import {Player, PlayerData, PlayerEditableInfo, PlayerState, WxUserInfo} from "../data/Player";
 import {PromiseUtils} from "../../../utils/PromiseUtils";
-import {blockLoading, showLoading} from "../../core/managers/LoadingManager";
+import {blockLoading} from "../../core/managers/LoadingManager";
 import {DataLoader} from "../../core/data/DataLoader";
 import {handleError} from "../../core/managers/ErrorManager";
 import {Constructor} from "../../core/BaseContext";
 
-const Login: Itf<
-  {openid: string, userInfo: WxUserInfo},
-  {player: Player, token: string, data: {[T: string]: PlayerData}, extra: any}>
-  = post("/player/player/login", false);
+export type LoginExtra = {
+  focus?: Partial<Focus>
+}
+
+const Login: Itf<{
+    openid: string, userInfo: WxUserInfo
+  }, {
+    player: Partial<Player>, token: string,
+    data: {[T: string]: Partial<PlayerData>},
+    extra: LoginExtra
+  }> = post("/player/player/login", false);
 const Logout: Itf = post("/player/player/logout");
 const GetOpenid: Itf<{code: string}, {openid: string}>
   = post("/player/openid/get", false);
 const GetPhone: Itf<{code: string}, {phone: string}>
   = post("/player/phone/get");
-const GetPlayerData: Itf<{}, {data: {[T: string]: PlayerData}}>
+const GetPlayerData: Itf<{}, {data: {[T: string]: Partial<PlayerData>}}>
   = post("/player/player_data/get");
 const GetPlayerInfo: Itf<{}, {player: Player}>
   = get("/player/player_info/get");
 const EditPlayerInfo: Itf<{info: PlayerEditableInfo}, {}>
   = post("/player/player_info/edit");
+const InvitePlayer: Itf<{inviteCode: string}, {}>
+  = post("/player/player/invite");
+const ClaimInvite: Itf<{index: number}>
+  = post("/player/task/claim_invite");
+const UseRewardCode: Itf<{code: string}, {data: Partial<RewardCode>}>
+  = post("/player/reward_code/use");
 
 export function playerData<T extends PlayerData>(name: string) {
   return (clazz: Constructor<T>) =>
@@ -51,7 +64,6 @@ export class PlayerManager extends BaseManager {
   /**
    * 用户
    */
-    // TODO: 这种写法能否使用修饰器简化？
   private _player: Player;
   public get player(): Player {
     return this._player ||= storageMgr().getData(UserInfoKey, Player);
@@ -72,10 +84,15 @@ export class PlayerManager extends BaseManager {
   }
 
   /**
+   * 登陆额外数据
+   */
+  public extra: LoginExtra;
+
+  /**
    * 玩家数据
    */
   public playerData: {[T: string]: PlayerData} = {};
-  public playerDataClasses: {[T: string]: Constructor<any>} = {};
+  public playerDataClasses: {[T: string]: Constructor} = {};
 
   // region 用户操作
 
@@ -107,12 +124,9 @@ export class PlayerManager extends BaseManager {
     const res = await Login({
       openid: this.openid, userInfo
     });
-    this.setAllData(res.data);
-
     appMgr().setupToken(res.token);
-
-    userInfo = DataLoader.load(Player, res.player);
-    return this.player = userInfo as Player;
+    this.setAllData(res.data); this.extra = res.extra;
+    return this.player = DataLoader.load(Player, res.player);
   }
 
   /**
@@ -122,6 +136,7 @@ export class PlayerManager extends BaseManager {
     if (!this.isLogin) return;
     await Logout();
     appMgr().clearToken();
+    this.clearAllData();
     this.player = null;
   }
 
@@ -245,14 +260,67 @@ export class PlayerManager extends BaseManager {
     }
   }
 
+  /**
+   * 清除玩家数据
+   */
+  public clearAllData() {
+    this.playerData = {};
+  }
+
   // endregion
 
   // region 业务逻辑
 
+  /**
+   * 修改信息
+   * @param info
+   */
   public async editInfo(info: PlayerEditableInfo) {
     await EditPlayerInfo({info})
     this.player.edit(info);
   }
 
+  /**
+   * 邀请玩家（被邀请）
+   */
+  public async invitePlayer(inviteCode: string) {
+    if (this.player.state != PlayerState.Newer) return;
+    await InvitePlayer({inviteCode});
+    this.player.inviteeCode = inviteCode;
+  }
+
+  public async useRewardCode(code) {
+    const useRes = await UseRewardCode({code});
+    const res = DataLoader.load(RewardCode, useRes.data);
+    res.rewardGroup().invoke();
+    return res;
+  }
+
+  /**
+   * 邀请玩家
+   */
+  public async claimInvite(index: number) {
+    const pt = playerMgr().getData(PlayerTask);
+    if (pt.inviteTask.claimedRewards.includes(index))
+      throw "奖励已领取！";
+
+    const config = configMgr().config(InviteConfig);
+    // 处理条件
+    config.conditions(index).process();
+
+    await ClaimInvite({index});
+
+    pt.claim(index);
+    config.rewards(index).invoke();
+
+    return pt;
+  }
+
   // endregion
 }
+
+import {RewardCode} from "../data/RewardCode";
+import {Focus} from "../../focus/data/Focus";
+import {PlayerTask} from "../data/PlayerTask";
+import {configMgr} from "../../core/managers/ConfigManager";
+import InviteConfig from "../config/InviteConfig";

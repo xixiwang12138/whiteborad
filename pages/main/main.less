@@ -506,7 +506,7 @@ van-dialog {
   left: 0; bottom: 5vh;
   width: 100%;
 
-  .weather-status {
+  .white-noise-status {
     animation: 1.5s linear 0.5s move-in both;
 
     display: flex;
@@ -524,7 +524,8 @@ van-dialog {
     margin: 0 auto;
     padding: 0 16rpx;
 
-    .weather { height: 56rpx; }
+    .white-noise { height: 56rpx; opacity: 0.3 }
+    .white-noise.selected { opacity: 1 }
   }
   .bottom-info {
     animation: 1s linear 0s move-in;

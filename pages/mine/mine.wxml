@@ -1,37 +1,75 @@
 <view class="background"
       style="background: -webkit-linear-gradient(top, #{{room.gradientColors[0]}}, #{{room.gradientColors[1]}}" />
 <view class="content">
- <view class="page">
-   <view class="player-info">
-     <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}"/>
-     <image class="avatar" src="{{player.avatarUrl}}"
-            mode="aspectFill" bind:tap="onAvatarTap"/>
-     <text class="name">{{player.name}}</text>
-     <text class="slogan">{{player.slogan}}</text>
-   </view>
-  <scroll-view class="room-list" scroll-y="{{true}}" >
-    <text class="label">更多功能</text>
+  <view class="page">
+    <view class="player-info">
+      <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}"/>
+      <image class="avatar" src="{{player.avatarUrl}}"
+             mode="aspectFill" bind:tap="onClickShow" data-window="Info"/>
+      <text class="name">{{player.name}}</text>
+      <text class="slogan">{{player.slogan}}</text>
+<!--      <view class="reward-code" bind:tap="onRewardCodeTap">奖品兑换</view>-->
+    </view>
   
-    <van-empty description="施工中，敬请期待哦~" />
-<!--    <view wx:for="{{collectedRooms}}" class="room-card">-->
-<!--      <image class="room" src="../../assets/common/3.png" mode="heightFix"></image>-->
-<!--      <view class="info">-->
-<!--        <text class="user">{{item.userName}}｜{{item.level}}</text>-->
-<!--        <text class="name">{{item.name}}</text>-->
-<!--      </view>-->
-<!--      <view class="enter-tips">-->
-<!--        <text>进入房间</text>-->
-<!--        <image class="enter" src="../../images/enter.png"></image>-->
-<!--      </view>-->
-<!--      <image class="star" src="../../images/star.png"></image>-->
-<!--    </view>-->
-  </scroll-view>
- </view>
+    <!-- 菜单栏 -->
+    <van-grid class="menu-grid" column-num="4" border="{{ true }}">
+      <van-grid-item use-slot>
+        <view class="menu-item" bind:tap="onClickShow" data-window="Invite">
+          <image src="../../assets/mine/invite.png" mode="aspectFit"></image>
+          <view class="menu-title">邀请活动</view>
+        </view>
+      </van-grid-item>
+      <van-grid-item use-slot>
+        <view class="menu-item" bindtap="onRewardCodeTap">
+          <image src="../../assets/mine/reward.png" mode="aspectFit"></image>
+          <view class="menu-title">礼品兑换</view>
+        </view>
+      </van-grid-item>
+<!--      <van-grid-item use-slot>-->
+<!--        <view class="menu-item" bindtap="toRanklist">-->
+<!--          <image src="../../icon/rank.png" mode="aspectFit"></image>-->
+<!--          <view class="menu-title">卷王争霸</view>-->
+<!--        </view>-->
+<!--      </van-grid-item>-->
+<!--      <van-grid-item use-slot>-->
+<!--        <view class="menu-item" bindtap="toShopName">-->
+<!--          <image src="../../icon/shopName.png" mode="aspectFit"></image>-->
+<!--          <view class="menu-title">更改店名</view>-->
+<!--        </view>-->
+<!--      </van-grid-item>-->
+<!--      <van-grid-item use-slot>-->
+<!--        <view class="menu-item" bindtap="toNotice">-->
+<!--          <image src="../../icon/notice.png" mode="aspectFit"></image>-->
+<!--          <view class="menu-title">系统公告</view>-->
+<!--        </view>-->
+<!--      </van-grid-item>-->
+    </van-grid>
+  
+<!--    <scroll-view class="room-list" scroll-y="{{true}}" >-->
+<!--      -->
+<!--      <text class="label">更多功能</text>-->
+<!--      -->
+<!--      <van-empty description="施工中，敬请期待哦~" />-->
+      <!--    <view wx:for="{{collectedRooms}}" class="room-card">-->
+      <!--      <image class="room" src="../../assets/common/3.png" mode="heightFix"></image>-->
+      <!--      <view class="info">-->
+      <!--        <text class="user">{{item.userName}}｜{{item.level}}</text>-->
+      <!--        <text class="name">{{item.name}}</text>-->
+      <!--      </view>-->
+      <!--      <view class="enter-tips">-->
+      <!--        <text>进入房间</text>-->
+      <!--        <image class="enter" src="../../images/enter.png"></image>-->
+      <!--      </view>-->
+      <!--      <image class="star" src="../../images/star.png"></image>-->
+      <!--    </view>-->
+<!--    </scroll-view>-->
+  </view>
 </view>
 
-<van-popup show="{{isEdit}}" round bind:close="onClose"
-           custom-class="popup">
-  <view class="popup-content">
+<van-popup show="{{isShowInfoWindow}}" round
+           bind:close="onClickHide" data-window="Info"
+           custom-class="info-window">
+  <view class="info-content">
     <image class="avatar" src="{{info.avatarUrl}}" mode="aspectFill"/>
     <input class="name" maxlength="8" value="{{info.name}}" bind:input="onNameInput" />
     <view class="gender-container">
@@ -41,13 +79,43 @@
             bind:tap="onFemaleTap">女</view>
     </view>
     <textarea class="slogan" placeholder="输入你的Slogan吧！"
-                adjust-position="{{false}}" focus="{{false}}"
-                maxlength="40" cursor-spacing="10"
-                value="{{info.slogan}}" bind:input="onSloganInput"/>
+              adjust-position="{{false}}" focus="{{false}}"
+              maxlength="40" cursor-spacing="10"
+              value="{{info.slogan}}" bind:input="onSloganInput"/>
     <view class="buttons">
-      <view class="cancel" bindtap="onClose">取消</view>
-      <view class="ok" bindtap="onSubmit">完成</view>
+      <view class="cancel" bind:tap="onClickHide" data-window="Info">取消</view>
+      <view class="ok" bind:tap="onSubmit">完成</view>
     </view>
+  </view>
+</van-popup>
+
+<van-popup show="{{isShowInviteWindow}}" round
+           bind:close="onClickHide" data-window="Invite"
+           custom-class="invite-window">
+  <view class="invite-content">
+    <view class="tips">点击<text>右上角分享小程序</text></view>
+    <view class="tips">邀请朋友一起加入Homi元宇宙吧~</view>
+    <view class="list">
+      <view class="row head">
+        <view class="left">邀请数量</view>
+        <view class="middle">奖励</view>
+        <view class="right">操作</view>
+      </view>
+      <view wx:for="{{inviteConfig.data}}" class="row">
+        <text class="left">{{item.count}}人</text>
+        <text class="middle">{{item.rewardDescription}}</text>
+        <view wx:if="{{item.isClaimed}}"
+              class="right button disabled">已领取</view>
+        <view wx:elif="{{inviteTask.count < item.count}}"
+              class="right button disabled">未完成</view>
+        <view wx:else class="right button"
+              bind:tap="onClaimInvite"
+              data-index="{{index}}">领取</view>
+      </view>
+    </view>
+    <view class="cur">当前已邀请：<text>{{inviteTask.count}}</text>人</view>
+    <view class="line"/>
+    <view class="confirm" bind:tap="onClickHide" data-window="Invite">了解啦~</view>
   </view>
 </van-popup>
 

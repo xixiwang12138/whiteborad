@@ -26,12 +26,12 @@
 <!--  </view>-->
   
   <view class="focus-bottom">
-<!--    <view class="weather-status">-->
-<!--      <image src="../../assets/main/thunder.png" class="weather" mode="heightFix" />-->
-<!--      <image src="../../assets/main/thunder.png" class="weather" mode="heightFix" />-->
-<!--      <image src="../../assets/main/rainy.png" class="weather" mode="heightFix" />-->
-<!--      <image src="../../assets/main/rainy.png" class="weather" mode="heightFix" />-->
-<!--    </view>-->
+    <view class="white-noise-status" wx:if="{{runtimeFocus}}">
+      <image wx:for="{{whiteNoises}}"
+             class="white-noise {{index == curWhiteNoiseIdx && 'selected'}}"
+             src="../../assets/main/{{item}}.png" mode="heightFix"
+             bind:tap="onWhiteNoiseTap" data-index="{{index}}"/>
+    </view>
     <view class="bottom-info">
       <view class="player-info">
         <image class="avatar" src="{{item.player.avatarUrl}}"></image>
@@ -72,7 +72,7 @@
       <image class="top-img" src="/assets/main/desc.png" mode="heightFix" />
       <image class="top-img" src="/assets/main/close.png" mode="heightFix" bindtap="onClickHide" data-window="Start" />
     </view>
-    <image class="clock-img" src="/assets/main/clock.png" mode="widthFix" />
+    <image class="clock-img" src="{{item.thumbnailFileId}}" mode="widthFix" />
     <van-slider value="{{focus.duration}}" min="{{item.minDuration}}" max="{{item.maxDuration}}" bind:drag="onDragTime" />
     <view class="time">
       专注时长
@@ -92,7 +92,10 @@
     <view class="start-btn" bind:tap="onSubmit">开始专注</view>
   </view>
 </van-dialog>
-<van-dialog use-slot show="{{ isShowResultWindow }}" show-confirm-button="{{false}}" bind:close="onClickHide" close-on-click-overlay data-window="Result">
+<van-dialog use-slot
+            show="{{ isShowResultWindow }}"
+            show-confirm-button="{{false}}"
+            data-window="Result">
   <view class="result-config">
     <view class="focus-title">
       <text lines="1">本次专注时长</text>

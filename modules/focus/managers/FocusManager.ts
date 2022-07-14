@@ -6,10 +6,13 @@ import {IRoomIndex} from "../../room/data/PlayerRoom";
 import {blockLoading} from "../../core/managers/LoadingManager";
 import {roomMgr} from "../../room/managers/RoomManager";
 import {RewardGroup} from "../../player/data/Reward";
+import {wsMgr} from "../../websocket/WebSocketManager";
 
 const StartFocus: Itf<
   {room: IRoomIndex, mode: FocusMode, tagIdx?: number, duration?: number},
   {focus: Partial<Focus>}> = post("/focus/focus/start");
+const ContinueFocus: Itf<{}, {focus: Partial<Focus>}>
+  = post("/focus/focus/continue");
 const EndFocus: Itf<{runtime: RuntimeFocus},
   {focus: Partial<Focus>}> = post("/focus/focus/end");
 const EditFocus: Itf<{focusId: string, tagIdx: number, note: string}>
@@ -34,13 +37,22 @@ export class FocusManager extends BaseManager {
   /**
    * 开始专注
    */
-  public async startFocus(tagIdx: number, mode: FocusMode, duration: number) {
-    const room = await roomMgr().getSelfRoom();
+  public async startFocus(tagIdx: number, mode: FocusMode, duration: number,
+                          room?: IRoomIndex) {
+    room ||= await roomMgr().getSelfRoom();
     // const room = {roomId: "test123456789"}; // TODO: 测试房间，后面需要获取当前房间
     const response = await StartFocus({room, tagIdx, mode, duration});
 
-    roomMgr().onFocusStart();
+    // roomMgr().onFocusStart();
 
+    return this.curFocus = DataLoader.load(Focus, response.focus);
+  }
+
+  /**
+   * 继续专注
+   */
+  public async continueFocus() {
+    const response = await ContinueFocus();
     return this.curFocus = DataLoader.load(Focus, response.focus);
   }
 
@@ -50,7 +62,7 @@ export class FocusManager extends BaseManager {
   public async endFocus(runtime: RuntimeFocus, tagIdx?: number, note?: string) {
     const response = await EndFocus({runtime});
 
-    roomMgr().onFocusEnd();
+    // roomMgr().onFocusEnd();
 
     const res = DataLoader.load(Focus, response.focus);
     const rewards = this.curRewards = await res.realRewards();
@@ -68,11 +80,11 @@ export class FocusManager extends BaseManager {
   }
 
   /**
-   * 取消专注
+   * 更新专注
    */
-  @blockLoading
   public updateFocus(runtime: RuntimeFocus) {
-    return UpdateFocus({runtime});
+    // return UpdateFocus({runtime});
+    roomMgr().updateRoomFocus(runtime);
   }
 
   /**
@@ -81,7 +93,7 @@ export class FocusManager extends BaseManager {
   public async cancelFocus(reason?: string) {
     const response = await CancelFocus({reason});
 
-    roomMgr().onFocusEnd();
+    // roomMgr().onFocusEnd();
 
     const res = DataLoader.load(Focus, response.focus);
     this.curFocus = null;

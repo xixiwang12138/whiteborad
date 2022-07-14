@@ -38,8 +38,10 @@ const ExpRewardCalc = {
 }
 
 export class MotionRecord extends BaseData {
-  motionId: number;
-  triggerTime: number
+	@field(Number)
+	motionId: number;//产生的动作对象id
+	@field(Number)
+	triggerTime: number//动作触发时间戳
 }
 
 export class RuntimeFocus extends BaseData {
@@ -47,21 +49,20 @@ export class RuntimeFocus extends BaseData {
 	@field
 	public elapseTime: number = 0;//已专注时间
 	@field
-	public realTime: number = 0;//ID
-	// @field
-	// public isPause: boolean = false;
+	public realTime: number = 0;
+
 	@field
 	public isDown: boolean = false; // 朝下
 	@field
 	public invalidTime: number = 0; // 单次无效的时间
 	@field
 	public invalidCount: number = 0; // 中途无效次数
-	@field
+
 	public lastTime: number = 0; // 上次更新时间
 
 	public focus: Focus;//对应的Focus对象
-	@field
-	public motionRecords:MotionRecord
+	@field([MotionRecord])
+	public motionRecords:MotionRecord[]=[]
 
 	constructor(index?, parent?) {
 		super(index);
@@ -153,7 +154,7 @@ export class Focus extends DynamicData {
 	@field(Number)
 	@occasion(DataOccasion.Extra)
 	public get realDuration() {
-		return Math.floor(this.runtime?.elapseTime / 1000 / 60);
+		return Math.floor(this.runtime?.realTime / 1000 / 60);
 	}
 
 	// region 拓展数据

@@ -9,7 +9,7 @@ class Token {
   // TOKEN有效总时间
   public static Duration = 30 * 60 * 1000;
   // TOKEN更新时间（测试30秒）
-  public static UpdateDuration = 15 * 60 * 1000;
+  public static UpdateDuration = 3 * 60 * 60 * 1000;
 
   public value: string;
   public time: number;
@@ -57,7 +57,10 @@ class AppManager extends BaseManager {
 		return this._sys ||= wx.getSystemInfoSync();
 	}
 
-	public get isDebug() { return this.sys.platform == 'devtools'; }
+	public get isDebug() {
+		// return true;
+		return this.sys.platform == 'devtools';
+	}
 
 	// region 更新
 

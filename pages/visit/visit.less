@@ -1,4 +1,15 @@
-
+@keyframes move-in {
+  0% {
+    opacity: 0;
+    transform: translateY(100px);
+    animation-timing-function: cubic-bezier(0.175, 0.385, 0.32, 1);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.375, 0.19);
+  }
+}
 .container{
   position: absolute;
   left: 0; right: 0;
@@ -98,7 +109,7 @@
 
     pointer-events: none;
 
-    .weather-status {
+    .white-noise-status {
       animation: 1.5s linear 0.5s move-in both;
 
       display: flex;
@@ -116,7 +127,10 @@
       margin: 0 auto;
       padding: 0 16rpx;
 
-      .weather { height: 56rpx; }
+      pointer-events: all;
+
+      .white-noise { height: 56rpx; opacity: 0.3 }
+      .white-noise.selected { opacity: 1 }
     }
     .bottom-info {
       animation: 1s linear 0s move-in;

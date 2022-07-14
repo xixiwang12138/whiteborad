@@ -3,6 +3,10 @@ import {RootPage} from "./RootPage";
 import {BaseData} from "../../../modules/core/data/BaseData";
 import {field} from "../../../modules/core/data/DataLoader";
 import {pageMgr} from "../../../modules/core/managers/PageManager";
+import {
+	startUpdateContext,
+	stopUpdateContext
+} from "../../../modules/core/managers/BaseManager";
 
 // export enum PageState {
 // 	Unloaded, Shown, Hidden
@@ -28,10 +32,6 @@ export abstract class BasePage<
 	public extra: any; // extra是微信参数传递
 
 	public app;
-
-	// public status: PageState = PageState.Unloaded;
-
-	// private isLoaded = false;
 
 	constructor(params?: P) {
 		super();
@@ -91,6 +91,7 @@ export abstract class BasePage<
 	 */
 	@pageFunc
 	public onShow() {
+		startUpdateContext();
 		// this.status = PageState.Shown;
 	}
 
@@ -99,6 +100,7 @@ export abstract class BasePage<
 	 */
 	@pageFunc
 	public onHide() {
+		stopUpdateContext()
 		// this.status = PageState.Hidden;
 	}
 
@@ -133,6 +135,23 @@ export abstract class BasePage<
 	// 	if (!this.isLoaded && dataMgr().loadingProgress() >= 1)
 	// 		this.onDataLoad();
 	// }
+
+	// endregion
+
+	// region 参数操作
+
+	public getExtra(key, _default?) {
+		return key in this.extra ? this.extra[key] : _default
+	}
+	public getNumberExtra(key, _default = 0) {
+		return Number(this.getExtra(key, _default));
+	}
+	public getBooleanExtra(key, _default = false) {
+		return Boolean(this.getExtra(key, _default));
+	}
+	public getObjectExtra(key, _default = null) {
+		return JSON.parse(this.getExtra(key, _default));
+	}
 
 	// endregion
 

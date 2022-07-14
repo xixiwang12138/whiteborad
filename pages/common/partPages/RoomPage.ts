@@ -13,12 +13,13 @@ import {Constructor} from "../../../modules/core/BaseContext";
 import {appMgr} from "../../../modules/core/managers/AppManager";
 import {waitForLogin} from "../../../modules/player/managers/PlayerManager";
 import {pageFunc} from "../PageBuilder";
+import {showLoading} from "../../../modules/core/managers/LoadingManager";
 
-const TimeRate = 100;
+const DebugTimeRate = 10;
 const AniColCount = 4;
 const MotionDuration = 60;
-const DefaultHouseScale = 0.5;
-const FocusingHouseScale = 0.75;
+const DefaultHouseScale = 0.4;
+const FocusingHouseScale = 0.5;
 const DebugAlpha = 0.33;
 
 type RuntimeAnimation = {
@@ -244,9 +245,8 @@ export class RoomDrawingPage extends CanvasPage<DrawingData> {
 	update(focusing = false) {
 		this.focusing = focusing;
 		this.updateHouseScale();
-		this.updateMotions();
+		this.switchMotions(RuntimeFocus);
 		this.updateAnimations();
-		// this.playSpecifiedMotions(new RuntimeFocus);
 		this.render();
 	}
 
@@ -263,35 +263,14 @@ export class RoomDrawingPage extends CanvasPage<DrawingData> {
 		this.base.house.scale.y += dtScale;
 	}
 
-	// private updateMotions() {
-	// 	const rate = appMgr().isDebug ? TimeRate : 1;
-	// 	const dt = pageMgr().deltaTime * rate;
-
-	// 	this.motion.duration += dt;
-	// 	if ((this.motion.duration += dt)
-	// 		< MotionDuration * 1000) return;
-
-	// 	this.motion.duration = 0;
-	// 	this.motion.curMotionId = MathUtils.randomInt(1, 3);
-	// }
-
-	private updateMotions(data:RuntimeFocus) {
-		// const rate = appMgr().isDebug ? TimeRate : 1;
+	  switchMotions(motionRecord) {
+		// const rate = appMgr().isDebug ? DebugTimeRate : 1;
 		// const dt = pageMgr().deltaTime * rate;
-		// this.motion.duration += dt;
-		// if ((this.motion.duration += dt)
-		// 	< MotionDuration * 1000) return;
-		// this.motion.duration = 0;
-		this.motion.curMotionId = data.motionRecords.motionId;
+		this.motion.duration = 0;
+		this.motion.curMotionId = motionRecord.motionId;
+		// this.motion.curMotionId = MathUtils.randomPick([1, 2, 4]);
 	}
 
-
-
-
-			// this.motion.curMotionId = 1;
-		// const motionRecords = ra.motionRecords
-    // motionRecords.unshift({motionId, triggerTime});
-    // await this.setData({ motionRecords });
 	private updateAnimations() {
 		if (this.motion.animations.length <= 0) return;
 

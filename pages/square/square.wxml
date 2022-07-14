@@ -25,7 +25,12 @@
   <view class="room" wx:for="{{rooms}}" bindtap="onRoomTap" data-id="{{item.roomId}}">
     <image src="{{item.thumbnail}}" mode="widthFix" class="room-thumbnail" />
     <view class="room-desc">
-      <text class="room-user-name">{{item.playerName}}'s</text>
+      <view class="room-user-name">
+        <view wx:if="{{item.ownerOnline}}" class="point green"/>
+        <view wx:elif="{{item.anyFocusing}}" class="point blue"/>
+        <view wx:elif="{{item.visitorCount > 0}}" class="point white"/>
+        <text class="name">{{item.playerName}}'s</text>
+      </view>
       <view class="room-level-name">
         <text class="room-level">{{item.starId}}</text>
         <text class="room-name">{{item.name}}</text>

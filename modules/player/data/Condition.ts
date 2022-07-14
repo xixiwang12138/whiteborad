@@ -7,6 +7,17 @@ export enum ConditionType {
 	Gold = "gold",
 	Level = "level",
 
+	RoomSkin = "roomSkin",
+	RoomStar = "roomStar",
+
+	Motion = "motion",
+
+	FocusCount = "focusCount", // 专注次数
+
+	InviteCount = "inviteCount",
+
+	Score = "score",
+
 	// TODO: 补充更多
 }
 
@@ -127,18 +138,18 @@ export class ConditionGroup extends BaseData {
 			cond.conditions.forEach(c => this.add(c))
 	}
 
-	public async process() {
+	public process() {
 		const processors = this.conditions.map(
 			c => createProcessor(c));
 
-		for (const p of processors) await p.check();
-		for (const p of processors) await p.consume();
+		for (const p of processors) p.check();
+		for (const p of processors) p.consume();
 	}
 
-	public async check() {
+	public check() {
 		const processors = this.conditions.map(
 			c => createProcessor(c));
-		for (const p of processors) await p.check();
+		for (const p of processors) p.check();
 	}
 
 	public judge() {

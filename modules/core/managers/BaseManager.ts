@@ -1,10 +1,12 @@
 import {getSingleton, singleton} from "../../../utils/SingletonUtils";
 import {BaseContext, Constructor} from "../BaseContext";
 
-const UpdateInterval = 20; // 更新间隔
+const UpdateInterval = 50; // 更新间隔
 
 @singleton
 export class ManagerContext extends BaseContext {
+
+	public updateTask;
 
 	get contentName(): string { return "Manager"; }
 
@@ -32,7 +34,22 @@ export function getManager<T extends BaseManager>(
 function updateContext() {
 	managerContext().update();
 }
-setInterval(updateContext, UpdateInterval);
+
+export function startUpdateContext() {
+	const context = managerContext();
+	console.log("startUpdateContext", context.updateTask)
+	if (context.updateTask) return;
+	context.updateTask = setInterval(
+		updateContext, UpdateInterval
+	)
+}
+export function stopUpdateContext() {
+	const context = managerContext();
+	console.log("stopUpdateContext", context.updateTask)
+	if (!context.updateTask) return;
+	clearInterval(context.updateTask);
+	context.updateTask = null;
+}
 
 export class BaseManager {
 

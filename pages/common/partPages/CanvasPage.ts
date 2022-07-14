@@ -48,7 +48,7 @@ export class CanvasPage<T extends BaseData = Data> extends PartialPage<T> {
 	}
 
 	@pageFunc
-	async onReady(e) {
+	onReady(e) {
 		this.setupCanvas();
 	}
 

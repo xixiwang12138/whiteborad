@@ -2,9 +2,12 @@ import {Condition, ConditionType} from "../data/Condition";
 import {Constructor} from "../../core/BaseContext";
 import {playerMgr} from "../managers/PlayerManager";
 import {error} from "../../core/BaseAssist";
+import {PlayerTask} from "../data/PlayerTask";
 
 const GoldNotEnough = error(200031, "金币不足");
 const LevelNotEnough = error(200032, "等级不足");
+const FocusNotEnough = error(200034, "专注次数不足");
+const InviteNotEnough = error(200035, "邀请人数不足");
 
 export function conditionProcessor(type: ConditionType) {
 	return (clazz) => {
@@ -88,7 +91,7 @@ export abstract class ConditionProcessor {
 class FuncConditionProcessor extends ConditionProcessor {
 
 	protected get playerValue(): number { return 0; }
-	protected get throwFunc(): Function { return this.condition.params.throwFunc; }
+	protected get throwFunc(): Function { return this.condition.params.tFunc; }
 
 	judge(): boolean {
 		return this.condition.params.jFunc();
@@ -112,5 +115,21 @@ class LevelConditionProcessor extends ConditionProcessor {
 
 	protected get playerValue(): number { return this.player?.level; }
 	protected get throwFunc(): Function { return LevelNotEnough; }
+
+}
+
+@conditionProcessor(ConditionType.InviteCount)
+class InviteCountConditionProcessor extends ConditionProcessor {
+
+	private count: number;
+
+	protected get playerValue(): number { return this.count; }
+	protected get throwFunc(): Function { return InviteNotEnough; }
+
+	protected preprocess() {
+		super.preprocess();
+		const pt = playerMgr().getData(PlayerTask);
+		this.count = pt.inviteTask.count;
+	}
 
 }

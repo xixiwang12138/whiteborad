@@ -204,7 +204,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
 
   public async enterRoom() {
     await roomMgr().enterRoom(this.roomIndex,
-      e => this.onRoomMessage(e))
+      e => this.ssage(e))
   }
 
   public async leaveRoom() {
@@ -292,6 +292,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
       case "focusStart": status = "开始专注"; break
       case "focusEnd": status = "结束专注"; break
       case "leave": status = "离开房间"; break
+      case "switchMotion":break;
     }
     if (!status) return;
 

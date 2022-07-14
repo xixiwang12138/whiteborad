@@ -9,6 +9,7 @@ import {Room} from "../../room/data/Room";
 import {NPCRoom} from "../../room/data/NPCRoom";
 import {roomMgr} from "../../room/managers/RoomManager";
 import {IRoomIndex} from "../../room/data/PlayerRoom";
+import { BaseContext } from "../../core/BaseContext";
 
 export const FocusTags = [
 	"沉迷学习", "期末爆肝", "大考备战",
@@ -36,13 +37,17 @@ const ExpRewardCalc = {
 	K: 10
 }
 
+export class MotionRecord extends BaseData {
+  motionId: number;
+  triggerTime: number
+}
+
 export class RuntimeFocus extends BaseData {
 
 	@field
-	public elapseTime: number = 0;
+	public elapseTime: number = 0;//已专注时间
 	@field
-	public realTime: number = 0;
-
+	public realTime: number = 0;//ID
 	// @field
 	// public isPause: boolean = false;
 	@field
@@ -51,8 +56,12 @@ export class RuntimeFocus extends BaseData {
 	public invalidTime: number = 0; // 单次无效的时间
 	@field
 	public invalidCount: number = 0; // 中途无效次数
+	@field
+	public lastTime: number = 0; // 上次更新时间
 
-	public focus: Focus
+	public focus: Focus;//对应的Focus对象
+	@field
+	public motionRecords:MotionRecord
 
 	constructor(index?, parent?) {
 		super(index);

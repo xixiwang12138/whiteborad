@@ -4,6 +4,7 @@ import {field} from "../../../modules/core/data/DataLoader";
 import {roomMgr} from "../../../modules/room/managers/RoomManager";
 import {Room} from "../../../modules/room/data/Room";
 import {PartialPage} from "../core/BasePage";
+import {Focus, FocusTags, RuntimeFocus} from "../../../modules/focus/data/Focus";
 import {Container, Rectangle, Sprite} from "pixi.js";
 import {Animation} from "../../../modules/room/data/IRoomDrawable";
 import {pageMgr} from "../../../modules/core/managers/PageManager";
@@ -245,7 +246,7 @@ export class RoomDrawingPage extends CanvasPage<DrawingData> {
 		this.updateHouseScale();
 		this.updateMotions();
 		this.updateAnimations();
-
+		// this.playSpecifiedMotions(new RuntimeFocus);
 		this.render();
 	}
 
@@ -262,18 +263,35 @@ export class RoomDrawingPage extends CanvasPage<DrawingData> {
 		this.base.house.scale.y += dtScale;
 	}
 
-	private updateMotions() {
-		const rate = appMgr().isDebug ? TimeRate : 1;
-		const dt = pageMgr().deltaTime * rate;
+	// private updateMotions() {
+	// 	const rate = appMgr().isDebug ? TimeRate : 1;
+	// 	const dt = pageMgr().deltaTime * rate;
 
-		this.motion.duration += dt;
-		if ((this.motion.duration += dt)
-			< MotionDuration * 1000) return;
+	// 	this.motion.duration += dt;
+	// 	if ((this.motion.duration += dt)
+	// 		< MotionDuration * 1000) return;
 
-		this.motion.duration = 0;
-		this.motion.curMotionId = MathUtils.randomInt(1, 3);
+	// 	this.motion.duration = 0;
+	// 	this.motion.curMotionId = MathUtils.randomInt(1, 3);
+	// }
+
+	private updateMotions(data:RuntimeFocus) {
+		// const rate = appMgr().isDebug ? TimeRate : 1;
+		// const dt = pageMgr().deltaTime * rate;
+		// this.motion.duration += dt;
+		// if ((this.motion.duration += dt)
+		// 	< MotionDuration * 1000) return;
+		// this.motion.duration = 0;
+		this.motion.curMotionId = data.motionRecords.motionId;
 	}
 
+
+
+
+			// this.motion.curMotionId = 1;
+		// const motionRecords = ra.motionRecords
+    // motionRecords.unshift({motionId, triggerTime});
+    // await this.setData({ motionRecords });
 	private updateAnimations() {
 		if (this.motion.animations.length <= 0) return;
 

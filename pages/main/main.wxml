@@ -40,7 +40,7 @@
       <view class="slogan">{{player.slogan}}</view>
     </view>
   </view>
-  
+
   <view class="room-status">
     <view class="status-text">{{focusing}}人正在专注中</view>
     <scroll-view scroll-y="{{true}}" style="height: 6vh;">
@@ -49,7 +49,7 @@
       </view>
     </scroll-view>
   </view>
-  
+
   <view wx:if="{{runtimeFocus && focus.mode==1}}">
     <view class="remind" wx:if="{{!isDown && runtimeFocus.invalidCount <= 1}}">
       <text class="remind-text1">准备好了吗？</text>
@@ -122,6 +122,7 @@
     </view>
   </view>
 </van-dialog>
+<!-- 专注结算弹窗 -->
 <van-dialog use-slot show="{{ isShowResultWindow }}"
             show-confirm-button="{{false}}"
             width="80%" data-window="Result">
@@ -150,6 +151,23 @@
           <view class="tips">
             距离升级还需{{resAni.restExp}}
           </view>
+        </view>
+      </view>
+      <view class="action">
+        <view class="room-type">{{room.name}}</view>
+        <view class="action-list">
+        <view class="action-title-row">
+        <view class="content">专注状态</view>
+        <view class="content">触发分钟</view>
+        <view class="content">收获金币</view>
+        <view class="content">收货经验</view>
+        </view>
+        <view class="action-item-row" wx:for="{{motionList}}">
+                <view class="content">{{item.name}}</view>
+                <view class="content">{{motionCountList[index]}}</view>
+                <view class="content">{{motionCountList[index] * item.gold}}</view>
+                <view class="content">{{motionCountList[index] * item.exp}}</view>
+        </view>
         </view>
       </view>
     </view>

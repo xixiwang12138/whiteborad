@@ -4,6 +4,7 @@
     transform: translateY(100px);
     animation-timing-function: cubic-bezier(0.175, 0.385, 0.32, 1);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -11,9 +12,10 @@
   }
 }
 
-.container{
+.container {
   position: absolute;
-  left: 0; right: 0;
+  left: 0;
+  right: 0;
   width: 100vw;
   height: 100vh;
   //background:-webkit-linear-gradient(top,#C7E1FA,#4F8DCC);
@@ -26,6 +28,7 @@
     position: fixed;
     top: 80rpx;
   }
+
   .room-info {
     margin-top: 12.5%;
     width: 100%;
@@ -33,19 +36,22 @@
 
     text-align: center;
 
-    .top-player-name{
+    .top-player-name {
       width: fit-content;
       font-size: 24rpx;
       margin: 4rpx auto;
 
       transition: all 1.5s ease 0s;
     }
+
     .room-display-id {
       font-size: 20rpx;
       margin-top: 12rpx;
     }
+
     .room-name {
-      width: 296rpx; height: 80rpx;
+      width: 296rpx;
+      height: 80rpx;
       margin: 4rpx auto;
 
       text-align: center;
@@ -61,21 +67,26 @@
         margin: 12rpx auto;
       }
     }
+
     .rest-time {
       width: fit-content;
       margin: 32rpx auto;
       font-size: 96rpx;
     }
   }
+
   .room-info.focusing {
     margin-top: 10%;
   }
 
   .focus-btn {
     position: fixed;
-    left: 28%; right: 28%; bottom: 15%;
+    left: 28%;
+    right: 28%;
+    bottom: 15%;
 
-    width: 44%; height: 96rpx;
+    width: 44%;
+    height: 96rpx;
 
     background-color: white;
     border-radius: 48rpx;
@@ -89,7 +100,8 @@
       font-weight: bold;
     }
   }
-  .shop-btn{
+
+  .shop-btn {
     width: 8vw;
     height: 8vw;
     position: fixed;
@@ -97,10 +109,11 @@
     right: 4%;
     top: 11%;
     padding: 0.8vw;
-    background-color: rgba(0,0,0,0.33);
+    background-color: rgba(0, 0, 0, 0.33);
     border-radius: 9px;
   }
-  .setting-btn{
+
+  .setting-btn {
     width: 7vw;
     height: 7vw;
     position: fixed;
@@ -113,8 +126,10 @@
 
 .cancel-button {
   position: fixed;
-  left: 32rpx; top: 108rpx;
-  width: fit-content; height: 42rpx;
+  left: 32rpx;
+  top: 108rpx;
+  width: fit-content;
+  height: 42rpx;
 }
 
 .van-dialog {
@@ -147,7 +162,9 @@ van-dialog {
       }
     }
 
-    .clock-img { width: 270rpx; }
+    .clock-img {
+      width: 270rpx;
+    }
 
     van-slider {
       width: 70%;
@@ -170,7 +187,10 @@ van-dialog {
       justify-content: center;
       align-items: center;
 
-      .desc { font-size: 32rpx; }
+      .desc {
+        font-size: 32rpx;
+      }
+
       .btn {
         margin-left: 48rpx;
         padding: 10rpx 20rpx;
@@ -193,9 +213,16 @@ van-dialog {
         font-size: 30rpx;
         border-radius: 16rpx;
       }
-      .selected { background-color: #C0A0C7; }
+
+      .selected {
+        background-color: #C0A0C7;
+      }
     }
-    .text { font-size: 27rpx; }
+
+    .text {
+      font-size: 27rpx;
+    }
+
     .start-btn {
       background-color: #4C7FB3;
       color: white;
@@ -204,6 +231,7 @@ van-dialog {
       border-radius: 8rpx;
     }
   }
+
   .tags-config {
     border-radius: 64rpx;
     background-color: white;
@@ -230,6 +258,7 @@ van-dialog {
 
         font-size: 32rpx;
       }
+
       .selected {
         background-color: #CADCEF;
       }
@@ -243,6 +272,7 @@ van-dialog {
       border-radius: 8rpx;
     }
   }
+
   .room-config {
     width: 80%;
     height: 35%;
@@ -281,7 +311,10 @@ van-dialog {
     }
 
     .shade-block {
-      .shade-topic { text-align: center; }
+      .shade-topic {
+        text-align: center;
+      }
+
       .btn {
         width: 110rpx;
         margin: 16rpx 21rpx;
@@ -308,30 +341,37 @@ van-dialog {
       }
     }
   }
+
   .result-config {
     padding: 36rpx 0 12rpx;
     display: flex;
     flex-direction: column;
     align-items: center;
+
     .focus-title {
-      width: 70%; height: 42rpx;
+      width: 70%;
+      height: 42rpx;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
 
       text {
-        width: 50%; height: 100%;
+        width: 50%;
+        height: 100%;
         font-size: 28rpx;
         text-align: center;
         white-space: nowrap;
         overflow-x: visible;
       }
+
       .tag {
         width: 40%;
       }
     }
+
     .focus-val {
-      width: 70%; height: 56rpx;
+      width: 70%;
+      height: 56rpx;
 
       display: flex;
       flex-direction: row;
@@ -342,30 +382,34 @@ van-dialog {
 
       text {
         width: 50%;
-        color: rgba(76,127,179,1);
+        color: rgba(76, 127, 179, 1);
         font-size: 36rpx;
         text-align: center;
       }
+
       .focus-type {
-        width: 40%; height: 56rpx;
+        width: 40%;
+        height: 56rpx;
         border-radius: 8rpx;
-        background-color: rgba(202,220,239,1);
+        background-color: rgba(202, 220, 239, 1);
 
         font-size: 28rpx;
         line-height: 56rpx;
         text-align: center;
       }
     }
+
     .focus-content {
       width: 60%;
       height: 96rpx;
       border-radius: 14rpx;
-      background-color: rgba(242,242,242,1);
+      background-color: rgba(242, 242, 242, 1);
       font-size: 24rpx;
       margin: 16rpx auto 0;
       padding: 16rpx;
     }
-    .result-config-top{
+
+    .result-config-top {
       position: relative;
       display: flex;
       flex-direction: column;
@@ -375,7 +419,7 @@ van-dialog {
       padding: 24rpx 0 48rpx;
 
       border-radius: 16px;
-      background-color: rgba(237,237,237,1);
+      background-color: rgba(237, 237, 237, 1);
 
       .gold-reward {
         height: 96rpx;
@@ -391,6 +435,7 @@ van-dialog {
           width: 30%;
           height: 100%;
         }
+
         text {
           width: 60%;
           font-size: 36rpx;
@@ -412,36 +457,43 @@ van-dialog {
           width: 30%;
           height: 100%;
           border-radius: 28rpx;
-          background-color: rgba(216,216,216,1);
+          background-color: rgba(216, 216, 216, 1);
           text-align: center;
           font-size: 28rpx;
           line-height: 56rpx;
         }
+
         .experience {
           position: relative;
           width: 60%;
           height: 42rpx;
           border-radius: 8px;
-          background-color: rgba(255,255,255,1);
+          background-color: rgba(255, 255, 255, 1);
 
           .progress {
             height: 100%;
             border-radius: 8px;
-            background-color: rgba(179,179,179,1);
+            background-color: rgba(179, 179, 179, 1);
           }
+
           .add {
             position: absolute;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
 
             font-size: 32rpx;
             line-height: 42rpx;
             text-align: center;
           }
+
           .tips {
             position: absolute;
-            width: 100%; height: 32rpx;
-            left: 0; top: 100%;
+            width: 100%;
+            height: 32rpx;
+            left: 0;
+            top: 100%;
 
             margin-top: 4rpx;
             font-size: 22rpx;
@@ -449,7 +501,59 @@ van-dialog {
           }
         }
       }
+
+      .action {
+        height: 200rpx;
+        margin: 36rpx 24rpx;
+        display: flex;
+        flex-direction: column;
+
+        .room-type {
+          align-self: center;
+          font-size: 25rpx;
+          margin: 8rpx 0;
+        }
+
+        .action-list {
+          display: flex;
+          flex-direction: column;
+
+          .action-title-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            .content {
+              width: 60%;
+              height: fit-content;
+              font-size: 25rpx;
+              text-align: center;
+            }
+          }
+
+          .action-item-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            .content {
+              width: 60%;
+              height: fit-content;
+              font-size: 24rpx;
+              color: #8f8f8f;
+              text-align: center;
+            }
+          }
+        }
+
+
+
+
+      }
     }
+
     // .content {
     //   width: 80%;
     //   height: fit-content;
@@ -487,13 +591,16 @@ van-dialog {
       border-radius: 8rpx;
     }
   }
+
   .tip-content {
     padding: 32rpx;
+
     .title {
       text-align: center;
       margin: 0 auto 24rpx;
       font-size: 28rpx;
     }
+
     .line {
       margin: 0 auto 24rpx;
       font-size: 24rpx;
@@ -501,9 +608,10 @@ van-dialog {
   }
 }
 
-.focus-bottom{
+.focus-bottom {
   position: fixed;
-  left: 0; bottom: 5vh;
+  left: 0;
+  bottom: 5vh;
   width: 100%;
 
   .white-noise-status {
@@ -516,17 +624,25 @@ van-dialog {
     flex-direction: row;
     justify-content: space-between;
 
-    width: 312rpx; height: 72rpx;
+    width: 312rpx;
+    height: 72rpx;
 
     border-radius: 16rpx;
-    background-color: rgba(0,0,0,0.19);
+    background-color: rgba(0, 0, 0, 0.19);
 
     margin: 0 auto;
     padding: 0 16rpx;
 
-    .white-noise { height: 56rpx; opacity: 0.3 }
-    .white-noise.selected { opacity: 1 }
+    .white-noise {
+      height: 56rpx;
+      opacity: 0.3
+    }
+
+    .white-noise.selected {
+      opacity: 1
+    }
   }
+
   .bottom-info {
     animation: 1s linear 0s move-in;
     position: relative;
@@ -540,20 +656,24 @@ van-dialog {
       position: absolute;
 
       left: 24rpx;
-      width: 160rpx; height: fit-content;
+      width: 160rpx;
+      height: fit-content;
 
       display: flex;
       flex-direction: column;
       align-items: center;
 
       .avatar {
-        width: 80rpx; height: 80rpx;
+        width: 80rpx;
+        height: 80rpx;
         margin: 0 0 8rpx;
         border-radius: 50%;
         border: #F8D1DB solid 2px;
       }
+
       .player-name {
-        width: 100%; height: 32rpx;
+        width: 100%;
+        height: 32rpx;
 
         color: white;
         font-size: 24rpx;
@@ -561,15 +681,17 @@ van-dialog {
 
         overflow: hidden; // 隐藏文字
         white-space: nowrap; // 不换行
-        text-overflow: ellipsis;// 显示...
+        text-overflow: ellipsis; // 显示...
       }
     }
+
     .slogan {
       position: absolute;
-      left: 192rpx; right: 32rpx;
+      left: 192rpx;
+      right: 32rpx;
       height: 80rpx;
       border-radius: 14rpx;
-      background-color: rgba(0,0,0,0.13);
+      background-color: rgba(0, 0, 0, 0.13);
       color: white;
       font-size: 24rpx;
       text-align: left;
@@ -580,7 +702,7 @@ van-dialog {
   }
 }
 
-.room-status{
+.room-status {
   animation: 2s linear 0s move-in;
   position: absolute;
   left: 53vw;
@@ -590,31 +712,35 @@ van-dialog {
   display: flex;
   flex-direction: column;
   text-align: right;
-  .status-text{
+
+  .status-text {
     height: 2vh;
   }
 }
 
-.remind{
+.remind {
   position: fixed;
   width: 50%;
   left: 25%;
   bottom: 30%;
   height: 12vh;
   border-radius: 20px;
-  background-color: rgba(255,255,255,0.89);
+  background-color: rgba(255, 255, 255, 0.89);
   text-align: center;
   display: flex;
   flex-direction: column;
-  .remind-text1{
+
+  .remind-text1 {
     font-size: 28rpx;
     padding-top: 2.2vh;
   }
-  .remind-text2{
+
+  .remind-text2 {
     font-size: 28rpx;
     padding-top: 1vh;
   }
-  .remind-text3{
+
+  .remind-text3 {
     font-size: 21rpx;
     padding-top: 2vh;
   }

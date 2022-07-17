@@ -45,6 +45,10 @@ export class ResultAnimation extends BaseData {
   restExp: number
   @field(Number)
   level: number
+  @field
+  motionList:Motion[] = []
+  @field
+  motionCountList:number[] = []
 
   private curExp: number = 0
   private curGold: number = 0
@@ -142,6 +146,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
   public playerPage: PlayerPage = new PlayerPage(true, true);
   public roomDrawingPage: RoomDrawingPage = new RoomDrawingPage();
   public shareAppPage: ShareAppPage = new ShareAppPage();
+  public roomPage : RoomPage = new RoomPage()
   // public shareTimelinePage: ShareTimelinePage = new ShareTimelinePage();
 
   // region 白噪音控制
@@ -386,7 +391,7 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
     //   // 如果有人当前专注中的数据，使用之，否则如果当前玩家在专注，设置为1，否则为0
     //   focusing: data.count // || (this.data.runtimeFocus ? 1 : 0)
     // })
-    const name = data.player.name; let status; 
+    const name = data.player.name; let status;
     switch (data.type) {
       case "enter": status = "进入房间"; break
       case "focusStart": status = "开始专注"; break
@@ -515,8 +520,23 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
       this.data.runtimeFocus);
     const exp = focusMgr().curRewards.exp.realValue;
     const gold = focusMgr().curRewards.gold.realValue;
+
+    let motionList:Motion[] = [];
+    let motionCountList:number[] = [];
+    focus.runtime.motionRecords.forEach((value)=>{
+
+      const res = motionRepo().getById(value.motionId);
+      let index = motionList.indexOf(res);
+      if(index!=-1)motionCountList[index]++
+      else {
+        motionList.push(res);
+        motionCountList[motionList.length-1] = 1;
+      }
+
+    })
+
     await this.setData({
-      focus, runtimeFocus: null, isShowResultWindow: true,
+      focus, runtimeFocus: null, isShowResultWindow: true, motionList,motionCountList,
       resAni: ResultAnimation.create(exp, gold, baseExp)
     })
   }
@@ -577,3 +597,4 @@ import {PromiseUtils} from "../../utils/PromiseUtils";
 import {WhiteNoise, whiteNoiseRepo} from "../../modules/room/data/WhiteNoise";
 import {MathUtils} from "../../utils/MathUtils";
 import BackgroundAudioManager = WechatMiniprogram.BackgroundAudioManager;
+import {Motion, motionRepo} from "../../modules/room/data/Motion";

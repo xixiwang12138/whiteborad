@@ -72,7 +72,6 @@ export class LoginPage extends BasePage<Data> {
 	}
 
 	private async move() {
-		// console.log('ddddddd')
 		let bubble=this.data.bubble
 		if (bubble.length > 0) {
 			for(var i=0;i<bubble.length;i++)

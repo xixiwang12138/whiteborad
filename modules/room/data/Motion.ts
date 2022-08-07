@@ -1,9 +1,9 @@
 import {dataClass} from "../../core/managers/DataManager";
 import {StaticData} from "../../core/data/StaticData";
 import {BaseRepository, getRepository, repository} from "../../core/data/BaseRepository";
-import {Reward} from "../../player/data/Reward";
+import {Reward, RewardGroup} from "../../player/data/Reward";
 import {field} from "../../core/data/DataLoader";
-import {Condition} from "../../player/data/Condition";
+import {Condition, ConditionGroup} from "../../player/data/Condition";
 
 export enum MotionRare {
 	N, R, SR, SSR, UR
@@ -32,6 +32,32 @@ export class Motion extends StaticData {
 	public get thumbnailUrl() {
 		return this.thumbnail || `/motions/${this.id}.png`;
 	}
+
+	// region 奖励计算
+
+	public get conditionGroup() {
+		return ConditionGroup.create(...this.conditions)
+	}
+	public get unlockRewardGroup() {
+		return RewardGroup.create(...this.unlockRewards)
+	}
+	public get rewardGroup() {
+		return RewardGroup.create(...this.rewards)
+	}
+	public get unlockGold() {
+		return this.unlockRewardGroup.gold.realValue
+	}
+	public get unlockExp() {
+		return this.unlockRewardGroup.exp.realValue
+	}
+	public get gold() {
+		return this.rewardGroup.gold.realValue
+	}
+	public get exp() {
+		return this.rewardGroup.exp.realValue
+	}
+
+	// endregion
 }
 
 export function motionRepo() {

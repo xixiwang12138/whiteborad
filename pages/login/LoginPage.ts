@@ -56,7 +56,6 @@ export class LoginPage extends BasePage<Data> {
 			that.move()
 			if(bubble.length>50)
 			{
-				console.log('ssssssss')
 				clearInterval(Interval)
 			}
 		}, 500);

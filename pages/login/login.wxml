@@ -1,23 +1,37 @@
 <!--square.wxml-->
 <view class="container">
-  <view class="login-page {{isLogin ? 'is-login' : ''}}" >
+  <view class="login-page{{isNewer?'':(isLogin?' is-login':'')}}">
     <view class="logo-container">
-      <image class="logo" src="../../assets/logo.png" mode="widthFix"></image>
-      <image class="homi" src="../../assets/logo-text.png" mode="heightFix"></image>
+      <view class="logo" style="background-color:{{isNewer?'transparent':'white'}};">
+      <image src="../../assets/logo-shape.png" wx:if="{{!isNewer}}"></image>
+      </view>
+      <image class="homi{{isNewer?'2':''}}" src="../../assets/logo-text.png" mode="heightFix"></image>
     </view>
-    <view class="login-block">
+    <!-- <view class="login-block" wx:if="{{!isNewer}}">
       <text class="tips">点击进入Homi元宇宙</text>
       <button class="button {{isLogin ? 'is-login' : ''}}"
               bindtap="tapToLogin">
         <view class="effect"/>
       </button>
-    </view>
+    </view> -->
   </view>
-  
+
   <view class="register-page" wx:if="{{isNewer}}">
+    <image src="../../assets/background-logo.png" style="width:128vw;height: 62vh;position: absolute;left: -14vw;opacity: 0.6;" class="background-logo"></image>
+    <image class="homi2" src="../../assets/logo-text.png" mode="heightFix"></image>
     <view class="avatar-container">
       <view class="effect"/>
       <image class="avatar" src="{{info.avatarUrl}}" mode="aspectFill"/>
+    </view>
+    <view class="gender-container">
+      <view class="gender-box male {{info.gender == 1 ? 'selected' : ''}}"
+            bind:tap="onMaleTap">
+            <image src="../../assets/male.png" style="width: 31px;height:31px;padding-top: 5px;" ></image>
+            </view>
+      <view class="gender-box female {{info.gender == 2 ? 'selected' : ''}}"
+            bind:tap="onFemaleTap">
+            <image src="../../assets/female.png" style="width: 25px;height:34px;padding-top: 4px;"></image>
+            </view>
     </view>
     <view class="name-container">
       <view class="name">
@@ -25,12 +39,6 @@
                maxlength="8"
                value="{{info.name}}" bind:input="onNameInput"/>
       </view>
-    </view>
-    <view class="gender-container">
-      <view class="gender-box male {{info.gender == 1 ? 'selected' : ''}}"
-            bind:tap="onMaleTap">男</view>
-      <view class="gender-box female {{info.gender == 2 ? 'selected' : ''}}"
-            bind:tap="onFemaleTap">女</view>
     </view>
     <view class="slogan-container">
       <textarea class="slogan" placeholder="输入你的Slogan吧！"
@@ -40,7 +48,13 @@
     </view>
     <view class="submit" bind:tap="onSubmit">完成</view>
   </view>
-  
+
+  <view class="bubble-container">
+  <block wx:for="{{bubble}}" >
+  <view class="round" style="position: absolute;top: {{item.top}}px;left: {{item.left}}px;"></view>
+  </block>
+
+  </view>
   <!--  -->
 <!--  <view class="page">-->
 <!--    <view class="logo-container">-->

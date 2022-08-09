@@ -2,10 +2,11 @@
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background:-webkit-linear-gradient(top,#FFFFFF,#C0A0C7);
+  background: linear-gradient(180deg, #E9DBEB 3.85%, #6D418F 93.59%);
 }
 
 .login-page {
+  z-index: 2;
   position: absolute;
 
   left: 0; top: 0;
@@ -18,23 +19,28 @@
     text-align: center;
 
     .logo {
+      // background-color: white;
+      border-radius: 20%;
       opacity: 1;
       display: block;
       animation: 2s 0s alternate login-move-in both;
-
-      width: 50vw;
-
+      width: 54.6vw;
+      height: 53.3vw;
       margin-left: auto;
       margin-right: auto;
+      image{
+        height: 18vh;
+        width: 35vw;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 4.2vh;
+      }
     }
     .homi {
       display: block;
       animation: 2s 0.5s alternate login-move-in both;
-
-      height: 5vh;
-
+      height: 6vh;
       text-align: center;
-
       margin: 64rpx auto;
     }
   }
@@ -93,7 +99,7 @@
 
     }
     .is-login {
-      animation: 2s ease alternate login-scale both;
+      animation: 2s ease alternate login-scale;
     }
   }
 
@@ -104,29 +110,38 @@
 }
 
 .register-page {
+  z-index: 2;
   position: absolute;
-
   left: 0; top: 0;
   height: 100%; width: 100%;
   overflow: hidden;
 
   display: flex;
   flex-direction: column;
-
+  .background-logo{
+    animation: 2s 0s alternate logo-enlarge both;
+  }
+  .homi2 {
+    display: block;
+    animation: 2s 0s alternate login-move-in2 both;
+    height: 7vh;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 150rpx;
+  }
   .avatar-container{
     position: relative;
-    width: 25vw; height: 25vw;
-
-    animation: 2s linear 0s alternate both register-move-in;
-    margin: 256rpx auto 32rpx;
+    width: 29vw; height: 29vw;
+    animation: 2s linear 1s alternate both register-move-in;
+    margin: 90rpx auto 10rpx;
 
     .avatar{
       position: absolute;
-
       left: -6px; top: -6px;
       width: 100%; height: 100%;
-      border: 6px solid #F4D5D5;
-      border-radius: 250rpx;
+      border: 4px solid white;
+      border-radius: 300rpx;
     }
 
     .effect {
@@ -142,27 +157,28 @@
     }
   }
   .name-container{
-    animation: 2s linear 0.5s alternate both register-move-in;
+    animation: 2s linear 1.6s alternate both register-move-in;
     margin: 32rpx auto 16rpx;
 
     .name{
-      height: 64rpx;
-      width: 303rpx;
-      border-radius: 32rpx;
-      background-color: rgba(0,0,0,0.55);
-      text-align: center;
+      height: 90rpx;
+      width: 84.6vw;
+      border-radius: 8px;
+      background-color: white;
+      text-align: left;
 
       .name-input{
-        height: 64rpx;
+        padding-left: 5vw;
+        height: 90rpx;
         line-height: 64rpx;
         width: 100%;
-        color: rgba(255,255,255,1);
+        color:#B7B7B7;
       }
     }
   }
   .gender-container {
-    animation: 2s linear 0.5s alternate both register-move-in;
-    width: 256rpx; height: 64rpx;
+    animation: 2s linear 1.3s alternate both register-move-in;
+    width: 400rpx; height: 82rpx;
     margin: 16rpx auto;
 
     flex-direction: row;
@@ -170,42 +186,37 @@
     justify-content: space-between;
 
     .gender-box {
-      width: 92rpx; height: 64rpx;
-      line-height: 64rpx;
-
+      width: 70.6px; height: 41.3px;
       font-size: 28rpx;
       text-align: center;
-
       border-radius: 32rpx;
-
       background-color: rgba(234,234,234,1);
-
-      .gender-text{
-        line-height: 100%;
+      .image{
+        line-height: 41.3px;
       }
     }
     //.male{  }
     //.female { background-color: rgba(244,213,213,1); }
 
     //.selected { border: solid 2px darkslateblue; }
-    .male.selected{ background-color: rgba(213,213,244,1); }
-    .female.selected { background-color: rgba(244,213,213,1); }
+    .male.selected{ background-color: #816EA8; }
+    .female.selected { background-color: #BCBBBC; }
   }
   .slogan-container {
-    animation: 2s linear 0.5s alternate both register-move-in;
-    height: 11.4vh;
-    border-radius: 16rpx;
-    background-color: rgba(255,255,255,1);
-    width: 468rpx;
+    animation: 2s linear 1.9s alternate both register-move-in;
+    height: 20vh;
+    border-radius: 24rpx;
+    background-color: #E9DBEB;
+    width: 84.6vw;
     margin: 16rpx auto;
 
     .slogan{
-      width: 50vw;
-      height: 7vh;
+      width: 74vw;
+      height: 17vh;
       display: block;
       overflow-wrap: break-word;
-      color: rgba(0,0,0,1);
-      font-size: 24rpx;
+      color:#A1A1A1;
+      font-size: 30rpx;
       line-height: 35rpx;
       text-align: left;
       margin: 20rpx auto;
@@ -214,27 +225,71 @@
   }
   .submit {
     opacity: 1;
-    animation: 2s linear 1s alternate both register-move-in;
-
+    animation: 2s linear 2.4s alternate both register-move-in;
     margin: 32rpx auto;
-
     text-align: center;
-
-    width: 324rpx; height: 64rpx;
-    line-height: 64rpx;
+    width: 380rpx; height: 92rpx;
     border-radius: 10rpx;
-
-    background-color: #8875B3;
-    color: white;
+    background-color:white;
+    color:#816EA8;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 6vw;
+    line-height: 5.5vh;
   }
 
 }
 
+.bubble-container{
+  overflow: hidden;
+  position: absolute;
+  // top: 60vh;
+  // z-index: -999;
+  width: 100vw;
+  height: 100vh;
+}
+
+.round {
+  width: 6px;
+  height: 6px;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.25));
+  animation: shadow1 9s infinite;
+  transition-property: left, top;
+  transition-duration: 6s, 3s;
+  transition-timing-function: ease,ease;
+}
+
 // region 登录页动画
+
+@keyframes shadow1 {
+  0% {width:6px;height:6px;opacity:0.2};
+  10% {width:14px;height:14px;opacity:0.4};
+  20% {width:20px;height:20px;opacity:0.6};
+  30% {width:24px;height:24px;opacity:0.8};
+  40% {width:30px;height:30px;opacity:0.9};
+  50% {width:40px;height:40px;opacity:1};
+  60% {width:30px;height:30px;opacity:0.9};
+  70% {width:24px;height:24px;opacity:0.8};
+  80% {width:20px;height:20px;opacity:0.6};
+  90% {width:14px;height:14px;opacity:0.4};
+  100% {width:6px;height:6px;opacity:0.2};
+}
 
 @keyframes login-move-in {
   0% {
     opacity: 0; transform: scale(1) translateY(96rpx);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+  100% {
+    opacity: 1; transform: scale(1) translateY(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+}
+
+@keyframes login-move-in2 {
+  0% {
+    opacity: 1; transform: scale(0.855) translateY(40.5vh);
     animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
   }
   100% {
@@ -288,7 +343,16 @@
   0% { opacity: 1; transform: scale(1) }
   100% { opacity: 0; transform: scale(1.5) }
 }
-
+@keyframes logo-enlarge{
+  0% {
+    opacity: 1; transform: scale(0.2) translateY(-6vh);
+    animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
+  }
+  100% {
+    opacity: 1; transform: scale(1) translateY(0);
+    animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  }
+}
 // endregion
 
 @keyframes zoom-down3 {

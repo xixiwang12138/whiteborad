@@ -11,7 +11,7 @@
 
   left: 0; top: 0;
   height: 100%; width: 100%;
-  overflow: hidden;
+  overflow: visible;
 
   .logo-container{
     margin-top: 256rpx;
@@ -48,26 +48,26 @@
   .login-block {
     position: absolute;
 
-    left: 50%; top: 80%;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
 
-    margin-left: auto;
-    margin-right: auto;
+    //margin-left: auto;
+    //margin-right: auto;
 
     text-align: center;
 
-    transform: translate(-50%, -50%);
-
     .tips {
       position: absolute;
+      left: 50%; top: 90%;
 
       font-size: 28rpx;
 
       width: 100vw;
       bottom: 120rpx;
 
-      transform: translateX(-50%);
+      transform: translate(-50%, -108rpx);
 
-      color: grey;
+      color: white;
 
       animation: 1s 1s alternate login-button-show both;
     }
@@ -75,15 +75,18 @@
     .button {
       animation: 1s 1s alternate login-button-show both;
 
-      position: relative;
+      position: absolute;
+      left: 50%; top: 90%;
 
       width: 64rpx; height: 64rpx;
       padding: 0;
 
-      background-color: #BC9BC4;
+      background-color: white;
       border-radius: 50%;
 
       overflow: visible;
+
+      transform: translate(-50%, -50%);
 
       .effect {
         position: absolute;
@@ -91,21 +94,20 @@
         left: 0; top: 0;
         width: 100%; height: 100%;
 
-        background-color: #BC9BC4;
+        background-color: white;
         border-radius: 50%;
 
         animation: 1.5s infinite login-button-effect;
       }
-
     }
-    .is-login {
+    .button.is-login {
       animation: 2s ease alternate login-scale;
     }
   }
 
 }
 
-.is-login {
+.login-page.is-login {
   animation: 2s ease alternate login-move-out both;
 }
 
@@ -132,13 +134,13 @@
   }
   .avatar-container{
     position: relative;
-    width: 29vw; height: 29vw;
+    width: 25vw; height: 25vw;
     animation: 2s linear 1s alternate both register-move-in;
     margin: 90rpx auto 10rpx;
 
     .avatar{
       position: absolute;
-      left: -6px; top: -6px;
+      left: -4px; top: -4px;
       width: 100%; height: 100%;
       border: 4px solid white;
       border-radius: 300rpx;
@@ -147,7 +149,7 @@
     .effect {
       position: absolute;
 
-      left: 0; top: 0;
+      left: 0; top: 0; right: 0; bottom: 0;
       width: 100%; height: 100%;
 
       background-color: #F4D5D5;
@@ -199,8 +201,8 @@
     //.female { background-color: rgba(244,213,213,1); }
 
     //.selected { border: solid 2px darkslateblue; }
-    .male.selected{ background-color: #816EA8; }
-    .female.selected { background-color: #BCBBBC; }
+    .male.selected{ background-color: #6677CC; }
+    .female.selected { background-color: #CC7766; }
   }
   .slogan-container {
     animation: 2s linear 1.9s alternate both register-move-in;
@@ -241,13 +243,20 @@
 
 }
 
-.bubble-container{
+.bubble-container {
   overflow: hidden;
   position: fixed;
   left: 0; right: 0;
   top: 0; bottom: 0;
   width: 100vw;
   height: 100vh;
+
+  filter: blur(4px);
+
+  transition: all 2s ease-in-out;
+}
+.bubble-container.is-login {
+  filter: blur(0);
 }
 
 .round {
@@ -300,11 +309,11 @@
 
 @keyframes login-button-show {
   0% { opacity: 0; }//transform: scale(0); }
-  100% { opacity: 1; }//transform: scale(1); }
+  100% { opacity: 0.75; }//transform: scale(1); }
 }
 @keyframes login-button-effect {
-  0% { opacity: 1; transform: scale(1) }
-  100% { opacity: 0; transform: scale(2.5) }
+  0% { opacity: 0.5; transform: scale(1) }
+  100% { opacity: 0; transform: scale(2) }
 }
 @keyframes login-scale {
   0% { width: 64rpx; height: 64rpx; }
@@ -341,7 +350,7 @@
 }
 @keyframes avatar-effect {
   0% { opacity: 1; transform: scale(1) }
-  100% { opacity: 0; transform: scale(1.5) }
+  100% { opacity: 0; transform: scale(1.25) }
 }
 @keyframes logo-enlarge{
   0% {
@@ -349,7 +358,7 @@
     animation-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1);
   }
   100% {
-    opacity: 1; transform: scale(1) translateY(0);
+    opacity: 0.5; transform: scale(1) translateY(0);
     animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
   }
 }

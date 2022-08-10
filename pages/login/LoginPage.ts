@@ -126,13 +126,12 @@ export class LoginPage extends BasePage<Data> {
 	private setupBubbles() {
 		let bubbles = this.data.bubbles;
 		this.interval = setInterval(() => {
-			console.log("setupBubbles", this)
 			// 控制Bubble数量
-			if (bubbles.length <= 25) this.addItem();
+			if (bubbles.length < 30) this.addItem();
 			this.move()
 			// 之前的问题是因为这里Clear了，动画就不会继续播放了
 			// clearInterval(this.interval)
-		}, 500);
+		}, 1000);
 	}
 	private async addItem() {
 		let bubbles = this.data.bubbles;
@@ -150,7 +149,7 @@ export class LoginPage extends BasePage<Data> {
 			// 到了最上方之后重置
 			if (bubble.top < -50) bubble.top = 110;
 
-			let speed = Math.floor(Math.random() * 20) + 10; // 定义总体速度
+			let speed = MathUtils.random(20, 40); // 定义总体速度
 
 			// 随机设置在x和y方向的速度
 			let theta = Math.floor(Math.random() * speed) + 10 * Math.PI * Math.random();

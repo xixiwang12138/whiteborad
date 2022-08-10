@@ -1,19 +1,25 @@
 <!--square.wxml-->
 <view class="container">
+  
+  <view class="bubble-container {{isLogin && 'is-login'}}">
+    <view wx:for="{{bubbles}}" class="round"
+          style="position: absolute; top: {{item.top}}%; left: {{item.left}}%; display: {{item.visible ? 'block' : 'none'}}"/>
+  </view>
+  
   <view class="login-page{{isNewer?'':(isLogin?' is-login':'')}}">
     <view class="logo-container">
       <view class="logo" style="background-color:{{isNewer?'transparent':'white'}};">
-      <image src="../../assets/logo-shape.png" wx:if="{{!isNewer}}"></image>
+        <image src="../../assets/logo-shape.png" wx:if="{{!isNewer}}"/>
       </view>
-      <image class="homi{{isNewer?'2':''}}" src="../../assets/logo-text.png" mode="heightFix"></image>
+      <image class="homi{{isNewer?'2':''}}" src="../../assets/logo-text.png" mode="heightFix"/>
     </view>
-    <!-- <view class="login-block" wx:if="{{!isNewer}}">
-      <text class="tips">点击进入Homi元宇宙</text>
-      <button class="button {{isLogin ? 'is-login' : ''}}"
+    <view class="login-block" wx:if="{{!isNewer}}">
+      <text class="tips">点击进入Homi</text>
+      <button class="button {{isLogin && 'is-login'}}"
               bindtap="tapToLogin">
         <view class="effect"/>
       </button>
-    </view> -->
+    </view>
   </view>
 
   <view class="register-page" wx:if="{{isNewer}}">
@@ -35,24 +41,20 @@
     </view>
     <view class="name-container">
       <view class="name">
-        <input class="name-input" placeholder="输入你的游戏昵称"
+        <input class="name-input" placeholder="输入你的昵称"
                maxlength="8"
                value="{{info.name}}" bind:input="onNameInput"/>
       </view>
     </view>
     <view class="slogan-container">
-      <textarea class="slogan" placeholder="输入你的Slogan吧！"
+      <textarea class="slogan" placeholder="输入你的Slogan！"
                 adjust-position="{{false}}" focus="{{false}}"
                 maxlength="40" cursor-spacing="10"
                 value="{{info.slogan}}" bind:input="onSloganInput"/>
     </view>
-    <view class="submit" bind:tap="onSubmit">完成</view>
+    <view class="submit" bind:tap="onSubmit">进入Homi</view>
   </view>
 
-  <view class="bubble-container">
-    <view wx:for="{{bubbles}}" class="round"
-          style="position: absolute; top: {{item.top}}%; left: {{item.left}}%; display: {{item.visible ? 'block' : 'none'}}"/>
-  </view>
   <!--  -->
 <!--  <view class="page">-->
 <!--    <view class="logo-container">-->

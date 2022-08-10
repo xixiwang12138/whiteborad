@@ -50,10 +50,8 @@
   </view>
 
   <view class="bubble-container">
-  <block wx:for="{{bubble}}" >
-  <view class="round" style="position: absolute;top: {{item.top}}px;left: {{item.left}}px;"></view>
-  </block>
-
+    <view wx:for="{{bubbles}}" class="round"
+          style="position: absolute; top: {{item.top}}%; left: {{item.left}}%; display: {{item.visible ? 'block' : 'none'}}"/>
   </view>
   <!--  -->
 <!--  <view class="page">-->

@@ -12,6 +12,7 @@ const LoginDesc = "个人信息仅用于展示";
 type Bubble = {
 	left: number
 	top: number
+	visible: boolean
 }
 
 class Data extends BasePageData {
@@ -23,21 +24,18 @@ class Data extends BasePageData {
 	@field
 	isNewer: boolean = false;
 	@field
-	public bubble:Bubble[]=[];
-	@field
-	public clientW:number=0;
-	@field
-	public clientH:number=0;
-	@field
-	public Interval
-	// @field(String)
-	// name: string = "";
+	bubbles: Bubble[] = [];
+	// @field
+	// clientW: number = 0;
+	// @field
+	// clientH: number = 0;
 }
 
 @page("login", "登陆")
 export class LoginPage extends BasePage<Data> {
 
 	public data = new Data();
+	private interval
 
 	/**
 	 * 部分页
@@ -46,57 +44,8 @@ export class LoginPage extends BasePage<Data> {
 
 	onReady() {
 		super.onReady();
-		this.playerPage.registerOnLogin(
-			() => this.onLogin());
-		let that=this;
-		let bubble=this.data.bubble;
-		let Interval=this.data.Interval
-		Interval=setInterval(function () {
-			that.addItem();
-			that.move()
-			if(bubble.length>50)
-			{
-				clearInterval(Interval)
-			}
-		}, 500);
-	}
-
-	private async addItem() {
-		let bubble=this.data.bubble;
-		let left;let top;
-		left = Math.floor(Math.random() * 380) ;
-		top = this.data.contentHeight;
-		bubble.push({left,top});
-		await this.setData({bubble})
-	}
-
-	private async move() {
-		let bubble=this.data.bubble
-		if (bubble.length > 0) {
-			for(var i=0;i<bubble.length;i++)
-			{
-				if(bubble[i].top>-200)
-				{
-				let xleft;let xtop
-				let speed = Math.floor(Math.random() * 20) + 10;//定义总体速度
-				xleft = bubble[i].left;
-				xtop = bubble[i].top;
-				//随机设置在x和y方向的速度
-				let theta = Math.floor(Math.random() * speed) + 10 * Math.PI * Math.random();
-				let speedX = Math.floor(speed * Math.cos(theta));
-				let speedY = -Math.floor(6*speed * Math.random());
-				xleft+=speedX;
-				xtop+=speedY;
-				let bubble1:Bubble[]=[];
-				bubble[i].left+=speedX;
-				bubble[i].top+=speedY;
-				await this.setData({bubble})
-				}
-				else{
-					continue
-				}
-			}
-		}
+		this.playerPage.registerOnLogin(() => this.onLogin());
+		this.setupBubbles();
 	}
 
 	// region 事件
@@ -164,9 +113,62 @@ export class LoginPage extends BasePage<Data> {
 		await playerMgr().editInfo(this.data.info);
 		await pageMgr().goto(MainPage);
 	}
-}
-// endregion
-// endregion
 
+	// endregion
+
+	// endregion
+
+	// region Bubble动画
+
+	/**
+	 * 初始化Bubble动画
+	 */
+	private setupBubbles() {
+		let bubbles = this.data.bubbles;
+		this.interval = setInterval(() => {
+			console.log("setupBubbles", this)
+			// 控制Bubble数量
+			if (bubbles.length <= 25) this.addItem();
+			this.move()
+			// 之前的问题是因为这里Clear了，动画就不会继续播放了
+			// clearInterval(this.interval)
+		}, 500);
+	}
+	private async addItem() {
+		let bubbles = this.data.bubbles;
+		let left, top;
+		// xp改为百分比定位
+		left = MathUtils.random(10, 90);
+		top = 110; // this.data.contentHeight;
+		bubbles.push({ left, top, visible: true });
+		await this.setData({ bubbles })
+	}
+	private async move() {
+		let bubbles = this.data.bubbles
+
+		for (const bubble of bubbles) {
+			// 到了最上方之后重置
+			if (bubble.top < -50) bubble.top = 110;
+
+			let speed = Math.floor(Math.random() * 20) + 10; // 定义总体速度
+
+			// 随机设置在x和y方向的速度
+			let theta = Math.floor(Math.random() * speed) + 10 * Math.PI * Math.random();
+			let speedX = Math.floor(speed * Math.cos(theta));
+			let speedY = -Math.floor(4 * speed * Math.random());
+
+			bubble.left += speedX / 8;
+			bubble.top += speedY / 8;
+
+			bubble.visible = bubble.top >= -50 && bubble.top <= 110
+
+			await this.setData({ bubbles })
+		}
+	}
+
+	// endregion
+
+}
 
 import {MainPage} from "../main/MainPage";
+import {MathUtils} from "../../utils/MathUtils";

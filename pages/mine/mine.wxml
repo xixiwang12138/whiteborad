@@ -2,14 +2,34 @@
       style="background: -webkit-linear-gradient(top, #{{room.gradientColors[0]}}, #{{room.gradientColors[1]}}" />
 <view class="content">
   <view class="page">
-    <view class="player-info">
+    <!-- <view class="player-info">
       <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}"/>
       <image class="avatar" src="{{player.avatarUrl}}"
              mode="aspectFill" bind:tap="onClickShow" data-window="Info"/>
       <text class="name">{{player.name}}</text>
       <text class="slogan">{{player.slogan}}</text>
-<!--      <view class="reward-code" bind:tap="onRewardCodeTap">奖品兑换</view>-->
+     <view class="reward-code" bind:tap="onRewardCodeTap">奖品兑换</view>
+   </view> -->
+   <view class="container-top">
+    <view class="player-info" wx:if="{{!runtimeFocus}}">
+      <image class="avatar" src="{{player.avatarUrl}}"mode="aspectFill"/>
+      <view class="player-info-container">
+        <image src="../../assets/shop/coin.png" style="height: 20px;width: 18px;" mode="aspectFit"></image>
+        <text>{{player.gold}}</text>
+        <image src="../../assets/main/medal.png" style="height: 20px;width: 18px;" mode="aspectFit"></image>
+        <text>LV.{{player.level}}</text>
+        <view class="exp-background">
+          <view class="exp-bar" style="{{'right:' + (1-player.expRate)*100 + '%'}}"/>
+        </view>
+      </view>
     </view>
+    <view class="shop-buttons" wx:if="{{!runtimeFocus}}">
+      <image src="../../assets/shop/setting.png" mode="aspectFit"></image>
+      <image src="../../assets/shop/reminder.png" mode="aspectFit"></image>
+      <image src="../../assets/shop/brush.png" mode="aspectFit" bind:tap="onShopTap"></image>
+    </view>
+   </view>
+   
   
     <!-- 菜单栏 -->
     <van-grid class="menu-grid" column-num="4" border="{{ true }}">

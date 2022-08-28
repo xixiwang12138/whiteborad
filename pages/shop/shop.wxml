@@ -1,8 +1,21 @@
 <view class="page">
   <canvas type='webgl' id="main-canvas"></canvas>
-  <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}"/>
+  <!-- <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}"/> -->
   <image class="back-button" src="../../assets/common/back.png"
          mode="heightFix" bind:tap="back"/>
+  <view class="player-info">
+  <image class="avatar" src="{{player.avatarUrl}}"
+   mode="aspectFill"/>
+   <view class="coins">
+   <image src="../../assets/shop/coin.png" style="height: 26px;width: 23px;" mode="aspectFit"></image>
+   {{player.gold}}
+   </view>
+  </view>
+  <view class="shop-buttons">
+  <image src="../../assets/shop/setting.png" mode="aspectFit"></image>
+  <image src="../../assets/shop/reminder.png" mode="aspectFit"></image>
+  <image src="../../assets/shop/brush.png" mode="aspectFit"></image>
+  </view>
   <view class="confirm-button" wx:if="{{showBuyButton}}"
         bind:tap="onBuyTap">确认购买并使用</view>
   <view class="control-panel">
@@ -10,6 +23,7 @@
       <view class="tab-button {{tab == 1 && 'selected'}}" bindtap="onSkinTab">小屋</view>
       <view class="tab-button {{tab == 2 && 'selected'}}" bindtap="onMotionTab">动作</view>
     </view>
+    <view class="tips" wx:if="{{tab==2}}">首次解锁动作可获得丰厚奖励哦</view>
     <scroll-view class="shelf" scroll-y="true">
       <view class="detail">
         <view class="shop-container" wx:if="{{tab == 1}}">
@@ -30,7 +44,56 @@
           </view>
         </view>
         <view class="motion-container" wx:if="{{tab == 2}}">
-          <van-empty description="施工中，敬请期待哦~" />
+          <!-- <van-empty description="施工中，敬请期待哦~" /> -->
+          <!-- <view wx:for="{{motions}}" bind:tap="onSkinTap" data-id="{{item.id}}"
+                class="room {{item.isUsing && 'using'}} {{!item.isUnlock && 'locked'}} {{item.id == curSkinId && 'selected'}}">
+            <image class="room-img" src="{{item.thumbnail}}" mode="aspectFit"></image>
+            <view class="bottom">
+              <view wx:if="{{item.isUnlock && !item.isBought}}" class="price-box">
+                <image src="/assets/common/gold.png"></image>
+                <text class="price">{{item.price}}</text>
+              </view>
+              <view wx:if="{{item.isUsing}}" class="using-flag">使用中</view>
+              <view wx:if="{{!item.isUsing && item.isBought}}" class="switch-flag">点击更换</view>
+            </view>
+            <view wx:if="{{!item.isUnlock}}" class="locked-flag">
+              <text>{{item.unlockText}}</text>
+            </view>
+          </view> -->
+          <view class="motion">
+            <view class="redDot" wx:if="unclaimed"></view>
+            <text class="level">N</text>
+            <image class="motion-img" src="../../assets/logo-shape.png" mode="aspectFit"></image>
+            <!-- unclaimed表示未领取，后端还没写 -->
+            <view class="motion-bottom">
+            <view class="motion-price">
+            <image src="/assets/common/gold.png"></image>
+            <text>1000</text>
+            </view>
+            <text>点击领取</text>
+            </view>
+          </view>
+          <view class="motion" wx:if="unclaimed">
+            <text class="level">N</text>
+            <image class="motion-img" src="../../assets/logo-shape.png" mode="aspectFit"></image>
+            <view class="motion-bottom">
+            <view class="motion-price">
+            <text></text>
+            </view>
+            <text>普通学习</text>
+            </view>
+          </view>
+          <view class="motion" wx:if="Locked" style="opacity:0.5">
+            <text class="level" style="color:#715AFF">R</text>
+            <image class="motion-img" src="../../assets/logo-shape.png" mode="aspectFit"></image>
+            <view class="motion-bottom">
+            <view class="motion-price">
+            <image src="/assets/common/gold.png"></image>
+            <text>1000</text>
+            </view>
+            <text>精神食粮</text>
+            </view>
+          </view>
         </view>
       </view>
     </scroll-view>

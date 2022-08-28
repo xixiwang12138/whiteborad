@@ -23,94 +23,213 @@
 }
 
 .content {
-
-  .container-top {
-    position: fixed;
-    top: 80rpx;
-  }
-
-  .room-info {
-    margin-top: 12.5%;
-    width: 100%;
-    transition: all 1s ease 0s;
-
-    text-align: center;
-
-    .top-player-name {
-      width: fit-content;
-      font-size: 24rpx;
-      margin: 4rpx auto;
-
-      transition: all 1.5s ease 0s;
+  // .player-info{
+  //   margin-top: 4.8vh;
+  //   margin-left: 2vw;
+  //   .avatar {
+  //     width: 5.16vh; height: 5.16vh;
+  //     border-radius: 50%;
+  //     border: white solid 2px;
+  //     overflow: hidden;
+  //     z-index: -1;
+  //   }
+  //   .player-info-container{
+  //     position: absolute;
+  //     top: 5.8vh;
+  //     left: 9vw;
+  //     height: 30px;
+  //     width: 220px;
+  //     border-radius: 6px;
+  //     background-color: rgba(0,0,0,0.3);
+  //     z-index: -2;
+  //     color: white;
+  //     display: flex;
+  //     flex-direction: row;
+  //     line-height: 66rpx;
+  //     font-weight: 400;
+  //     font-size: 16px;
+  //     text-align: center;
+  //     align-items: center;
+  //     padding-left: 4vw;
+  //     image{
+  //       // padding-top: 5px;
+  //       padding-left: 3vw;
+  //       padding-right: 5px;
+  //     }
+  //     .exp-background {
+  //       margin-left: 5px;
+  //       position: relative;
+  //       width: 35%;
+  //       height: 28rpx;
+  //       background: rgba(255,255,255,0.44);
+  //       border-radius: 14rpx;
+  //       .exp-bar {
+  //         position: absolute;
+  //         left: 0; right: 0;
+  //         top: 0; bottom: 0;
+  //         background: #FFFFFF;
+  //         border-radius: 14rpx;
+  //       }
+  //     }
+  //   }
+  // }
+  .player-info{
+    margin-top: 36px;
+    margin-left: 5px;
+    .avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      border: white solid 2px;
+      overflow: hidden;
+      z-index: -1;
     }
-
-    .room-display-id {
-      font-size: 20rpx;
-      margin-top: 12rpx;
-    }
-
-    .room-name {
-      width: 296rpx;
-      height: 80rpx;
-      margin: 4rpx auto;
-
-      text-align: center;
-
-      background-color: white;
-      border-radius: 32rpx;
-
-      .text {
-        width: fit-content;
-        height: 100%;
-        font-size: 32rpx;
-        line-height: 80rpx;
-        margin: 12rpx auto;
+    .player-info-container{
+      position: absolute;
+      top: 46px;
+      left: 14px;
+      height: 24px;
+      width: 205px;
+      border-radius: 6px;
+      background-color: rgba(0,0,0,0.3);
+      z-index: -2;
+      color: white;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-left: 34px;
+      text{
+        line-height: 30rpx;
+        font-weight: 400;
+        font-size: 12px;
+        text-align: center;
+      }
+      image{
+        // padding-top: 5px;
+        padding-left: 8px;
+        padding-right: 4px;
+      }
+      .exp-background {
+        margin-right: 5px;
+        margin-left: 5px;
+        position: relative;
+        width: 35%;
+        height: 28rpx;
+        background: rgba(255,255,255,0.44);
+        border-radius: 14rpx;
+        .exp-bar {
+          position: absolute;
+          left: 0; right: 0;
+          top: 0; bottom: 0;
+          background: #FFFFFF;
+          border-radius: 14rpx;
+        }
       }
     }
-
-    .rest-time {
-      width: fit-content;
-      margin: 32rpx auto;
-      font-size: 96rpx;
+  }
+  .notice{
+    height: 30px;
+    margin-top: 5vh;
+    margin-left: 5vw;
+    margin-bottom: 1vh;
+    image{
+      position: relative;
+      top: 6px;
+      align-items: center;
+      width: 24rpx;
+      height: 40rpx;
+    }
+    text{
+      font-weight: 300;
+      font-size: x-small;
+      line-height: 12px;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.49);
     }
   }
+  .container-top{
+    display: flex;
+    flex-direction: row;
+    .room-info {
+      transition: all 1s ease 0s;
+      text-align: center;
+      .room-name {
+        position: absolute;
+        left: 2vw;
+        width: fit-content;
+        font-size: 30rpx;
+        margin-top: 10px;
+        font-weight: 600;
+        color: #38376D;
+      }
 
-  .room-info.focusing {
-    margin-top: 10%;
+    }
+  
+    // .room-info.focusing {
+    //   margin-top: 10%;
+    // }
+    .shop-buttons{
+      margin-top: 5px;
+      margin-left: 15vw;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+      image{
+        height: 32px;
+        width: 32px;
+        padding-left: 4vw;
+      }
+    }
   }
+  .rest-time {
+    width: 100%;
+    text-align: center;
+    font-size: 17vw;
+    font-weight: 400;
+    opacity: 0.6;
+    mix-blend-mode: darken;
+  }
+  .white-noise-status {
+    animation: 1.5s linear 0.5s move-in both;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 312rpx;
+    height: 72rpx;
+    border-radius: 16rpx;
+    background-color: rgba(1, 0, 15, 0.15);
+    margin: 0 auto;
+    padding: 0 16rpx;
+    // background: #010015;
+    mix-blend-mode: darken;
+    // opacity: 0.15;
 
+    .white-noise {
+      height: 56rpx;
+      opacity: 0.3
+    }
+
+    .white-noise.selected {
+      opacity: 1
+    }
+  }
   .focus-btn {
     position: fixed;
-    left: 28%;
-    right: 28%;
-    bottom: 15%;
-
-    width: 44%;
-    height: 96rpx;
-
+    left: 25%;
+    right: 25%;
+    bottom: 25%;
+    width: 50vw;
+    height: 5.7vh;
     background-color: white;
-    border-radius: 48rpx;
-
+    border-radius: 20rpx;
     display: flex;
     justify-content: center;
     align-items: center;
-
+    color: #816EA8;
     .text {
-      font-size: 36rpx;
-      font-weight: bold;
+      font-size: 60rpx;
+      font-weight: 700;
     }
-  }
-
-  .shop-btn {
-    width: 8vw;
-    height: 8vw;
-    position: fixed;
-    left: 86%;
-    right: 4%;
-    top: 11%;
-    padding: 0.8vw;
-    background-color: rgba(0, 0, 0, 0.33);
-    border-radius: 9px;
   }
 
   .setting-btn {
@@ -608,99 +727,191 @@ van-dialog {
   }
 }
 
-.focus-bottom {
+.focus-bottom{
   position: fixed;
   left: 0;
-  bottom: 5vh;
+  bottom: 0;
   width: 100%;
-
-  .white-noise-status {
-    animation: 1.5s linear 0.5s move-in both;
-
+  .messages{
+    margin-left: 2vw;
+    margin-bottom: 1vh;
+    width: fit-content;
+    // height: 50rpx;
+    height: fit-content;
     display: flex;
-    //flex-direction: column;
-    //justify-content: center;
-    align-items: center;
     flex-direction: row;
-    justify-content: space-between;
-
-    width: 312rpx;
-    height: 72rpx;
-
-    border-radius: 16rpx;
-    background-color: rgba(0, 0, 0, 0.19);
-
-    margin: 0 auto;
-    padding: 0 16rpx;
-
-    .white-noise {
-      height: 56rpx;
-      opacity: 0.3
+    align-items: center;
+    background: rgba(2, 2, 2, 0.25);
+    border-radius: 8px;
+    text-align: center;
+    image{
+      // position: relative;
+      // top: 2px;
+      margin: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid white;
     }
-
-    .white-noise.selected {
-      opacity: 1
+    text{
+      margin-left: 2px;
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 15px;
+      color: #FFFFFF;
     }
   }
-
-  .bottom-info {
-    animation: 1s linear 0s move-in;
-    position: relative;
+  .chat-container{
+    // margin-bottom: 1vh;
     width: 100%;
-    height: 128rpx;
-    margin-top: 92rpx;
+    height: 7vh;
+    background-color: rgba(1, 0, 15, 0.1);
+    // background: #010015;
+    mix-blend-mode: darken;
+    // opacity: 0.1;
     display: flex;
     flex-direction: row;
-
-    .player-info {
-      position: absolute;
-
-      left: 24rpx;
-      width: 160rpx;
-      height: fit-content;
-
-      display: flex;
-      flex-direction: column;
+    align-items: center;
+    // justify-content: center;
+    .chat-img{
+      width: 64rpx;
+      height: 64rpx;
+    }
+    .chat-border{
+      // margin-top: 1vh;
       align-items: center;
-
-      .avatar {
-        width: 80rpx;
-        height: 80rpx;
-        margin: 0 0 8rpx;
-        border-radius: 50%;
-        border: #F8D1DB solid 2px;
+      // justify-content: center;
+      margin-left: 10vw;
+      width: 79vw;
+      height: 4vh;
+      background: rgba(2, 2, 2, 0.25);
+      border: 3px solid rgba(0, 0, 0, 0.06);
+      border-radius: 8px;
+      display: flex;
+      position: relative;
+      .message-input{
+        width: 1000px;
+        height: 4vh;
+        justify-content: center;
+        display: block;
+        overflow-wrap: break-word;
+        color:#A1A1A1;
+        font-size: 30rpx;
+        line-height: 35rpx;
+        text-align: left;
+        word-break: break-all
       }
-
-      .player-name {
-        width: 100%;
-        height: 32rpx;
-
-        color: white;
-        font-size: 24rpx;
+      .sent-btn{
+        position: absolute;
+        right: -3px;
+        justify-content: flex-end;
+        width:16.1vw;
+        height: 4vh;
+        background-color: #050505;
+        border: 3px solid #050505;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-align: center;
-
-        overflow: hidden; // 隐藏文字
-        white-space: nowrap; // 不换行
-        text-overflow: ellipsis; // 显示...
+        text{
+          font-weight: 700;
+          font-size: 14px;
+          // line-height: 30px;
+          color: white;
+        }
       }
     }
-
-    .slogan {
-      position: absolute;
-      left: 192rpx;
-      right: 32rpx;
-      height: 80rpx;
-      border-radius: 14rpx;
-      background-color: rgba(0, 0, 0, 0.13);
-      color: white;
-      font-size: 24rpx;
-      text-align: left;
-      padding: 16rpx 32rpx;
-      word-wrap: break-word;
-      word-break: normal;
+    .switch-container{
+      margin-left: 18px;
+      width: 10px;
+      height: 32px;
+      background: #D9D9D9;
+      border-radius: 6px;
+      .switch-content{
+        background-color: white;
+        height: 16px;
+        border-top-right-radius: 6px;
+        border-top-left-radius: 6px;
+        display: flex;
+        justify-content: center;
+        .switch-dot{
+          width: 4px;
+          height: 4px;
+          margin-top: 3px;
+          border-radius: 50%;
+          background: #7DE24D;
+        }
+      }
     }
   }
 }
+
+// .focus-bottom {
+//   position: fixed;
+//   left: 0;
+//   bottom: 5vh;
+//   width: 100%;
+
+//   .bottom-info {
+//     animation: 1s linear 0s move-in;
+//     position: relative;
+//     width: 100%;
+//     height: 128rpx;
+//     margin-top: 92rpx;
+//     display: flex;
+//     flex-direction: row;
+
+//     .player-info {
+//       position: absolute;
+
+//       left: 24rpx;
+//       width: 160rpx;
+//       height: fit-content;
+
+//       display: flex;
+//       flex-direction: column;
+//       align-items: center;
+
+//       .avatar {
+//         width: 80rpx;
+//         height: 80rpx;
+//         margin: 0 0 8rpx;
+//         border-radius: 50%;
+//         border: #F8D1DB solid 2px;
+//       }
+
+//       .player-name {
+//         width: 100%;
+//         height: 32rpx;
+
+//         color: white;
+//         font-size: 24rpx;
+//         text-align: center;
+
+//         overflow: hidden; // 隐藏文字
+//         white-space: nowrap; // 不换行
+//         text-overflow: ellipsis; // 显示...
+//       }
+//     }
+
+//     .slogan {
+//       position: absolute;
+//       left: 192rpx;
+//       right: 32rpx;
+//       height: 80rpx;
+//       border-radius: 14rpx;
+//       background-color: rgba(0, 0, 0, 0.13);
+//       color: white;
+//       font-size: 24rpx;
+//       text-align: left;
+//       padding: 16rpx 32rpx;
+//       word-wrap: break-word;
+//       word-break: normal;
+//     }
+//   }
+// }
 
 .room-status {
   animation: 2s linear 0s move-in;
@@ -713,6 +924,11 @@ van-dialog {
   flex-direction: column;
   text-align: right;
 
+  .status-title{
+    margin-right: 8vw;
+    margin-bottom: 2px;
+    color: white;
+  }
   .status-text {
     height: 2vh;
   }

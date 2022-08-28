@@ -12,6 +12,55 @@
     left: 32rpx; top: 108rpx;
     width: fit-content; height: 42rpx;
   }
+  .player-info{
+    margin-top: 4.8vh;
+    margin-left: 15vw;
+    .avatar {
+      width: 6.16vh; height: 6.16vh;
+      border-radius: 50%;
+      border: white solid 2px;
+      overflow: hidden;
+      z-index: -1;
+    }
+    .coins{
+      position: absolute;
+      top: 6.3vh;
+      left: 19vw;
+      height: 34px;
+      width: 157px;
+      border-radius: 6px;
+      background-color: rgba(0,0,0,0.3);
+      z-index: -2;
+      color: white;
+      display: flex;
+      flex-direction: row;
+      line-height: 66rpx;
+      font-weight: 400;
+      font-size: 16px;
+      text-align: center;
+      image{
+        padding-top: 4px;
+        padding-left: 14vw;
+        padding-right: 10px;
+      }
+    }
+  }
+
+  .shop-buttons{
+    position: relative;
+    bottom: 1vh;
+    // background-color: black;
+    margin-left: 62vw;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    margin-bottom: 10vh;
+    image{
+      height: 32px;
+      width: 32px;
+      padding-left: 4vw;
+    }
+  }
 
   .confirm-button {
     position: fixed;
@@ -81,29 +130,30 @@
 
     }
     .tab-buttons {
+      position: absolute;
+      left: 1vw;
+      top: 2vh;
+      z-index: 999;
+      // margin-top: 2vh;
       height: 64rpx;
       padding-left: 24rpx;
-
       display: flex;
       flex-direction: row;
-
       .tab-button {
-        width: 124rpx;
-        height: 64rpx;
-
+        width: 160rpx;
+        height: 58rpx;
         margin: 0 16rpx;
-
-        border-top-left-radius: 24rpx;
-        border-top-right-radius: 24rpx;
-        background-color: rgba(255,255,255,0.5);
-
+        // background-color: rgba(255,255,255,0.5);
+        background-color: rgba(255,255,255,1);
         text-align: center;
-
-        font-size: 28rpx;
+        font-size: 30rpx;
+        font-weight: 700;
         line-height: 64rpx;
+        color: #464499;
+        border-radius: 10px;
       }
       .selected {
-        background-color: rgba(255,255,255,1);
+        border-bottom: #FFC700 solid 3px;
       }
 
       //.rooms {
@@ -137,22 +187,30 @@
       //  }
       //}
     }
+    .tips{
+      position: absolute;
+      // width: 168px;
+      // height: 15px;
+      left: 54vw;
+      top: 4.8vh;
+      font-weight: 400;
+      font-size: 24rpx;
+      line-height: 16px;
+      color: white;
+      z-index: 999;
+    }
     .shelf {
+      z-index: 100;
       position: absolute;
       left: 0; top: 64rpx; bottom: 0;
       width: 100%;
-
-      padding-top: 32rpx;
+      padding-top: 50rpx;
       padding-bottom: 48rpx;
-
       background-color: rgba(0,0,0,0.29);
-
       .shop-container {
         width: calc((186rpx + 48rpx + 8rpx) * 3);
         height: fit-content;
-
         margin: 0 auto;
-
         flex-wrap: wrap;
         display: flex;
         flex-direction: row;
@@ -160,19 +218,15 @@
         align-items: center;
         justify-items: center;
         //justify-content: center;
-
         .room {
           position: relative;
           display: flex;
           flex-direction: column;
-
           width: 186rpx; height: 216rpx;
           padding: 12rpx 4rpx 4rpx;
           margin: 16rpx 24rpx;
-
           border-radius: 16rpx;
           background: rgba(255,255,255,1);
-
           .room-img {
             width: 100%;
             height: 80%;
@@ -183,7 +237,6 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
-
             .using-flag {
               font-size: 24rpx;
               text-align: center;
@@ -199,6 +252,7 @@
               flex-direction: row;
               justify-content: center;
               image {
+                margin-top: 2px;
                 width: 24rpx; height: 24rpx;
               }
               .price {
@@ -237,6 +291,80 @@
         }
         .room.selected {
           background-color: rgba(255, 128, 255, 0.25);
+        }
+      }
+
+      .motion-container{
+        width: calc((186rpx + 48rpx + 8rpx) * 3);
+        height: fit-content;
+        margin: 0 auto;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        align-items: center;
+        justify-items: center;
+        .motion {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          width: 186rpx;
+          height: 216rpx;
+          padding: 12rpx 4rpx 4rpx;
+          margin: 16rpx 24rpx;
+          border-radius: 16rpx;
+          background: rgba(255,255,255,1);
+          .motion-img {
+            padding-top: 20%;
+            width: 100%;
+            height: 60%;
+          }
+          .redDot{
+            position: absolute;
+            left: 23vw;
+            top: -0.5vh;
+            background-color: #EB0000;
+            border-radius: 50%;
+            width: 12px;
+            height: 12px;
+          }
+          .level{
+            width: 20px;
+            position: absolute;
+            left: 21vw;
+            // top: -1vh;
+            font-weight: 1000;
+            font-size: 15px;
+            // line-height: 18px;
+            color: #949494;
+          }
+          .motion-bottom{
+            height: 30%;
+            text-align: center;
+            font-weight: 500;
+            font-size: 13px;
+            line-height: 18px;
+            color: #464499;
+            .motion-price {
+              margin-top: 3px;
+              height: 40%;
+              display: flex;
+              flex-direction: row;
+              justify-content: center;
+              align-items: center;
+              image {
+                width: 26rpx; height: 26rpx;
+              }
+              text {
+                // margin-top: 2px;
+                font-weight: 300;
+                font-size: 11px;
+                line-height: 12px;
+                color: #464499;
+                margin-left: 5px;
+              }
+            }
+          }
         }
       }
     }

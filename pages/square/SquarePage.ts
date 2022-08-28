@@ -4,6 +4,7 @@ import {playerMgr, waitForLogin} from "../../modules/player/managers/PlayerManag
 import {PlayerPage} from "../common/partPages/PlayerPage";
 import {pageMgr} from "../../modules/core/managers/PageManager";
 import {VisitPage} from "../visit/VisitPage";
+import {ShopPage} from "../shop/ShopPage";
 import {RoomPage} from "../common/partPages/RoomPage";
 import {field} from "../../modules/core/data/DataLoader";
 import {roomMgr} from "../../modules/room/managers/RoomManager";
@@ -63,6 +64,9 @@ export class SquarePage extends BasePage<Data> {
 		const roomId: string = e.currentTarget.dataset.id;
 		pageMgr().push(VisitPage, { roomId })
 	}
+
+	@pageFunc
+  onShopTap() { pageMgr().push(ShopPage); }
 
 	// private async loadRooms(queryParams: QueryParams) {
 	// 	queryParams.filter.openid = [

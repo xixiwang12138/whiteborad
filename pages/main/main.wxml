@@ -2,36 +2,53 @@
 <view class="container">
   <canvas type='webgl' id="main-canvas"></canvas>
   <view class="content">
-    <view class="container-top">
-      <avatar-display wx:if="{{!runtimeFocus}}" avatar="{{player.avatarUrl}}" name="{{player.name}}" />
-    </view>
-    <gold-level-display wx:if="{{!runtimeFocus}}" gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
-    <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">
-<!--      <view wx:if="{{runtimeFocus}}" class="top-player-name">{{player.name}}'s</view>-->
-      <view class="room-display-id">房间ID：{{item.displayId}}</view>
-      <view class="room-name">
-        <input class="text" placeholder="输入房间名~" disabled="{{runtimeFocus}}" model:value="{{item.name}}"
-               bind:blur="onRoomNameBlur" bindchange="onRoomNameChange" />
+    <view class="player-info" wx:if="{{!runtimeFocus}}">
+      <image class="avatar" src="{{player.avatarUrl}}"mode="aspectFill"/>
+      <view class="player-info-container">
+        <image src="../../assets/shop/coin.png" style="height: 20px;width: 18px;" mode="aspectFit"></image>
+        <text>{{player.gold}}</text>
+        <image src="../../assets/main/medal.png" style="height: 20px;width: 18px;" mode="aspectFit"></image>
+        <text>LV.{{player.level}}</text>
+        <view class="exp-background">
+          <view class="exp-bar" style="{{'right:' + (1-player.expRate)*100 + '%'}}"/>
+        </view>
       </view>
-      <text wx:if="{{runtimeFocus}}" class="rest-time">{{runtimeFocus.restTime}}</text>
     </view>
-    <image wx:if="{{!runtimeFocus}}" class="shop-btn" src="../../assets/main/shop.png" mode="aspectFit" bind:tap="onShopTap" />
-    <!-- <image wx:if="{{!runtimeFocus}}" class="setting-btn"
-           src="../../assets/main/setting.png" mode="aspectFit"
-           bind:tap="onClickShow" data-window="Room"/> -->
-    <view wx:if="{{!runtimeFocus}}" class="focus-btn"
-          bind:tap="onClickShow" data-window="Start">
-      <view class="text">专注</view>
+    <view class="notice" wx:if="{{runtimeFocus}}">
+    <image src="../../assets/main/notice.png"></image>
+    <text>【再坚持120分钟，就可以升级为尊贵的LV.4啦！】</text>
     </view>
-  </view>
-
-  <view class="focus-bottom" wx:if="{{runtimeFocus}}">
-    <view class="white-noise-status">
+    <view class="container-top">
+      <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">
+        <!-- <view class="room-display-id">房间ID：{{item.displayId}}</view> -->
+        <input class="room-name" placeholder="输入房间名~" disabled="{{runtimeFocus}}" model:value="{{item.name}}"
+               bind:blur="onRoomNameBlur" bindchange="onRoomNameChange" />
+        <image src="../../assets/main/nameBorder.png" style="width: 194px;height: 44px;"></image>
+        <!-- <view class="room-name">
+        </view> -->
+      </view>
+      <view class="shop-buttons" wx:if="{{!runtimeFocus}}">
+        <image src="../../assets/shop/setting.png" mode="aspectFit"></image>
+        <image src="../../assets/shop/reminder.png" mode="aspectFit"></image>
+        <image src="../../assets/shop/brush.png" mode="aspectFit" bind:tap="onShopTap"></image>
+      </view>
+    </view>
+    <view wx:if="{{runtimeFocus}}" class="rest-time">
+      <text>{{runtimeFocus.restTime}}</text>
+    </view>
+    <view class="white-noise-status" wx:if="{{runtimeFocus}}">
       <image wx:for="{{whiteNoises}}"
              class="white-noise {{index == curWhiteNoiseIdx && 'selected'}}"
              src="../../assets/main/{{item}}.png" mode="heightFix"
              bind:tap="onWhiteNoiseTap" data-index="{{index}}"/>
     </view>
+    <view wx:if="{{!runtimeFocus}}" class="focus-btn"
+          bind:tap="onClickShow" data-window="Start">
+      <view class="text">开始</view>
+    </view>
+  </view>
+
+  <!-- <view class="focus-bottom" wx:if="{{runtimeFocus}}">
     <view class="bottom-info">
       <view class="player-info">
         <image class="avatar" src="{{player.avatarUrl}}"></image>
@@ -39,9 +56,40 @@
       </view>
       <view class="slogan">{{player.slogan}}</view>
     </view>
+  </view> -->
+
+  <view class="focus-bottom" wx:if="{{runtimeFocus}}">
+  <view class="messages">
+  <image src="{{player.avatarUrl}}"></image>
+  <text>啥玩意儿啊？</text>
+  </view>
+  <view class="messages">
+  <image src="{{player.avatarUrl}}"></image>
+  <text>啥玩意儿啊？</text>
+  </view>
+  <view class="messages">
+  <image src="{{player.avatarUrl}}"></image>
+  <text>啥玩意儿啊？</text>
+  </view>
+  <view class="chat-container">
+    <!-- <image class="chat-img" src="../../assets/main/chat.png"></image> -->
+    <view class="chat-border">
+      <textarea class="message-input" placeholder="学累了，来发个弹幕放松一下吧~" adjust-position="{{false}}" focus="{{false}}" maxlength="30" cursor-spacing="10"/>
+      <view class="sent-btn">
+      <text>发送</text>
+      </view>
+      <image src="../../assets/main/switch.png"></image>
+    </view>
+    <view class="switch-container">
+    <view class="switch-content">
+    <view class="switch-dot"></view>
+    </view>
+    </view>
+  </view>
   </view>
 
   <view class="room-status">
+    <text class="status-title">【公告】：</text>
     <view class="status-text">{{focusing}}人正在专注中</view>
     <scroll-view scroll-y="{{true}}" style="height: 6vh;">
       <view class="status-text" wx:for="{{messages}}">
@@ -64,7 +112,7 @@
   </view>
 </view>
 
-<view wx:if="{{runtimeFocus}}" class="cancel-button" bind:tap="onCancelTap">取消专注</view>
+<!-- <view wx:if="{{runtimeFocus}}" class="cancel-button" bind:tap="onCancelTap">取消专注</view> -->
 
 <van-dialog use-slot show="{{ isShowStartWindow }}"
             show-confirm-button="{{false}}"

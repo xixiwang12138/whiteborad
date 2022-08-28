@@ -6,44 +6,112 @@
   flex-direction: column;
   color: black;
 
-  .player-info {
-    position: absolute;
-    width: 100vw;
-    height: 532rpx;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
-    justify-items: center;
-    justify-content: center;
-    text-align: center;
-    .avatar {
-      width: 128rpx; height: 128rpx;
-      margin: 28rpx;
-      border-radius: 50%;
-      border: #F8D1DB solid 4px;
+  // .player-info {
+  //   position: absolute;
+  //   width: 100vw;
+  //   height: 532rpx;
+  //   display: flex;
+  //   flex-direction: column;
+  //   align-items: center;
+  //   align-content: center;
+  //   justify-items: center;
+  //   justify-content: center;
+  //   text-align: center;
+  //   .avatar {
+  //     width: 128rpx; height: 128rpx;
+  //     margin: 28rpx;
+  //     border-radius: 50%;
+  //     border: #F8D1DB solid 4px;
+  //   }
+  //   .name {
+  //     width: 384rpx;
+  //     text-align: center;
+  //     color: black;
+  //   }
+  //   .slogan {
+  //     width: 70%; height: 80rpx;
+  //     margin: 16rpx auto;
+  //     padding: 16rpx 32rpx;
+  //     border-radius: 24rpx;
+  //     background-color: rgba(0,0,0,0.16);
+  //     font-size: 24rpx;
+  //     text-align: left;
+  //     color: white;
+  //     word-wrap: break-word;
+  //     word-break: normal;
+  //   }
+  //   .reward-code {
+  //     position: absolute;
+  //     top: 192rpx; right: 32rpx;
+  //     font-size: 28rpx;
+  //   }
+  // }
+
+  .container-top{
+    .player-info{
+      margin-top: 36px;
+      margin-left: 5px;
+      .avatar {
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        border: white solid 2px;
+        overflow: hidden;
+        z-index: -1;
+      }
+      .player-info-container{
+        position: absolute;
+        top: 46px;
+        left: 14px;
+        height: 24px;
+        width: 205px;
+        border-radius: 6px;
+        background-color: rgba(0,0,0,0.3);
+        z-index: -2;
+        color: white;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding-left: 34px;
+        text{
+          line-height: 30rpx;
+          font-weight: 400;
+          font-size: 12px;
+          text-align: center;
+        }
+        image{
+          // padding-top: 5px;
+          padding-left: 8px;
+          padding-right: 4px;
+        }
+        .exp-background {
+          margin-right: 5px;
+          margin-left: 5px;
+          position: relative;
+          width: 35%;
+          height: 28rpx;
+          background: rgba(255,255,255,0.44);
+          border-radius: 14rpx;
+          .exp-bar {
+            position: absolute;
+            left: 0; right: 0;
+            top: 0; bottom: 0;
+            background: #FFFFFF;
+            border-radius: 14rpx;
+          }
+        }
+      }
     }
-    .name {
-      width: 384rpx;
-      text-align: center;
-      color: black;
-    }
-    .slogan {
-      width: 70%; height: 80rpx;
-      margin: 16rpx auto;
-      padding: 16rpx 32rpx;
-      border-radius: 24rpx;
-      background-color: rgba(0,0,0,0.16);
-      font-size: 24rpx;
-      text-align: left;
-      color: white;
-      word-wrap: break-word;
-      word-break: normal;
-    }
-    .reward-code {
-      position: absolute;
-      top: 192rpx; right: 32rpx;
-      font-size: 28rpx;
+    .shop-buttons{
+      margin-top: 5px;
+      margin-left: 62%;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
+      image{
+        height: 32px;
+        width: 32px;
+        padding-left: 4vw;
+      }
     }
   }
 

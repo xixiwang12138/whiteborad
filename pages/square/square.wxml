@@ -1,6 +1,7 @@
 <!--square.wxml-->
 <view class="background"
       style="background: -webkit-linear-gradient(top, #{{room.gradientColors[0]}}, #{{room.gradientColors[1]}}" />
+<image class="background-logo" src="../../assets/square/logo-frame.png" />
 <view class="mask">
   <view class="top-mask"
         style="background: -webkit-linear-gradient(top, #{{room.gradientColors[0]}}, #{{room.gradientColors[0]}}, transparent)"/>
@@ -9,9 +10,38 @@
 
   <view class="absoluter">
     <view class="container-top">
-      <avatar-display avatar="{{player.avatarUrl}}" name="{{player.name}}" />
+      <!-- <avatar-display avatar="{{player.avatarUrl}}" name="{{player.name}}" /> -->
+      <view class="player-info">
+        <image class="avatar" src="{{player.avatarUrl}}"mode="aspectFill"/>
+        <view class="player-info-container">
+          <image src="../../assets/shop/coin.png" style="height: 20px;width: 18px;" mode="aspectFit" />
+          <text>{{player.gold}}</text>
+          <image src="../../assets/main/medal.png" style="height: 20px;width: 18px;" mode="aspectFit" />
+          <text>LV.{{player.level}}</text>
+        <view class="exp-background">
+          <view class="exp-bar" style="{{'right:' + (1-player.expRate)*100 + '%'}}"/>
+        </view>
+        </view>
+      </view>
+      <view class="welcome-shop">
+        <view class="welcome-info">
+          <view class="welcome-text">WELCOME TO</view>
+          <image class="logo" src="../../assets/logo-text.png" mode="heightFix" />
+        </view>
+        <view class="shop-buttons">
+          <image src="../../assets/shop/setting.png" mode="aspectFit" />
+          <image src="../../assets/shop/reminder.png" mode="aspectFit"/>
+          <image src="../../assets/shop/brush.png" mode="aspectFit" bind:tap="onShopTap"/>
+        </view>
+      </view>
+      <view class="search-container">
+        <input placeholder="输入id搜索" />
+        <view class="search-icon">
+          <image src="../../assets/square/search.png" mode="heightFix" />
+        </view>
+      </view>
     </view>
-    <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" />
+    <!-- <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" /> -->
     <real-tab-bar curPageIndex="1"></real-tab-bar>
   </view>
   <!-- <view class="search">
@@ -21,7 +51,7 @@
   
 </view>
 
-<view class="room-list-content">
+<scroll-view scroll-y="true" class="room-list-content">
   <view class="room" wx:for="{{rooms}}" bindtap="onRoomTap" data-id="{{item.roomId}}">
     <image src="{{item.thumbnail}}" mode="widthFix" class="room-thumbnail" />
     <view class="room-desc">
@@ -32,10 +62,10 @@
         <text class="name">{{item.playerName}}'s</text>
       </view>
       <view class="room-level-name">
-        <text class="room-level">{{item.starId}}</text>
+        <view class="room-level">{{item.starId}}</view>
         <text class="room-name">{{item.name}}</text>
       </view>
     </view>
   </view>
-</view>
+</scroll-view>
 

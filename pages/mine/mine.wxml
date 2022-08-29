@@ -29,9 +29,51 @@
       <image src="../../assets/shop/brush.png" mode="aspectFit" bind:tap="onShopTap"></image>
     </view>
    </view>
-   
+   <view class="envelop-container">
+    <image class="myAvatar" src="{{player.avatarUrl}}"mode="aspectFill" bind:tap="onClickShow" data-window="Info"/>
+    <view class="paper">
+    <text>{{player.name}}</text>
+    </view>
+    <image class="envelop" src="../../assets/mine/envelop.png" />
+   </view>
+   <view class="menu">
+     <view class="invite">
+       <image src="../../assets/mine/invite.png" />
+       <text>邀请活动</text>
+     </view>
+     <view class="reward">
+       <image src="../../assets/mine/reward.png" />
+       <text>礼品兑换</text>
+     </view>
+   </view>
+   <scroll-view class="room-list" scroll-y="{{true}}" >
+     <view class="room" wx:for="{{collectedRooms}}">
+       <image class="room-pic" src="../../assets/square/logo-frame.png"></image>
+       <view class="room-info">
+        <view class="room-num-name">
+          <view class="room-num">{{item.level}}</view>
+          <view class="room-name">{{item.name}}</view>
+        </view>
+        <view class="room-owner">
+          <image src="{{player.avatarUrl}}" />
+          <text>{{item.userName}}</text>
+        </view>
+        <view class="room-slogan">{{item.slogan}}</view>
+        <view class="stars">
+          <image src="../../assets/mine/star1.png" />
+          <image src="../../assets/mine/star1.png" />
+          <image src="../../assets/mine/star1.png" />
+          <image src="../../assets/mine/star2.png" />
+          <image src="../../assets/mine/star2.png" />
+        </view>
+       </view>
+       <view class="enter">Go</view>
+       <image class="bubble1" src="../../assets/mine/bubble1.png" />
+       <image class="bubble2" src="../../assets/mine/bubble2.png" />
+     </view>
+   </scroll-view>
   
-    <!-- 菜单栏 -->
+    <!-- 菜单栏
     <van-grid class="menu-grid" column-num="4" border="{{ true }}">
       <van-grid-item use-slot>
         <view class="menu-item" bind:tap="onClickShow" data-window="Invite">
@@ -45,25 +87,25 @@
           <view class="menu-title">礼品兑换</view>
         </view>
       </van-grid-item>
-<!--      <van-grid-item use-slot>-->
-<!--        <view class="menu-item" bindtap="toRanklist">-->
-<!--          <image src="../../icon/rank.png" mode="aspectFit"></image>-->
-<!--          <view class="menu-title">卷王争霸</view>-->
-<!--        </view>-->
-<!--      </van-grid-item>-->
-<!--      <van-grid-item use-slot>-->
-<!--        <view class="menu-item" bindtap="toShopName">-->
-<!--          <image src="../../icon/shopName.png" mode="aspectFit"></image>-->
-<!--          <view class="menu-title">更改店名</view>-->
-<!--        </view>-->
-<!--      </van-grid-item>-->
-<!--      <van-grid-item use-slot>-->
-<!--        <view class="menu-item" bindtap="toNotice">-->
-<!--          <image src="../../icon/notice.png" mode="aspectFit"></image>-->
-<!--          <view class="menu-title">系统公告</view>-->
-<!--        </view>-->
-<!--      </van-grid-item>-->
-    </van-grid>
+     <van-grid-item use-slot>
+       <view class="menu-item" bindtap="toRanklist">
+         <image src="../../icon/rank.png" mode="aspectFit"></image>
+         <view class="menu-title">卷王争霸</view>
+       </view>
+      </van-grid-item>
+     <van-grid-item use-slot>
+       <view class="menu-item" bindtap="toShopName">
+         <image src="../../icon/shopName.png" mode="aspectFit"></image>
+         <view class="menu-title">更改店名</view>
+       </view>
+     </van-grid-item>
+     <van-grid-item use-slot>
+       <view class="menu-item" bindtap="toNotice">
+         <image src="../../icon/notice.png" mode="aspectFit"></image>
+         <view class="menu-title">系统公告</view>
+       </view>
+     </van-grid-item>
+    </van-grid> -->
   
 <!--    <scroll-view class="room-list" scroll-y="{{true}}" >-->
 <!--      -->
@@ -81,8 +123,8 @@
       <!--        <image class="enter" src="../../images/enter.png"></image>-->
       <!--      </view>-->
       <!--      <image class="star" src="../../images/star.png"></image>-->
-      <!--    </view>-->
-<!--    </scroll-view>-->
+      <!--    </view> -->
+<!-- <!--    </scroll-view> -->
   </view>
 </view>
 

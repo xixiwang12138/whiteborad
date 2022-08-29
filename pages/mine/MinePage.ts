@@ -15,22 +15,22 @@ import {DefaultSharePage, ShareAppPage} from "../common/partPages/SharePage";
 
 class Data extends BasePageData {
 
-	// @field(Array)
-	// collectedRooms = [{
-	// 	userName: "测试君", level: 3, name: "摆烂12小屋"
-	// },{
-	// 	userName: "测试君", level: 3, name: "摆烂小屋"
-	// },{
-	// 	userName: "测试君", level: 3, name: "摆烂小屋"
-	// },{
-	// 	userName: "测试君", level: 3, name: "摆烂小屋"
-	// },{
-	// 	userName: "测试君", level: 3, name: "摆烂小屋"
-	// },{
-	// 	userName: "测试君", level: 3, name: "摆烂小屋"
-	// },{
-	// 	userName: "测试君", level: 3, name: "摆烂小屋"
-	// }];
+	@field(Array)
+	collectedRooms = [{
+		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
+	},{
+		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
+	},{
+		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
+	},{
+		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
+	},{
+		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
+	},{
+		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
+	},{
+		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
+	},];
 	@field
 	info: PlayerEditableInfo = {};
 	@field

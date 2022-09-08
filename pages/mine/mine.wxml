@@ -55,10 +55,10 @@
           <view class="room-name">{{item.name}}</view>
         </view>
         <view class="room-owner">
-          <image src="{{player.avatarUrl}}" />
+          <!-- <image src="{{player.avatarUrl}}" /> -->
+          <view class="dot"></view>
           <text>{{item.userName}}</text>
         </view>
-        <view class="room-slogan">{{item.slogan}}</view>
         <view class="stars">
           <image src="../../assets/mine/star1.png" />
           <image src="../../assets/mine/star1.png" />
@@ -66,6 +66,7 @@
           <image src="../../assets/mine/star2.png" />
           <image src="../../assets/mine/star2.png" />
         </view>
+        <view class="room-slogan">{{item.slogan}}</view>
        </view>
        <view class="enter">Go</view>
        <image class="bubble1" src="../../assets/mine/bubble1.png" />

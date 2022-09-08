@@ -291,7 +291,7 @@
     }
     .room-info{
       z-index: 6;
-      padding-top: 1.5vh;
+      padding-top: 0.6vh;
       margin-left: 18vw;
       .room-num-name{
         margin-bottom: 2px;
@@ -299,55 +299,62 @@
         flex-direction: row;
         align-items: center;
         .room-num{
-          width: 15px;
-          height: 15px;
+          width: 22px;
+          height: 22px;
           border-radius: 50%;
-          background: #BA9CC0;
+          background: #B9B6F2;
           display: flex;
           align-items: center;
           justify-content: center;
           color: white;
-          font-size: 15px;
+          font-size: 16px;
           margin-right: 3px;
         }
         .room-name{
           font-weight: 600;
-          font-size: 15px;
+          font-size: 2.6vh;
           color: #464499;
         }
       }
       .room-owner{
-        margin-bottom: 2px;
-        margin-left: 2px;
+        // margin-bottom: 2px;
+        // margin-left: 2px;
+        position: absolute;
+        right: 2.5vw;
+        top: 1.5vh;
         display: flex;
         flex-direction: row;
         align-items: center;
-        width: 57px;
-        height: 9px;
-        background: #BA9CC0;
+        width: 73px;
+        height: 14px;
+        // background: #BA9CC0;
         border-radius: 2px;
-        image{
-          margin: 0 1.5px;
+        border: 1px solid #B9B6F2;
+        // image{
+        //   margin: 0 1.5px;
+        //   width: 7px;
+        //   height: 7px;
+        //   border-radius: 2px;
+        // }
+        .dot{
+          margin-left:10px;
+          margin-right: 3px;
           width: 7px;
           height: 7px;
-          border-radius: 2px;
+          border-radius: 50%;
+          background-color: #7DE24D;
         }
         text{
           font-weight: 400;
           font-size: 8px;
           line-height: 11px;
-          color: #EFE5F0;
+          color:#BEB5F0;
         }
       }
-      .room-slogan{
-        margin-bottom: 2px;
-        margin-left: 2px;
-        font-weight: 400;
-        font-size: 10px;
-        line-height: 14px;
-        color: #989898;
-      }
       .stars{
+        margin-left: 5vw;
+        margin-top: 0.8vh;
+        margin-bottom: 0.8vh;
         display: flex;
         flex-direction: row;
         image{
@@ -355,6 +362,13 @@
           height: 13px;
           padding-right: 1px;
         }
+      }
+      .room-slogan{
+        margin-left: 5vw;
+        font-weight: 400;
+        font-size: 10px;
+        line-height: 14px;
+        color: #989898;
       }
     }
     .enter{

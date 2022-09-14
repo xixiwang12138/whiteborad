@@ -48,7 +48,7 @@
   // }
 
   .container-top{
-    .player-info{
+    .top-info{
       margin-top: 36px;
       margin-left: 5px;
       .avatar {
@@ -58,7 +58,7 @@
         overflow: hidden;
         z-index: -1;
       }
-      .player-info-container{
+      .top-info-container{
         position: absolute;
         top: 46px;
         left: 14px;
@@ -157,83 +157,82 @@
     flex-direction: column;
     text-align: center;
     justify-content: center;
-    .slogan-container{
+    .player-info{
       position: absolute;
-      left: 31vw;
       top: -11vh;
-      .slogan-box{
-        width: 32vw;
-        height: 3vh;
-        opacity: 0.9;
-      }
-      .slogan-text{
-        position: absolute;
-        left: 33vw;
-        top: -11vh;
-        font-weight: 400;
-        font-size: 10px;
-        line-height: 12px;
+      width: 100vw;
+      left: -2vw;
+      display: flex;
+      flex-direction: column;
+      // justify-content: center;
+      .slogan-container{
+        width: 50vw;
+        height: 2vh;
+        margin: 0 auto;
+        margin-bottom: 1.2vh;
+        position: relative;
         text-align: center;
+        display: flex;
+        justify-content: center;
+        .slogan-box{
+          position: absolute;
+          // left: 20vw;
+          width: 40vw;
+          height: 3vh;
+          opacity: 0.9;
+        }
+        .slogan-text{
+          position: absolute;
+          font-weight: 400;
+          font-size: 10px;
+          line-height: 20px;
+          color: white;
+        }
       }
-    }
-    .slogan-text{
-      position: relative;
-      top: -15vh;
-      font-weight: 400;
-      font-size: 10px;
-      line-height: 12px;
-      text-align: center;
-      color: white;
-    }
-    .myAvatar{
-      position: absolute;
-      top: -16vw;
-      left: 32.8vw;
-      width: 30vw; height: 30vw;
-      border-radius: 50%;
-      border: white solid 4px;
-      overflow: hidden;
-      z-index: 1;
-    }
-    text{
-      // position: relative;
-      // top: 7vh;
-      // padding-top: 40%;
-      margin-top: 2vh;
-      font-weight: 700;
-      font-size: 30px;
-      line-height: 36px;
-      color: #9879BF;
+      .myAvatar{
+        // position: absolute;
+        margin: 0 auto;
+        width: 14vh; height: 14vh;
+        border-radius: 50%;
+        border: white solid 4px;
+        overflow: hidden;
+        z-index: 1;
+      }
+      .player-name{
+        font-weight: 700;
+        font-size: 3.2vh;
+        color: #9879BF;
+      }
     }
     .menu{
       display: flex;
       flex-direction: row;
       justify-content: center;
       z-index: 3;
-      margin-top: 1vh;
+      margin-top: 10vh;
       .invite{
         position: relative;
-        margin-right: 10vw;
+        margin-right: 5vh;
         display: flex;
         flex-direction: row;
         background: #7F67B1;
         border-radius: 8px;
-        width: 142px;
-        height:28px;
+        width: 15.3vh;
+        height:3vh;
         image{
           position: absolute;
           bottom: -6px;
-          width: 53px;
-          height: 48px;
+          width: 5.7vh;
+          height: 5.2vh;
           overflow: visible;
         }
         text{
           margin-top: 0;
           color: white;
-          margin-left: 15vw;
+          margin-left: 7vh;
           font-weight: 400;
-          font-size: 15px;
-          line-height: 27px;
+          font-size: 1.7vh;
+          line-height: 2.9vh;
           color: #FFFFFF;
         }
       }
@@ -243,22 +242,22 @@
         flex-direction: row;
         background: #7F67B1;
         border-radius: 8px;
-        width: 142px;
-        height:28px;
+        width: 15.3vh;
+        height:3vh;
         image{
           position: absolute;
           bottom: -8px;
           left: 3px;
-          width: 35px;
-          height: 35px;
+          width: 3.8vh;
+          height: 3.8vh;
         }
         text{
           margin-top: 0;
           color: white;
-          margin-left: 15vw;
+          margin-left: 7vh;
           font-weight: 400;
-          font-size: 15px;
-          line-height: 27px;
+          font-size: 1.7vh;
+          line-height: 2.9vh;
           color: #FFFFFF;
         }
       }

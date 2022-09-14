@@ -15,9 +15,9 @@
    </view> -->
    <image class="background-logo" src="../../assets/mine/background-logo.png"></image>
     <view class="container-top">
-      <view class="player-info" wx:if="{{!runtimeFocus}}">
+      <view class="top-info">
         <image class="avatar" src="{{player.avatarUrl}}"mode="aspectFill"/>
-        <view class="player-info-container">
+        <view class="top-info-container">
           <image src="../../assets/shop/coin.png" style="height: 20px;width: 18px;" mode="aspectFit"></image>
           <text>{{player.gold}}</text>
           <image src="../../assets/main/medal.png" style="height: 20px;width: 18px;" mode="aspectFit"></image>
@@ -34,13 +34,15 @@
       </view>
     </view>
     <view class="paper">
-      <view class="slogan-container">
-        <image class="slogan-box" src="../../assets/mine/slogan-box.png" />
+      <view class="player-info">
+        <view class="slogan-container">
+          <image class="slogan-box" src="../../assets/mine/slogan-box.png" />
+          <text class="slogan-text">卷不过，又躺不平--鲁迅</text>
+        </view>
+        <!-- 这个slogan只是展示一下效果，暂时不知道怎么不用position定位实现固定在边框图片中间,现在position还是会出很多位置的偏移 -->
+        <image class="myAvatar" src="{{player.avatarUrl}}"mode="aspectFill" bind:tap="onClickShow" data-window="Info"/>
+        <text class="player-name">{{player.name}}</text>
       </view>
-      <text class="slogan-text">卷不过，又躺不平--鲁迅</text>
-      <!-- 这个slogan只是展示一下效果，暂时不知道怎么不用position定位实现固定在边框图片中间,现在position还是会出很多位置的偏移 -->
-      <image class="myAvatar" src="{{player.avatarUrl}}"mode="aspectFill" bind:tap="onClickShow" data-window="Info"/>
-      <text>{{player.name}}</text>
       <view class="menu">
         <view class="invite">
           <image src="../../assets/mine/invite.png" />

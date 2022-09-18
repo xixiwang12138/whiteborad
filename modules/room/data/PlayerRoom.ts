@@ -2,6 +2,7 @@ import {BaseData} from "../../core/data/BaseData";
 import {field} from "../../core/data/DataLoader";
 import {PlayerData} from "../../player/data/Player";
 import {playerData} from "../../player/managers/PlayerManager";
+import {get, Itf} from "../../core/BaseAssist";
 
 export interface IRoomIndex {
 
@@ -84,6 +85,8 @@ export class PlayerRoom extends PlayerData {
 	@field([RoomVisitRecord])
 	public visitRecords: RoomVisitRecord[] = []
 
+	protected syncItf = get("room/player_room/get");
+
 	/**
 	 * 当前进入的房间
 	 */
@@ -160,5 +163,6 @@ export class PlayerRoom extends PlayerData {
 		}
 		return res;
 	}
+
 
 }

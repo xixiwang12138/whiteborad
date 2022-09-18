@@ -137,6 +137,8 @@ export class RoomManager extends BaseManager {
     this.socket.send({data});
   }
 
+  public syncPlayerRoomRecords
+
   // endregion
 
   // public onFocusStart() {

@@ -125,7 +125,8 @@ export class PlayerManager extends BaseManager {
       openid: this.openid, userInfo
     });
     appMgr().setupToken(res.token);
-    this.setAllData(res.data); this.extra = res.extra;
+    this.setAllData(res.data);
+    this.extra = res.extra;
     return this.player = DataLoader.load(Player, res.player);
   }
 
@@ -221,8 +222,12 @@ export class PlayerManager extends BaseManager {
    * 获取玩家数据
    * @param clazz 需要获取的数据类型
    */
-  public getData<T extends PlayerData>(clazz: Constructor<T>): T {
-    return this.playerData[this.getDataName(clazz)] as T;
+  public async getData<T extends PlayerData>(clazz: Constructor<T>): Promise<T> {
+    const key = this.getDataName(clazz);
+    if(this.playerData[key].dirty) {
+      await this.playerData[key].sync();
+    }
+    return this.playerData[key] as T;
   }
 
   /**

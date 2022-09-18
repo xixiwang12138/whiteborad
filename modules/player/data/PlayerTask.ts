@@ -3,6 +3,7 @@ import {BaseData} from "../../core/data/BaseData";
 import {field} from "../../core/data/DataLoader";
 import {PlayerData} from "./Player";
 import {getRepository} from "../../core/data/BaseRepository";
+import {get} from "../../core/BaseAssist";
 
 export class PlayerInviteTask extends BaseData {
 
@@ -18,6 +19,8 @@ export class PlayerTask extends PlayerData {
 
 	@field(PlayerInviteTask)
 	public inviteTask: PlayerInviteTask = new PlayerInviteTask();
+
+	protected syncItf = get("player/player_task/get");
 
 	public invite() {
 		this.inviteTask.count++;

@@ -77,7 +77,7 @@ export class MinePage extends BasePage<Data> {
 	@waitForLogin
 	async onLogin() {
 		const player = playerMgr().player;
-		const pt = playerMgr().getData(PlayerTask);
+		const pt = await playerMgr().getData(PlayerTask);
 
 		this.shareAppPage.extra = {code: player.inviteCode};
 

@@ -3,6 +3,7 @@ import {field} from "../../core/data/DataLoader";
 import {PlayerData} from "../../player/data/Player";
 import {playerData} from "../../player/managers/PlayerManager";
 import {get, Itf} from "../../core/BaseAssist";
+import {Cache} from "../../core/data/Cache";
 
 export interface IRoomIndex {
 
@@ -165,4 +166,10 @@ export class PlayerRoom extends PlayerData {
 	}
 
 
+}
+
+
+export class PlayerRoomCache extends Cache<PlayerRoom> {
+
+	protected syncItf = get("/player_room/get")
 }

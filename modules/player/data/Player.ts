@@ -1,6 +1,6 @@
 import {BaseData, StateData} from "../../core/data/BaseData";
 import {DataOccasion, dataPK, field, occasion} from "../../core/data/DataLoader";
-import {CacheableData, DynamicData} from "../../core/data/DynamicData";
+import {DynamicData} from "../../core/data/DynamicData";
 import {LevelCalculator} from "../utils/LevelCalculator";
 
 const DefaultGold = 100;
@@ -189,7 +189,7 @@ export class Player extends StateData<PlayerState> {
 	// endregion
 }
 
-export abstract class PlayerData extends CacheableData implements IPlayerData {
+export abstract class PlayerData extends DynamicData implements IPlayerData {
 
 	@field(String)
 	@dataPK

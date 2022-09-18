@@ -65,7 +65,7 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 	private async loadData() {
 		const skins = roomSkinRepo().list;
 		const motions = motionRepo().list;
-		const playerRoom = playerMgr().getData(PlayerRoom);
+		const playerRoom = await playerMgr().getData(PlayerRoom);
 		await this.setData({skins, motions, playerRoom});
 	}
 	private async loadRoom() {

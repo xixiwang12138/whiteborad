@@ -6,7 +6,7 @@ import {cGte, ConditionGroup, ConditionType} from "../data/Condition";
 import {playerMgr} from "../managers/PlayerManager";
 import {PlayerTask} from "../data/PlayerTask";
 
-class InviteData extends BaseData {
+export class InviteData extends BaseData {
 
 	@field(Number)
 	public count: number

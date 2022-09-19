@@ -63,8 +63,8 @@ export class MinePage extends BasePage<Data> {
 
 	@waitForLogin
 	@waitForConfigLoad
-	private setupConfigs() {
-		this.setData({
+	private async setupConfigs() {
+		await this.setData({
 			inviteConfig: configMgr().config(InviteConfig)
 		})
 	}
@@ -101,6 +101,7 @@ export class MinePage extends BasePage<Data> {
 	@pageFunc
 	async onClickShow(e) {
 		const window = e.currentTarget.dataset.window;
+
 		await this[`on${window}WindowShow`]?.();
 		await this.setData({ [`isShow${window}Window`]: true })
 	}
@@ -109,6 +110,10 @@ export class MinePage extends BasePage<Data> {
 		const window = e.currentTarget.dataset.window;
 		await this[`on${window}WindowHide`]?.();
 		await this.setData({ [`isShow${window}Window`]: false })
+	}
+
+	onInviteWindowShow() {
+
 	}
 
 	// endregion

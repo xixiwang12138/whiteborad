@@ -223,17 +223,18 @@ export class PlayerManager extends BaseManager {
    *  初始化所有玩家缓存
    */
   private configureCaches(){
-      this.playerData[this.getDataName(PlayerTask)] = new PlayerTaskCache();
-      this.playerData[this.getDataName(PlayerRoom)] = new PlayerRoomCache(); // TODO playerRoom缓存会不会放在RoomManager更合适？
+      this.playerData[this.getDataName(PlayerTask)] = new PlayerTaskCache(PlayerTask);
+      this.playerData[this.getDataName(PlayerRoom)] = new PlayerRoomCache(PlayerRoom); // TODO playerRoom缓存会不会放在RoomManager更合适？
   }
 
   /**
-   * 获取玩家的缓冲数据，如果dirty，则使用接口更新
+   * 获取玩家的缓冲数据，如果expire，则使用接口更新
    * @param clazz 需要获取的数据类型
    */
   public async getData<T extends PlayerData>(clazz: Constructor<T>): Promise<T> {
     const key = this.getDataName(clazz);
-    if(this.playerData[key].dirty) {
+    console.log(this.playerData, key, this.playerData[key]);
+    if(this.playerData[key].expire) {
       await this.playerData[key].sync();
     }
     return this.playerData[key].data as T;

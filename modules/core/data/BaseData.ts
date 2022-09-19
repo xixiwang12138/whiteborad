@@ -13,7 +13,7 @@ export class BaseData  {
 		this.index = index;
 	}
 
-	onCreated?() {}
+	onCreated() {}
 
 	toJSON?() { return DataLoader.convert(this); }
 

@@ -31,6 +31,6 @@ export class PlayerTask extends PlayerData {
 
 export class PlayerTaskCache extends Cache<PlayerTask>{
 
-	protected syncItf = get("player/player_task/get");
+	protected syncItf = get("/player/player_task/get");
 
 }

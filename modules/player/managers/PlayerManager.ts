@@ -16,7 +16,8 @@ export type LoginExtra = {
 const Login: Itf<{
     openid: string, userInfo: WxUserInfo
   }, {
-    player: Partial<Player>, token: string,
+    player: Partial<Player>,
+    token: string,
     data: {[T: string]: Partial<PlayerData>},
     extra: LoginExtra
   }> = post("/player/player/login", false);

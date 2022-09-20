@@ -39,7 +39,7 @@ export type RoomMessage = {
   type: RoomMessageType, time: number,
   player?: PlayerBaseInfo,
   count?: number,
-  motionRecord:MotionRecord
+  motionRecord: MotionRecord
 }
 
 const CloseCode = 3005;

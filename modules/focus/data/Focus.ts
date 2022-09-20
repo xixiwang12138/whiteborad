@@ -60,7 +60,7 @@ export class RuntimeFocus extends BaseData {
 
 	public lastTime: number = 0; // 上次更新时间
 
-	public focus: Focus;//对应的Focus对象
+	public focus: Focus;// 对应的Focus对象
 	@field([MotionRecord])
 	public motionRecords:MotionRecord[]=[]
 
@@ -130,7 +130,7 @@ export class Focus extends DynamicData {
 	@field(Number)
 	public npcRoomId?: number
 
-	@field(Number)
+	@field
 	public tagIdx: number = 0
 	@field(String)
 	public note: string

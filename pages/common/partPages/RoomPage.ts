@@ -263,7 +263,7 @@ export class RoomDrawingPage extends CanvasPage<DrawingData> {
 		this.base.house.scale.y += dtScale;
 	}
 
-	  switchMotions(motionRecord) {
+	switchMotions(motionRecord) {
 		// const rate = appMgr().isDebug ? DebugTimeRate : 1;
 		// const dt = pageMgr().deltaTime * rate;
 		this.motion.duration = 0;

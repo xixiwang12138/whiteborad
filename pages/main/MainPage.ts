@@ -134,7 +134,8 @@ export const RoomType = "room";
 const FocusUpdateInterval = 1000; // 1秒更新一次
 
 @page("main", "主页")
-export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
+export class MainPage<P = {}> extends
+  ItemDetailPage<MainPageData, Room, P> {
 
   public data = new MainPageData();
 
@@ -397,7 +398,8 @@ export class MainPage<P = {}> extends ItemDetailPage<MainPageData, Room, P> {
       case "focusStart": status = "开始专注"; break
       case "focusEnd": status = "结束专注"; break
       case "leave": status = "离开房间"; break
-      case "switchMotion":this.roomDrawingPage.switchMotions(data.motionRecord);break;
+      case "switchMotion":
+        this.roomDrawingPage.switchMotions(data.motionRecord);break;
     }
     if (!status) return;
 

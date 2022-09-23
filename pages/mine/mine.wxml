@@ -10,68 +10,77 @@
       <text class="slogan">{{player.slogan}}</text>
      <view class="reward-code" bind:tap="onRewardCodeTap">奖品兑换</view>
    </view> -->
-   <view class="container-top">
-    <view class="player-info" wx:if="{{!runtimeFocus}}">
-      <image class="avatar" src="{{player.avatarUrl}}"mode="aspectFill"/>
-      <view class="player-info-container">
-        <image src="../../assets/shop/coin.png" style="height: 20px;width: 18px;" mode="aspectFit"></image>
-        <text>{{player.gold}}</text>
-        <image src="../../assets/main/medal.png" style="height: 20px;width: 18px;" mode="aspectFit"></image>
-        <text>LV.{{player.level}}</text>
-        <view class="exp-background">
-          <view class="exp-bar" style="{{'right:' + (1-player.expRate)*100 + '%'}}"/>
+   <!-- <view class="envelop-container">
+    <image class="envelop" src="../../assets/mine/envelop.png" />
+   </view> -->
+   <image class="background-logo" src="../../assets/mine/background-logo.png"></image>
+    <view class="container-top">
+      <view class="top-info">
+        <image class="avatar" src="{{player.avatarUrl}}"mode="aspectFill"/>
+        <view class="top-info-container">
+          <image src="../../assets/shop/coin.png" style="height: 20px;width: 18px;" mode="aspectFit"></image>
+          <text>{{player.gold}}</text>
+          <image src="../../assets/main/medal.png" style="height: 20px;width: 18px;" mode="aspectFit"></image>
+          <text>LV.{{player.level}}</text>
+          <view class="exp-background">
+            <view class="exp-bar" style="{{'right:' + (1-player.expRate)*100 + '%'}}"/>
+          </view>
+        </view>
+      </view>
+      <view class="shop-buttons" wx:if="{{!runtimeFocus}}">
+        <image src="../../assets/shop/setting.png" mode="aspectFit"></image>
+        <image src="../../assets/shop/reminder.png" mode="aspectFit"></image>
+        <image src="../../assets/shop/brush.png" mode="aspectFit" bind:tap="onShopTap"></image>
+      </view>
+    </view>
+    <view class="paper">
+      <view class="player-info">
+        <view class="slogan-container">
+          <image class="slogan-box" src="../../assets/mine/slogan-box.png" />
+          <text class="slogan-text">卷不过，又躺不平--鲁迅</text>
+        </view>
+        <!-- 这个slogan只是展示一下效果，暂时不知道怎么不用position定位实现固定在边框图片中间,现在position还是会出很多位置的偏移 -->
+        <image class="myAvatar" src="{{player.avatarUrl}}"mode="aspectFill" bind:tap="onClickShow" data-window="Info"/>
+        <text class="player-name">{{player.name}}</text>
+      </view>
+      <view class="menu">
+        <view class="invite">
+          <image src="../../assets/mine/invite.png" />
+          <text>邀请活动</text>
+        </view>
+        <view class="reward">
+          <image src="../../assets/mine/reward.png" />
+          <text>礼品兑换</text>
         </view>
       </view>
     </view>
-    <view class="shop-buttons" wx:if="{{!runtimeFocus}}">
-      <image src="../../assets/shop/setting.png" mode="aspectFit"></image>
-      <image src="../../assets/shop/reminder.png" mode="aspectFit"></image>
-      <image src="../../assets/shop/brush.png" mode="aspectFit" bind:tap="onShopTap"></image>
-    </view>
-   </view>
-   <view class="envelop-container">
-    <image class="myAvatar" src="{{player.avatarUrl}}" mode="aspectFill" bind:tap="onClickShow" data-window="Info"/>
-    <view class="paper">
-    <text>{{player.name}}</text>
-    </view>
-    <image class="envelop" src="../../assets/mine/envelop.png" />
-   </view>
-   <view class="menu">
-     <view class="invite" bindtap="onClickShow" data-window="Invite">
-       <image src="../../assets/mine/invite.png" />
-       <text>邀请活动</text>
-     </view>
-     <view class="reward">
-       <image src="../../assets/mine/reward.png" />
-       <text>礼品兑换</text>
-     </view>
-   </view>
-   <scroll-view class="room-list" scroll-y="{{true}}" >
-     <view class="room" wx:for="{{collectedRooms}}">
-       <image class="room-pic" src="../../assets/square/logo-frame.png"></image>
-       <view class="room-info">
-        <view class="room-num-name">
-          <view class="room-num">{{item.level}}</view>
-          <view class="room-name">{{item.name}}</view>
+    <scroll-view class="room-list" scroll-y="{{true}}" >
+      <view class="room" wx:for="{{collectedRooms}}">
+        <image class="room-pic" src="../../assets/square/logo-frame.png"></image>
+        <view class="room-info">
+          <view class="room-num-name">
+            <view class="room-num">{{item.level}}</view>
+            <view class="room-name">{{item.name}}</view>
+          </view>
+          <view class="room-owner">
+            <!-- <image src="{{player.avatarUrl}}" /> -->
+            <view class="dot"></view>
+            <text>{{item.userName}}</text>
+          </view>
+          <view class="stars">
+            <image src="../../assets/mine/star1.png" />
+            <image src="../../assets/mine/star1.png" />
+            <image src="../../assets/mine/star1.png" />
+            <image src="../../assets/mine/star2.png" />
+            <image src="../../assets/mine/star2.png" />
+          </view>
+          <view class="room-slogan">{{item.slogan}}</view>
         </view>
-        <view class="room-owner">
-          <image src="{{player.avatarUrl}}" />
-          <text>{{item.userName}}</text>
-        </view>
-        <view class="room-slogan">{{item.slogan}}</view>
-        <view class="stars">
-          <image src="../../assets/mine/star1.png" />
-          <image src="../../assets/mine/star1.png" />
-          <image src="../../assets/mine/star1.png" />
-          <image src="../../assets/mine/star2.png" />
-          <image src="../../assets/mine/star2.png" />
-        </view>
-       </view>
-       <view class="enter">Go</view>
-       <image class="bubble1" src="../../assets/mine/bubble1.png" />
-       <image class="bubble2" src="../../assets/mine/bubble2.png" />
-     </view>
-   </scroll-view>
+        <view class="enter">Go</view>
+        <image class="bubble1" src="../../assets/mine/bubble1.png" />
+        <image class="bubble2" src="../../assets/mine/bubble2.png" />
+      </view>
+    </scroll-view>
   
     <!-- 菜单栏
     <van-grid class="menu-grid" column-num="4" border="{{ true }}">

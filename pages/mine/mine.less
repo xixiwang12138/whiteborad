@@ -48,7 +48,7 @@
   // }
 
   .container-top{
-    .player-info{
+    .top-info{
       margin-top: 36px;
       margin-left: 5px;
       .avatar {
@@ -58,7 +58,7 @@
         overflow: hidden;
         z-index: -1;
       }
-      .player-info-container{
+      .top-info-container{
         position: absolute;
         top: 46px;
         left: 14px;
@@ -115,101 +115,151 @@
     }
   }
 
-  .envelop-container{
-    margin-top: 1vh;
+  // .envelop-container{
+  //   margin-top: 1vh;
+    // display: flex;
+    // align-items: center;
+    // justify-content: center;
+    // .envelop{
+    //   width: 100vw;
+    //   height: 60vh;
+    //   position: absolute;
+    //   bottom: 0;
+    //   z-index: 2;
+    // }
+  // }
+
+  .background-logo{
+    position: absolute;
+    top: -11.5vh;
+    left: -10vw;
+    width: 120%;
+    height: 55%;
+    z-index: -2;
+    opacity: 0.8;
+    backdrop-filter: blur(40px);
+  }
+
+  .paper{
+    margin-top: 9vh;
+    position: relative;
+    top: 0;
+    left: 2vw;
+    width: 96vw;
+    height: 19vh;
+    bottom: 50vh;
+    background: #FFFFFF;
+    mix-blend-mode: normal;
+    opacity: 0.95;
+    border-radius: 8px;
+    z-index: -1;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    text-align: center;
     justify-content: center;
-    .myAvatar{
-      width: 30vw; height: 30vw;
-      border-radius: 50%;
-      border: white solid 4px;
-      overflow: hidden;
-      z-index: 1;
-    }
-    .paper{
+    .player-info{
       position: absolute;
-      width: 93vw;
-      height: 22vh;
-      bottom: 45vh;
-      background: #FFFFFF;
-      mix-blend-mode: normal;
-      opacity: 0.95;
-      border-radius: 8px;
-      z-index: -1;
-      text-align: center;
-      text{
+      top: -11vh;
+      width: 100vw;
+      left: -2vw;
+      display: flex;
+      flex-direction: column;
+      // justify-content: center;
+      .slogan-container{
+        width: 50vw;
+        height: 2vh;
+        margin: 0 auto;
+        margin-bottom: 1.2vh;
         position: relative;
-        top: 7vh;
-        // padding-top: 40%;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        .slogan-box{
+          position: absolute;
+          // left: 20vw;
+          width: 40vw;
+          height: 3vh;
+          opacity: 0.9;
+        }
+        .slogan-text{
+          position: absolute;
+          font-weight: 400;
+          font-size: 10px;
+          line-height: 20px;
+          color: white;
+        }
+      }
+      .myAvatar{
+        // position: absolute;
+        margin: 0 auto;
+        width: 14vh; height: 14vh;
+        border-radius: 50%;
+        border: white solid 4px;
+        overflow: hidden;
+        z-index: 1;
+      }
+      .player-name{
         font-weight: 700;
-        font-size: 30px;
-        line-height: 36px;
+        font-size: 3.2vh;
         color: #9879BF;
       }
     }
-    .envelop{
-      width: 100vw;
-      height: 60vh;
-      position: absolute;
-      bottom: 0;
-      z-index: 2;
-    }
-  }
-
-  .menu{
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    z-index: 3;
-    margin-top: 7vh;
-    .invite{
-      position: relative;
-      margin-right: 10vw;
+    .menu{
       display: flex;
       flex-direction: row;
-      background: #BA9CC0;
-      border-radius: 8px;
-      width: 142px;
-      height:28px;
-      image{
-        position: absolute;
-        bottom: -6px;
-        width: 53px;
-        height: 48px;
-        overflow: visible;
+      justify-content: center;
+      z-index: 3;
+      margin-top: 10vh;
+      .invite{
+        position: relative;
+        margin-right: 5vh;
+        display: flex;
+        flex-direction: row;
+        background: #7F67B1;
+        border-radius: 8px;
+        width: 15.3vh;
+        height:3vh;
+        image{
+          position: absolute;
+          bottom: -6px;
+          width: 5.7vh;
+          height: 5.2vh;
+          overflow: visible;
+        }
+        text{
+          margin-top: 0;
+          color: white;
+          margin-left: 7vh;
+          font-weight: 400;
+          font-size: 1.7vh;
+          line-height: 2.9vh;
+          color: #FFFFFF;
+        }
       }
-      text{
-        color: white;
-        margin-left: 15vw;
-        font-weight: 400;
-        font-size: 15px;
-        line-height: 27px;
-        color: #FFFFFF;
-      }
-    }
-    .reward{
-      position: relative;
-      display: flex;
-      flex-direction: row;
-      background: #BA9CC0;
-      border-radius: 8px;
-      width: 142px;
-      height:28px;
-      image{
-        position: absolute;
-        bottom: -8px;
-        left: 3px;
-        width: 35px;
-        height: 35px;
-      }
-      text{
-        color: white;
-        margin-left: 15vw;
-        font-weight: 400;
-        font-size: 15px;
-        line-height: 27px;
-        color: #FFFFFF;
+      .reward{
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        background: #7F67B1;
+        border-radius: 8px;
+        width: 15.3vh;
+        height:3vh;
+        image{
+          position: absolute;
+          bottom: -8px;
+          left: 3px;
+          width: 3.8vh;
+          height: 3.8vh;
+        }
+        text{
+          margin-top: 0;
+          color: white;
+          margin-left: 7vh;
+          font-weight: 400;
+          font-size: 1.7vh;
+          line-height: 2.9vh;
+          color: #FFFFFF;
+        }
       }
     }
   }
@@ -267,87 +317,96 @@
   }
 
   .room-list{
-    height: 44vh;
+    height: 46.5vh;
     z-index: 4;
-    margin-top: 5vh;
+    margin-top: 1vh;
     .room{
       position: relative;
-      margin-bottom: 1vh;
-      margin-left: 13vw;
-      width: 80vw;
-      height: 10vh;
+      margin-top: 3vh;
+      margin-left: 2vw;
+      width: 96vw;
+      height: 10.3vh;
       background: #E9DBEB;
       border-radius: 6px;
     }
     .room-pic{
       position: absolute;
-      top: 5px;
-      left: -30px;
-      width: 18.5vw;
-      height: 8.9vh;
+      top: -2vh;
+      left: -5px;
+      width: 24.7vw;
+      height: 26vw;
       display: inline-block;
       filter: drop-shadow(4px 4px 4px rgba(0, 0, 0, 0.25));
       border-radius: 6px;
     }
     .room-info{
       z-index: 6;
-      padding-top: 1.5vh;
-      margin-left: 18vw;
+      padding-top: 0.6vh;
+      margin-left: 28vw;
       .room-num-name{
         margin-bottom: 2px;
         display: flex;
         flex-direction: row;
         align-items: center;
         .room-num{
-          width: 15px;
-          height: 15px;
+          width: 22px;
+          height: 22px;
           border-radius: 50%;
-          background: #BA9CC0;
+          background: #B9B6F2;
           display: flex;
           align-items: center;
           justify-content: center;
           color: white;
-          font-size: 15px;
+          font-size: 16px;
           margin-right: 3px;
         }
         .room-name{
+          font-family: 'Dubai';
+          font-style: normal;
           font-weight: 600;
-          font-size: 15px;
+          font-size: 2.6vh;
           color: #464499;
         }
       }
       .room-owner{
-        margin-bottom: 2px;
-        margin-left: 2px;
+        // margin-bottom: 2px;
+        // margin-left: 2px;
+        position: absolute;
+        right: 2.5vw;
+        top: 1.5vh;
         display: flex;
         flex-direction: row;
         align-items: center;
-        width: 57px;
-        height: 9px;
-        background: #BA9CC0;
+        width: 73px;
+        height: 14px;
+        // background: #BA9CC0;
         border-radius: 2px;
-        image{
-          margin: 0 1.5px;
+        border: 1px solid #B9B6F2;
+        // image{
+        //   margin: 0 1.5px;
+        //   width: 7px;
+        //   height: 7px;
+        //   border-radius: 2px;
+        // }
+        .dot{
+          margin-left:10px;
+          margin-right: 3px;
           width: 7px;
           height: 7px;
-          border-radius: 2px;
+          border-radius: 50%;
+          background-color: #7DE24D;
         }
         text{
           font-weight: 400;
           font-size: 8px;
           line-height: 11px;
-          color: #EFE5F0;
+          color:#BEB5F0;
         }
       }
-      .room-slogan{
-        margin-bottom: 2px;
-        margin-left: 2px;
-        font-weight: 400;
-        font-size: 10px;
-        line-height: 14px;
-        color: #989898;
-      }
       .stars{
+        margin-left: 5vw;
+        // margin-top: 0.6vh;
+        margin-bottom: 1vh;
         display: flex;
         flex-direction: row;
         image{
@@ -356,12 +415,19 @@
           padding-right: 1px;
         }
       }
+      .room-slogan{
+        margin-left: 5vw;
+        font-weight: 400;
+        font-size: 10px;
+        line-height: 14px;
+        color: #989898;
+      }
     }
     .enter{
       z-index: 6;
       position: absolute;
       right: 3vw;
-      top: 6.2vh;
+      top: 6.4vh;
       width: 44px;
       height: 19px;
       background: #816EA8;

@@ -1,5 +1,6 @@
 import {DataLoader, field} from "./DataLoader";
 import {DateUtils} from "../../../utils/DateUtils";
+import {Itf} from "../BaseAssist";
 
 export type PK = string;
 export function pkType() { return String; }
@@ -12,7 +13,7 @@ export class BaseData  {
 		this.index = index;
 	}
 
-	onCreated?() {}
+	onCreated() {}
 
 	toJSON?() { return DataLoader.convert(this); }
 
@@ -92,3 +93,6 @@ export class StateData<T> extends MainData {
 
 	// endregion
 }
+
+
+

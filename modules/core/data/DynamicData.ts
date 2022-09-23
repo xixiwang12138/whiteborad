@@ -1,12 +1,8 @@
-import {MainData} from "./BaseData";
+import {BaseData, MainData} from "./BaseData";
+import {Itf} from "../BaseAssist";
+
 
 export abstract class DynamicData extends MainData {
-
-	public get syncAble() { return true; }
-	public get removeAble() {  return false; }
-
-	// public sync() : undefined | Promise<SyncResult>;
-	// public remove() : undefined | Promise<RemoveResult>;
 
 	/**
 	 * 业务主键
@@ -17,3 +13,4 @@ export abstract class DynamicData extends MainData {
 	}
 
 }
+

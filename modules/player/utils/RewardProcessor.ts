@@ -83,8 +83,8 @@ class RoomSkinRewardProcessor extends RewardProcessor {
 
 	public playerRoom: PlayerRoom;
 
-	protected preprocess() {
-		this.playerRoom = playerMgr().getData(PlayerRoom);
+	protected async preprocess() {
+		this.playerRoom = await playerMgr().getData(PlayerRoom);
 	}
 
 	private get skin() { return roomSkinRepo().getById(this.value) }

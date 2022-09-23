@@ -79,7 +79,7 @@ export class RoomSkin extends StaticData implements IRoomDrawable {
 			CloudFileUtils.pathToFileId(url) : url;
 
 		const room = await roomMgr().getSelfRoom();
-		const pr = playerMgr().getData(PlayerRoom);
+		const pr = await playerMgr().getData(PlayerRoom);
 		const lastSkinId = this.lastLevelSkin?.id;
 
 		// TODO: 封装前置解锁条件

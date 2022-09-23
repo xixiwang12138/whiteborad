@@ -90,9 +90,9 @@ export class PlayerManager extends BaseManager {
   public extra: LoginExtra;
 
   /**
-   * 玩家数据
+   * 玩家数据缓存
    */
-  public playerData: {[T: string]: PlayerData} = {};
+  public playerData: {[T: string]: Cache<any>} = {};
   public playerDataClasses: {[T: string]: Constructor} = {};
 
   // region 用户操作
@@ -126,8 +126,10 @@ export class PlayerManager extends BaseManager {
       openid: this.openid, userInfo
     });
     appMgr().setupToken(res.token);
-    this.setAllData(res.data); this.extra = res.extra;
-    return this.player = DataLoader.load(Player, res.player);
+    // this.setAllData(res.data);
+    this.configureCaches();
+    this.extra = res.extra;
+    return this.player = DataLoader.load(Player, res.player); // TODO Player是否也可以采用同样的缓存机制？
   }
 
   /**
@@ -219,11 +221,24 @@ export class PlayerManager extends BaseManager {
   }
 
   /**
-   * 获取玩家数据
+   *  初始化所有玩家缓存
+   */
+  private configureCaches(){
+      this.playerData[this.getDataName(PlayerTask)] = new PlayerTaskCache(PlayerTask);
+      this.playerData[this.getDataName(PlayerRoom)] = new PlayerRoomCache(PlayerRoom); // TODO playerRoom缓存会不会放在RoomManager更合适？
+  }
+
+  /**
+   * 获取玩家的缓冲数据，如果expire，则使用接口更新
    * @param clazz 需要获取的数据类型
    */
-  public getData<T extends PlayerData>(clazz: Constructor<T>): T {
-    return this.playerData[this.getDataName(clazz)] as T;
+  public async getData<T extends PlayerData>(clazz: Constructor<T>): Promise<T> {
+    const key = this.getDataName(clazz);
+    console.log(this.playerData, key, this.playerData[key]);
+    if(this.playerData[key].expire) {
+      await this.playerData[key].sync();
+    }
+    return this.playerData[key].data as T;
   }
 
   /**
@@ -232,34 +247,41 @@ export class PlayerManager extends BaseManager {
    */
   public async refreshData<T extends PlayerData>(
     clazz?: Constructor<T>) {
+    // if (clazz) {
+    //   const name = this.getDataName(clazz);
+    //   const res = await GetPlayerData({name});
+    //   this.setData(clazz, res.data);
+    // } else {
+    //   const res = await GetPlayerData();
+    //   this.setAllData(res.data);
+    // }
     if (clazz) {
-      const name = this.getDataName(clazz);
-      const res = await GetPlayerData({name});
-      this.setData(clazz, res.data);
+      const key = this.getDataName(clazz);
+      await this.playerData[key].sync();
     } else {
-      const res = await GetPlayerData();
-      this.setAllData(res.data);
+      await Promise.all(Object.values(this.playerData).map(cache => cache.sync()));
     }
   }
+
 
   /**
    * 设置玩家数据
    */
-  public setData<T extends PlayerData>(
-    clazz: Constructor<T>, data: object) {
-    const name = this.getDataName(clazz);
-    if (name) this.playerData[name] = DataLoader.load(clazz, data);
-  }
+  // public setData<T extends PlayerData>(
+  //   clazz: Constructor<T>, data: object) {
+  //   const name = this.getDataName(clazz);
+  //   if (name) this.playerData[name] = DataLoader.load(clazz, data);
+  // }
 
   /**
    * 设置玩家数据
    */
-  public setAllData<T extends PlayerData>(dict: object) {
-    for (const key in dict) {
-      const clazz = this.getDataClass(key);
-      if (clazz) this.setData(clazz, dict[key]);
-    }
-  }
+  // public setAllData<T extends PlayerData>(dict: object) {
+  //   for (const key in dict) {
+  //     const clazz = this.getDataClass(key);
+  //     if (clazz) this.setData(clazz, dict[key]);
+  //   }
+  // }
 
   /**
    * 清除玩家数据
@@ -301,7 +323,7 @@ export class PlayerManager extends BaseManager {
    * 邀请玩家
    */
   public async claimInvite(index: number) {
-    const pt = playerMgr().getData(PlayerTask);
+    const pt = await playerMgr().getData(PlayerTask);
     if (pt.inviteTask.claimedRewards.includes(index))
       throw "奖励已领取！";
 
@@ -322,6 +344,8 @@ export class PlayerManager extends BaseManager {
 
 import {RewardCode} from "../data/RewardCode";
 import {Focus} from "../../focus/data/Focus";
-import {PlayerTask} from "../data/PlayerTask";
+import {PlayerTask, PlayerTaskCache} from "../data/PlayerTask";
 import {configMgr} from "../../core/managers/ConfigManager";
 import InviteConfig from "../config/InviteConfig";
+import {Cache} from "../../core/data/Cache";
+import {PlayerRoom, PlayerRoomCache} from "../../room/data/PlayerRoom";

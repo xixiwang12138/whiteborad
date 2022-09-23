@@ -6,7 +6,7 @@ import {cGte, ConditionGroup, ConditionType} from "../data/Condition";
 import {playerMgr} from "../managers/PlayerManager";
 import {PlayerTask} from "../data/PlayerTask";
 
-class InviteData extends BaseData {
+export class InviteData extends BaseData {
 
 	@field(Number)
 	public count: number
@@ -31,11 +31,11 @@ class InviteData extends BaseData {
 	@occasion(DataOccasion.Extra)
 	public isClaimed: boolean
 
-	public refresh() {
+	public async refresh() {
 		const group = RewardGroup.create(...this.rewards);
 		this.rewardDescription = group.description("\n");
 
-		const pt = playerMgr().getData(PlayerTask);
+		const pt = await playerMgr().getData(PlayerTask);
 		this.isClaimed = pt.inviteTask.claimedRewards.includes(this.index);
 
 		console.log("Task", this.index, this, pt);

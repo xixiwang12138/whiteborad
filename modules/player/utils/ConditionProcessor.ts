@@ -126,9 +126,9 @@ class InviteCountConditionProcessor extends ConditionProcessor {
 	protected get playerValue(): number { return this.count; }
 	protected get throwFunc(): Function { return InviteNotEnough; }
 
-	protected preprocess() {
+	protected async preprocess() {
 		super.preprocess();
-		const pt = playerMgr().getData(PlayerTask);
+		const pt = await playerMgr().getData(PlayerTask);
 		this.count = pt.inviteTask.count;
 	}
 

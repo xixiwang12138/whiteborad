@@ -38,19 +38,20 @@
     "useCompilerPlugins": [
       "less"
     ],
-    "ignoreUploadUnusedFiles": true
+    "ignoreUploadUnusedFiles": true,
+    "useStaticServer": true
   },
   "compileType": "miniprogram",
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2
   },
-  "libVersion": "2.24.1",
+  "libVersion": "2.26.0",
   "packOptions": {
     "ignore": [],
     "include": []
   },
   "appid": "wxef246ad51fd70fdd",
-  "projectname": "Homi",
+  "projectname": "homi-miniprogram-client",
   "condition": {}
 }

@@ -158,7 +158,6 @@ export class DataLoader {
 		}
 
 		// endregion
-
 		if (data == null) return null;
 
 		let res = new type(index, parent);
@@ -169,7 +168,6 @@ export class DataLoader {
 				if (key in data && this.matchOccasion(occasion, type, key))
 					this.loadProp(occasion, res, key, properties[key], data[key]);
 		}
-
 		res.onCreated();
 		return res;
 	}

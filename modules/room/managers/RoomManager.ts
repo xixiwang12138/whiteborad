@@ -103,7 +103,7 @@ export class RoomManager extends BaseManager {
     await BuySkin({skinId});
 
     await cond.process();
-    const pr = playerMgr().getData(PlayerRoom);
+    const pr = await playerMgr().getData(PlayerRoom);
     pr.buy(skinId);
   }
   public async switchSkin(skinId: number) {
@@ -136,6 +136,8 @@ export class RoomManager extends BaseManager {
     })
     this.socket.send({data});
   }
+
+  public syncPlayerRoomRecords
 
   // endregion
 

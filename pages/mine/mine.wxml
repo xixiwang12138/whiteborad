@@ -30,14 +30,14 @@
     </view>
    </view>
    <view class="envelop-container">
-    <image class="myAvatar" src="{{player.avatarUrl}}"mode="aspectFill" bind:tap="onClickShow" data-window="Info"/>
+    <image class="myAvatar" src="{{player.avatarUrl}}" mode="aspectFill" bind:tap="onClickShow" data-window="Info"/>
     <view class="paper">
     <text>{{player.name}}</text>
     </view>
     <image class="envelop" src="../../assets/mine/envelop.png" />
    </view>
    <view class="menu">
-     <view class="invite">
+     <view class="invite" bindtap="onClickShow" data-window="Invite">
        <image src="../../assets/mine/invite.png" />
        <text>邀请活动</text>
      </view>

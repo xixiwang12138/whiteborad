@@ -9,6 +9,7 @@ import {playerMgr} from "../../player/managers/PlayerManager";
 import {PlayerRoom} from "./PlayerRoom";
 import {roomMgr} from "../managers/RoomManager";
 import {Constructor} from "../../core/BaseContext";
+import {DefaultThemeId, themeRepo} from "./Theme";
 
 export type Color = string;
 
@@ -39,8 +40,10 @@ export class RoomSkin extends StaticData implements IRoomDrawable {
 
 	@field(String)
 	public background?: string; // 房间背景
+	@field
+	public themeId: number = DefaultThemeId; // 主题ID
 	@field([String])
-	public backgroundColors: [Color, Color] = ["FFFFFF", "000000"]; // 房间背景颜色（渐变）
+	public backgroundColors?: [Color, Color]; // 房间背景颜色（渐变）
 
 	@field([Condition])
 	public conditions: Condition[] = []; // 解锁条件
@@ -53,6 +56,9 @@ export class RoomSkin extends StaticData implements IRoomDrawable {
 	}
 	public get pictureUrl() {
 		return this.picture || `@/roomSkins/pictures/${this.id}.png`;
+	}
+	public get theme() {
+		return themeRepo().getById(this.themeId);
 	}
 
 	// region 额外数据

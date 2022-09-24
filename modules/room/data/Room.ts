@@ -9,6 +9,7 @@ import {roomSkinRepo} from "./RoomSkin";
 import {roomStarRepo} from "./RoomStar";
 import {CloudFileUtils} from "../../../utils/CloudFileUtils";
 import {RuntimeRoom, VisitorState} from "../runtime/RuntimeRoom";
+import {Theme} from "./Theme";
 
 export enum RoomState {
 	Uncreated, Created, Banned
@@ -83,9 +84,12 @@ export class Room extends DynamicData implements IRoomDrawable {
 	// @field(String)
 	// @occasion(DataOccasion.Extra)
 	// public backgroundStyle: string;
-	@field([String])
+	// @field([String])
+	// @occasion(DataOccasion.Extra)
+	// public gradientColors: string[];
+	@field(Theme)
 	@occasion(DataOccasion.Extra)
-	public gradientColors: string[];
+	public theme: Theme;
 
 	@field(String)
 	@occasion(DataOccasion.Extra)
@@ -99,7 +103,8 @@ export class Room extends DynamicData implements IRoomDrawable {
 		this.maxDuration = this.star.maxDuration;
 		// this.backgroundStyle = `-webkit-linear-gradient(top, #${
 		// 	this.skin.backgroundColors[0]}, #${this.skin.backgroundColors[1]});`
-		this.gradientColors = this.skin.backgroundColors;
+		// this.gradientColors = this.skin.backgroundColors;
+		this.theme = this.skin.theme;
 	}
 
 	// endregion

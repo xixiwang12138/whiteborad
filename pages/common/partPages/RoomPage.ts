@@ -1,10 +1,10 @@
-import { BaseData } from "../../../modules/core/data/BaseData";
-import {CanvasPage, waitForCanvas} from "./CanvasPage";
+import {BaseData} from "../../../modules/core/data/BaseData";
+import {CanvasPage} from "./CanvasPage";
 import {field} from "../../../modules/core/data/DataLoader";
 import {roomMgr} from "../../../modules/room/managers/RoomManager";
 import {Room} from "../../../modules/room/data/Room";
 import {PartialPage} from "../core/BasePage";
-import {Focus, FocusTags, RuntimeFocus} from "../../../modules/focus/data/Focus";
+import {RuntimeFocus} from "../../../modules/focus/data/Focus";
 import {Container, Rectangle, Sprite} from "pixi.js";
 import {Animation} from "../../../modules/room/data/IRoomDrawable";
 import {pageMgr} from "../../../modules/core/managers/PageManager";
@@ -13,7 +13,6 @@ import {Constructor} from "../../../modules/core/BaseContext";
 import {appMgr} from "../../../modules/core/managers/AppManager";
 import {waitForLogin} from "../../../modules/player/managers/PlayerManager";
 import {pageFunc} from "../PageBuilder";
-import {showLoading} from "../../../modules/core/managers/LoadingManager";
 
 const DebugTimeRate = 10;
 const AniColCount = 4;

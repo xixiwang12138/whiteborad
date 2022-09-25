@@ -3,7 +3,7 @@ import {BasePage, BasePageData} from "../common/core/BasePage";
 import {playerMgr, waitForLogin} from "../../modules/player/managers/PlayerManager";
 import {PlayerPage} from "../common/partPages/PlayerPage";
 import {field} from "../../modules/core/data/DataLoader";
-import {RoomDrawingPage} from "../common/partPages/RoomPage";
+import {RoomDrawingPage, RoomPage} from "../common/partPages/RoomPage";
 import {Room} from "../../modules/room/data/Room";
 import {roomMgr} from "../../modules/room/managers/RoomManager";
 import {waitForDataLoad} from "../../modules/core/managers/DataManager";
@@ -13,6 +13,7 @@ import {PlayerRoom} from "../../modules/room/data/PlayerRoom";
 import {handleError} from "../../modules/core/managers/ErrorManager";
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {showLoading} from "../../modules/core/managers/LoadingManager";
+import {ThemePage} from "../common/partPages/ThemePage";
 
 const RoomPosition = [0.5, 0.3];
 const RoomScale = 0.9;
@@ -46,8 +47,10 @@ export class ShopPage extends BasePage<Data>{
 
 	public data = new Data();
 
-	public playerPage: PlayerPage = new PlayerPage();
-	public roomDrawingPage: RoomDrawingPage = new RoomDrawingPage();
+	public playerPage = new PlayerPage();
+	public roomPage = new RoomPage();
+	public roomDrawingPage = new RoomDrawingPage();
+	public themePage = new ThemePage();
 
 	// region 数据访问
 

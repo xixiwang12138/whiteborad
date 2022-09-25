@@ -71,6 +71,13 @@ export class RoomDrawingPage extends CanvasPage<DrawingData> {
 
 	public data = new DrawingData();
 
+	/**
+	 * 获取主题页
+	 */
+	private get themePage() {
+		return this.page.getPartialPage(ThemePage);
+	}
+
 	// region 绘制数据
 
 	private room: Room;
@@ -125,6 +132,8 @@ export class RoomDrawingPage extends CanvasPage<DrawingData> {
 										position = [0.5, 0.5],
 										scale = 1) {
 		this.clear();
+
+		this.themePage?.setTheme(room.theme);
 
 		this.room = room; this.scale = scale;
 		this.position = position;

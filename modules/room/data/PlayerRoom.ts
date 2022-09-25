@@ -86,8 +86,6 @@ export class PlayerRoom extends PlayerData {
 	@field([RoomVisitRecord])
 	public visitRecords: RoomVisitRecord[] = []
 
-	protected syncItf = get("room/player_room/get");
-
 	/**
 	 * 当前进入的房间
 	 */
@@ -171,5 +169,5 @@ export class PlayerRoom extends PlayerData {
 
 export class PlayerRoomCache extends Cache<PlayerRoom> {
 
-	protected syncItf = get("/player_room/get")
+	protected syncItf = get("/room/player_room/get")
 }

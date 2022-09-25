@@ -1,4 +1,5 @@
 <!--square.wxml-->
+<view class="background" style="{{theme.backgroundStyle}}" />
 <canvas type='webgl' id="main-canvas"></canvas>
 
 <view class="content">

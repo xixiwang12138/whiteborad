@@ -23,7 +23,7 @@ export class VisitPage extends MainPage<Params> {
 
 	protected async processCurFocusing(focus: Focus) {
 		if (focus.roomId == this.params.roomId) {
-			await PromiseUtils.waitFor(() => this.item && this.isEntered);
+			await PromiseUtils.waitFor(() => this.room && this.isEntered);
 			await this.onFocusStart(focus)
 			playerMgr().extra.focus = null; // 处理完毕
 		}

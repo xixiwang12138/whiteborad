@@ -41,7 +41,6 @@
       </view>
     </view>
     <!-- <gold-level-display gold="{{player.gold}}" level="{{player.level}}" expRate="{{player.expRate}}" /> -->
-    <real-tab-bar curPageIndex="1"></real-tab-bar>
   </view>
   <!-- <view class="search">
     <input value="输入id搜索" />
@@ -49,6 +48,10 @@
   </view> -->
   
 </view>
+
+<real-tab-bar curPageIndex="1"
+              lightColor="{{theme.lightColor}}"
+              darkColor="{{theme.darkColor}}"/>
 
 <scroll-view scroll-y="true" class="room-list-content">
   <view class="room" wx:for="{{rooms}}" bindtap="onRoomTap" data-id="{{item.roomId}}">

@@ -138,11 +138,11 @@ export class MainPage<P = {}> extends BasePage<MainPageData, P> {
   /**
    * 部分页
    */
-  public playerPage: PlayerPage = new PlayerPage(true, true);
-  public roomDrawingPage: RoomDrawingPage = new RoomDrawingPage();
-  public shareAppPage: ShareAppPage = new ShareAppPage();
-  public themePage : ThemePage = new ThemePage()
-  public roomPage : RoomPage = new RoomPage()
+  public playerPage = new PlayerPage(true, true);
+  public roomDrawingPage = new RoomDrawingPage();
+  public shareAppPage = new ShareAppPage();
+  public themePage = new ThemePage()
+  // public roomPage = new RoomPage()
   // public shareTimelinePage: ShareTimelinePage = new ShareTimelinePage();
 
   // region 数据访问

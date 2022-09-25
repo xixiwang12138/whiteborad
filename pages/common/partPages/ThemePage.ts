@@ -1,7 +1,7 @@
 import {PartialPage} from "../core/BasePage";
 import {BaseData} from "../../../modules/core/data/BaseData";
 import {Theme} from "../../../modules/room/data/Theme";
-import {field} from "../../../modules/core/data/DataLoader";
+import {DataOccasion, field, occasion} from "../../../modules/core/data/DataLoader";
 
 class Data extends BaseData {
   @field(Theme)

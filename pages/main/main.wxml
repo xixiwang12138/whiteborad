@@ -252,7 +252,4 @@
 
 <loading wx:if="{{isLoading}}"/>
 
-<real-tab-bar curPageIndex="0"
-              lightColor="{{theme.lightColor}}"
-              darkColor="{{theme.darkColor}}"
-              wx:if="{{!runtimeFocus}}"/>
+<real-tab-bar curPageIndex="0" theme="{{theme}}" wx:if="{{!runtimeFocus}}"/>

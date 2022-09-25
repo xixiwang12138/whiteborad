@@ -1,11 +1,13 @@
 <!--components/real-tab-bar/avatar-display.wxml-->
 <view class="container">
-  <view class="tab-bar-border"></view>
-  <view wx:for="{{pages}}" wx:key="index" data-item="{{item}}" data-index="{{index}}" class="{{item.command ? 'main-button': 'menu-item'}}" bindtap="onTap">
-    <view class="tab-bar-item"></view>
-    <image class="{{item.command && showMainMenu && 'animation'}}"
-           src="{{index == curPageIndex ? item.selectedIconPath : item.iconPath}}"
-           mode="{{item.command ? 'widthFix': 'aspectFit'}}" />
-    <!-- <text style="color: {{curPageIndex === index ? selectedColor : color}}">{{item.text}}</text> -->
+  <view class="tab-bar-border"/>
+  <view wx:for="{{pages}}" wx:key="index"
+        data-item="{{item}}" data-index="{{index}}"
+        bindtap="onTap">
+    <view class="tab-bar-item" style="{{item.style}}"/>
+<!--    <image class="{{item.command && showMainMenu && 'animation'}}"-->
+<!--           src="{{index == curPageIndex ? item.selectedIconPath : item.iconPath}}"-->
+<!--           mode="{{item.command ? 'widthFix': 'aspectFit'}}" />-->
+    <text style="color: {{curPageIndex === index ? selectedColor : color}}">{{item.text}}</text>
   </view>
 </view>

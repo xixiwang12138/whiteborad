@@ -49,10 +49,6 @@
   
 </view>
 
-<real-tab-bar curPageIndex="1"
-              lightColor="{{theme.lightColor}}"
-              darkColor="{{theme.darkColor}}"/>
-
 <scroll-view scroll-y="true" class="room-list-content">
   <view class="room" wx:for="{{rooms}}" bindtap="onRoomTap" data-id="{{item.roomId}}">
     <image src="{{item.thumbnail}}" mode="widthFix" class="room-thumbnail" />
@@ -71,3 +67,4 @@
   </view>
 </scroll-view>
 
+<real-tab-bar curPageIndex="1" theme="{{theme}}"/>

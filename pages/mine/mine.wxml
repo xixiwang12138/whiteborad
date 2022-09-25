@@ -189,6 +189,4 @@
   </view>
 </van-popup>
 
-<real-tab-bar curPageIndex="2"
-              lightColor="{{theme.lightColor}}"
-              darkColor="{{theme.darkColor}}"/>
+<real-tab-bar curPageIndex="2" theme="{{theme}}"/>

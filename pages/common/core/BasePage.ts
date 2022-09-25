@@ -7,6 +7,7 @@ import {
 	startUpdateContext,
 	stopUpdateContext
 } from "../../../modules/core/managers/BaseManager";
+import {Constructor} from "../../../modules/core/BaseContext";
 
 // export enum PageState {
 // 	Unloaded, Shown, Hidden
@@ -151,6 +152,21 @@ export abstract class BasePage<
 	}
 	public getObjectExtra(key, _default = null) {
 		return JSON.parse(this.getExtra(key, _default));
+	}
+
+	// endregion
+
+	// region 部分页操作
+
+	public partialPages: PartialPage[] = []
+
+	/**
+	 * 获取指定部分页
+	 * @param type
+	 */
+	public getPartialPage<PP extends PartialPage>(
+		type: Constructor<PP>): PP {
+		return this.partialPages.find(pp => pp instanceof type) as PP;
 	}
 
 	// endregion

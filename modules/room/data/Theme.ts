@@ -2,12 +2,6 @@ import {dataClass} from "../../core/managers/DataManager";
 import {StaticData} from "../../core/data/StaticData";
 import {BaseRepository, getRepository, repository} from "../../core/data/BaseRepository";
 import {DataOccasion, field, occasion} from "../../core/data/DataLoader";
-import {Animation, IRoomDrawable, PictureLayer} from "./IRoomDrawable";
-import {cGte, Condition, ConditionGroup, ConditionType} from "../../player/data/Condition";
-import {CloudFileUtils} from "../../../utils/CloudFileUtils";
-import {playerMgr} from "../../player/managers/PlayerManager";
-import {PlayerRoom} from "./PlayerRoom";
-import {roomMgr} from "../managers/RoomManager";
 import {Constructor} from "../../core/BaseContext";
 
 export type Color = string;
@@ -31,6 +25,12 @@ export class Theme extends StaticData {
 	public bottomColor: Color;
 
 	// region 额外数据
+
+	@field(String)
+	@occasion(DataOccasion.Extra)
+	public get backgroundStyle(): string {
+		return `background: -webkit-linear-gradient(top, ${this.topColor}, ${this.bottomColor})`
+	}
 
 	public async refresh() {
 	}

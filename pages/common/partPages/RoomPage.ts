@@ -13,6 +13,7 @@ import {Constructor} from "../../../modules/core/BaseContext";
 import {appMgr} from "../../../modules/core/managers/AppManager";
 import {waitForLogin} from "../../../modules/player/managers/PlayerManager";
 import {pageFunc} from "../PageBuilder";
+import {ThemePage} from "./ThemePage";
 
 const DebugTimeRate = 10;
 const AniColCount = 4;
@@ -40,6 +41,13 @@ export class RoomPage extends PartialPage<Data> {
 
 	public get room() { return this.data.room }
 
+	/**
+	 * 获取主题页
+	 */
+	private get themePage() {
+		return this.page.getPartialPage(ThemePage);
+	}
+
 	@pageFunc
 	protected async onShow() {
 		await this.loadSelfRoom();
@@ -48,6 +56,7 @@ export class RoomPage extends PartialPage<Data> {
 	@waitForLogin
 	public async loadSelfRoom() {
 		const room = await roomMgr().getSelfRoom();
+		this.themePage?.setTheme(room.theme);
 		await this.setData({room});
 	}
 }
@@ -136,14 +145,18 @@ export class RoomDrawingPage extends CanvasPage<DrawingData> {
 		await this.createBackgroundSprite(ctx);
 	}
 	private drawBackgroundContext() {
-		const skin = this.room.skin;
+		const skin = this.room.skin, theme = skin.theme;
 
 		const w = this.width, h = this.height;
 		const res = this.makeContext(w, h);
 
 		const grd = res.createLinearGradient(0, 0, 0, h);
-		grd.addColorStop(0, `#${skin.backgroundColors[0]}`);
-		grd.addColorStop(1, `#${skin.backgroundColors[1]}`);
+
+		const topColor = skin.backgroundColors?.[0] || theme.topColor;
+		const bottomColor = skin.backgroundColors?.[1] || theme.bottomColor;
+
+		grd.addColorStop(0, `#${topColor}`);
+		grd.addColorStop(1, `#${bottomColor}`);
 
 		res.fillStyle = grd;
 		res.fillRect(0, 0, w, h);

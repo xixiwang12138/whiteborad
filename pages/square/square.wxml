@@ -1,6 +1,5 @@
 <!--square.wxml-->
-<view class="background"
-      style="background: -webkit-linear-gradient(top, #{{room.gradientColors[0]}}, #{{room.gradientColors[1]}}" />
+<view class="background" style="{{theme.backgroundStyle}}" />
 <image class="background-logo" src="../../assets/square/logo-frame.png" />
 <view class="mask">
   <view class="top-mask"

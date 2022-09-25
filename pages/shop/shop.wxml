@@ -7,7 +7,7 @@
   <image class="avatar" src="{{player.avatarUrl}}"
    mode="aspectFill"/>
    <view class="coins">
-   <image src="../../assets/shop/coin.png" style="height: 26px;width: 23px;" mode="aspectFit"></image>
+   <image src="../../assets/shop/coin.png" style="height: 26px;width: 23px;" mode="aspectFit"/>
    {{player.gold}}
    </view>
   </view>
@@ -23,7 +23,7 @@
       <view class="tab-button {{tab == 1 && 'selected'}}" bindtap="onSkinTab">小屋</view>
       <view class="tab-button {{tab == 2 && 'selected'}}" bindtap="onMotionTab">动作</view>
     </view>
-    <view class="tips" wx:if="{{tab==2}}">首次解锁动作可获得丰厚奖励哦</view>
+    <view class="tips" wx:if="{{tab == 2}}">首次解锁动作可获得丰厚奖励哦</view>
     <scroll-view class="shelf" scroll-y="true">
       <view class="detail">
         <view class="shop-container" wx:if="{{tab == 1}}">

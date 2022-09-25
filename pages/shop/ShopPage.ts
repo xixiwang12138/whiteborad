@@ -4,7 +4,6 @@ import {playerMgr, waitForLogin} from "../../modules/player/managers/PlayerManag
 import {PlayerPage} from "../common/partPages/PlayerPage";
 import {field} from "../../modules/core/data/DataLoader";
 import {RoomDrawingPage} from "../common/partPages/RoomPage";
-import {ItemDetailPage} from "../common/pages/ItemDetailPage";
 import {Room} from "../../modules/room/data/Room";
 import {roomMgr} from "../../modules/room/managers/RoomManager";
 import {waitForDataLoad} from "../../modules/core/managers/DataManager";
@@ -21,7 +20,7 @@ const RoomScale = 0.9;
 class Data extends BasePageData {
 
 	@field(Room)
-	item: Room
+	room: Room
 
 	@field([RoomSkin])
 	skins: RoomSkin[] = []
@@ -43,12 +42,18 @@ class Data extends BasePageData {
 }
 
 @page("shop", "商城")
-export class ShopPage extends ItemDetailPage<Data, Room>{
+export class ShopPage extends BasePage<Data>{
 
 	public data = new Data();
 
 	public playerPage: PlayerPage = new PlayerPage();
 	public roomDrawingPage: RoomDrawingPage = new RoomDrawingPage();
+
+	// region 数据访问
+
+	public get room() { return this.data.room }
+
+	// endregion
 
 	async onLoad(e) {
 		await super.onLoad(e);
@@ -70,7 +75,7 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 	}
 	private async loadRoom() {
 		const room = await roomMgr().getSelfRoom();
-		await this.setItem(room.clone());
+		await this.setData({room: room.clone()});
 	}
 
 	// region 操作
@@ -80,7 +85,7 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 		if (!skin.isUnlock) return; // 未解锁，无法预览
 
 		await this.setData({
-			curSkinId: this.item.skinId = skinId,
+			curSkinId: this.room.skinId = skinId,
 			showBuyButton: !skin.isBought
 		});
 		if (skin.isBought) // 已经购买了，直接切换
@@ -142,11 +147,8 @@ export class ShopPage extends ItemDetailPage<Data, Room>{
 
 	@showLoading
 	public async refresh() {
-		await this.roomDrawingPage.draw(
-			this.item, RoomPosition, RoomScale);
-		await this.setData({
-			skins: this.data.skins
-		})
+		await this.roomDrawingPage.draw(this.room, RoomPosition, RoomScale);
+		await this.setData({ skins: this.data.skins })
 	}
 
 	// endregion

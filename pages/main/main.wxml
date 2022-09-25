@@ -1,4 +1,5 @@
 <!--square.wxml-->
+<view class="background" style="{{theme.backgroundStyle}}" />
 <view class="container">
   <canvas type='webgl' id="main-canvas"></canvas>
   <view class="content">
@@ -15,8 +16,8 @@
       </view>
     </view>
     <view class="notice" wx:if="{{runtimeFocus}}">
-    <image src="../../assets/main/notice.png"></image>
-    <text>【再坚持120分钟，就可以升级为尊贵的LV.4啦！】</text>
+      <image src="../../assets/main/notice.png"></image>
+      <text>【再坚持120分钟，就可以升级为尊贵的LV.4啦！】</text>
     </view>
     <view class="container-top">
       <view class="room-info {{runtimeFocus ? 'focusing' : ''}}">
@@ -47,7 +48,7 @@
       <view class="text">开始</view>
     </view>
   </view>
-
+  
   <!-- <view class="focus-bottom" wx:if="{{runtimeFocus}}">
     <view class="bottom-info">
       <view class="player-info">
@@ -57,37 +58,40 @@
       <view class="slogan">{{player.slogan}}</view>
     </view>
   </view> -->
-
+  
   <view class="focus-bottom" wx:if="{{runtimeFocus}}">
-  <view class="messages">
-  <image src="{{player.avatarUrl}}"></image>
-  <text>啥玩意儿啊？</text>
-  </view>
-  <view class="messages">
-  <image src="{{player.avatarUrl}}"></image>
-  <text>啥玩意儿啊？</text>
-  </view>
-  <view class="messages">
-  <image src="{{player.avatarUrl}}"></image>
-  <text>啥玩意儿啊？</text>
-  </view>
-  <view class="chat-container">
-    <!-- <image class="chat-img" src="../../assets/main/chat.png"></image> -->
-    <view class="chat-border">
-      <textarea class="message-input" placeholder="学累了，来发个弹幕放松一下吧~" adjust-position="{{false}}" focus="{{false}}" maxlength="30" cursor-spacing="10"/>
-      <view class="sent-btn">
-      <text>发送</text>
+    <view class="messages">
+      <image src="{{player.avatarUrl}}"/>
+      <text>啥玩意儿啊？</text>
+    </view>
+    <view class="messages">
+      <image src="{{player.avatarUrl}}"/>
+      <text>啥玩意儿啊？</text>
+    </view>
+    <view class="messages">
+      <image src="{{player.avatarUrl}}"/>
+      <text>啥玩意儿啊？</text>
+    </view>
+    <view class="chat-container">
+      <!-- <image class="chat-img" src="../../assets/main/chat.png"></image> -->
+      <view class="chat-border">
+        <textarea class="message-input"
+                  placeholder="学累了，来发个弹幕放松一下吧~"
+                  adjust-position="{{false}}" focus="{{false}}"
+                  maxlength="30" cursor-spacing="10"/>
+        <view class="sent-btn">
+          <text>发送</text>
+        </view>
+        <image src="../../assets/main/switch.png"/>
       </view>
-      <image src="../../assets/main/switch.png"></image>
-    </view>
-    <view class="switch-container">
-    <view class="switch-content">
-    <view class="switch-dot"></view>
-    </view>
+      <view class="switch-container">
+        <view class="switch-content">
+          <view class="switch-dot"/>
+        </view>
+      </view>
     </view>
   </view>
-  </view>
-
+  
   <view class="room-status">
     <text class="status-title">【公告】：</text>
     <view class="status-text">{{focusing}}人正在专注中</view>
@@ -97,7 +101,7 @@
       </view>
     </scroll-view>
   </view>
-
+  
   <view wx:if="{{runtimeFocus && focus.mode==1}}">
     <view class="remind" wx:if="{{!isDown && runtimeFocus.invalidCount <= 1}}">
       <text class="remind-text1">准备好了吗？</text>
@@ -111,8 +115,8 @@
     </view>
   </view>
 </view>
-
-<!-- <view wx:if="{{runtimeFocus}}" class="cancel-button" bind:tap="onCancelTap">取消专注</view> -->
+    
+    <!-- <view wx:if="{{runtimeFocus}}" class="cancel-button" bind:tap="onCancelTap">取消专注</view> -->
 
 <van-dialog use-slot show="{{ isShowStartWindow }}"
             show-confirm-button="{{false}}"
@@ -170,7 +174,7 @@
     </view>
   </view>
 </van-dialog>
-<!-- 专注结算弹窗 -->
+    <!-- 专注结算弹窗 -->
 <van-dialog use-slot show="{{ isShowResultWindow }}"
             show-confirm-button="{{false}}"
             width="80%" data-window="Result">
@@ -204,18 +208,18 @@
       <view class="action">
         <view class="room-type">{{room.name}}</view>
         <view class="action-list">
-        <view class="action-title-row">
-        <view class="content">专注状态</view>
-        <view class="content">触发分钟</view>
-        <view class="content">收获金币</view>
-        <view class="content">收货经验</view>
-        </view>
-        <view class="action-item-row" wx:for="{{motionList}}">
-                <view class="content">{{item.name}}</view>
-                <view class="content">{{motionCountList[index]}}</view>
-                <view class="content">{{motionCountList[index] * item.gold}}</view>
-                <view class="content">{{motionCountList[index] * item.exp}}</view>
-        </view>
+          <view class="action-title-row">
+            <view class="content">专注状态</view>
+            <view class="content">触发分钟</view>
+            <view class="content">收获金币</view>
+            <view class="content">收货经验</view>
+          </view>
+          <view class="action-item-row" wx:for="{{motionList}}">
+            <view class="content">{{item.name}}</view>
+            <view class="content">{{motionCountList[index]}}</view>
+            <view class="content">{{motionCountList[index] * item.gold}}</view>
+            <view class="content">{{motionCountList[index] * item.exp}}</view>
+          </view>
         </view>
       </view>
     </view>

@@ -87,9 +87,6 @@ export class Room extends DynamicData implements IRoomDrawable {
 	// @field([String])
 	// @occasion(DataOccasion.Extra)
 	// public gradientColors: string[];
-	@field(Theme)
-	@occasion(DataOccasion.Extra)
-	public theme: Theme;
 
 	@field(String)
 	@occasion(DataOccasion.Extra)
@@ -104,7 +101,7 @@ export class Room extends DynamicData implements IRoomDrawable {
 		// this.backgroundStyle = `-webkit-linear-gradient(top, #${
 		// 	this.skin.backgroundColors[0]}, #${this.skin.backgroundColors[1]});`
 		// this.gradientColors = this.skin.backgroundColors;
-		this.theme = this.skin.theme;
+		// this.theme = this.skin.theme;
 	}
 
 	// endregion
@@ -148,6 +145,7 @@ export class Room extends DynamicData implements IRoomDrawable {
 	// region 绘制数据
 
 	public get skin() { return roomSkinRepo().getById(this.skinId) }
+	public get theme() { return this.skin.theme };
 
 	public get thumbnail() { return this.skin.thumbnail }
 	public get picture() { return this.skin.picture }

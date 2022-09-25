@@ -11,6 +11,7 @@ import {roomMgr} from "../../modules/room/managers/RoomManager";
 import {Room, RoomInfo} from "../../modules/room/data/Room";
 import {QueryPage, QueryParams} from "../common/partPages/QueryPage";
 import {ShareAppPage} from "../common/partPages/SharePage";
+import {ThemePage} from "../common/partPages/ThemePage";
 
 class Data extends BasePageData {
 
@@ -28,10 +29,11 @@ export class SquarePage extends BasePage<Data> {
 	/**
 	 * 部分页
 	 */
-	public playerPage: PlayerPage = new PlayerPage();
-	public roomPage: RoomPage = new RoomPage();
-	public shareAppPage: ShareAppPage = new ShareAppPage();
-	public queryPage: QueryPage = new QueryPage<RoomInfo>(
+	public playerPage = new PlayerPage();
+	public roomPage = new RoomPage();
+	public shareAppPage = new ShareAppPage();
+	public themePage = new ThemePage();
+	public queryPage = new QueryPage<RoomInfo>(
 		this.loadRooms.bind(this), "rooms"
 	)
 

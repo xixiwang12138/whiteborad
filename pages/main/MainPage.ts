@@ -1,9 +1,7 @@
 import {DataLoader, field} from "../../modules/core/data/DataLoader";
 import {page, pageFunc} from "../common/PageBuilder";
-import {BasePageData} from "../common/core/BasePage";
+import {BasePage, BasePageData} from "../common/core/BasePage";
 import {PlayerPage} from "../common/partPages/PlayerPage";
-import {CanvasPage, waitForCanvas} from "../common/partPages/CanvasPage";
-import {ItemDetailPage} from "../common/pages/ItemDetailPage";
 import {Room} from "../../modules/room/data/Room";
 import {Focus, FocusTags, RuntimeFocus} from "../../modules/focus/data/Focus";
 import {waitForDataLoad} from "../../modules/core/managers/DataManager";
@@ -14,11 +12,9 @@ import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {ShopPage} from "../shop/ShopPage";
 import {blockLoading, showLoading} from "../../modules/core/managers/LoadingManager";
 import {RoomMessage, roomMgr} from "../../modules/room/managers/RoomManager";
-import SystemInfo = WechatMiniprogram.SystemInfo;
 import CustomEvent = WechatMiniprogram.CustomEvent;
 import {RoomDrawingPage, RoomPage} from "../common/partPages/RoomPage";
 import {appMgr} from "../../modules/core/managers/AppManager";
-import {RewardGroup} from "../../modules/player/data/Reward";
 import {BaseData} from "../../modules/core/data/BaseData";
 import {LevelCalculator} from "../../modules/player/utils/LevelCalculator";
 import {ShareAppPage, ShareTimelinePage} from "../common/partPages/SharePage";
@@ -84,7 +80,7 @@ export class ResultAnimation extends BaseData {
 export class MainPageData extends BasePageData {
 
   @field(Room)
-  item: Room
+  room: Room
   @field(Focus)
   focus: Focus
 
@@ -128,14 +124,12 @@ export class MainPageData extends BasePageData {
   messages: Message[] = [];
 }
 
-
 export const RoomType = "room";
 
 const FocusUpdateInterval = 1000; // 1秒更新一次
 
 @page("main", "主页")
-export class MainPage<P = {}> extends
-  ItemDetailPage<MainPageData, Room, P> {
+export class MainPage<P = {}> extends BasePage<MainPageData, P> {
 
   public data = new MainPageData();
 
@@ -147,35 +141,13 @@ export class MainPage<P = {}> extends
   public playerPage: PlayerPage = new PlayerPage(true, true);
   public roomDrawingPage: RoomDrawingPage = new RoomDrawingPage();
   public shareAppPage: ShareAppPage = new ShareAppPage();
+  public themePage : ThemePage = new ThemePage()
   public roomPage : RoomPage = new RoomPage()
   // public shareTimelinePage: ShareTimelinePage = new ShareTimelinePage();
 
-  // region 白噪音控制
+  // region 数据访问
 
-  private audio: BackgroundAudioManager;
-
-  public selectWhiteNoise(idx) {
-    if (this.data.curWhiteNoiseIdx == idx) idx = -1;
-    this.setData({ curWhiteNoiseIdx: idx })
-    if (idx >= 0) {
-      const wns = whiteNoiseRepo().findByType(idx);
-      this.playAudio(MathUtils.randomPick(wns));
-    } else this.stopAudio();
-  }
-
-  private playAudio(wn: WhiteNoise) {
-    if (!wn) return;
-
-    this.audio.src = wn.src;
-    this.audio.title = wn.title;
-    this.audio.epname = wn.epname;
-    this.audio.singer = wn.singer;
-    this.audio.onEnded(() => this.audio.src = wn.src);
-  }
-  private stopAudio() {
-    this.audio.stop();
-    // this.audio.src = null;
-  }
+  public get room() { return this.data.room }
 
   // endregion
 
@@ -232,7 +204,7 @@ export class MainPage<P = {}> extends
   }
   protected async processCurFocusing(focus: Focus) {
     if (await focus.inSelfRoom()) {
-      await PromiseUtils.waitFor(() => this.item && this.isEntered);
+      await PromiseUtils.waitFor(() => this.room && this.isEntered);
       await this.onFocusStart(focus)
       playerMgr().extra.focus = null; // 处理完毕
     } else if (!focus.inNPCRoom())
@@ -250,11 +222,40 @@ export class MainPage<P = {}> extends
   private async refresh() {
     await this.loadRoom();
     await this.playerPage.resetPlayer();
-    await this.roomDrawingPage.draw(this.item);
+    await this.roomDrawingPage.draw(this.room);
 
     this.shareAppPage.extra = {
       code: playerMgr().player.inviteCode
     };
+  }
+
+  // endregion
+
+  // region 白噪音控制
+
+  private audio: BackgroundAudioManager;
+
+  public selectWhiteNoise(idx) {
+    if (this.data.curWhiteNoiseIdx == idx) idx = -1;
+    this.setData({ curWhiteNoiseIdx: idx })
+    if (idx >= 0) {
+      const wns = whiteNoiseRepo().findByType(idx);
+      this.playAudio(MathUtils.randomPick(wns));
+    } else this.stopAudio();
+  }
+
+  private playAudio(wn: WhiteNoise) {
+    if (!wn) return;
+
+    this.audio.src = wn.src;
+    this.audio.title = wn.title;
+    this.audio.epname = wn.epname;
+    this.audio.singer = wn.singer;
+    this.audio.onEnded(() => this.audio.src = wn.src);
+  }
+  private stopAudio() {
+    this.audio.stop();
+    // this.audio.src = null;
   }
 
   // endregion
@@ -275,13 +276,13 @@ export class MainPage<P = {}> extends
     return roomMgr().getSelfRoom();
   }
   protected get roomIndex() {
-    return {roomId: this.item.roomId}
+    return {roomId: this.room.roomId}
   }
 
   private async loadRoom() {
     // const room = Room.testData();
     const room = await this.getRoom();
-    await this.setItem(room);
+    await this.setData({room: room});
   }
 
   // endregion
@@ -429,7 +430,7 @@ export class MainPage<P = {}> extends
   async onStartWindowShow() {
     const focus = Focus.emptyData(
       this.playerPage.openid, {
-        roomId: this.item.roomId
+        roomId: this.room.roomId
       })
     await this.setData({focus});
   }
@@ -600,3 +601,4 @@ import {WhiteNoise, whiteNoiseRepo} from "../../modules/room/data/WhiteNoise";
 import {MathUtils} from "../../utils/MathUtils";
 import BackgroundAudioManager = WechatMiniprogram.BackgroundAudioManager;
 import {Motion, motionRepo} from "../../modules/room/data/Motion";
+import {ThemePage} from "../common/partPages/ThemePage";

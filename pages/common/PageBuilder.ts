@@ -105,9 +105,11 @@ export class PageBuilder {
 		this.processPageData(res, page);
 
 		// 筛选出PartPage并进行combine
-		Object.keys(page)
+		const ppKeys = Object.keys(page)
 			.filter(key => page[key] instanceof PartialPage)
-			.forEach(key => this.combinePartPage(res, page, page[key]));
+
+		page.partialPages = ppKeys.map(key => page[key]);
+		ppKeys.forEach(key => this.combinePartPage(res, page, page[key]));
 	}
 
 	private static combinePartPage(

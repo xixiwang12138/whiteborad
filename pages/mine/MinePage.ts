@@ -12,25 +12,14 @@ import {configMgr, waitForConfigLoad} from "../../modules/core/managers/ConfigMa
 import {PlayerInviteTask, PlayerTask} from "../../modules/player/data/PlayerTask";
 import {handleError} from "../../modules/core/managers/ErrorManager";
 import {DefaultSharePage, ShareAppPage} from "../common/partPages/SharePage";
+import {ThemePage} from "../common/partPages/ThemePage";
 
 class Data extends BasePageData {
 
 	@field(Array)
 	collectedRooms = [{
 		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
-	},{
-		userName: "测试君", level: 3, name: "摆烂小屋",slogan:"卷也卷不起，躺也躺不平"
-	},];
+	}];
 	@field
 	info: PlayerEditableInfo = {};
 	@field
@@ -52,9 +41,10 @@ export class MinePage extends BasePage<Data> {
 	/**
 	 * 部分页
 	 */
-	public playerPage: PlayerPage = new PlayerPage();
-	public roomPage: RoomPage = new RoomPage();
-	public shareAppPage: ShareAppPage = new ShareAppPage();
+	public playerPage = new PlayerPage();
+	public roomPage = new RoomPage();
+	public shareAppPage = new ShareAppPage();
+	public themePage = new ThemePage();
 
 	async onLoad(e): Promise<void> {
 		await super.onLoad(e);

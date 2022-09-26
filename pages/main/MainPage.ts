@@ -393,7 +393,8 @@ export class MainPage<P = {}> extends BasePage<MainPageData, P> {
     //   // 如果有人当前专注中的数据，使用之，否则如果当前玩家在专注，设置为1，否则为0
     //   focusing: data.count // || (this.data.runtimeFocus ? 1 : 0)
     // })
-    const name = data.player.name; let status;
+    // const name = data.player.name;
+    let status;
     switch (data.type) {
       case "enter": status = "进入房间"; break
       case "focusStart": status = "开始专注"; break
@@ -407,7 +408,7 @@ export class MainPage<P = {}> extends BasePage<MainPageData, P> {
     const focusing = data.count == undefined ?
       this.data.focusing : data.count;
     const messages = this.data.messages;
-    messages.unshift({name, status});
+    messages.unshift({name: data.player.name, status});
     await this.setData({ focusing, messages });
   }
 

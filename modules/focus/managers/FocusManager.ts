@@ -8,13 +8,14 @@ import {roomMgr} from "../../room/managers/RoomManager";
 import {RewardGroup} from "../../player/data/Reward";
 import {wsMgr} from "../../websocket/WebSocketManager";
 
+const GetCurrentFocus: Itf<{}, Focus> = get("/focus/focus/current")
 const StartFocus: Itf<
   {room: IRoomIndex, mode: FocusMode, tagIdx?: number, duration?: number},
   {focus: Partial<Focus>}> = post("/focus/focus/start");
 const ContinueFocus: Itf<{}, {focus: Partial<Focus>}>
   = post("/focus/focus/continue");
 const EndFocus: Itf<{runtime: RuntimeFocus},
-  {focus: Partial<Focus>}> = post("/focus/focus/end");
+  Partial<Focus>> = post("/focus/focus/end");
 const EditFocus: Itf<{focusId: string, tagIdx: number, note: string}>
   = post("/focus/focus/edit");
 const UpdateFocus: Itf<{runtime: RuntimeFocus}>
@@ -33,6 +34,7 @@ export class FocusManager extends BaseManager {
   public curRewards: RewardGroup;
 
   // region 业务逻辑
+
 
   /**
    * 开始专注
@@ -60,11 +62,11 @@ export class FocusManager extends BaseManager {
    * 结束专注
    */
   public async endFocus(runtime: RuntimeFocus, tagIdx?: number, note?: string) {
-    const response = await EndFocus({runtime});
+    const focus = await EndFocus({runtime});
 
     // roomMgr().onFocusEnd();
 
-    const res = DataLoader.load(Focus, response.focus);
+    const res = DataLoader.load(Focus, focus);
     const rewards = this.curRewards = await res.realRewards();
     rewards.invoke(); // 执行奖励
 
@@ -98,6 +100,13 @@ export class FocusManager extends BaseManager {
     const res = DataLoader.load(Focus, response.focus);
     this.curFocus = null;
     return res;
+  }
+
+  /**
+   * 获取当前正在进行的专注
+   */
+  public async GetCurrentFocus() {
+    return GetCurrentFocus()
   }
 
   // endregion

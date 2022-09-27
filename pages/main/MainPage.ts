@@ -199,14 +199,14 @@ export class MainPage<P = {}> extends BasePage<MainPageData, P> {
    * 检查当前专注
    */
   private async checkCurFocusing() {
-    const focus = playerMgr().extra?.focus;
+    const focus = await focusMgr().GetCurrentFocus();
     if (focus) await this.processCurFocusing(DataLoader.load(Focus, focus))
   }
   protected async processCurFocusing(focus: Focus) {
     if (await focus.inSelfRoom()) {
       await PromiseUtils.waitFor(() => this.room && this.isEntered);
       await this.onFocusStart(focus)
-      playerMgr().extra.focus = null; // 处理完毕
+      // playerMgr().extra.focus = null; // 处理完毕
     } else if (!focus.inNPCRoom())
       await pageMgr().push(VisitPage, {roomId: focus.roomId});
     else {} // NPC房间

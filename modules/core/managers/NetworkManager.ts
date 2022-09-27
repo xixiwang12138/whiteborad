@@ -185,7 +185,7 @@ class NetworkManager extends BaseManager {
           let json, code, data;
           json = res.data;
           code = json["code"] || 0;
-          data = json["data"] || json;
+          data = json["data"] === undefined ? json : json["data"];
 
           console.log("Response JSON: ", json, code, data);
 

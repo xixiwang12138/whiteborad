@@ -6,7 +6,7 @@ export function wsMgr() {
 	return getManager(WebSocketManager)
 }
 // const Host = "wss://homi-ws-server-1836805-1255510304.ap-shanghai.run.tcloudbase.com";
-// const Host = "wss://www.exermon.com:3000";
+// const Host = "wss://www.exermon.com:3002";
 const Host = "ws://localhost:3000";
 
 @manager

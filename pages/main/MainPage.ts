@@ -402,6 +402,8 @@ export class MainPage<P = {}> extends BasePage<MainPageData, P> {
       case "leave": status = "离开房间"; break
       case "switchMotion":
         this.roomDrawingPage.switchMotions(data.motionRecord);break;
+      case "focusSuccess":
+        this.onNotifyFocusSuccess().then();break;
     }
     if (!status) return;
 
@@ -518,10 +520,18 @@ export class MainPage<P = {}> extends BasePage<MainPageData, P> {
     this.startFocusUpdate();
   }
 
+  // 本地专注完成
   private async onFocusSuccess() {
+    // 最后同步服务端缓存中的数据
+    focusMgr().updateFocus(this.data.runtimeFocus)
+    // 之后等待服务端确认同步完成, 并发送focusSuccess消息
+  }
+
+  // 服务端通知专注成功（真正完成)
+  private async onNotifyFocusSuccess() {
     const baseExp = this.playerPage.player.exp;
     const focus = await focusMgr().endFocus(
-      this.data.runtimeFocus);
+        this.data.runtimeFocus);
     const exp = focusMgr().curRewards.exp.realValue;
     const gold = focusMgr().curRewards.gold.realValue;
 

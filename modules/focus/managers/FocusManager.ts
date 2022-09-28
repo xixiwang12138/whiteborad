@@ -62,7 +62,7 @@ export class FocusManager extends BaseManager {
    * 结束专注
    */
   public async endFocus(runtime: RuntimeFocus, tagIdx?: number, note?: string) {
-    const focus = await EndFocus({runtime});
+    const focus = await EndFocus({runtime}); // TODO 有没有一种可能，这里不需要传runtimefocus
 
     // roomMgr().onFocusEnd();
 

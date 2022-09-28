@@ -17,7 +17,7 @@ export class Motion extends StaticData {
 	@field(String)
 	public description: string
 	@field(String)
-	public thumbnail: string // 缩略图
+	public thumbnail?: string // 缩略图
 	@field
 	public rate: number = 1 // 几率（每分钟）
 	@field
@@ -30,7 +30,7 @@ export class Motion extends StaticData {
 	public rewards: Reward[] = [] // 出现奖励
 
 	public get thumbnailUrl() {
-		return this.thumbnail || `/motions/${this.id}.png`;
+		return this.thumbnail || `/motions/thumbnails/${this.id}.png`;
 	}
 
 	// region 奖励计算

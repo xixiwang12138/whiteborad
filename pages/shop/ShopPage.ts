@@ -14,6 +14,7 @@ import {handleError} from "../../modules/core/managers/ErrorManager";
 import {alertMgr} from "../../modules/core/managers/AlertManager";
 import {showLoading} from "../../modules/core/managers/LoadingManager";
 import {ThemePage} from "../common/partPages/ThemePage";
+import {PlayerMotion} from "../../modules/room/data/PlayerMotion";
 
 const RoomPosition = [0.5, 0.3];
 const RoomScale = 0.9;
@@ -30,6 +31,9 @@ class Data extends BasePageData {
 
 	@field(PlayerRoom)
 	playerRoom: PlayerRoom
+
+	@field(PlayerMotion)
+	playerMotion: PlayerMotion
 
 	@field(Number)
 	tab: number = 1
@@ -73,8 +77,12 @@ export class ShopPage extends BasePage<Data>{
 	private async loadData() {
 		const skins = roomSkinRepo().list;
 		const motions = motionRepo().list;
+
 		const playerRoom = await playerMgr().getData(PlayerRoom);
-		await this.setData({skins, motions, playerRoom});
+		//TODO 用playerData获取playerMotion
+		const playerMotion = await roomMgr().getPlayerMotion();
+
+		await this.setData({skins, motions, playerRoom, playerMotion});
 	}
 	private async loadRoom() {
 		const room = await roomMgr().getSelfRoom();
@@ -94,6 +102,15 @@ export class ShopPage extends BasePage<Data>{
 		if (skin.isBought) // 已经购买了，直接切换
 			await roomMgr().switchSkin(skinId);
 		await this.refresh();
+	}
+
+	public async receiveMotionReward(motionId){
+		const records = (await roomMgr().getPlayerMotion()).records
+		const playerMotionRecord = records.find(pm => pm.motionId == motionId);
+
+		if(!playerMotionRecord)return;		//未解锁,无法获取奖励
+		if(playerMotionRecord.rewardTime != undefined)return;	//已领取，无法获取奖励
+		await roomMgr().receiveMotionReward(motionId);
 	}
 
 	// endregion
@@ -133,6 +150,20 @@ export class ShopPage extends BasePage<Data>{
 			showBuyButton: false
 		});
 		await alertMgr().showToast("购买成功", "success");
+	}
+
+	@pageFunc
+	@handleError
+	@showLoading
+	public async onMotionTap(e) {
+		const motion = e.currentTarget.dataset.motion
+		if(!motion.isUnlock)return;
+		if(!motion.isUnclaimed)return;
+
+		const motionId = e.currentTarget.dataset.motion.id;
+		await this.receiveMotionReward(motionId)
+		await this.setData({motions: this.data.motions});
+		await alertMgr().showToast("奖励领取成功", "success");
 	}
 
 	// endregion

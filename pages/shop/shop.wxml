@@ -61,44 +61,44 @@
               <text>{{item.unlockText}}</text>
             </view>
           </view> -->
-          <view class="motion">
-            <view class="redDot" wx:if="unclaimed"></view>
+          <view class="motion" wx:for="{{motions}}" data-motion="{{item}}" wx:key="key" bind:tap="{{(item.isUnlock && item.isUnclaimed)?'onMotionTap':''}}"  style="opacity:{{item.isUnlock?1:0.5}}">
+            <view class="redDot" wx:if="{{item.isUnclaimed}}"></view>
             <text class="level">N</text>
-            <image class="motion-img" src="../../assets/logo-shape.png" mode="aspectFit"></image>
-            <!-- unclaimed表示未领取，后端还没写 -->
+            <image class="motion-img" src="../../assets/logo-shape.png" mode="aspectFit" style="filter: brightness({{item.isUnlock?100:0}}%);"></image>
             <view class="motion-bottom">
-            <view class="motion-price">
+            <view class="motion-price" wx:if="{{item.isUnclaimed || !item.isUnlock}}">
             <image src="/assets/common/gold.png"></image>
-            <text>1000</text>
+            <text>{{item.unlockRewards[0].value}}</text>
             </view>
-            <text>点击领取</text>
-            </view>
-          </view>
-          <view class="motion" wx:if="unclaimed">
-            <text class="level">N</text>
-            <image class="motion-img" src="../../assets/logo-shape.png" mode="aspectFit"></image>
-            <view class="motion-bottom">
-            <view class="motion-price">
-            <text></text>
-            </view>
-            <text>普通学习</text>
+            <text>{{item.isUnclaimed?"点击领取":item.name}}</text>
+
             </view>
           </view>
-          <view class="motion" wx:if="Locked" style="opacity:0.5">
-            <text class="level" style="color:#715AFF">R</text>
-            <image class="motion-img" src="../../assets/logo-shape.png" mode="aspectFit"></image>
-            <view class="motion-bottom">
-            <view class="motion-price">
-            <image src="/assets/common/gold.png"></image>
-            <text>1000</text>
-            </view>
-            <text>精神食粮</text>
-            </view>
-          </view>
+<!--          <view class="motion" wx:if="unclaimed">-->
+<!--            <text class="level">N</text>-->
+<!--            <image class="motion-img" src="../../assets/logo-shape.png" mode="aspectFit"></image>-->
+<!--            <view class="motion-bottom">-->
+<!--            <view class="motion-price">-->
+<!--            <text></text>-->
+<!--            </view>-->
+<!--            <text>普通学习</text>-->
+<!--            </view>-->
+<!--          </view>-->
+<!--          <view class="motion" wx:if="Locked" style="opacity:0.5">-->
+<!--            <text class="level" style="color:#715AFF">R</text>-->
+<!--            <image class="motion-img" src="../../assets/logo-shape.png" mode="aspectFit"></image>-->
+<!--            <view class="motion-bottom">-->
+<!--            <view class="motion-price">-->
+<!--            <image src="/assets/common/gold.png"></image>-->
+<!--            <text>1000</text>-->
+<!--            </view>-->
+<!--            <text>精神食粮</text>-->
+<!--            </view>-->
+<!--          </view>-->
         </view>
       </view>
     </scroll-view>
-  
+
     <!--    <view class="top-control">-->
 <!--      <image class="undo" src="../../images/return.png" style="width: 60rpx;height: 55rpx;"></image>-->
 <!--      <image class="redo" src="../../images/return1.png" style="width: 60rpx;height: 55rpx;"></image>-->

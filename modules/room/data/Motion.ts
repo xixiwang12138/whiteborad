@@ -2,8 +2,12 @@ import {dataClass} from "../../core/managers/DataManager";
 import {StaticData} from "../../core/data/StaticData";
 import {BaseRepository, getRepository, repository} from "../../core/data/BaseRepository";
 import {Reward, RewardGroup} from "../../player/data/Reward";
-import {field} from "../../core/data/DataLoader";
+import {DataOccasion, field, occasion} from "../../core/data/DataLoader";
 import {Condition, ConditionGroup} from "../../player/data/Condition";
+import {CloudFileUtils} from "../../../utils/CloudFileUtils";
+import {roomMgr} from "../managers/RoomManager";
+import {playerMgr} from "../../player/managers/PlayerManager";
+import {PlayerRoom} from "./PlayerRoom";
 
 export enum MotionRare {
 	N, R, SR, SSR, UR
@@ -32,6 +36,26 @@ export class Motion extends StaticData {
 	public get thumbnailUrl() {
 		return this.thumbnail || `/motions/thumbnails/${this.id}.png`;
 	}
+
+	// region 额外数据
+
+	@field(Boolean)
+	@occasion(DataOccasion.Extra)
+	isUnlock: boolean;
+	@field(Boolean)
+	@occasion(DataOccasion.Extra)
+	isUnclaimed: boolean;
+
+	public async refresh() {
+		const records = (await roomMgr().getPlayerMotion()).records;
+		const playerMotionRecord = records.find(pm => pm.motionId == this.id)
+
+		this.isUnlock = playerMotionRecord != null;
+		this.isUnclaimed = playerMotionRecord != null && playerMotionRecord.rewardTime == null;
+		//console.log("Motion Refresh On",this);
+	}
+
+	// endregion
 
 	// region 奖励计算
 

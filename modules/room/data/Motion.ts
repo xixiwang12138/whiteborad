@@ -29,8 +29,16 @@ export class Motion extends StaticData {
 	@field([Reward])
 	public rewards: Reward[] = [] // 出现奖励
 
+	@field(Number)
+	public count: number; // 持续帧数
+	@field
+	public duration: number = 1; // 单次播放时长（秒）
+
 	public get thumbnailUrl() {
-		return this.thumbnail || `/motions/thumbnails/${this.id}.png`;
+		return this.thumbnail || `@/motions/thumbnails/${this.id}.png`;
+	}
+	public pictureUrl(gender = 0) {
+		return `@/motions/animations/${this.id}` + (gender > 0 ? `-${gender}.png` : `.png`);
 	}
 
 	// region 奖励计算

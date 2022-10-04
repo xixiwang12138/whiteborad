@@ -122,34 +122,75 @@
             show-confirm-button="{{false}}"
             bind:close="onClickHide"
             close-on-click-overlay
-            width="80%" data-window="Start">
+            width="60%" data-window="Start">
   <view class="start-config">
     <view class="start-config-top">
-      <image class="top-img" src="/assets/main/desc.png" mode="heightFix"
-             bind:tap="onClickShow" data-window="Tips"/>
+      <!-- <image class="top-img" src="/assets/main/desc.png" mode="heightFix"
+             bind:tap="onClickShow" data-window="Tips"/> -->
       <image class="top-img" src="/assets/main/close.png" mode="heightFix"
              bind:tap="onClickHide" data-window="Start" />
     </view>
-    <image class="clock-img" src="{{room.thumbnailFileId}}" mode="widthFix" />
-    <van-slider value="{{focus.duration}}" min="{{room.minDuration}}" max="{{room.maxDuration}}" bind:drag="onDragTime" />
-    <view class="time">
+    <!-- <image class="clock-img" src="{{item.thumbnailFileId}}" mode="widthFix" /> -->
+    <view class="mode-select">
+      <text>模式选择</text>
+    </view>
+    <view class="content">
+      <text class="desc">专注内容:</text>
+      <view class="btn">
+        <text>{{focusTags[focus.tagIdx]}}</text>
+        <image src="../../assets/main/select.png" bindtap="onClickShow" data-window="Tags"></image>
+      </view>
+    </view>
+    <view class="timeAndMoney">
+      <text>专注时长：</text>
+      <view class="timeDisplay">
+        <view class="time-block">0{{(focus.duration)/60>=2?2:((focus.duration)/60>=1?1:0)}}</view>
+        <view class="colon">
+          <view></view>
+          <view></view>
+        </view>
+        <view class="time-block">{{(focus.duration)%60>9?(focus.duration)%60:('0'+(focus.duration)%60)}}</view>
+      </view>
+      <view class="slider">
+        <van-slider use-button-slot value="{{focus.duration}}" min="{{item.minDuration}}" max="{{item.maxDuration}}" bind:drag="onDragTime">
+          <image class="{{animating?'bar-icon scale-ani':'bar-icon'}}" src="../../assets/main/bar.png"  slot="button" mode="aspectFit" bindtouchstart="onDragStart" bindtouchend="onDragEnd" touchcancel="onDragEnd">
+          <view class="drag-prompt"><image src="../../assets/shop/coin.png" mode="aspectFit"/>+{{focus.expectGoldReward}}</view>
+          </image>
+        </van-slider>
+        <!-- <view class="gap">
+          <view></view>
+          <view></view>
+          <view></view>
+          <view></view>
+          </view> -->
+        <view class="minutes">
+          <view>15</view>
+          <view>30</view>
+          <view>45</view>
+          <view>60</view>
+          <view>75</view>
+          <view>90</view>
+        </view>
+        <view class="mins">(mins)</view>
+      </view>
+    </view>
+    <!-- <view class="time">
       专注时长
       <text>{{focus.duration}}</text>
       /min
-    </view>
-    <view class="content">
-      <view class="desc">专注内容</view>
-      <view class="btn" bindtap="onClickShow" data-window="Tags">{{focusTags[focus.tagIdx]}}</view>
-    </view>
-    <view class="mode-set">
-      <view class="mode {{focus.mode == 0 ? 'selected' : ''}}" bind:tap="onModeTab" data-index="{{0}}">基础模式</view>
-      <view class="mode {{focus.mode == 1 ? 'selected' : ''}}" bind:tap="onModeTab" data-index="{{1}}">反盖模式</view>
-    </view>
-    <view class="text">预计经验+{{focus.expectExpReward}} 金币+{{focus.expectGoldReward}}</view>
+    </view> -->
+    <!-- <view class="text">预计经验+{{focus.expectExpReward}} 金币+{{focus.expectGoldReward}}</view> -->
     <!--    <view class="text">超时后可以继续获得奖励哦～</view>-->
-    <view class="start-btn" bind:tap="onSubmit">开始专注</view>
+    <!-- <view class="start-btn" bind:tap="onSubmit">开始专注</view> -->
   </view>
 </van-dialog>
+<view class="mode-set" wx:if="{{isShowStartWindow}}">
+    <view class="mode {{focus.mode == 0 ? 'selected' : ''}}" bind:tap="onModeTab" bind:tap="onSubmit" data-index="{{0}}">基础模式</view>
+    <view class="mode {{focus.mode == 1 ? 'selected' : ''}}" bind:tap="onModeTab" bind:tap="onSubmit" data-index="{{1}}">反盖模式
+      <view class="double"><image src="../../assets/shop/coin.png"/>×2</view>
+      <view class="tip">摸鱼减半，效率加倍！</view>
+    </view>
+</view>
 <van-dialog use-slot show="{{ isShowRoomWindow }}"
             show-confirm-button="{{false}}"
             bind:close="onClickHide"
@@ -230,14 +271,17 @@
             show-confirm-button="{{false}}"
             bind:close="onClickHide"
             close-on-click-overlay
-            width="85%" data-window="Tags">
+            width="60%" data-window="Tags">
   <view class="tags-config">
+    <image class="top-img" src="/assets/main/close.png" mode="heightFix"
+             bind:tap="onClickHide" data-window="Tags" />
+    <view class="tags-titile">内容</view>
     <view class="tags-content">
       <view wx:for="{{focusTags}}" class="btn {{focus.tagIdx == index ? 'selected' : ''}}" bind:tap="onTagTab" data-index="{{index}}">{{item}}</view>
     </view>
-    <view class="selector-btn" bindtap="onClickHide" data-window="Tags">完成</view>
   </view>
 </van-dialog>
+<view wx:if="{{isShowTagsWindow}}" class="selector-btn" bindtap="onClickHide" data-window="Tags">确定</view>
 <van-dialog use-slot show="{{ isShowTipsWindow }}"
             show-confirm-button="{{false}}"
             bind:close="onClickHide"

@@ -4,7 +4,7 @@ import {Effect} from "./Effect";
 import {Trait} from "./Trait";
 import {BaseRepository, getRepository, repository} from "../../core/data/BaseRepository";
 import {Constructor} from "../../core/BaseContext";
-import {Animation, PictureLayer} from "./IRoomDrawable";
+import {Animation, PictureLayer} from "./IDrawable";
 import {Condition} from "../../player/data/Condition";
 import {ParamType} from "./Room";
 
@@ -51,11 +51,13 @@ export class NPCRoom extends StaticData {
 	@field
 	public state: NPCRoomState = NPCRoomState.Closed;
 
+	public get rootPath() { return "npcRooms"; }
+
 	public get thumbnailUrl() {
-		return this.thumbnail || `@/npcRooms/thumbnails/${this.id}.png` || this.pictureUrl;
+		return this.thumbnail || `@/${this.rootPath}/thumbnails/${this.id}.png` || this.pictureUrl;
 	}
 	public get pictureUrl() {
-		return this.picture || `@/npcRooms/pictures/${this.id}.png`;
+		return this.picture || `@/${this.rootPath}/pictures/${this.id}.png`;
 	}
 
 	// region 属性控制

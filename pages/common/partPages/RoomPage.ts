@@ -6,7 +6,7 @@ import {Room} from "../../../modules/room/data/Room";
 import {PartialPage} from "../core/BasePage";
 import {RuntimeFocus} from "../../../modules/focus/data/Focus";
 import {Container, Rectangle, Sprite} from "pixi.js";
-import {Animation} from "../../../modules/room/data/IRoomDrawable";
+import {Animation} from "../../../modules/room/data/IDrawable";
 import {pageMgr} from "../../../modules/core/managers/PageManager";
 import {MathUtils} from "../../../utils/MathUtils";
 import {Constructor} from "../../../modules/core/BaseContext";

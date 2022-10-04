@@ -3,7 +3,7 @@ import {DataOccasion, dataPK, field, occasion} from "../../core/data/DataLoader"
 import {Player, PlayerBaseInfo} from "../../player/data/Player";
 import {Trait} from "./Trait";
 import {DynamicData} from "../../core/data/DynamicData";
-import {IRoomDrawable} from "./IRoomDrawable";
+import {IDrawable} from "./IDrawable";
 import {Effect} from "./Effect";
 import {roomSkinRepo} from "./RoomSkin";
 import {roomStarRepo} from "./RoomStar";
@@ -28,7 +28,7 @@ export type RoomEditableInfo = {
 const DefaultMinDuration = 15;
 const FocusFeeRate = 0.5;
 
-export class Room extends DynamicData implements IRoomDrawable {
+export class Room extends DynamicData implements IDrawable {
 
 	@field(String)
 	@dataPK
@@ -144,10 +144,15 @@ export class Room extends DynamicData implements IRoomDrawable {
 
 	// region 绘制数据
 
+	public get rootPath() { return "rooms" }
+
 	public get skin() { return roomSkinRepo().getById(this.skinId) }
 	public get theme() { return this.skin.theme };
 
 	public get thumbnail() { return this.skin.thumbnail }
+
+	public get furnitureSetting() { return this.skin.furnitureSetting }
+
 	public get picture() { return this.skin.picture }
 	public get layers() { return this.skin.layers }
 	public get animations() { return this.skin.animations }

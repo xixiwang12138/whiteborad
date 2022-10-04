@@ -1,5 +1,5 @@
 <!--components/real-tab-bar/avatar-display.wxml-->
-<view class="container">
+<view class="container" style="background-color: {{theme.mainColor}};">
   <view class="tab-bar-border"/>
   <view class="menu-item" bindtap="onTap"
         wx:for="{{pages}}" wx:key="index"

@@ -62,7 +62,9 @@ export class FocusManager extends BaseManager {
    * 结束专注
    */
   public async endFocus(runtime: RuntimeFocus, tagIdx?: number, note?: string) {
-    const focus = await EndFocus({runtime});
+    // 同步缓存中的数据
+    focusMgr().updateFocus(runtime)
+    const focus = await EndFocus({runtime}); // TODO 有没有一种可能，这里不需要传递runtimefocus
 
     // roomMgr().onFocusEnd();
 

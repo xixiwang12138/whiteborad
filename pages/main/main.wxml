@@ -4,7 +4,7 @@
   <canvas type='webgl' id="main-canvas"></canvas>
   <view class="content">
     <view class="player-info" wx:if="{{!runtimeFocus}}">
-      <image class="avatar" src="{{player.avatarUrl}}"mode="aspectFill"/>
+      <image class="avatar" src="{{player.avatarUrl}}" mode="aspectFill"/>
       <view class="player-info-container">
         <image src="../../assets/shop/coin.png" style="height: 20px;width: 18px;" mode="aspectFit"></image>
         <text>{{player.gold}}</text>

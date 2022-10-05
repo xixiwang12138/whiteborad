@@ -64,7 +64,7 @@ export class Animation extends BaseData {
 	@field(Number)
 	public motionId?: number; // 关联的Motion
 	@field(Boolean)
-	public custom: boolean = false; // 是否自定义动画
+	public custom: boolean = true; // 是否自定义动画
 
 	@field(Number)
 	public count?: number; // 持续帧数（custom下起效）

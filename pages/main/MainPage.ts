@@ -3,7 +3,7 @@ import {page, pageFunc} from "../common/PageBuilder";
 import {BasePage, BasePageData} from "../common/core/BasePage";
 import {PlayerPage} from "../common/partPages/PlayerPage";
 import {Room} from "../../modules/room/data/Room";
-import {Focus, FocusTags, RuntimeFocus} from "../../modules/focus/data/Focus";
+import {Focus, FocusMode, FocusTags, RuntimeFocus} from "../../modules/focus/data/Focus";
 import {waitForDataLoad} from "../../modules/core/managers/DataManager";
 import {playerMgr, waitForLogin} from "../../modules/player/managers/PlayerManager";
 import {focusMgr} from "../../modules/focus/managers/FocusManager";
@@ -473,7 +473,8 @@ export class MainPage<P = {}> extends BasePage<MainPageData, P> {
   }
 
   @pageFunc
-  private async onSubmit() {
+  private async onSubmit(e: CustomEvent) {
+    this.data.focus.mode = <FocusMode>e.target.dataset.index;
     await this.onFocusStart();
   }
 

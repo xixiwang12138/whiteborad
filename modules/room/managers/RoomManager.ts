@@ -39,7 +39,7 @@ const LeaveRoom: Itf = post("/room/room/leave");
 const GetPlayerMotions: Itf<{},{records:Partial<PlayerMotionRecord[]>}> = get("/room/player_motion/get");
 const ReceiveMotionReward: Itf<{motionId: number}> = post("/room/motion/receive");
 
-export type RoomMessageType = "enter" | "leave" | "focusStart" | "focusEnd" | "focusing"|"switchMotion";
+export type RoomMessageType = "enter" | "leave" | "focusStart" | "focusEnd" | "focusing"|"switchMotion" | "focusSuccess";
 export type RoomMessage = {
   type: RoomMessageType, time: number,
   player?: PlayerBaseInfo,

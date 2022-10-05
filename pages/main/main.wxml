@@ -152,7 +152,7 @@
         <view class="time-block">{{(focus.duration)%60>9?(focus.duration)%60:('0'+(focus.duration)%60)}}</view>
       </view>
       <view class="slider">
-        <van-slider use-button-slot value="{{focus.duration}}" min="{{item.minDuration}}" max="{{item.maxDuration}}" bind:drag="onDragTime">
+        <van-slider use-button-slot value="{{focus.duration}}" min="{{room.minDuration}}" max="{{room.maxDuration}}" bind:drag="onDragTime">
           <image class="{{animating?'bar-icon scale-ani':'bar-icon'}}" src="../../assets/main/bar.png"  slot="button" mode="aspectFit" bindtouchstart="onDragStart" bindtouchend="onDragEnd" touchcancel="onDragEnd">
           <view class="drag-prompt"><image src="../../assets/shop/coin.png" mode="aspectFit"/>+{{focus.expectGoldReward}}</view>
           </image>
@@ -185,8 +185,8 @@
   </view>
 </van-dialog>
 <view class="mode-set" wx:if="{{isShowStartWindow}}">
-    <view class="mode {{focus.mode == 0 ? 'selected' : ''}}" bind:tap="onModeTab" bind:tap="onSubmit" data-index="{{0}}">基础模式</view>
-    <view class="mode {{focus.mode == 1 ? 'selected' : ''}}" bind:tap="onModeTab" bind:tap="onSubmit" data-index="{{1}}">反盖模式
+    <view class="mode {{focus.mode == 0 ? 'selected' : ''}}" bind:tap="onSubmit" data-index="{{0}}">基础模式</view>
+    <view class="mode {{focus.mode == 1 ? 'selected' : ''}}"  bind:tap="onSubmit" data-index="{{1}}">反盖模式
       <view class="double"><image src="../../assets/shop/coin.png"/>×2</view>
       <view class="tip">摸鱼减半，效率加倍！</view>
     </view>

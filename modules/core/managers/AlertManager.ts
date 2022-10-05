@@ -135,7 +135,7 @@ class AlertManager extends BaseManager {
 		return wx.showModal(config)
 	}
 	protected async onShowToast(config: AlertOptions) {
-		await PromiseUtils.waitFor(() => !loadingMgr().isLoading)
+		//await PromiseUtils.waitFor(() => !loadingMgr().isLoading)
 		console.error("[L] showToast", config)
 		return wx.showToast(config)
 	}

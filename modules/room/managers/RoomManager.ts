@@ -7,10 +7,12 @@ import {DataLoader, DataOccasion} from "../../core/data/DataLoader";
 import {wsMgr} from "../../websocket/WebSocketManager";
 import {RoomType} from "../../../pages/main/MainPage";
 import {PlayerBaseInfo} from "../../player/data/Player";
-import SocketTask = WechatMiniprogram.SocketTask;
 import {roomSkinRepo} from "../data/RoomSkin";
 import {playerMgr} from "../../player/managers/PlayerManager";
 import {MotionRecord, RuntimeFocus} from "../../focus/data/Focus";
+import {PlayerMotion, PlayerMotionRecord} from "../data/PlayerMotion";
+import {motionRepo} from "../data/Motion";
+import SocketTask = WechatMiniprogram.SocketTask;
 
 const GetRoom: Itf<{room: IRoomIndex},
   {room?: Partial<Room>, npcRoom?: Partial<NPCRoom>}>
@@ -34,7 +36,10 @@ const SwitchSkin: Itf<{skinId: number}> = post("/room/skin/switch");
 const EnterRoom: Itf<{room: IRoomIndex}> = post("/room/room/enter");
 const LeaveRoom: Itf = post("/room/room/leave");
 
-export type RoomMessageType = "enter" | "leave" | "focusStart" | "focusEnd" | "focusing"|"switchMotion" | "focusSuccess";
+const GetPlayerMotions: Itf<{},{records:Partial<PlayerMotionRecord[]>}> = get("/room/player_motion/get");
+const ReceiveMotionReward: Itf<{motionId: number}> = post("/room/motion/receive");
+
+export type RoomMessageType = "enter" | "leave" | "focusStart" | "focusEnd" | "focusing"|"switchMotion";
 export type RoomMessage = {
   type: RoomMessageType, time: number,
   player?: PlayerBaseInfo,
@@ -110,6 +115,21 @@ export class RoomManager extends BaseManager {
     await SwitchSkin({skinId});
     const room = await roomMgr().getSelfRoom();
     room.switchSkin(skinId);
+  }
+
+  public async receiveMotionReward(motionId:number){
+    const motion = motionRepo().getById(motionId);
+
+    await motion.unlockRewardGroup.invoke();
+    await ReceiveMotionReward({motionId})
+
+    const pm = await this.getPlayerMotion()
+    pm.gain(motionId);
+  }
+
+  public async getPlayerMotion(){
+    const response = await GetPlayerMotions({});
+    return DataLoader.load(PlayerMotion, response);
   }
 
   public async enterRoom(room: IRoomIndex,

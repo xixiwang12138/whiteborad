@@ -8,8 +8,8 @@ import { loadingMgr, LoadingOptions, LoadingParam } from "./LoadingManager";
 import { loading } from "../BaseAssist";
 
 // const Host = "https://homi-http-server-1836805-1255510304.ap-shanghai.run.tcloudbase.com";
-// const Host = "https://www.exermon.com:8092";
-const Host = "http://localhost:8090";
+ const Host = "https://www.exermon.com:8092";
+//const Host = "http://localhost:8090";
 
 const Request = loading(100001, "请求中", true);
 const DefaultTimeOut = 120000;

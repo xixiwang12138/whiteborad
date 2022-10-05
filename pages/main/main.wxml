@@ -45,7 +45,7 @@
     </view>
     <view wx:if="{{!runtimeFocus}}" class="focus-btn"
           bind:tap="onClickShow" data-window="Start">
-      <view class="text">开始</view>
+      <view class="text" style="color:{{theme.mainColor}}">开始</view>
     </view>
   </view>
   

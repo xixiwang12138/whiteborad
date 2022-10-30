@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="ALL" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c492c315-e513-48d7-aadc-1c49bdc76b62" name="变更" comment="">
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/Utils/src/main/java/ConvertInMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/Utils/src/main/java/ExcelProcess.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/Utils/src/main/java/OLS.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/Utils/src/main/java/POJO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/Utils/src/main/java/ProperValueToString.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/Utils/src/main/java/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/app/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/app/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/app/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/app/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/app/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/app/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/app/src/main/java/com/xixi/cloud/CloudApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/app/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/app/src/test/java/com/xixi/cloud/CloudApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/cloud/app/src/main/java/com/xixi/app/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/cloud/app/src/main/java/com/xixi/app/service/LoginService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/cloud/app/src/main/java/com/xixi/app/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/cloud/app/src/main/java/com/xixi/app/service/impl/LoginServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/cloud/app/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/cloud/user/src/main/java/com/xixi/user/controller/UserController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/cloud/user/src/main/java/com/xixi/user/entity/CommonResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/cloud/user/src/main/java/com/xixi/user/entity/User.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/cloud/user/src/main/java/com/xixi/user/mapper/UserMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/cloud/user/src/main/java/com/xixi/user/service/UserService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/cloud/user/src/main/java/com/xixi/user/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/grade/src/main/java/com/xixi/grade/common/ApiException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/grade/src/main/java/com/xixi/grade/common/UserLoginException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/grade/src/main/java/com/xixi/grade/config/WebMvcConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/grade/src/main/java/com/xixi/grade/controller/interceptor/UserLoginInterceptor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/grade/src/main/java/com/xixi/grade/entity/Teacher.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/grade/src/main/java/com/xixi/grade/mappers/TeacherDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/grade/src/main/java/com/xixi/grade/service/TeacherService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/grade/src/main/java/com/xixi/grade/utils/JwtUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/grade/src/main/resources/static/pages/login.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/ExcelUtil.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/controller/QuesController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/controller/ResumeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/entity/InResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/entity/JsonResult.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/entity/Result.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/entity/Resume.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/entity/ResumeRow.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/entity/UserInfo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/mappers/Result2Mapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/mappers/ResultMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/services/Result2Service.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/services/ResultService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/java/com/xixi/ques/services/ResumeService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/mappers/ResultMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/css/layui.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/js/axios-0.18.0.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/js/echarts.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/js/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/js/jquery.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/js/layui.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/js/vue.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/js/vue2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/pages/research.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/pages/test.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/elementui/fonts/element-icons.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/elementui/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/elementui/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/elementui/index2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/font-awesome/css/font-awesome.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/font-awesome/css/font-awesome.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/font-awesome/fonts/FontAwesome.otf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/font-awesome/fonts/fontawesome-webfont.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/font-awesome/fonts/fontawesome-webfont.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/font-awesome/fonts/fontawesome-webfont.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/font-awesome/fonts/fontawesome-webfont.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques/src/main/resources/static/plugins/font-awesome/fonts/fontawesome-webfont.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/ques2/src/main/resources/static/plugins/elementui/index2.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/user/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/user/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/user/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/user/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/user/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/user/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/user/src/main/java/com/xixi/cloud/CloudApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/user/src/main/resources/application.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/user/src/test/java/com/xixi/cloud/CloudApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/whales/src/Coast.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/whales/src/Whale.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//Learning/project/whales/src/WhaleWatching.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/app/App.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/app/AppConfig.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/app/BaseAssist.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/app/BaseContext.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/app/BaseInterface.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/app/ManagerContext.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/app/ModuleContext.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/app/RepositoryContext.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/modules/reward/Reward.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/modules/reward/RewardProcessor.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/utils/DateUtils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/utils/DecoratorUtils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/utils/EventBus.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/utils/MathUtils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/utils/ParamCodec.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/utils/PromiseUtils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/utils/SingletonUtils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/utils/StringUtils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/Framework/src/utils/TypeUtils.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/PyCharm 2022.1.3/NLP/ch1/base01.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/PyCharm 2022.1.3/NLP/ch2/corpus.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/PyCharm 2022.1.3/npl-b/api.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/PyCharm 2022.1.3/npl-b/train.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/PyCharm 2022.1.3/sra/settings.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/PyCharm 2022.1.3/sra/百度失信名单测试.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/apache-tomcat-9.0.34-windows-x64/apache-tomcat-9.0.34/webapps/Test/src/Test.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/bk/src/test/admin.test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/bk/src/test/echo.test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/bk/src/utils/BaseContext.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/bk/src/utils/Core.router.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/demo/data/postdao.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/demo/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/demo/index.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/demo/utils/CommonRes.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/fkpass/plugin/weui/css/style/base/reset.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/ts-learn/原始类型.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/ts-learn/接口.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/ts-learn/类型断言.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/ts-project/demo.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/ts-project/广东省各市空气质量报告（PM2.5浓度）.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/ts-project/广东省平均PM2.5浓度趋势变化.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../..//develop/ts-project/臭氧浓度与PM2.5浓度关系.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//app.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//app.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//app.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/background-logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/common/back.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/common/gold.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/common/loading-circle.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/common/loading-icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/female.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/logo-shape.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/logo-text.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/bar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/chat.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/clock.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/close.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/config.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/desc.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/lunar.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/medal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/nameBorder.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/notice.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/rainy.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/select.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/setting.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/shop-2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/shop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/sun.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/switch.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/thunder.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/time.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/whiteNoise1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/whiteNoise2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/whiteNoise3.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/main/whiteNoise4.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/male.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/mine/background-logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/mine/bubble1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/mine/bubble2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/mine/envelop.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/mine/invite.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/mine/reward.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/mine/slogan-box.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/mine/star1.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/mine/star2.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/shop/brush.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/shop/coin.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/shop/reminder.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/shop/setting.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/square/logo-frame.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/square/search.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/tabbar/main-selected.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/tabbar/main.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/tabbar/main.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/tabbar/mine-selected.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/tabbar/mine.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/tabbar/mine.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/tabbar/square-selected.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/tabbar/square.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//assets/tabbar/square.svg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/avatar-display/avatar-display.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/avatar-display/avatar-display.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/avatar-display/avatar-display.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/avatar-display/avatar-display.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/gold-level-display/gold-level-display.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/gold-level-display/gold-level-display.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/gold-level-display/gold-level-display.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/gold-level-display/gold-level-display.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/loading/loading.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/loading/loading.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/loading/loading.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/loading/loading.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/real-tab-bar/real-tab-bar.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/real-tab-bar/real-tab-bar.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/real-tab-bar/real-tab-bar.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/real-tab-bar/real-tab-bar.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/start-config/start-config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/start-config/start-config.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/start-config/start-config.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/start-config/start-config.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/type-input/type-input.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/type-input/type-input.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//components/type-input/type-input.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//custom-tab-bar/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//custom-tab-bar/index.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//custom-tab-bar/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/action-sheet/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/action-sheet/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/action-sheet/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/area/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/area/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/area/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/area/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/button/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/button/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/button/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/button/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/calendar.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/components/header/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/components/header/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/components/header/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/components/month/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/components/month/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/components/month/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/components/month/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/utils.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/calendar/utils.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/card/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/card/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/card/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/cell-group/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/cell-group/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/cell-group/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/cell/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/cell/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/cell/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/cell/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/checkbox-group/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/checkbox-group/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/checkbox-group/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/checkbox/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/checkbox/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/checkbox/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/checkbox/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/circle/canvas.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/circle/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/circle/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/circle/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/col/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/col/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/col/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/col/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/collapse-item/animate.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/collapse-item/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/collapse-item/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/collapse-item/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/collapse/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/collapse/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/collapse/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/common/color.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/common/component.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/common/relation.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/common/utils.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/common/validator.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/common/version.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/config-provider/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/config-provider/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/config-provider/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/config-provider/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/count-down/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/count-down/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/count-down/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/count-down/utils.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/datetime-picker/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/datetime-picker/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/datetime-picker/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/definitions/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dialog/dialog.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dialog/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dialog/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dialog/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/divider/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/divider/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/divider/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/divider/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dropdown-item/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dropdown-item/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dropdown-item/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dropdown-item/shared.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dropdown-menu/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dropdown-menu/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dropdown-menu/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/dropdown-menu/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/empty/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/empty/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/empty/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/empty/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/field/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/field/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/field/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/field/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/field/input.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/field/props.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/field/textarea.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/goods-action-button/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/goods-action-button/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/goods-action-button/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/goods-action-icon/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/goods-action-icon/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/goods-action-icon/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/goods-action/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/goods-action/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/goods-action/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/grid-item/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/grid-item/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/grid-item/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/grid-item/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/grid/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/grid/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/grid/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/grid/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/icon/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/icon/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/icon/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/icon/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/image/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/image/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/image/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/image/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/index-anchor/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/index-anchor/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/index-anchor/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/index-bar/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/index-bar/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/index-bar/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/info/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/info/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/info/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/loading/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/loading/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/loading/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/loading/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/mixins/basic.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/mixins/button.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/mixins/link.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/mixins/page-scroll.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/mixins/touch.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/mixins/transition.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/nav-bar/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/nav-bar/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/nav-bar/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/nav-bar/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/notice-bar/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/notice-bar/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/notice-bar/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/notice-bar/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/notify/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/notify/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/notify/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/notify/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/notify/notify.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/overlay/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/overlay/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/overlay/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/panel/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/panel/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/panel/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/picker-column/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/picker-column/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/picker-column/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/picker-column/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/picker/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/picker/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/picker/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/picker/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/picker/shared.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/picker/toolbar.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/popup/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/popup/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/popup/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/popup/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/progress/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/progress/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/progress/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/progress/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/radio-group/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/radio-group/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/radio-group/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/radio/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/radio/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/radio/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/radio/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/rate/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/rate/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/rate/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/row/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/row/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/row/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/row/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/search/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/search/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/search/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/share-sheet/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/share-sheet/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/share-sheet/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/share-sheet/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/share-sheet/options.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/share-sheet/options.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/share-sheet/options.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/share-sheet/options.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/sidebar-item/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/sidebar-item/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/sidebar-item/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/sidebar/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/sidebar/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/sidebar/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/skeleton/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/skeleton/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/skeleton/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/slider/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/slider/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/slider/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/slider/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/stepper/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/stepper/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/stepper/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/stepper/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/steps/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/steps/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/steps/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/sticky/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/sticky/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/sticky/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/sticky/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/submit-bar/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/submit-bar/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/submit-bar/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/swipe-cell/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/swipe-cell/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/swipe-cell/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/switch/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/switch/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/switch/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/switch/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tab/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tab/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tab/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tabbar-item/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tabbar-item/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tabbar-item/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tabbar/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tabbar/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tabbar/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tabs/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tabs/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tabs/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tabs/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tag/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tag/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tag/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tag/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/toast/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/toast/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/toast/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/toast/toast.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/transition/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/transition/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/transition/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/transition/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tree-select/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tree-select/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tree-select/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/tree-select/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/uploader/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/uploader/index.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/uploader/index.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/uploader/index.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/uploader/shared.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/uploader/utils.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/wxs/add-unit.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/wxs/array.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/wxs/bem.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/wxs/memoize.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/wxs/object.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/wxs/style.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//miniprogram_npm/@vant/weapp/wxs/utils.wxs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/BaseAssist.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/BaseContext.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/data/BaseConfig.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/data/BaseData.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/data/BaseRepository.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/data/Cache.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/data/DataLoader.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/data/DynamicData.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/data/StaticData.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/managers/AlertManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/managers/AppManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/managers/BaseManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/managers/ConfigManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/managers/DataManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/managers/ErrorManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/managers/LoadingManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/managers/NetworkManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/managers/PageManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/core/managers/StroageManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/focus/data/Focus.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/focus/managers/FocusManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/player/config/InviteConfig.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/player/data/Condition.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/player/data/Player.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/player/data/PlayerTask.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/player/data/Reward.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/player/data/RewardCode.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/player/managers/PlayerManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/player/utils/ConditionProcessor.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/player/utils/LevelCalculator.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/player/utils/RewardProcessor.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/Effect.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/Furniture.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/IDrawable.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/Motion.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/NPCRoom.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/PlayerMotion.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/PlayerRoom.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/Room.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/RoomSkin.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/RoomStar.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/Theme.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/Trait.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/data/WhiteNoise.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/managers/RoomManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/room/runtime/RuntimeRoom.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//modules/websocket/WebSocketManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/PageBuilder.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/core/BaseComponent.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/core/BasePage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/core/RootComponent.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/core/RootPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/partPages/CanvasPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/partPages/DatePickerPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/partPages/PickerPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/partPages/PlayerPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/partPages/QueryPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/partPages/RoomPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/partPages/SharePage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/partPages/ThemePage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/partPages/UploaderPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/common/utils/PageUtils.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/login/LoginPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/login/login.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/login/login.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/login/login.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/login/login.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/main/MainPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/main/main.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/main/main.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/main/main.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/main/main.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/mine/MinePage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/mine/mine.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/mine/mine.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/mine/mine.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/mine/mine.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/shop/ShopPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/shop/shop.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/shop/shop.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/shop/shop.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/shop/shop.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/square/SquarePage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/square/square.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/square/square.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/square/square.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/square/square.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/visit/VisitPage.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/visit/visit.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/visit/visit.less" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/visit/visit.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//pages/visit/visit.wxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//project.config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//project.private.config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//sitemap.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//types/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//types/types/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//types/types/wx/index.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//types/types/wx/lib.wx.api.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//types/types/wx/lib.wx.app.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//types/types/wx/lib.wx.behavior.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//types/types/wx/lib.wx.cloud.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//types/types/wx/lib.wx.component.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//types/types/wx/lib.wx.event.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//types/types/wx/lib.wx.page.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//utils/CloudFileUtils.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//utils/DateUtils.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//utils/MathUtils.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//utils/PromiseUtils.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//utils/SingletonUtils.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//utils/StringUtils.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../..//utils/TypeUtils.ts" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Api File" />
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" url="file://$PROJECT_DIR$/../../../../develop/go1.18" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../" />
+  </component>
+  <component name="GoLibraries">
+    <option name="urls">
+      <list>
+        <option value="file://$PROJECT_DIR$/../src/WhiteBoard" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="2Gnk3uwA09ahXsJLoWa9a4yfGST" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultApiTemplateProperty": "Api File",
+    "DefaultGoTemplateProperty": "Go File",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "configurable..is.expanded": "false",
+    "configurable.GoLibrariesConfigurable.is.expanded": "true",
+    "go.import.settings.migrated": "true",
+    "last_opened_file_path": "D:/Learning/project/Go/WhiteBoard/server",
+    "settings.editor.selected.configurable": "com.goide.configuration.GoLibrariesConfigurableProvider"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Learning\project\Go\WhiteBoard\common" />
+      <recent name="D:\Learning\project\Go\WhiteBoard\common\errs" />
+      <recent name="D:\Learning\project\Go\WhiteBoard" />
+      <recent name="D:\Learning\project\Go\WhiteBoard\common\sources" />
+      <recent name="D:\Learning\project\Go\WhiteBoard\common\config" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Learning\project\Go\WhiteBoard\common" />
+      <recent name="D:\Learning\project\Go\WhiteBoard\dao" />
+      <recent name="D:\Learning\project\Go\WhiteBoard\dao\whiteboarddao" />
+    </key>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+</project>

@@ -7,12 +7,18 @@ const (
 	Editable BoardType = 1
 )
 
+type Model struct {
+	CreatTime  int64 `json:"creatTime"`  //创建时间
+	DeleteTime int64 `json:"deleteTime"` //删除时间
+}
+
 //默认情况下，GORM 会使用 ID 作为表的主键
 
 type WhiteBoard struct {
 	ID      int64     `json:"id"`      //使用雪花算法
 	Mode    BoardType `json:"mode"`    //模式
 	Creator int64     `json:"creator"` //创建者
+	Model
 }
 
 const (

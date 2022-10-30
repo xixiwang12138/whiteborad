@@ -4,6 +4,7 @@ import (
 	"server/common/repo"
 	"server/common/utils"
 	"server/models"
+	"time"
 )
 
 var WhiteBoardRepo *whiteBoardRepo = &whiteBoardRepo{}
@@ -20,6 +21,10 @@ func (this *whiteBoardRepo) Init(creator int64) (int64, error) {
 		ID:      boardId,
 		Mode:    models.Editable,
 		Creator: creator,
+		Model: models.Model{
+			CreatTime:  time.Now().UnixMilli(),
+			DeleteTime: 0,
+		},
 	}
 	err := this.Create(wb)
 	if err != nil {

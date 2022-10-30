@@ -16,47 +16,35 @@ var wsServer = &WstServer{}
 func StartUp(config *config.WebSocketConfig) {
 	ConfigWsServer(config)
 	wsServer.Start()
+	wsServer.AddOnConnectListener(ConnectHandler) //添加连接处理函数
 }
 
 type WstServer struct {
-	listener net.Listener
-	addr     string
-	upgrade  *websocket.Upgrader
-	path     string //ws处理的路径，这一个是没用的
-	//Connections map[string]map[string]*RoomConnection2 //第一个键为roomIndex，第二个键为openid
+	listener          net.Listener
+	addr              string
+	upgrade           *websocket.Upgrader
 	onConnectHandlers []OnConnectHandler
 }
 
 func ConfigWsServer(config *config.WebSocketConfig) {
 	wsServer.addr = config.PORT
-	//ws.Connections = make(map[string]map[string]*RoomConnection2, 0)
 	wsServer.upgrade = &websocket.Upgrader{
 		ReadBufferSize:  4096,
 		WriteBufferSize: 1024,
 		CheckOrigin: func(r *http.Request) bool {
-			////TODO 检查ws接受源
-			//if r.Method != "GET" {
-			//	fmt.Println("method is not GET")
-			//	return false
-			//}
-			////if r.URL.Path != "/123456/2/3" {
-			////	fmt.Println("path error")
-			////	return false
-			////}
 			return true
 		},
 	}
 }
 
 func (thisServer *WstServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	thisServer.path = r.RequestURI
 	conn, err := thisServer.upgrade.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println("[ws upgrade]", err)
 		return
 	}
 	log.Println("[ws client connect]", conn.RemoteAddr())
-	thisServer.onConnect(conn, r.URL.Path) //每个连接开启协程进行处理
+	go thisServer.onConnect(conn, r.URL.Path) //每个连接开启协程进行处理
 }
 
 func (thisServer *WstServer) Start() (err error) {
@@ -90,6 +78,6 @@ func (thisServer *WstServer) AddOnConnectListener(handler OnConnectHandler) {
 
 func (thisServer *WstServer) onConnect(conn *websocket.Conn, processPath string) {
 	for _, handler := range thisServer.onConnectHandlers {
-		go handler(conn, processPath)
+		handler(conn, processPath)
 	}
 }

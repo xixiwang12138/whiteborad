@@ -8,7 +8,20 @@ import (
 
 // Register 注册业务，返回用户的ID
 func Register(phone string, password string) (*bind.LoginResponse, error) {
+	f, err := userExist(phone)
+	if err != nil {
+		return nil, err
+	}
+	if f {
+		//TODO 该号码已经注册
+		return nil, err
+	}
 	uId, err := dao.UserRepo.Init(phone, password)
+	if err != nil {
+		return nil, err
+	}
+	//注册之后自动生成一个白板
+	_, _, err = InitBoard(uId)
 	if err != nil {
 		return nil, err
 	}
@@ -34,13 +47,11 @@ func Login(phone string, password string) (*bind.LoginResponse, error) {
 	}
 	if one == nil {
 		//判断是没有注册还是密码错误
-		one2, err := dao.UserRepo.FindOne(map[string]interface{}{
-			"Phone": phone,
-		})
+		f, err := userExist(phone)
 		if err != nil {
 			return nil, err
 		}
-		if one2 == nil {
+		if !f {
 			//TODO 该号码没有注册
 			return nil, err
 		}
@@ -57,4 +68,17 @@ func Login(phone string, password string) (*bind.LoginResponse, error) {
 		ID:    one.ID,
 	}
 	return r, nil
+}
+
+func userExist(phone string) (bool, error) {
+	one, err := dao.UserRepo.FindOne(map[string]interface{}{
+		"Phone": phone,
+	})
+	if err != nil {
+		return false, err
+	}
+	if one == nil {
+		return false, nil
+	}
+	return true, nil
 }

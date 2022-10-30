@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"runtime"
 	c "server/common/config"
+	"server/common/jwt"
 	"server/common/utils"
 )
 
@@ -42,6 +43,7 @@ func InitAppGateway(config *c.BaseApiConfig) {
 func InitGin(config *c.BaseApiConfig) *gin.Engine {
 	g := gin.Default()
 	g.Use(CatchError()) //全局异常处理中间件
+	g.Use(JWTAuth(config))
 	return g
 }
 
@@ -143,6 +145,33 @@ func TlsHandler(port string) gin.HandlerFunc {
 		if err != nil {
 			return
 		}
+		c.Next()
+	}
+}
+
+func JWTAuth(config *c.BaseApiConfig) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if config.ExceptAuth[c.FullPath()] {
+			c.Next()
+			return
+		}
+		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localSstorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
+		token := c.Request.Header.Get("token")
+		if token == "" {
+			Err(c, 403, 100003, "登录凭证解析错误")
+			c.Abort()
+			return
+		}
+		j := jwt.NewJWT()
+		// parseToken 解析token包含的信息
+		claims, err := j.ParseToken(token)
+		if err != nil {
+			Err(c, 403, 100003, "登录凭证解析错误")
+			c.Abort()
+			return
+		}
+		// gin的上下文记录claims和userId的值
+		c.Set("payload", claims)
 		c.Next()
 	}
 }

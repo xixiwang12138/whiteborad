@@ -28,7 +28,6 @@ type WstServer struct {
 }
 
 func ConfigWsServer(config *config.WebSocketConfig) {
-	//TODO 完善配置信息
 	wsServer.addr = config.PORT
 	//ws.Connections = make(map[string]map[string]*RoomConnection2, 0)
 	wsServer.upgrade = &websocket.Upgrader{

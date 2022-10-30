@@ -6,7 +6,7 @@ import (
 	"server/models"
 )
 
-var WhiteBoardRepo *whiteBoardRepo
+var WhiteBoardRepo *whiteBoardRepo = &whiteBoardRepo{}
 
 type whiteBoardRepo struct {
 	repo.BaseRepo[models.WhiteBoard]

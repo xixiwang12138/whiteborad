@@ -2,7 +2,6 @@ package utils
 
 import (
 	"github.com/robfig/cron/v3"
-	"homi-server/common/cts"
 	"log"
 	"time"
 )
@@ -11,7 +10,7 @@ import (
 
 // SetAsynchronousTask 定时任务执行，ms为执行时刻的毫秒时间戳
 func SetAsynchronousTask(ms int64, task func()) {
-	timer := time.NewTimer(time.Duration((ms - time.Now().UnixMilli()) * cts.NoToMillSeconds))
+	timer := time.NewTimer(time.Duration((ms - time.Now().UnixMilli()))) //TODO 注意还没有转化
 	go func() {
 		<-timer.C
 		task()
@@ -41,8 +40,8 @@ func TodayZeroUnix() int64 {
 	return startTime
 }
 
-// TodayOneHour 获取今天Hour整点的时间戳
-func TodayOneHour(hour int) int64 {
-	z := TodayZeroUnix()
-	return z + int64(hour)*cts.MillToHour
-}
+//// TodayOneHour 获取今天Hour整点的时间戳
+//func TodayOneHour(hour int) int64 {
+//	z := TodayZeroUnix()
+//	return z + int64(hour)*cts.MillToHour
+//}

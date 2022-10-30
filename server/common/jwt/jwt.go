@@ -1,10 +1,10 @@
-package routes
+package jwt
 
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"server/common/config"
+	"strconv"
 	"time"
 )
 
@@ -12,10 +12,10 @@ type JWT struct {
 	SigningKey []byte
 }
 
-func CreateJWT(openid string) (string, error) {
+func CreateJWT(userId int64) (string, error) {
 	j := NewJWT()
 	cs := CustomClaims{
-		Openid: openid,
+		UserId: userId,
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix(),
 			ExpiresAt: time.Now().Unix() + 60*60*60*4, //token -->45分钟
@@ -30,7 +30,7 @@ func CreateJWT(openid string) (string, error) {
 }
 
 type CustomClaims struct {
-	Openid string
+	UserId int64
 	jwt.StandardClaims
 }
 
@@ -45,7 +45,7 @@ func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedString, err := token.SignedString(j.SigningKey)
 	if err != nil {
-		return "", errors.Wrap(err, "create token err: "+claims.Openid)
+		return "", errors.Wrap(err, "create token err: "+strconv.Itoa(int(claims.UserId)))
 	}
 	return signedString, nil
 }
@@ -98,34 +98,7 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 	return "", errors.New("invalid token")
 }
 
-func JWTAuth(config *config.BaseApiConfig) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		if config.ExceptAuth[c.FullPath()] {
-			c.Next()
-			return
-		}
-		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localSstorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
-		token := c.Request.Header.Get("token")
-		if token == "" {
-			Err(c, 403, 100003, "登录凭证解析错误")
-			c.Abort()
-			return
-		}
-		j := NewJWT()
-		// parseToken 解析token包含的信息
-		claims, err := j.ParseToken(token)
-		if err != nil {
-			Err(c, 403, 100003, "登录凭证解析错误")
-			c.Abort()
-			return
-		}
-		// gin的上下文记录claims和userId的值
-		c.Set("payload", claims)
-		c.Next()
-	}
-}
-
-func getOpenid(c *gin.Context) string {
+func getOpenid(c *gin.Context) int64 {
 	cc, _ := c.Get("payload")
-	return cc.(*CustomClaims).Openid
+	return cc.(*CustomClaims).UserId
 }

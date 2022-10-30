@@ -7,7 +7,7 @@ import (
 var node *snowflake.Node
 
 func init() {
-	nodeNew, err := snowflake.NewNode(6732)
+	nodeNew, err := snowflake.NewNode(432)
 	if err != nil {
 		panic(err)
 	}

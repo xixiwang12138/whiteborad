@@ -6,7 +6,7 @@ import (
 	"server/models"
 )
 
-var PageRepo *pageRepo
+var PageRepo *pageRepo = &pageRepo{}
 
 type pageRepo struct {
 	repo.BaseRepo[models.Page]

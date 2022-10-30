@@ -10,14 +10,19 @@ const (
 //默认情况下，GORM 会使用 ID 作为表的主键
 
 type WhiteBoard struct {
-	ID      string    `json:"id"`      //使用雪花算法
+	ID      int64     `json:"id"`      //使用雪花算法
 	Mode    BoardType `json:"mode"`    //模式
-	Creator string    `json:"creator"` //创建者
+	Creator int64     `json:"creator"` //创建者
 }
 
+const (
+	DefaultPageName = "default"
+)
+
 type Page struct {
-	ID           string `json:"id"`           //页标识
-	WhiteBoardID string `json:"whiteBoardId"` //所属白板的id
+	ID           int64  `json:"id"`           //页标识
+	WhiteBoardID int64  `json:"whiteBoardId"` //所属白板的id
+	DisplayName  string `json:"displayName"`  //展示的名字
 }
 
 type GraphType int8
@@ -34,9 +39,9 @@ type BaseGraph struct {
 }
 
 type Graph struct {
-	ID         string    `json:"id"`
-	PageId     string    `json:"pageId"`  //所属页面的id
-	Creator    string    `json:"creator"` //创建者id
+	ID         int64     `json:"id"`
+	PageId     int64     `json:"pageId"`  //所属页面的id
+	Creator    int64     `json:"creator"` //创建者id
 	CreateTime int64     `json:"createTime"`
 	Type       GraphType `json:"type"`
 	Content    []byte    `json:"content"`

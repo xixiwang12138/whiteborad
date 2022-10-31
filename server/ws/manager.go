@@ -2,27 +2,20 @@ package ws
 
 import (
 	"github.com/gorilla/websocket"
+	"github.com/pkg/errors"
 	"log"
+	"net"
 	"server/common/utils"
 	"server/models"
 	"strconv"
 	"strings"
 )
 
-type CmdHandlerFunType func(cmd *models.Cmd) error
+type CmdHandlerFunType func(cmd *models.Cmd, boardId int64, userId int64) error
 
 var CmdHandler CmdHandlerFunType
 
 //每一个白板为Hub
-
-func HandleCmd(o *interface{}) {
-	cmd := (*o).(models.Cmd)
-	err := CmdHandler(&cmd)
-	if err != nil {
-		//日志
-		return
-	}
-}
 
 func ConnectHandler(conn *websocket.Conn, processPath string) {
 	defer func() {
@@ -41,7 +34,7 @@ func ConnectHandler(conn *websocket.Conn, processPath string) {
 
 	//监听消息
 	userConn := HubMgr.GetHub(boardId).GetUserConnection(userId)
-	userConn.ListenJSONMessage(HandleCmd)
+	userConn.ListenJSONMessage(CmdHandler)
 }
 
 // region HubManager部分
@@ -98,6 +91,12 @@ func (h *HubManager) LeaveHub(boardId int64, userId int64) {
 	//TODO 是否需要回收hub
 }
 
+func (h *HubManager) BroadcastCmd(boardId int64, cmd *models.Cmd, exceptUser ...int64) {
+	//获取hub
+	hub := h.GetHub(boardId)
+	hub.Broadcast(cmd, exceptUser...)
+}
+
 //endregion
 
 //region Hub部分
@@ -111,10 +110,15 @@ func NewHub(boardId int64) *Hub {
 	return &Hub{BoardId: boardId, Connections: utils.NewConcurrentMap[int64, *UserConnection]()}
 }
 
-func (hub *Hub) Broadcast(obj any) {
+// Broadcast 给Hub中每一个用户发送消息，在排除列表中的除外
+func (hub *Hub) Broadcast(obj any, exceptUsers ...int64) {
 	//迭代每一个连接，发送消息
 	hub.Connections.Data().Range(func(key, value any) bool {
 		userId := key.(int64)
+		_, ok := utils.FindBasic(exceptUsers, userId)
+		if ok { //如果在排除名单中，直接跳过
+			return true
+		}
 		conn := value.(*UserConnection)
 		err := conn.SendJSON(obj) //TODO 差错控制
 		if err != nil {
@@ -164,6 +168,34 @@ func NewUserConnection(baseConnection *BaseConnection, userId int64, boardId int
 func (c *UserConnection) CloseHandler() {
 	HubMgr.LeaveHub(c.BoardId, c.UserId)
 	//TODO 离开白板的时候是否需要持久化？？？
+}
+
+func (c *UserConnection) ListenJSONMessage(handler func(o *models.Cmd, boardId int64, userId int64) error) {
+	defer func() {
+		err := c.Close()
+		if err != nil {
+			log.Printf("[BaseConnection.ListenMessage]:websocket conn failed when closing, %s", err)
+		}
+	}()
+	for !c.isClosed {
+		o := new(interface{})
+		err := c.WsConn.ReadJSON(o)
+		if err == nil {
+			cmd := (*o).(models.Cmd)
+			err := handler(&cmd, c.BoardId, c.UserId)
+			if err != nil {
+				//TODO 日志
+				return
+			}
+		}
+		if err != nil {
+			if websocket.IsUnexpectedCloseError(err) || errors.Is(err, net.ErrClosed) {
+				c.isClosed = true
+			} else {
+				go c.onError(err)
+			}
+		}
+	}
 }
 
 //endregion

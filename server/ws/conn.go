@@ -2,9 +2,7 @@ package ws
 
 import (
 	"github.com/gorilla/websocket"
-	"github.com/pkg/errors"
 	"log"
-	"net"
 	"server/common/cts"
 )
 
@@ -40,30 +38,6 @@ func (this *BaseConnection) Close() error {
 
 func (this *BaseConnection) SetOnErrorHandler(handler OnErrorHandler) {
 	this.onError = handler
-}
-
-// ListenJSONMessage 监听连接消息JSON格式
-func (this *BaseConnection) ListenJSONMessage(handler func(*interface{})) {
-	defer func() {
-		err := this.Close()
-		if err != nil {
-			log.Printf("[BaseConnection.ListenMessage]:websocket conn failed when closing, %s", err) // 这里打印就ok
-		}
-	}()
-	for !this.isClosed {
-		o := new(interface{})
-		err := this.WsConn.ReadJSON(o)
-		if err == nil {
-			handler(o)
-		}
-		if err != nil {
-			if websocket.IsUnexpectedCloseError(err) || errors.Is(err, net.ErrClosed) {
-				this.isClosed = true
-			} else {
-				go this.onError(err)
-			}
-		}
-	}
 }
 
 func (this *BaseConnection) SendMessage(message []byte) error {

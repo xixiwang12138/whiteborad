@@ -6,6 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"log"
 	"server/common/config"
+	"server/common/utils"
 	"strconv"
 	"time"
 )
@@ -50,15 +51,27 @@ func (this *redisSource) connect(config *config.Config) {
 	log.Printf("[redisdata.Setup]:Setup successfully:%v", conf)
 }
 
-// 向哈希表中插入字符串
-func (this *redisSource) HSet(key string, field string, value string) error {
+// HMSet 向哈希表中加入一个对象
+func (this *redisSource) HMSet(key string, srt interface{}) error {
+	m, err := utils.ToMap(srt, "json")
+	if err != nil {
+		return err
+	}
+	if err := this.Client.HMSet(key, m).Err(); err != nil {
+		return errors.Wrap(err, "HMSet cache key ==========> "+key)
+	}
+	return nil
+}
+
+// HSet 向哈希表中插入字符串
+func (this *redisSource) HSet(key string, field string, value interface{}) error {
 	if err := this.Client.HSet(key, field, value).Err(); err != nil {
 		return errors.Wrap(err, "HSet cache key ==========> "+key)
 	}
 	return nil
 }
 
-// 仅获取哈希表中值的字符串
+// HGet 仅获取哈希表中值的字符串
 func (this *redisSource) HGet(key string, field string) (string, error) {
 	str, err := this.Client.HGet(key, field).Result()
 	if err != nil {

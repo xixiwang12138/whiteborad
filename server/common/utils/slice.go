@@ -15,7 +15,7 @@ func Find[T Comparator](slice []T, val T) (int, bool) {
 	return -1, false
 }
 
-func FindBasic[T int | string](slice []T, val T) (int, bool) {
+func FindBasic[T int | string | int64](slice []T, val T) (int, bool) {
 	for i, item := range slice {
 		if item == val {
 			return i, true

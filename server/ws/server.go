@@ -15,7 +15,10 @@ var wsServer = &WstServer{}
 
 func StartUp(config *config.WebSocketConfig) {
 	ConfigWsServer(config)
-	wsServer.Start()
+	err := wsServer.Start()
+	if err != nil {
+		panic(err)
+	}
 	wsServer.AddOnConnectListener(ConnectHandler) //添加连接处理函数
 }
 

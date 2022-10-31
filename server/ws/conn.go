@@ -43,7 +43,7 @@ func (this *BaseConnection) SetOnErrorHandler(handler OnErrorHandler) {
 }
 
 // ListenJSONMessage 监听连接消息JSON格式
-func (this *BaseConnection) ListenJSONMessage(handler func(*interface{}) error) {
+func (this *BaseConnection) ListenJSONMessage(handler func(*interface{})) {
 	defer func() {
 		err := this.Close()
 		if err != nil {
@@ -54,7 +54,7 @@ func (this *BaseConnection) ListenJSONMessage(handler func(*interface{}) error) 
 		o := new(interface{})
 		err := this.WsConn.ReadJSON(o)
 		if err == nil {
-			err = handler(o)
+			handler(o)
 		}
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err) || errors.Is(err, net.ErrClosed) {

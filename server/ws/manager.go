@@ -4,14 +4,24 @@ import (
 	"github.com/gorilla/websocket"
 	"log"
 	"server/common/utils"
+	"server/models"
 	"strconv"
 	"strings"
 )
 
+type CmdHandlerFunType func(cmd *models.Cmd) error
+
+var CmdHandler CmdHandlerFunType
+
 //每一个白板为Hub
 
-func HandleCmd(o *interface{}) error {
-	return nil
+func HandleCmd(o *interface{}) {
+	cmd := (*o).(models.Cmd)
+	err := CmdHandler(&cmd)
+	if err != nil {
+		//日志
+		return
+	}
 }
 
 func ConnectHandler(conn *websocket.Conn, processPath string) {
@@ -19,7 +29,6 @@ func ConnectHandler(conn *websocket.Conn, processPath string) {
 		if r := recover(); r != nil {
 			log.Println(r)
 		}
-
 	}()
 	//提取路径参数，读取所在白板以及连接的用户
 	res := strings.Split(processPath, "/")
@@ -34,6 +43,8 @@ func ConnectHandler(conn *websocket.Conn, processPath string) {
 	userConn := HubMgr.GetHub(boardId).GetUserConnection(userId)
 	userConn.ListenJSONMessage(HandleCmd)
 }
+
+// region HubManager部分
 
 var HubMgr = &HubManager{Hubs: utils.NewConcurrentMap[int64, *Hub]()}
 
@@ -87,6 +98,10 @@ func (h *HubManager) LeaveHub(boardId int64, userId int64) {
 	//TODO 是否需要回收hub
 }
 
+//endregion
+
+//region Hub部分
+
 type Hub struct {
 	BoardId     int64                                        //白板id
 	Connections *utils.ConcurrentMap[int64, *UserConnection] //当前白板下所有的连接
@@ -126,6 +141,10 @@ func (hub *Hub) DeleteUser(userId int64) {
 	hub.Connections.Delete(userId)
 }
 
+//endregion
+
+//region 用户连接部分
+
 type UserConnection struct {
 	*BaseConnection
 	UserId  int64
@@ -146,3 +165,5 @@ func (c *UserConnection) CloseHandler() {
 	HubMgr.LeaveHub(c.BoardId, c.UserId)
 	//TODO 离开白板的时候是否需要持久化？？？
 }
+
+//endregion

@@ -3,7 +3,10 @@ package config
 import (
 	"gopkg.in/yaml.v2"
 	"log"
+	"server/common/utils"
 )
+
+var GlobalConfig *Config
 
 const (
 	CertFile = "server.crt"
@@ -52,10 +55,21 @@ type WebSocketConfig struct {
 	PORT string `yaml:"port"`
 }
 
-func (c *Config) GetConfig(yamlString string) {
+func GetConfig(yamlString string) *Config {
+	var c = new(Config)
 	yamlFile := []byte(yamlString)
 	err := yaml.Unmarshal(yamlFile, c)
 	if err != nil {
 		log.Fatalf("[Get Config]Unmarshal Yaml: %v", err)
 	}
+	return c
+}
+
+func SetupConfig(configFilePath string) {
+	log.SetFlags(LogConfig)
+	bytes, err := utils.ReadFile(configFilePath)
+	if err != nil {
+		panic(err)
+	}
+	GlobalConfig = GetConfig(string(bytes))
 }

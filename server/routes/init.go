@@ -12,7 +12,6 @@ import (
 )
 
 func InitAppGateway(config *c.BaseApiConfig) {
-
 	g := InitGin(config)
 	//注册路由组
 	BoardRouter := g.Group("/board")
@@ -33,7 +32,7 @@ func InitAppGateway(config *c.BaseApiConfig) {
 			panic(err)
 		}
 	} else {
-		log.Println("[HTTPS] CERT FILE NOT EXIST, 已使用WS代替")
+		log.Println("[HTTPS] CERT FILE NOT EXIST, 已使用HTTP代替")
 		if err := g.Run(config.PORT); err != nil {
 			panic(err)
 		}

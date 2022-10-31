@@ -1,0 +1,19 @@
+
+http:
+  port: :10300
+
+websocket:
+  port: :10400
+
+mysql:
+  userName: root
+  password: FuKHc7TeCS
+  address: 175.178.81.93
+  port: 3306
+  dbName: board
+
+
+redis:
+  address: 175.178.81.93:6379
+  password: L2q81sNBKFKFW23y
+  DB: 3

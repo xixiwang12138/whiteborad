@@ -19,7 +19,13 @@ func (m *ConcurrentMap[K, V]) Set(k K, v V) {
 }
 
 func (m *ConcurrentMap[K, V]) Get(k K) (V, bool) {
-	return m.data.Load(k)
+	originData, ok := m.data.Load(k)
+	if !ok {
+		res := new(V)
+		return *res, false
+	}
+	res := originData.(V)
+	return res, ok
 }
 
 func (m *ConcurrentMap[K, V]) Delete(k K) {

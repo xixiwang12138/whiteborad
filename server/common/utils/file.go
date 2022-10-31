@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/pkg/errors"
 	"os"
 )
 
@@ -13,4 +14,11 @@ func ExistFile(filePath string) bool {
 		return false
 	}
 	return false
+}
+
+func ReadFile(filePath string) ([]byte, error) {
+	if !ExistFile(filePath) {
+		return nil, errors.New("file path not exits")
+	}
+	return os.ReadFile(filePath)
 }

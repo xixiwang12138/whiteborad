@@ -13,3 +13,5 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o borad main.go
 EXPOSE 10300 10400
 CMD ["./borad"]
 
+
+

@@ -174,3 +174,12 @@ func JWTAuth(config *c.BaseApiConfig) gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func GetUser(ctx *gin.Context) int64 {
+	data, ok := ctx.Get("payload")
+	if !ok {
+		return 0
+	}
+	p := data.(jwt.CustomClaims)
+	return p.UserId
+}

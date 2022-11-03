@@ -32,7 +32,7 @@ func InitAppGateway(config *c.BaseApiConfig) {
 			panic(err)
 		}
 	} else {
-		log.Println("[HTTPS] CERT FILE NOT EXIST, 已使用HTTP代替")
+		log.Println("[HTTPS] CERT FILE NOT EXIST, 已使用HTTP代替: ", config.PORT)
 		if err := g.Run(config.PORT); err != nil {
 			panic(err)
 		}

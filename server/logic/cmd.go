@@ -11,6 +11,7 @@ var actuallyHandlers = []func(cmd *models.Cmd) error{AddCmd, DeleteCmd, MoveCmd,
 
 func init() {
 	ws.CmdHandler = CmdHandler
+	ws.StoreHandler = StoreBoard
 }
 
 func CmdHandler(o *models.Cmd, boardId int64, userId int64) error {

@@ -14,6 +14,7 @@ import (
 type CmdHandlerFunType func(cmd *models.Cmd, boardId int64, userId int64) error
 
 var CmdHandler CmdHandlerFunType
+var StoreHandler func(int64)
 
 //每一个白板为Hub
 
@@ -62,6 +63,10 @@ func (h *HubManager) CreateHub(boardId int64) {
 	h.Hubs.Set(boardId, NewHub(boardId))
 }
 
+func (h *HubManager) DeleteHub(boardId int64) {
+	h.Hubs.Delete(boardId)
+}
+
 func (h *HubManager) EnterHub(boardId int64, userId int64, conn *websocket.Conn) {
 	//判断hub白板是否创建
 	if !h.HubCreated(boardId) {
@@ -87,7 +92,13 @@ func (h *HubManager) LeaveHub(boardId int64, userId int64) {
 	//在Hub中删除该用户
 	hub.DeleteUser(userId)
 	//如果Hub中没有人
-	//TODO 是否需要回收hub
+	if hub.IsEmpty() {
+		// delete this hub(Board)
+		h.DeleteHub(boardId)
+
+		//store
+		StoreHandler(boardId)
+	}
 }
 
 func (h *HubManager) BroadcastCmd(boardId int64, cmd *models.Cmd, exceptUser ...int64) {
@@ -142,6 +153,10 @@ func (hub *Hub) AddUser(c *UserConnection) {
 
 func (hub *Hub) DeleteUser(userId int64) {
 	hub.Connections.Delete(userId)
+}
+
+func (hub *Hub) IsEmpty() bool {
+	return hub.Connections.Empty()
 }
 
 //endregion

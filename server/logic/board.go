@@ -1,9 +1,12 @@
 package logic
 
 import (
+	"log"
+	"server/common/cts"
 	"server/common/repo"
 	"server/dao"
 	"server/models"
+	"sync"
 )
 
 // InitBoard 为指定用户初始化创建一个白板
@@ -36,4 +39,21 @@ func GetBoardPages(boardId int64) ([]int64, error) {
 		result[i] = res[i].ID
 	}
 	return result, nil
+}
+
+func StoreBoard(bId int64) {
+	pages, err := GetBoardPages(bId)
+	if err != nil {
+		log.Printf(cts.ErrorFormat, err)
+		return
+	}
+	var wg sync.WaitGroup
+	wg.Add(len(pages))
+	for _, id := range pages {
+		go func() {
+			defer wg.Done()
+			StorePage(id)
+		}()
+	}
+	wg.Wait()
 }

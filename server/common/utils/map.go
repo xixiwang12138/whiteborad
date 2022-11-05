@@ -42,6 +42,15 @@ func (m *ConcurrentMap[K, V]) Data() *sync.Map {
 	return m.data
 }
 
+func (m *ConcurrentMap[K, V]) Empty() bool {
+	flag := true
+	m.data.Range(func(key, value any) bool {
+		flag = false
+		return false
+	})
+	return flag
+}
+
 // ToMap 结构体转为Map[string]interface{}
 func ToMap(in interface{}, tagName string) (map[string]interface{}, error) {
 	out := make(map[string]interface{})

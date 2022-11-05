@@ -10,6 +10,7 @@ import (
 func registerUser(g *gin.RouterGroup) {
 	g.POST("/register", Handler(register))
 	g.POST("/login", Handler(login))
+	g.POST("/reset", Handler(reset))
 }
 
 func register(_ *gin.Context, req *bind.LoginReq) (*bind.LoginResponse, error) {
@@ -26,4 +27,9 @@ func login(_ *gin.Context, req *bind.LoginReq) (*bind.LoginResponse, error) {
 		return nil, err
 	}
 	return response, err
+}
+
+func reset(_ *gin.Context, req *bind.LoginReq) (interface{}, error) {
+	err := logic.Reset(req.Phone, req.Password)
+	return nil, err
 }

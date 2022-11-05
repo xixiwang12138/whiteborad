@@ -1,8 +1,10 @@
 package bind
 
+import "server/models"
+
 type LoginResponse struct {
-	Token string `json:"token"`
-	ID    int64  `json:"id"` //用户的ID
+	Token string       `json:"token"`
+	User  *models.User `json:"user"` //用户的ID
 }
 
 type LoginReq struct {

@@ -1,7 +1,8 @@
 package bind
 
 type BoardReq struct {
-	BoardId int64 `json:"boardId"`
+	BoardId   int64  `json:"boardId"`
+	BoardName string `json:"boardName"`
 }
 
 type PageReq struct {

@@ -73,8 +73,6 @@ func (h *HubManager) EnterHub(boardId int64, userId int64, conn *websocket.Conn)
 	userConnection := NewUserConnection(NewBaseConnection(conn), userId, boardId)
 	hub.AddUser(userConnection)
 
-	//TODO 需要同步目前画板上的内容？来源？
-
 	//TODO 通知前端更新在线用户
 	hub.Broadcast(nil)
 }

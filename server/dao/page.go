@@ -15,7 +15,7 @@ type pageRepo struct {
 func (this *pageRepo) CreatePage(boardId int64, displayName string) (int64, error) {
 	pageId := utils.GenerateId()
 	p := &models.Page{
-		ID:           pageId,
+		Model:        models.Model{ID: pageId},
 		WhiteBoardID: boardId,
 		DisplayName:  displayName,
 	}

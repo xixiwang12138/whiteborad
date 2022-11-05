@@ -64,6 +64,9 @@ type TextElement struct {
 	OriginText    string        `json:"originText"`
 }
 
+type TextAlign int8
+type VerticalAlign int8
+
 func (e *TextElement) GetElementId() int64 {
 	return e.ID
 }

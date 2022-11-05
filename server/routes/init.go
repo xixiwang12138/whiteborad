@@ -19,11 +19,9 @@ func InitAppGateway(config *c.BaseApiConfig) {
 	PageRouter := g.Group("/api/page")
 
 	config.ExceptAuth = make(map[string]bool, 0)
-	config.ExceptAuth["/core/data/get"] = true
-	config.ExceptAuth["/core/config/get"] = true
-	config.ExceptAuth["/player/player/login"] = true
-	config.ExceptAuth["/player/openid/get"] = true
-	config.ExceptAuth["/player/phone/get"] = true
+	config.ExceptAuth["/api/user/login"] = true
+	config.ExceptAuth["/api/user/reset"] = true
+	config.ExceptAuth["/api/user/register"] = true
 
 	registerBoard(BoardRouter)
 	registerUser(UserRouter)

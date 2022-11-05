@@ -1,0 +1,140 @@
+.base-row {
+    width: 100vw;
+    height: 60px;
+    background-color: #FDD3D3;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.row-left{
+    height: 40px;
+    width: 150px;
+    /*background-color: #282c34;*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.home-icon{
+    height: 40px;
+    width: 40px;
+    /*background-color: #DC8AF9;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.home-icon img{
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    cursor: pointer;
+}
+.board-name {
+    height: 20px;
+    width: fit-content;
+    /*background-color: grey;*/
+    color: black;
+    font-weight: bold;
+}
+.row-middle {
+    height: 60px;
+    width: 700px;
+    background-color: #282c34;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+}
+.avatar-group {
+    height: 50px;
+    width: fit-content;
+    background-color: #dbff92;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.row-right {
+    height: 60px;
+    width: 220px;
+    /*background-color: #282c34;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.right1 {
+    height: 30px;
+    width: 30px;
+    /*background-color: #DC8AF9;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.right1 img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    cursor: pointer;
+}
+.right2 {
+    height: 40px;
+    width: 80px;
+    /*background-color: green;*/
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.import-icon {
+    height: 40px;
+    width: 40px;
+    /*background-color: #DC8AF9;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.import-icon img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    cursor: pointer;
+}
+.export-icon {
+    height: 40px;
+    width: 40px;
+    /*background-color: #DC8AF9;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.export-icon img {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    cursor: pointer;
+}
+.right3 {
+    height: 40px;
+    width: 70px;
+    /*background-color: green;*/
+    display: flex;
+    align-items: center;
+}
+.btn-invite {
+    height: 30px;
+    width: 60px;
+    border-radius: 15px;
+    line-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 12px;
+    /*font-weight: bold;*/
+    background-color: #AD7878;
+    cursor: pointer;
+}
+

@@ -1,0 +1,96 @@
+.win-invite {
+    height: 100vh;
+    width: 100vw;
+    background-color: grey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.window {
+    height: 250px;
+    width: 400px;
+    background-color: white;
+    border-radius: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /*justify-content: center;*/
+}
+.win-top {
+    width: 350px;
+    height: 40px;
+    /*background-color: #FAA6A4;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.win-title {
+    height: 40px;
+    line-height: 40px;
+    font-size: 30px;
+    font-family: Poppins;
+}
+.win-close {
+    height: 40px;
+    width: 40px;
+    /*background-color: #282c34;*/
+}
+.win-close img {
+    cursor: pointer;
+}
+.invite-info {
+    width: 380px;
+    height: 90px;
+    /*background-color: #61dafb;*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+.info-text {
+    width: 320px;
+    height: 40px;
+    /*background-color: #DC8AF9;*/
+    color: #F3A1A1;
+    line-height: 40px;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.select-box{
+    width: 250px;
+    height: 30px;
+    /*background-color: #DC8AF9;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.input-win {
+    width: 250px;
+    height: 40px;
+    border-radius: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+    font-size: 15px;
+}
+.win-btn {
+    width: 380px;
+    height: 40px;
+    /*background-color: #282c34;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-win {
+    width: 100px;
+    height: 40px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 40px;
+    background-color: #F3A1A1;
+    color: white;
+    cursor: pointer;
+}

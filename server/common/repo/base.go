@@ -26,7 +26,7 @@ func (this *BaseRepo[T]) Create(o *T) error {
 	return sources.MysqlSource.Db.Create(o).Error
 }
 
-func (this *BaseRepo[T]) FindByID(pk string) (*T, error) {
+func (this *BaseRepo[T]) FindByID(pk int64) (*T, error) {
 	t := new(T)
 	err := sources.MysqlSource.Db.First(t, "id = ?", pk).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) { //没有找到返回空
@@ -58,4 +58,22 @@ func (this *BaseRepo[T]) Find(filter map[string]interface{}, conditions ...*Cond
 		return nil, nil
 	}
 	return *t, err
+}
+
+func (this *BaseRepo[T]) FindFields(filter map[string]interface{}, fields ...string) ([]*T, error) {
+	t := new([]*T)
+	db := sources.MysqlSource.Db
+	if filter != nil {
+		db = db.Where(filter)
+	}
+	err := db.Select(fields).Find(t).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) { //没有找到返回空
+		return nil, nil
+	}
+	return *t, err
+}
+
+func (this *BaseRepo[T]) UpdateFiled(pk int64, newValue map[string]interface{}) error {
+	t := new(T)
+	return sources.MysqlSource.Db.Model(t).Where("id = ?", pk).Updates(newValue).Error
 }

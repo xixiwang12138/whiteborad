@@ -30,14 +30,13 @@ func CmdHandler(o *models.Cmd, boardId int64, userId int64) error {
 
 // AddCmd 在页面上增加某一个元素
 func AddCmd(cmd *models.Cmd) error {
-	p := cmd.V.(models.BaseElement)
 	//存储元素对象
-	err := sources.RedisSource.HMSet(cache.ElementKey(p.ID), cmd.V)
+	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.V).Err()
 	if err != nil {
 		return err
 	}
 	//存储一个页面上所有的元素id
-	err = sources.RedisSource.Client.SAdd(cache.PageElementsKey(cmd.PageId), p.ID).Err()
+	err = sources.RedisSource.Client.SAdd(cache.PageElementsKey(cmd.PageId), cmd.O).Err()
 	if err != nil {
 		return err
 	}
@@ -46,12 +45,11 @@ func AddCmd(cmd *models.Cmd) error {
 
 // DeleteCmd 在页面上删除某一个元素
 func DeleteCmd(cmd *models.Cmd) error {
-	p := cmd.V.(models.BaseElement)
-	err := sources.RedisSource.Del(cache.ElementKey(p.ID))
+	err := sources.RedisSource.Del(cache.ElementKey(cmd.O))
 	if err != nil {
 		return err
 	}
-	err = sources.RedisSource.Client.SRem(cache.PageElementsKey(cmd.PageId), p.ID).Err()
+	err = sources.RedisSource.Client.SRem(cache.PageElementsKey(cmd.PageId), cmd.O).Err()
 	if err != nil {
 		return err
 	}
@@ -60,12 +58,7 @@ func DeleteCmd(cmd *models.Cmd) error {
 
 // MoveCmd 页面上移动一个元素
 func MoveCmd(cmd *models.Cmd) error {
-	p := cmd.V.(models.Location)
-	m := map[string]any{
-		"x": p.X,
-		"y": p.Y,
-	}
-	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), m).Err()
+	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.V).Err()
 	if err != nil {
 		return err
 	}

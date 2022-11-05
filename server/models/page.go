@@ -1,5 +1,12 @@
 package models
 
+import (
+	"encoding/json"
+	"log"
+	"server/common/utils"
+	"sync"
+)
+
 type BoardType int8
 
 const (
@@ -26,9 +33,70 @@ const (
 )
 
 type Page struct {
-	ID           int64  `json:"id"`           //页标识
-	WhiteBoardID int64  `json:"whiteBoardId"` //所属白板的id
-	DisplayName  string `json:"displayName"`  //展示的名字
+	ID           int64  `json:"id"`                                      //页标识
+	WhiteBoardID int64  `json:"whiteBoardId" gorm:"column:whiteBoardId"` //所属白板的id
+	DisplayName  string `json:"displayName"`                             //展示的名字
+	Content      string `json:"content" gorm:"type:LONGTEXT"`            //存储的一页上的所有图形对象,存储pageStringContent序列化后的字符串
+}
+
+type pageContent struct {
+	Data []ElementKV `json:"data"` //反序列化后Data为map类型
+}
+
+type pageStringContent struct {
+	Data []string `json:"data"`
+}
+
+func DataToStringFiled(d []string) string {
+	data := &pageStringContent{Data: d}
+	return utils.Serialize(data)
+}
+
+func (p *Page) BuildVo() (*PageVO, error) {
+	res := &PageVO{
+		Page:     p,
+		Elements: nil,
+	}
+
+	model := &pageStringContent{}
+	err := json.Unmarshal([]byte(p.Content), model)
+	if err != nil {
+		return nil, err
+	}
+
+	//for each element, element is JSON string
+	length := len(model.Data)
+	result := make([]ElementKV, length)
+	var wg sync.WaitGroup
+	wg.Add(length)
+	for i, eString := range model.Data {
+		eString := eString
+		i := i
+		go func() {
+			defer wg.Done()
+			stringStringMap := make(map[string]string)
+			err = json.Unmarshal([]byte(eString), &stringStringMap)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			newValue, err := utils.MapValueConvert(ElementFiledMap, stringStringMap)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			result[i] = newValue
+		}()
+	}
+	wg.Wait()
+
+	res.Elements = result
+	return res, nil
+}
+
+type PageVO struct {
+	*Page
+	Elements []ElementKV `json:"elements"`
 }
 
 type GraphType int8

@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"reflect"
+	"strconv"
 	"sync"
 )
 
@@ -63,4 +64,86 @@ func ToMap(in interface{}, tagName string) (map[string]interface{}, error) {
 		}
 	}
 	return out, nil
+}
+
+func StringMap2Struct[T any](m map[string]string, t *T) {
+	tValue := reflect.ValueOf(t)
+	tType := reflect.TypeOf(&t)
+	//traverse all field of struct
+	for i := 0; i < tType.NumField(); i++ {
+		field := tType.Field(i) //field obj
+		fieldName := field.Name //field name
+		fieldType := field.Type //field type
+		fieldTag := field.Tag   //field tag
+
+		jsonTag := fieldTag.Get("json")
+		strVal, ok := m[jsonTag]
+		if !ok {
+			continue
+		}
+
+		//compare mapVal and filedType
+		if fieldType.Kind() == reflect.String {
+			tValue.Elem().FieldByName(fieldName).SetString(strVal)
+		} else {
+			setBool := func() {
+				parseBool, err := strconv.ParseBool(strVal)
+				if err != nil {
+					panic(err)
+				}
+				tValue.Elem().FieldByName(fieldName).SetBool(parseBool)
+			}
+			setInt := func() {
+				parseInt, err := strconv.ParseInt(strVal, 10, 64)
+				if err != nil {
+					panic(err)
+				}
+				tValue.Elem().FieldByName(fieldName).SetInt(parseInt)
+			}
+			setUint := func() {
+				parseInt, err := strconv.ParseUint(strVal, 10, 64)
+				if err != nil {
+					panic(err)
+				}
+				tValue.Elem().FieldByName(fieldName).SetUint(parseInt)
+			}
+			setFloat := func() {
+				f, err := strconv.ParseFloat(strVal, 64)
+				if err != nil {
+					panic(err)
+				}
+				tValue.Elem().FieldByName(fieldName).SetFloat(f)
+			}
+			switch fieldType.Kind() {
+			case reflect.Bool:
+				setBool()
+			case reflect.Int:
+				setInt()
+			case reflect.Int8:
+				setInt()
+			case reflect.Int16:
+				setInt()
+			case reflect.Int32:
+				setInt()
+			case reflect.Int64:
+				setInt()
+			case reflect.Uint:
+				setUint()
+			case reflect.Uint8:
+				setUint()
+			case reflect.Uint16:
+				setUint()
+			case reflect.Uint32:
+				setUint()
+			case reflect.Uint64:
+				setUint()
+			case reflect.Float32:
+				setFloat()
+			case reflect.Float64:
+				setFloat()
+			default:
+				panic("no-basic data type is not supported")
+			}
+		}
+	}
 }

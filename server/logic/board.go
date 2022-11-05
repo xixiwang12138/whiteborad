@@ -30,3 +30,17 @@ func GetBoards(userId int64) ([]*models.WhiteBoard, error) {
 	}
 	return list, nil
 }
+
+func GetBoardPages(boardId int64) ([]int64, error) {
+	res, err := dao.PageRepo.FindFields(map[string]interface{}{
+		"whiteBoardId": boardId,
+	}, "id")
+	if err != nil {
+		return nil, err
+	}
+	result := make([]int64, len(res))
+	for i := 0; i < len(res); i++ {
+		result[i] = res[i].ID
+	}
+	return result, nil
+}

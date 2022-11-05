@@ -14,7 +14,9 @@ import (
 func InitAppGateway(config *c.BaseApiConfig) {
 	g := InitGin(config)
 	//注册路由组
-	BoardRouter := g.Group("/board")
+	BoardRouter := g.Group("/api/board")
+	UserRouter := g.Group("/api/user")
+	PageRouter := g.Group("/api/page")
 
 	config.ExceptAuth = make(map[string]bool, 0)
 	config.ExceptAuth["/core/data/get"] = true
@@ -24,6 +26,8 @@ func InitAppGateway(config *c.BaseApiConfig) {
 	config.ExceptAuth["/player/phone/get"] = true
 
 	registerBoard(BoardRouter)
+	registerUser(UserRouter)
+	registerPage(PageRouter)
 	//HTTPS启动
 	if utils.ExistFile(c.KeyFile) && utils.ExistFile(c.CertFile) {
 		g.Use(TlsHandler(config.PORT))

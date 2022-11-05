@@ -25,10 +25,11 @@ func ConnectHandler(conn *websocket.Conn, processPath string) {
 	}()
 	//提取路径参数，读取所在白板以及连接的用户
 	res := strings.Split(processPath, "/")
-	boardIdStr, userIdStr := res[0], res[1]
+	boardIdStr, userIdStr := res[1], res[2]
 	userId, _ := strconv.ParseInt(userIdStr, 10, 64)
 	boardId, _ := strconv.ParseInt(boardIdStr, 10, 64)
 
+	log.Println("user: ", userIdStr, "=========> "+"enter board: ", boardIdStr)
 	//处理用户进入某个白板
 	HubMgr.EnterHub(boardId, userId, conn)
 
@@ -178,11 +179,10 @@ func (c *UserConnection) ListenJSONMessage(handler func(o *models.Cmd, boardId i
 		}
 	}()
 	for !c.isClosed {
-		o := new(interface{})
+		o := new(models.Cmd)
 		err := c.WsConn.ReadJSON(o)
 		if err == nil {
-			cmd := (*o).(models.Cmd)
-			err := handler(&cmd, c.BoardId, c.UserId)
+			err := handler(o, c.BoardId, c.UserId)
 			if err != nil {
 				//TODO 日志
 				return

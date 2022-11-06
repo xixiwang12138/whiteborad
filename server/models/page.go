@@ -39,7 +39,7 @@ type Page struct {
 	Model
 	WhiteBoardID int64  `json:"whiteBoardId" gorm:"column:whiteBoardId"` //所属白板的id
 	DisplayName  string `json:"displayName"`                             //展示的名字
-	Content      string `json:"content" gorm:"type:LONGTEXT"`            //存储的一页上的所有图形对象,存储pageStringContent序列化后的字符串
+	Content      string `json:"-" gorm:"type:LONGTEXT"`                  //存储的一页上的所有图形对象,存储pageStringContent序列化后的字符串
 }
 
 type pageContent struct {

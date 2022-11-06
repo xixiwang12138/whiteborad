@@ -1,0 +1,100 @@
+.tool-list {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 80px;
+    width: 100vw;
+    /*background-color: #DC8AF9;*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.tool-do {
+    height: 60px;
+    width: 200px;
+    /*background-color: #282c34;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+}
+.do-box {
+    height: 40px;
+    width: 100px;
+    /*background-color: white;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.icon {
+    height: 40px;
+    width: 40px;
+    border-radius: 10px;
+    background-color: #FFEDED;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.icon img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+.bar-icon {
+    height: 40px;
+    width: 40px;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.bar-icon:hover{
+    background-color: #FFEDED;
+}
+.bar-icon img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+.tool-bar {
+    height: 50px;
+    width: 600px;
+    padding: 0 15px;
+    /*width: fit-content;*/
+    border-radius: 10px;
+    background-color: white;
+    border: 1px solid white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.bar-minbox {
+    height: 50px;
+    width: 100px;
+    /*background-color: #282c34;*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.bar-maxbox {
+    height: 50px;
+    width: 120px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    /*background-color: #282c34;*/
+}
+.tool-zhanwei {
+    height: 60px;
+    width: 200px;
+    /*background-color: #282c34;*/
+}

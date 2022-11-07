@@ -79,6 +79,8 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    border: none;
+    font-size: 15px;
 }
 /*.btn-login {*/
 /*    height: 40px;*/

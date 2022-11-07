@@ -73,4 +73,6 @@
     background-color: #F3A1A1;
     color: white;
     cursor: pointer;
+    border: none;
+    font-size: 15px;
 }

@@ -45,6 +45,7 @@
     font-size: 15px;
     padding-left: 10px;
     padding-right: 10px;
+    border: 1px solid black;
 }
 .form-tip {
     position: absolute;
@@ -79,6 +80,8 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    border: none;
+    font-size: 15px;
 }
 .btn-login {
     height: 40px;
@@ -90,4 +93,10 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    border: none;
+    font-size: 15px;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0px 1000px white inset;
 }

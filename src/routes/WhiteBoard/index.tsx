@@ -3,6 +3,7 @@ import "./index.css";
 import BaseRow from "./components/BaseRow";
 import WindowInvite from "./components/WindowInvite";
 import ToolList from "./components/ToolList";
+import WindowToolBar from "./components/WindowToolBar";
 
 
 function WhiteBoard() {
@@ -11,6 +12,7 @@ function WhiteBoard() {
             <BaseRow />
             <ToolList />
             {/*<WindowInvite />*/}
+            <WindowToolBar />
         </div>
     )
 }

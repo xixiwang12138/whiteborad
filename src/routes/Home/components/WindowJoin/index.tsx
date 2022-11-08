@@ -1,9 +1,24 @@
 import React from "react";
 import "./index.css";
 import close from "../../icon/close.svg";
-import {Input, Form} from "antd";
+import {Input, Form, Button} from "antd";
+import {doJoinBoard} from "../../../../api/api";
+import {useNavigate} from "react-router-dom";
 
 function WindowJoin(){
+
+    const navigate = useNavigate();
+
+    const onFinishJoin = (values: any) => {
+        doJoinBoard(values).then((res)=> {
+            if(res.success){
+                localStorage.setItem("token",res.data.token);
+            }else {
+                console.log(res.errorMessage);
+            }
+        })
+    }
+
     return(
         <div className="win-join">
             <div className="window">
@@ -15,13 +30,18 @@ function WindowJoin(){
                     </div>
                 </div>
                 <div style={{marginTop:'40px'}}/>
-                <Form>
+                <Form onFinish={onFinishJoin}>
                     <div className="win-input">
-                        <Input className="input-win" placeholder="请输入序列号"/>
+                        <Form.Item name="boardId">
+                            <Input className="input-win" placeholder="请输入序列号"/>
+                        </Form.Item>
                     </div>
                     <div style={{marginTop:'40px'}}/>
                     <div className="win-btn">
-                        <div className="btn-win">加 入</div>
+                        <Form.Item>
+                            <Button className="btn-win" htmlType="submit">加 入</Button>
+                        </Form.Item>
+                        {/*<div className="btn-win">加 入</div>*/}
                     </div>
                 </Form>
             </div>

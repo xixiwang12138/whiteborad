@@ -26,5 +26,5 @@ func TestConnect(t *testing.T) {
 		Port:     "3306",
 		DbName:   "board",
 	}})
-	fmt.Println(sources.MysqlSource.Db.AutoMigrate(&models.User{}, &models.WhiteBoard{}, &models.Page{}))
+	fmt.Println(sources.MysqlSource.Db.AutoMigrate(&models.User{}, &models.WhiteBoard{}, &models.Page{}, &models.UserJoin{}))
 }

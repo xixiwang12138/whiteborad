@@ -1,13 +1,15 @@
 package logic
 
 import (
+	"log"
 	"server/common/cache"
+	"server/common/cts"
 	"server/common/sources"
 	"server/models"
 	"server/ws"
 )
 
-var actuallyHandlers = []func(cmd *models.Cmd) error{AddCmd, DeleteCmd, MoveCmd, WithdrawCmd, AdjustCmd}
+var actuallyHandlers = []func(cmd *models.Cmd) error{AddCmd, DeleteCmd, MoveCmd, WithdrawCmd, AdjustCmd, SwitchPageCmd, ScaleCmd}
 
 func init() {
 	ws.CmdHandler = CmdHandler
@@ -16,9 +18,15 @@ func init() {
 
 func CmdHandler(o *models.Cmd, boardId int64, userId int64) error {
 	//广播
-	if o.Type != models.Withdraw {
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Printf(cts.ErrorFormat, r)
+			}
+		}()
 		ws.HubMgr.BroadcastCmd(boardId, o, userId) //注意不给发送者转发
-	}
+	}()
+
 	o.Fill(boardId, userId)
 	//更改数据
 	handler := actuallyHandlers[o.Type] //通过下标访问选择哪一个处理方法
@@ -32,7 +40,7 @@ func CmdHandler(o *models.Cmd, boardId int64, userId int64) error {
 // AddCmd 在页面上增加某一个元素
 func AddCmd(cmd *models.Cmd) error {
 	//存储元素对象
-	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.V).Err()
+	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.Payload).Err()
 	if err != nil {
 		return err
 	}
@@ -59,7 +67,7 @@ func DeleteCmd(cmd *models.Cmd) error {
 
 // MoveCmd 页面上移动一个元素
 func MoveCmd(cmd *models.Cmd) error {
-	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.V).Err()
+	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.Payload).Err()
 	if err != nil {
 		return err
 	}
@@ -67,16 +75,24 @@ func MoveCmd(cmd *models.Cmd) error {
 }
 
 func WithdrawCmd(cmd *models.Cmd) error { //TODO
-	//求逆操作
-	//广播给其他的用户
 	return nil
 }
 
 // AdjustCmd 调整一个对象的某一个属性
 func AdjustCmd(cmd *models.Cmd) error {
-	err := sources.RedisSource.HSet(cache.ElementKey(cmd.O), cmd.P, cmd.V)
+	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.Payload).Err()
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+// SwitchPageCmd 切换页面
+func SwitchPageCmd(cmd *models.Cmd) error {
+	return nil
+}
+
+// ScaleCmd 缩放
+func ScaleCmd(cmd *models.Cmd) error {
 	return nil
 }

@@ -2,11 +2,11 @@ import React, {useState} from "react";
 import {Col, InputNumber, Row, Slider} from "antd";
 import "./index.css";
 import "../../../../App.css";
-import linebord1 from "../../icon/线宽1.svg";
-import linebord2 from "../../icon/线宽2.svg";
-import linebord3 from "../../icon/线宽3.svg";
-import totop from "../../icon/置顶.svg";
-import tobottom from "../../icon/置底.svg";
+import lineWid1 from "../../icon/线宽1.svg";
+import lineWid2 from "../../icon/线宽2.svg";
+import lineWid3 from "../../icon/线宽3.svg";
+import toTop from "../../icon/置顶.svg";
+import toBottom from "../../icon/置底.svg";
 import jumps from "../../icon/上移一层.svg";
 import jumpx from "../../icon/下移一层.svg";
 import fuzhi from "../../icon/复制.svg";
@@ -63,9 +63,9 @@ function WindowToolBar() {
                     <div className="single-box">
                         <div className="single-box-title">描边宽度</div>
                         <div className="single-box-contain">
-                            <div className="border-box"><img src={linebord1}/></div>
-                            <div className="border-box"><img src={linebord2}/></div>
-                            <div className="border-box"><img src={linebord3}/></div>
+                            <div className="border-box"><img src={lineWid1}/></div>
+                            <div className="border-box"><img src={lineWid2}/></div>
+                            <div className="border-box"><img src={lineWid3}/></div>
                         </div>
                     </div>
                 </div>
@@ -166,8 +166,8 @@ function WindowToolBar() {
                 <div className="single-box">
                     <div className="single-box-title">图层</div>
                     <div className="single-box-contain">
-                        <div className="icon-box" title="置于顶层"><img src={totop}/></div>
-                        <div className="icon-box" title="置于底层"><img src={tobottom}/></div>
+                        <div className="icon-box" title="置于顶层"><img src={toTop}/></div>
+                        <div className="icon-box" title="置于底层"><img src={toBottom}/></div>
                         <div className="icon-box" title="上移一层"><img src={jumps}/></div>
                         <div className="icon-box" title="下移一层"><img src={jumpx}/></div>
                     </div>

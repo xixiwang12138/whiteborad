@@ -5,11 +5,9 @@ type CmdType int8
 const (
 	Add        CmdType = 0
 	Delete     CmdType = 1
-	Move       CmdType = 2
-	Withdraw   CmdType = 3
-	Adjust     CmdType = 4
-	SwitchPage CmdType = 5
-	Scale      CmdType = 6
+	Withdraw   CmdType = 2
+	Adjust     CmdType = 3
+	SwitchPage CmdType = 4
 )
 
 type ElementKV map[string]any

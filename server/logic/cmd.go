@@ -9,7 +9,7 @@ import (
 	"server/ws"
 )
 
-var actuallyHandlers = []func(cmd *models.Cmd) error{AddCmd, DeleteCmd, MoveCmd, WithdrawCmd, AdjustCmd, SwitchPageCmd, ScaleCmd}
+var actuallyHandlers = []func(cmd *models.Cmd) error{AddCmd, DeleteCmd, WithdrawCmd, AdjustCmd, SwitchPageCmd}
 
 func init() {
 	ws.CmdHandler = CmdHandler
@@ -65,15 +65,6 @@ func DeleteCmd(cmd *models.Cmd) error {
 	return nil
 }
 
-// MoveCmd 页面上移动一个元素
-func MoveCmd(cmd *models.Cmd) error {
-	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.Payload).Err()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func WithdrawCmd(cmd *models.Cmd) error { //TODO
 	return nil
 }
@@ -89,10 +80,5 @@ func AdjustCmd(cmd *models.Cmd) error {
 
 // SwitchPageCmd 切换页面
 func SwitchPageCmd(cmd *models.Cmd) error {
-	return nil
-}
-
-// ScaleCmd 缩放
-func ScaleCmd(cmd *models.Cmd) error {
 	return nil
 }

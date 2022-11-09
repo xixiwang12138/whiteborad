@@ -11,7 +11,7 @@ export abstract class PathElement extends ElementBase {
 
     public _points!: Array<number>;
 
-    protected constructor(id:number, x:number, y:number, type:ElementType) {
+    protected constructor(id:string, x:number, y:number, type:ElementType) {
         super(id, x, y, type);
         this.points = new Array<number>(2);
         this.points[0] = x; this.points[1] = y;

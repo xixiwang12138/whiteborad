@@ -1,14 +1,13 @@
 import React from "react";
 import "./index.css";
 import BaseRow from "./components/BaseRow";
-import WindowInvite from "./components/WindowInvite";
-import ToolList, {SecondLevelType} from "./components/ToolList";
+import ToolList, {IOpListener, SecondLevelType} from "./components/ToolList";
 import WindowToolBar from "./components/WindowToolBar";
 import {WhiteBoardApp} from "./app/WhiteBoardApp";
 import {ToolType} from "./app/tools/Tool";
 import {DrawingScene} from "./app/DrawingScene";
 
-class WhiteBoard extends React.Component {
+class WhiteBoard extends React.Component implements IOpListener {
     private app!:WhiteBoardApp;
 
     private root!:HTMLElement;
@@ -25,7 +24,7 @@ class WhiteBoard extends React.Component {
     render() {
         return <div className="board">
             <BaseRow />
-            <ToolList onToolSelected={this.selectTool.bind(this)}/>
+            <ToolList onToolSelected={this.selectTool.bind(this)} opListener={this}/>
             {/*<WindowInvite />*/}
             <div id="canvas-root" style={{width:"100%", height:"100%", overflow:"hidden"}}>
                 <div id={"text-editor-container"}/>
@@ -149,6 +148,10 @@ class WhiteBoard extends React.Component {
             this.app.selectTool(type, second);
         }
     }
+
+    onRedo(): void {this.app.redo();}
+
+    onUndo(): void {this.app.undo();}
 
 }
 

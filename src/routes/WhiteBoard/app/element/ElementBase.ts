@@ -8,7 +8,7 @@ export enum ElementType {
 }
 
 export abstract class ElementBase {
-    public id:number;
+    public id:string;
     public type:ElementType;
     public x:number; // 左上角点的x坐标
     public y:number;
@@ -22,11 +22,14 @@ export abstract class ElementBase {
 
     public opacity:number = 1;
 
+    public isDeleted:boolean = false;
+
     private onSelected!: OnselectedListener;
 
     public selected:boolean = false;
     // private corners:Array<number> = new Array<number>(8); // 被选中时的四个角定位点
     // private rotateHandle:Array<number> = new Array<number>(2); // 用于旋转的句柄的位置
+    // public dirty = false; // 是否被修改
 
     // 缩放之前的长度和宽度
     public _width:number = 0;
@@ -36,7 +39,7 @@ export abstract class ElementBase {
     get finish(){return this._finish;}
     set finish(f){this._finish = f;}
 
-    protected constructor(id:number, x:number, y:number, type:ElementType) {
+    protected constructor(id:string, x:number, y:number, type:ElementType) {
         this.id = id;
         this.x = x; this.y = y;
         this.type = type;

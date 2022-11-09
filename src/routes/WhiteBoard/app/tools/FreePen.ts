@@ -1,8 +1,9 @@
 import {Point, Tool, ToolType} from "../tools/Tool";
 import {SceneTouchEvent} from "../element/TouchEvent";
-import {DrawingScene} from "../../app/DrawingScene";
-import {FreeDraw} from "../../app/element/FreeDraw";
+import {DrawingScene} from "../DrawingScene";
+import {FreeDraw} from "../element/FreeDraw";
 import {GenericDrawingTool} from "./GenericDrawingTool";
+import {IdGenerator} from "../../../../utils/IdGenerator";
 
 export class FreePen extends GenericDrawingTool {
 
@@ -16,7 +17,7 @@ export class FreePen extends GenericDrawingTool {
 
     protected onDown(e: SceneTouchEvent, scene: DrawingScene) {
         this.last.x = e.x; this.last.y = e.y;
-        scene.actElem = new FreeDraw(new Date().valueOf(), e.x, e.y);
+        scene.actElem = new FreeDraw(IdGenerator.genElementId(), e.x, e.y);
     }
 
 

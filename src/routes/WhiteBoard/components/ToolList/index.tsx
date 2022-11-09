@@ -6,12 +6,22 @@ import redo from "../../icon/redo.svg";
 import {ToolType} from "../../app/tools/Tool";
 import {GenericElementType} from "../../app/element/GenericElement";
 import {LinearElementType} from "../../app/tools/LinearTool";
+import {OperationTracker} from "../../app/operationTracker/OperationTracker";
+import {Cmd, CmdPayloads} from "../../ws/message";
 
 export type SecondLevelType = GenericElementType | LinearElementType; // 二级类型，比如椭圆是通用类型的二级类型
-type OnToolSelected = (type:ToolType, secondType?:SecondLevelType) => void
+type OnToolSelected = (type:ToolType, secondType?:SecondLevelType) => void;
+export interface IOpListener {
+    onUndo():void;
+    onRedo():void;
+}
 
 class ToolListProp {
     onToolSelected:OnToolSelected = () => {};
+    opListener:IOpListener = new class implements IOpListener {
+        onRedo(): void {}
+        onUndo(): void {}
+    }()
 }
 
 class ToolList extends React.Component<ToolListProp> {
@@ -25,19 +35,23 @@ class ToolList extends React.Component<ToolListProp> {
         ["text", "image"]
     ]
 
+
     private readonly onToolSelected:OnToolSelected;
+
+    private readonly opListener:IOpListener;
 
     public constructor(props:ToolListProp) {
         super(props);
         this.onToolSelected = props.onToolSelected;
+        this.opListener = props.opListener;
     }
 
     render() {
         return <div className="tool-list">
             <div className="tool-do">
                 <div className="do-box">
-                    <div className="icon"><img src={undo}/></div>
-                    <div className="icon"><img src={redo}/></div>
+                    <div className="icon" onClick={()=>this.opListener.onUndo}><img src={undo}/></div>
+                    <div className="icon" onClick={this.opListener.onRedo}><img src={redo}/></div>
                 </div>
             </div>
             <div className="tool-bar"> {
@@ -61,6 +75,13 @@ class ToolList extends React.Component<ToolListProp> {
         </div>
     }
 
+    private onClickUndo() {
+
+    }
+
+    private onClickRedo() {
+
+    }
 }
 
 // function ToolList() {

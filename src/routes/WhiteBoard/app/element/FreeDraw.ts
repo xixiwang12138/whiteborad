@@ -5,7 +5,7 @@ import {RotateUtil} from "../../../../utils/math";
 
 export class FreeDraw extends PathElement {
 
-    public constructor(id:number, x:number, y:number) {
+    public constructor(id:string, x:number, y:number) {
         super(id, x, y, ElementType.freedraw);
     }
 

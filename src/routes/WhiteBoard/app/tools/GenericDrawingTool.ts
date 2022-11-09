@@ -1,4 +1,4 @@
-import {Point, Tool} from "./Tool";
+import {Creator, Point, Tool} from "./Tool";
 import {SceneTouchEvent} from "../element/TouchEvent";
 import {DrawingScene} from "../DrawingScene";
 
@@ -6,7 +6,7 @@ import {DrawingScene} from "../DrawingScene";
 /**
  * 通用绘制工具
  */
-export abstract class GenericDrawingTool extends Tool {
+export abstract class GenericDrawingTool extends Creator {
 
     protected last: Point = new Point(0, 0); // 上次点击位置
 
@@ -36,6 +36,7 @@ export abstract class GenericDrawingTool extends Tool {
         if (this.effective(scene)) {
             scene.addElem(scene.actElem!);
             scene.actElem!.finish = true;
+            this.onCreate(scene.actElem!);
         }
         scene.actElem = null;
     }

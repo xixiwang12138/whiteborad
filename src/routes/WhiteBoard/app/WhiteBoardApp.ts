@@ -1,25 +1,72 @@
 import {DrawingScene, OnRenderListener} from "./DrawingScene";
 import {ToolType} from "./tools/Tool";
-import {SceneTouchEvent, SceneTouchEventType} from "./element/TouchEvent";
 import {ToolBox} from "./tools/ToolBox";
 import {SecondLevelType} from "../components/ToolList";
 import {GenericElementTool} from "./tools/GenericElementTool";
 import {GenericElementType} from "./element/GenericElement";
 import {LinearElementType, LinearTool} from "./tools/LinearTool";
-import {ElementType} from "./element/ElementBase";
 import {TextTool} from "./tools/TextTool";
+import {Cmd, CmdBuilder, CmdPayloads, CmdType, Message} from "../ws/message";
+import {Selection} from "./tools/Selection";
+import {IWebsocket, WebsocketManager} from "../ws/websocketManager";
+import {OperationTracker} from "./operationTracker/OperationTracker";
+import {Page} from "./Page";
 
 
+export class WhiteBoardApp implements IWebsocket {
 
-export class WhiteBoardApp {
+    private wsClient:WebsocketManager;
 
     private readonly scene:DrawingScene;
 
-    public toolBox: ToolBox;
+    private pages:Page[] = [];
+
+    private toolBox: ToolBox;
+
+    private cmdTracker:OperationTracker<Cmd<keyof CmdPayloads>>;
+
+
+    public onClose = () => {}
+
+    public onOpen = () => {}
+
+    public onError = () => {}
+
+    public onMessage = (e:MessageEvent) => {
+        const message = JSON.parse(e.data) as Message;
+        switch (message.type) {
+            case "load":
+                break;
+            case "cmd":
+                const cmd = JSON.parse(message.data) as Cmd<any>;
+                switch (cmd.type) { //TODO 完善处理方式
+                    case CmdType.Add:
+                        // this.scene.restoreElem()
+                        break
+                    case CmdType.Delete:
+                        break
+                }
+        }
+    }
 
     constructor() {
         this.scene = new DrawingScene();
         this.toolBox  = new ToolBox();
+        this.wsClient = new WebsocketManager(this);
+        this.cmdTracker = new OperationTracker<Cmd<keyof CmdPayloads>>(10);
+        this.setupListeners();
+    }
+
+    private setupListeners() {
+        this.toolBox.setOnCreateListener( (e) => {
+            console.log(e);
+        })
+        this.toolBox.addOnModifyListener(CmdType.Adjust, (t, e,p) => {
+            console.log(p);
+        })
+        this.toolBox.addOnModifyListener(CmdType.Delete, (t, e,p ) => {
+            console.log(p);
+        })
     }
 
     public setOnRenderListener(listener:OnRenderListener) {
@@ -40,21 +87,22 @@ export class WhiteBoardApp {
                 (this.toolBox.curTool as LinearTool).shape = second as LinearElementType;
             }
         }
-        // 文本工具特殊处理
-        if(this.scene.actElem?.type === ElementType.text) {
-            if(!this.scene.actElem.finish) {
-                (this.toolBox.getTool("text") as TextTool).closeEditor();
-                this.scene.actElem.finish = true;
-                if(!this.scene.getElem(this.scene.actElem.id)) this.scene.addElem(this.scene.actElem);
-                this.scene.actElem = null;
-                this.scene.render();
+        (this.toolBox.getTool("selection") as Selection).unSelectedCurElem();
+        let textTool = this.toolBox.getTool("text") as TextTool;
+        if(textTool.curElem) {
+            if(textTool.finishEditing()) {
+                this.scene.deactivateElem()
+            } else {
+                this.scene.dropActElem();
             }
+        } else {
+            this.scene.deactivateElem();
         }
-        this.scene.unSelectAll();
+
     }
 
     public dispatchMouseEvent(e:MouseEvent, doubleClick:boolean = false) {
-        this.toolBox.curTool.op(this.translateSceneEvent(e, doubleClick), this.scene);
+        this.toolBox.curTool.op(this.scene.toSceneEvent(e, doubleClick), this.scene);
         // 使用完除了选择工具之后，切换回选择工具
         if(e.type === "mouseup" && this.toolBox.curTool.type !== "selection" && this.toolBox.curTool.type !== "eraser") {
             this.toolBox.setCurTool("selection");
@@ -78,18 +126,51 @@ export class WhiteBoardApp {
         this.scene.translate(dx, dy);
     }
 
-    /**
-     *  将原生触摸事件转化成场景事件
-     */
-    private translateSceneEvent(e:MouseEvent, doubleClick:boolean):SceneTouchEvent {
-        if(doubleClick) {
-            return new SceneTouchEvent("doubleClick",
-                (e.x - this.scene.x) / this.scene.scale,
-                (e.y -this.scene.y) / this.scene.scale, e.x, e.y);
+    public undo() {
+        let cmd = this.cmdTracker.undo();
+        if(cmd) {
+            switch (cmd.type) {
+                case CmdType.Add:
+                    this.deleteElem(cmd.pageId!, cmd.o!); break;
+                case CmdType.Delete:
+                    this.restoreElem(cmd.pageId!, cmd.o!); break;
+            }
+            let wdCmd = new CmdBuilder<CmdType.Withdraw>()
+                .setType(CmdType.Withdraw)
+                .setUser(123) // TODO 用户管理对象获取id
+                .setPage(1,2)
+                .setPayload(cmd)
+                .build()
+            this.wsClient.sendCmd(wdCmd);
         }
-        return new SceneTouchEvent(e.type.slice(5) as SceneTouchEventType,
-            (e.x - this.scene.x) / this.scene.scale,
-            (e.y -this.scene.y) / this.scene.scale, e.x, e.y);
     }
+
+    private deleteElem(pageId:number, elemId:string) {
+        if(this.scene.pageId === pageId) {
+            let elem = this.scene.getElem(elemId);
+            if(elem) this.scene.removeElem(elem);
+        }
+        this.pages[pageId].deleteElemById(elemId);
+    }
+
+    private restoreElem(pageId:number, id:string) {
+        const page = this.pages[pageId];
+        let i = page.findElemIdxById(id, true);
+        if(i !== -1) {
+            page.elements[i].isDeleted = false;
+            this.scene.restoreElem(id);
+        }
+    }
+
+    public redo() {
+        let cmd = this.cmdTracker.redo();
+        if(cmd) {
+            switch (cmd.type) {
+                case CmdType.Add:
+
+            }
+        }
+    }
+
 
 }

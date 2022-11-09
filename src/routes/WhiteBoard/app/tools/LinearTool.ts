@@ -3,6 +3,7 @@ import {Arrow, Line} from "../element/Line";
 import {GenericDrawingTool} from "./GenericDrawingTool";
 import {DrawingScene} from "../DrawingScene";
 import {SceneTouchEvent} from "../element/TouchEvent";
+import {IdGenerator} from "../../../../utils/IdGenerator";
 
 export type LinearElementType = "line" | "arrow";
 
@@ -22,9 +23,9 @@ export class LinearTool extends GenericDrawingTool {
     protected onDown(e: SceneTouchEvent, scene: DrawingScene) {
         this.last.x = e.x; this.last.y = e.y;
         if(this._shape === "line")
-            scene.actElem = new Line(new Date().valueOf(), e.x, e.y);
+            scene.actElem = new Line(IdGenerator.genElementId(), e.x, e.y);
          else
-            scene.actElem = new Arrow(new Date().valueOf(), e.x, e.y);
+            scene.actElem = new Arrow(IdGenerator.genElementId(), e.x, e.y);
     }
 
 

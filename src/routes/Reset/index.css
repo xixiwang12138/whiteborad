@@ -58,15 +58,15 @@
     /*background-color: #61dafb;*/
 }
 .btn-ver {
-    height: 40px;
-    width: 100px;
-    border-radius: 15px;
-    background: linear-gradient(#FF9494, #DC8AF9);
-    line-height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: none;
-    font-size: 15px;
+    height: 40px !important;
+    width: 100px !important;
+    border-radius: 15px !important;
+    background: linear-gradient(#FF9494, #DC8AF9) !important;
+    line-height: 40px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    border: none !important;
+    font-size: 15px !important;
 }

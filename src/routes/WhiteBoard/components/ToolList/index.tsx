@@ -58,6 +58,8 @@ class ToolList extends React.Component<ToolListProp> {
             <div className="tool-do">
                 <div className="do-box">{
                     DODOs.map((dodo)=> {
+                        // const [isDoDisabled, setIsDoDisabled] = useState(false)
+
                         let className = "icon";
                         if(dodo.disabled) className = "icon-disabled";
 

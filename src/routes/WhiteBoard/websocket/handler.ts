@@ -8,10 +8,13 @@ export enum CmdType { //枚举从最后开始添加
     Withdraw,
     Adjust, //调整单个属性
     SwitchPage,  //切换页面
-    // Rotate, //旋转，应该可以放在Adjust中
-    Zoom, //缩放
+    Scale, //缩放
 }
 
+
+
+
+//TODO 修改element数据类型
 type Element  = any
 
 //此处CmdPayloads中的值,即为payload
@@ -22,7 +25,7 @@ type CmdPayloads = {
     [CmdType.Withdraw]: Cmd<CmdType> //需要撤销的操作
     [CmdType.Adjust]: {p: string, value: any} //p为操作的属性，v为修改后的值
     [CmdType.SwitchPage]: {from: number, to: number} //从from页面切换到to页面
-    [CmdType.Zoom]: {from: number, to: number} //从from页面切换到to页面
+    [CmdType.Scale]: {factorH: number, factorV: number} //缩放因子
 }
 
 export class Cmd<T extends CmdType>{

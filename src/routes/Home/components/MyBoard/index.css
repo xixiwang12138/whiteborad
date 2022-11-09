@@ -129,3 +129,71 @@
     align-items: center;
     cursor: pointer;
 }
+.ant-modal-header {
+    width: 100% !important;
+    height: 60px !important;
+    line-height: 60px !important;
+    font-size: 40px !important;
+    font-family: Poppins !important;
+    font-weight: bold !important;
+    justify-content: left !important;
+    border-radius: 30px !important;
+    border: none !important;
+    /*background-color: #DC8AF9 !important;*/
+    margin-top: 5px !important;
+}
+.ant-modal-title {
+    color: black !important;
+    font-size: 30px !important;
+    font-family: Poppins !important;
+}
+.ant-modal-content {
+    /*position: absolute !important;*/
+    /*top: 50% !important;*/
+    /*left: 50% !important;*/
+    /*transform: translate(-50%,-50%) !important;*/
+    height: 250px !important;
+    width: 400px !important;
+    border-radius: 30px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+.ant-modal-footer {
+    border: none !important;
+    /*background-color: #F6CEEE !important;*/
+}
+.ant-btn {
+    width: 100px !important;
+    height: 40px !important;
+    border-radius: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 40px !important;
+    background-color: #F3A1A1 !important;
+    color: white !important;
+    cursor: pointer !important;
+    border: none !important;
+}
+.ant-btn:hover{
+    /*color: black !important;*/
+    border: none !important;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+}
+.ant-input {
+    width: 250px !important;
+    height: 40px !important;
+    border-radius: 10px !important;
+    padding-right: 10px !important;
+    padding-left: 10px !important;
+    font-size: 15px !important;
+}
+/*.ant-input:hover {*/
+/*    border: none !important;*/
+/*    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);*/
+/*}*/
+/*.ant-input:active {*/
+/*    border: none !important;*/
+/*    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);*/
+/*}*/

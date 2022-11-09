@@ -1,8 +1,35 @@
-import React from "react";
+import React, {useState} from "react";
 import "./index.css";
+import "../../../../App.css";
 import sort from "../../icon/排序.svg";
+import {Button, Modal, Input, Form} from "antd";
 
 function MyBoard(){
+
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [isJoinOpen, setIsJoinOpen] = useState(false);
+
+    const showCreate = () => {
+        setIsCreateOpen(true);
+    }
+    const showJoin =() => {
+        setIsJoinOpen(true);
+    }
+
+    const handleCreate = () => {
+        setIsCreateOpen(false)
+    }
+    const handleJoin = () => {
+        setIsJoinOpen(false)
+    }
+
+    const handleCreateClose = () => {
+        setIsCreateOpen(false)
+    }
+    const handleJoinClose = () => {
+        setIsJoinOpen(false)
+    }
+
     return(
         <div className="my-board">
             <div className="contain">
@@ -30,11 +57,29 @@ function MyBoard(){
                 <div style={{marginBottom:'20px'}}/>
                 <div className="contain-btns">
                     <div className="btns">
-                        <div className="btn-join">加入白板</div>
-                        <div className="btn-create">新增白板</div>
+                        <div className="btn-join" onClick={showJoin}>加入白板</div>
+                        <div className="btn-create" onClick={showCreate}>新增白板</div>
                     </div>
                 </div>
             </div>
+
+            <Modal title="Join" open={isJoinOpen} onOk={handleJoin} onCancel={handleJoinClose}
+                   footer={<Button key="copy" onClick={handleJoin}>加 入</Button> }>
+                <Form>
+                    <Form.Item name="boardId">
+                        <Input className="win-form-input" placeholder="请输入序列号"/>
+                    </Form.Item>
+                </Form>
+            </Modal>
+
+            <Modal title="Create" open={isCreateOpen} onOk={handleCreate} onCancel={handleCreateClose}
+                   footer={<Button key="copy" onClick={handleCreate}>创 建</Button> }>
+                <Form>
+                    <Form.Item name="boardName">
+                        <Input className="win-form-input" placeholder="请输入白板名称"/>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </div>
     )
 }

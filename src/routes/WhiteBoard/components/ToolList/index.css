@@ -31,14 +31,29 @@
     align-items: center;
 }
 .icon {
-    height: 40px;
-    width: 40px;
-    border-radius: 10px;
-    background-color: #FFEDED;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+    height: 40px !important;
+    width: 40px !important;
+    border-radius: 10px !important;
+    background-color: #FFEDED !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+}
+.icon-disabled {
+    height: 40px !important;
+    width: 40px !important;
+    border-radius: 10px !important;
+    background-color: #FFEDED !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: not-allowed !important;
+}
+.icon-disabled img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
 }
 .icon img {
     width: 30px;
@@ -81,6 +96,17 @@
 .separate{
     border-right: lightgray 2px solid;
 }
+
+/*.tool-list .tool-do .do-box .ant-btn {*/
+/*    height: 40px;*/
+/*    width: 40px;*/
+/*    border-radius: 10px;*/
+/*    background-color: #FFEDED;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    cursor: pointer;*/
+/*}*/
 
 /*.bar-minbox {*/
 /*    height: 50px;*/

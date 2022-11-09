@@ -5,6 +5,7 @@ import (
 	"github.com/pkg/errors"
 	"log"
 	"net"
+	"server/common/cts"
 	"server/common/utils"
 	"server/models"
 	"strconv"
@@ -15,6 +16,8 @@ type CmdHandlerFunType func(cmd *models.Cmd, boardId int64, userId int64) error
 
 var CmdHandler CmdHandlerFunType
 var StoreHandler func(int64)
+var LoadingHandler func(int64, int64) (*models.PageVO, error)
+var UserInfoHandler func(int64) (*models.User, error)
 
 //每一个白板为Hub
 
@@ -78,8 +81,38 @@ func (h *HubManager) EnterHub(boardId int64, userId int64, conn *websocket.Conn)
 	userConnection := NewUserConnection(NewBaseConnection(conn), userId, boardId)
 	hub.AddUser(userConnection)
 
-	//TODO 通知前端更新在线用户
-	hub.Broadcast(nil)
+	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Println(r)
+			}
+		}()
+		//发送用户信息
+		user, err := UserInfoHandler(userId)
+		if err != nil {
+			return
+		}
+		hub.Broadcast(struct {
+			Type string                `json:"type"`
+			Data *models.MemberMessage `json:"data"`
+		}{
+			models.MemberChangeMessage, &models.MemberMessage{Type: models.MemberEnter, Payload: user},
+		}, userId)
+
+	}()
+	//获取默认页信息
+	vo, err := LoadingHandler(boardId, 0)
+	if err != nil {
+		log.Printf(cts.ErrorFormat, err)
+		//TODO 返回给前端
+		return
+	}
+	//发送默认页消息
+	err = userConnection.SendLoadingData(vo)
+	if err != nil {
+		log.Printf(cts.ErrorFormat, err)
+		return
+	}
 }
 
 func (h *HubManager) LeaveHub(boardId int64, userId int64) {
@@ -91,20 +124,41 @@ func (h *HubManager) LeaveHub(boardId int64, userId int64) {
 	}
 	//在Hub中删除该用户
 	hub.DeleteUser(userId)
+	//广播给其他人
+	user, err := UserInfoHandler(userId)
+	if err != nil {
+		log.Printf(cts.ErrorFormat, err)
+		// TODO retry
+	} else {
+		hub.Broadcast(struct {
+			Type string                `json:"type"`
+			Data *models.MemberMessage `json:"data"`
+		}{
+			models.MemberChangeMessage,
+			&models.MemberMessage{Type: models.MemberLeave, Payload: user},
+		}, userId)
+	}
+
 	//如果Hub中没有人
 	if hub.IsEmpty() {
 		// delete this hub(Board)
 		h.DeleteHub(boardId)
-
 		//store
 		StoreHandler(boardId)
 	}
+
 }
 
 func (h *HubManager) BroadcastCmd(boardId int64, cmd *models.Cmd, exceptUser ...int64) {
 	//获取hub
 	hub := h.GetHub(boardId)
-	hub.Broadcast(cmd, exceptUser...)
+	hub.Broadcast(struct {
+		Type string      `json:"type"`
+		Data *models.Cmd `json:"data"`
+	}{
+		models.CmdMessage,
+		cmd,
+	}, exceptUser...)
 }
 
 //endregion
@@ -120,7 +174,7 @@ func NewHub(boardId int64) *Hub {
 	return &Hub{BoardId: boardId, Connections: utils.NewConcurrentMap[int64, *UserConnection]()}
 }
 
-// Broadcast 给Hub中每一个用户发送消息，在排除列表中的除外
+// Broadcast 给Hub中每一个用户发送CMD，在排除列表中的除外
 func (hub *Hub) Broadcast(obj any, exceptUsers ...int64) {
 	//迭代每一个连接，发送消息
 	hub.Connections.Data().Range(func(key, value any) bool {
@@ -181,7 +235,6 @@ func NewUserConnection(baseConnection *BaseConnection, userId int64, boardId int
 
 func (c *UserConnection) CloseHandler() {
 	HubMgr.LeaveHub(c.BoardId, c.UserId)
-	//TODO 离开白板的时候是否需要持久化？？？
 }
 
 func (c *UserConnection) ListenJSONMessage(handler func(o *models.Cmd, boardId int64, userId int64) error) {
@@ -192,23 +245,47 @@ func (c *UserConnection) ListenJSONMessage(handler func(o *models.Cmd, boardId i
 		}
 	}()
 	for !c.isClosed {
-		o := new(models.Cmd)
+		o := new(models.Message)
 		err := c.WsConn.ReadJSON(o)
 		if err == nil {
-			err := handler(o, c.BoardId, c.UserId)
-			if err != nil {
-				//TODO 日志
-				return
+			switch o.Type {
+			case models.CmdMessage:
+				cmd := utils.Deserialize[models.Cmd](o.Data)
+				err := handler(cmd, c.BoardId, c.UserId)
+				if err != nil {
+					//TODO 日志
+					return
+				}
 			}
-		}
-		if err != nil {
-			if websocket.IsUnexpectedCloseError(err) || errors.Is(err, net.ErrClosed) {
-				c.isClosed = true
-			} else {
-				go c.onError(err)
+			if err != nil {
+				if websocket.IsUnexpectedCloseError(err) || errors.Is(err, net.ErrClosed) {
+					c.isClosed = true
+				} else {
+					go c.onError(err)
+				}
 			}
 		}
 	}
+}
+
+func (c *UserConnection) SendCmdJSON(cmd *models.Cmd) error {
+	return c.SendJSON(struct {
+		Type string      `json:"type"`
+		Data *models.Cmd `json:"data"`
+	}{
+		models.CmdMessage,
+		cmd,
+	})
+}
+
+func (c *UserConnection) SendLoadingData(vo *models.PageVO) error {
+	return c.SendJSON(struct {
+		Type string         `json:"type"`
+		Data *models.PageVO `json:"data"`
+	}{
+		models.LoadMessage,
+		vo,
+	})
 }
 
 //endregion

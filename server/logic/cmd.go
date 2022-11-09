@@ -5,6 +5,7 @@ import (
 	"server/common/cache"
 	"server/common/cts"
 	"server/common/sources"
+	"server/dao"
 	"server/models"
 	"server/ws"
 )
@@ -14,6 +15,8 @@ var actuallyHandlers = []func(cmd *models.Cmd) error{AddCmd, DeleteCmd, Withdraw
 func init() {
 	ws.CmdHandler = CmdHandler
 	ws.StoreHandler = StoreBoard
+	ws.LoadingHandler = Load
+	ws.UserInfoHandler = dao.UserRepo.FindByID
 }
 
 func CmdHandler(o *models.Cmd, boardId int64, userId int64) error {
@@ -40,7 +43,7 @@ func CmdHandler(o *models.Cmd, boardId int64, userId int64) error {
 // AddCmd 在页面上增加某一个元素
 func AddCmd(cmd *models.Cmd) error {
 	//存储元素对象
-	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.Payload).Err()
+	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.Payload.GetAfter()).Err()
 	if err != nil {
 		return err
 	}
@@ -71,7 +74,7 @@ func WithdrawCmd(cmd *models.Cmd) error { //TODO
 
 // AdjustCmd 调整一个对象的某一个属性
 func AdjustCmd(cmd *models.Cmd) error {
-	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.Payload).Err()
+	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.Payload.GetAfter()).Err()
 	if err != nil {
 		return err
 	}

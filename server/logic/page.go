@@ -71,6 +71,18 @@ func LoadPage(pageId int64) (*models.PageVO, error) {
 	return vo, nil
 }
 
+func Load(boardId int64, pageId int64) (*models.PageVO, error) {
+	if pageId == 0 {
+		//需要加载的是默认page
+		defaultPageId, err := dao.WhiteBoardRepo.DefaultPageId(boardId)
+		if err != nil {
+			return nil, err
+		}
+		pageId = defaultPageId
+	}
+	return LoadPage(pageId)
+}
+
 func getAllGraph(pageId int64) ([]string, error) {
 	return sources.RedisSource.Client.SMembers(cache.PageElementsKey(pageId)).Result()
 }

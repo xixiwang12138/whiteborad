@@ -11,21 +11,29 @@ const (
 )
 
 type ElementKV map[string]any
+type ReceiveCmdElement map[string][2]any
 
 func (e ElementKV) GetElementId() int64 {
 	return e["id"].(int64)
+}
 
+func (e ReceiveCmdElement) GetAfter() map[string]any {
+	res := make(map[string]any)
+	for k, v := range e {
+		res[k] = v[1]
+	}
+	return res
 }
 
 type Cmd struct {
-	ID      int64          `json:"id"`      //操作id
-	PageId  int64          `json:"pageId"`  //操作的页面
-	Type    CmdType        `json:"type"`    //操作类型
-	O       int64          `json:"o"`       //操作对象
-	Payload map[string]any `json:"payload"` //操作后的值
-	Time    int64          `json:"time"`    //操作的时间
-	BoardId int64          `json:"boardId"` //所在的白板id
-	Creator int64          `json:"creator"` //操作人id
+	ID      int64             `json:"id"`      //操作id
+	PageId  int64             `json:"pageId"`  //操作的页面
+	Type    CmdType           `json:"type"`    //操作类型
+	O       int64             `json:"o"`       //操作对象
+	Payload ReceiveCmdElement `json:"payload"` //操作后的值
+	Time    int64             `json:"time"`    //操作的时间
+	BoardId int64             `json:"boardId"` //所在的白板id
+	Creator int64             `json:"creator"` //操作人id
 }
 
 func (cmd *Cmd) Fill(boardId int64, creator int64) {

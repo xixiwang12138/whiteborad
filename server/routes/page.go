@@ -8,7 +8,7 @@ import (
 )
 
 func registerPage(g *gin.RouterGroup) {
-	g.GET("/", Handler(GetPageVo))
+	//g.GET("/", Handler(GetPageVo))
 }
 
 func GetPageVo(ctx *gin.Context, req *bind.PageReq) (any, error) {

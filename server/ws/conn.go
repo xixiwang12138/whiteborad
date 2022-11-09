@@ -40,14 +40,6 @@ func (this *BaseConnection) SetOnErrorHandler(handler OnErrorHandler) {
 	this.onError = handler
 }
 
-func (this *BaseConnection) SendMessage(message []byte) error {
-	err := this.WsConn.WriteMessage(websocket.TextMessage, message)
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func (this *BaseConnection) SendJSON(obj any) error {
 	err := this.WsConn.WriteJSON(obj)
 	if err != nil {

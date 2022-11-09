@@ -24,9 +24,10 @@ type Model struct {
 //默认情况下，GORM 会使用 ID 作为表的主键
 
 type WhiteBoard struct {
-	Mode    BoardType `json:"mode"`    //模式
-	Creator int64     `json:"creator"` //创建者
-	Name    string    `json:"name"`
+	Mode        BoardType `json:"mode"`    //模式
+	Creator     int64     `json:"creator"` //创建者
+	Name        string    `json:"name"`
+	DefaultPage int64     `json:"defaultPage"`
 	Model
 }
 
@@ -40,10 +41,6 @@ type Page struct {
 	WhiteBoardID int64  `json:"whiteBoardId" gorm:"column:whiteBoardId"` //所属白板的id
 	DisplayName  string `json:"displayName"`                             //展示的名字
 	Content      string `json:"-" gorm:"type:LONGTEXT"`                  //存储的一页上的所有图形对象,存储pageStringContent序列化后的字符串
-}
-
-type pageContent struct {
-	Data []ElementKV `json:"data"` //反序列化后Data为map类型
 }
 
 type pageStringContent struct {

@@ -216,6 +216,6 @@ func GetUser(ctx *gin.Context) int64 {
 	if !ok {
 		return 0
 	}
-	p := data.(jwt.CustomClaims)
+	p := data.(*jwt.CustomClaims)
 	return p.UserId
 }

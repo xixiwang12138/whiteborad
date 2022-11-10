@@ -28,4 +28,8 @@ export class UserManager {
     public static getId() {
         return this.userInfo.id;
     }
+
+    public static getAvatar() {
+        return this.userInfo.avatar;
+    }
 }

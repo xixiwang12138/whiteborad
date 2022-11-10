@@ -15,13 +15,16 @@ import type {RadioChangeEvent} from "antd";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
 import {NavLink} from 'react-router-dom';
+import {UserManager} from "../../../../UserManager";
 
 
 
 function BaseRow(){
 
-    // const navigate = useNavigate();
+    const uid = UserManager.getId();
+    const ava = UserManager.getAvatar();
 
+    const [isCreateUser, setIsCreateUser] = useState(true);
     const [isInviteOpen, setIsInviteOpen] = useState(false);
 
     const showInvite = () => {
@@ -47,12 +50,15 @@ function BaseRow(){
 
     const ShuXingTool = (
         <div>
-            <div>
-                <Radio.Group onChange={onChangeQuanxian} value={useRadio} style={{display: "flex", flexDirection: "column"}}>
-                    <Radio value={1}>编辑模式</Radio>
-                    <Radio value={2}>只读模式</Radio>
-                </Radio.Group>
-            </div>
+            {isCreateUser ?
+                <div>
+                    <Radio.Group onChange={onChangeQuanxian} value={useRadio} style={{display: "flex", flexDirection: "column"}}>
+                        <Radio value={1}>编辑模式</Radio>
+                        <Radio value={2}>只读模式</Radio>
+                    </Radio.Group>
+                </div> :
+                <div></div>
+            }
             <div>
                 <Checkbox onChange={onChangeNihe}>线条拟合</Checkbox>
             </div>
@@ -77,7 +83,7 @@ function BaseRow(){
                     <div className="avatar-group">
                         {/*一些逻辑待细化*/}
                         <Avatar.Group maxCount={3} maxStyle={{color: 'white', backgroundColor: '#AD7878'}}>
-                            <Avatar style={{backgroundColor: '#dbff92',width: "40px", height: "40px", borderRadius: "20px"}}/>
+                            <Avatar style={{backgroundColor: `#${ava}`,width: "40px", height: "40px", borderRadius: "20px"}}/>
                             <Avatar style={{backgroundColor: 'white',width: "40px", height: "40px", borderRadius: "20px"}}/>
                             <Tooltip placement="top">
                                 <Avatar style={{backgroundColor:'#87d068',width: "40px", height: "40px", borderRadius: "20px"}}/>

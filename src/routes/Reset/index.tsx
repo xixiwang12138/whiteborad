@@ -4,6 +4,7 @@ import Background from "../components/Background";
 import {Input, Form, Button, message} from "antd";
 import {doReset} from "../../api/api";
 import {useHistory} from "react-router-dom";
+import {UserManager} from "../../UserManager";
 
 function Reset() {
     const history = useHistory();
@@ -13,7 +14,7 @@ function Reset() {
         doReset(values).then((res)=> {
             // localStorage.setItem("token",res.data.token);
             message.success("密码重置成功！")
-            history.push("/home")
+            history.push(`/home/${UserManager.getId()}`);
         });
     }
 

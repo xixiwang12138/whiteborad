@@ -5,7 +5,7 @@
     top: 50%;
     transform: translateY(-50%);
     right: 0;
-    background-color: white;
+    /*background-color: red;*/
     padding: 15px 0;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -54,9 +54,10 @@
 }
 .single-box {
     width: 160px;
-    height: fit-content;
+    height: 20px;
+    /*height: fit-content;*/
     display: flex;
-    /*background-color: #dbff92;*/
+    background-color: #dbff92;
     flex-direction: column;
     /*align-items: center;*/
     /*justify-content: left;*/

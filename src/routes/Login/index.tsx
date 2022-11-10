@@ -10,8 +10,15 @@ import {UserManager} from "../../UserManager";
 function Login() {
     const navigate = useHistory();
 
-    const onFinishlogin = async (values: any) => {
-        await UserManager.login(values);
+    const [userPhone, setUserPhone] = useState(" ");
+    const [userPassword, setUserPassword] = useState(" ");
+
+    const onFinishlogin = async () => {
+        await UserManager.login({
+            phone: userPhone,
+            password: userPassword
+        });
+        message.success("登录成功！")
         navigate.push('/home');
     }
 
@@ -22,12 +29,18 @@ function Login() {
                 <div className="form-box">
                     <div className="form-title">Explore with us</div>
                     <div className="form-inputs">
-                        <Form.Item name="phone">
-                            <Input className="input-box" placeholder="请输入手机号" />
+                        <Form.Item name="phone" rules={[
+                            {
+                                required: false,
+                                pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"),
+                                message: '请输入正确的手机号'
+                            }
+                        ]}>
+                            <Input className="input-box" placeholder="请输入手机号" onChange={(e)=>{setUserPhone(e.target.value);}}/>
                         </Form.Item>
                         <div style={{marginBottom: '20px'}}/>
                         <Form.Item name="password">
-                            <Input className="input-box" placeholder="请输入密码" />
+                            <Input className="input-box" placeholder="请输入密码" onChange={(e) => {setUserPassword(e.target.value);}}/>
                         </Form.Item>
                     </div>
                     <div className="form-tip">

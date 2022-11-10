@@ -36,7 +36,7 @@ function BaseColumn() {
                 <div style={{marginTop:'10px'}}/>
                 <div className="base-name" onClick={showNameWin}>
                     {/*后期加个判断：username是否为空*/}
-                    <div className="name">{userName}</div>
+                    <div className="name" >{userName}</div>
                     <div className="name-icon">
                         <img src={write}/>
                     </div>

@@ -103,7 +103,7 @@ func MapValueConvert(filedMap FiledTypeMap, v map[string]string) (map[string]int
 			}
 			result[field] = parseValue
 		case reflect.Array:
-			var arrayData []float64
+			var arrayData []any
 			err := json.Unmarshal([]byte(value), &arrayData)
 			if err != nil {
 				return nil, err

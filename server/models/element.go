@@ -34,7 +34,7 @@ var ElementFiledMap utils.FiledTypeMap = map[string]reflect.Kind{
 func StringElementArray(e map[string]any) {
 	v, ok := e["points"]
 	if ok {
-		points := v.([]float64)
+		points := v.([]any)
 		bytes, err := json.Marshal(points)
 		if err != nil {
 			return

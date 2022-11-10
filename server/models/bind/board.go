@@ -9,3 +9,7 @@ type PageReq struct {
 	BoardId string `json:"boardId"`
 	PageId  string `json:"pageId"`
 }
+
+type NameReq struct {
+	Name string `json:"name"`
+}

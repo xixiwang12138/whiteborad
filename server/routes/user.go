@@ -15,6 +15,7 @@ func registerUser(g *gin.RouterGroup) {
 	g.POST("/login", Handler(login))
 	g.POST("/reset", Handler(reset))
 	g.GET("/info", NoParamHandler(info))
+	g.GET("/rename", Handler(rename))
 }
 
 func register(_ *gin.Context, req *bind.LoginReq) (*bind.LoginResponse, error) {
@@ -48,4 +49,11 @@ func info(ctx *gin.Context) (interface{}, error) {
 	return struct {
 		User any `json:"user"`
 	}{user}, nil
+}
+
+func rename(ctx *gin.Context, req *bind.NameReq) (any, error) {
+	userId := GetUser(ctx)
+	return nil, dao.UserRepo.UpdateFiled(userId, map[string]interface{}{
+		"name": req.Name,
+	})
 }

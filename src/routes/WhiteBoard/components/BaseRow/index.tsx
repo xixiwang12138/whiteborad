@@ -4,6 +4,7 @@ import "../../../../App.css";
 import home from "../../icon/home.svg";
 import file from "../../icon/导入文件.svg";
 import ex from "../../icon/导出.svg";
+import allDelete from "../../icon/一键清空.svg";
 import {useNavigate} from "react-router-dom";
 
 // import list from "../../icon/属性-收起.svg"; 这个用不了，先用下面的顶替
@@ -55,7 +56,7 @@ function BaseRow(){
             <div>
                 <Checkbox onChange={onChangeNihe}>线条拟合</Checkbox>
             </div>
-            <div>一键清空</div>
+            <div style={{cursor: "pointer"}}><img src={allDelete}/>&nbsp;一键清空</div>
         </div>
     )
 
@@ -83,17 +84,16 @@ function BaseRow(){
                     </div>
                 </div>
                 <div className="row-right">
-                    <div className="right1">
-                        <Popover placement="bottom" content={ShuXingTool} trigger="hover">
+                    <div className="right1-click">
+                        <Popover placement="bottom" content={ShuXingTool} trigger="click">
                             <img src={shuxing}/>
                         </Popover>
-                        {/*<img src={shuxing}/>*/}
                     </div>
                     <div className="right2">
-                        <div className="import-icon">
+                        <div className="import-icon" title="导入">
                             <img src={file}/>
                         </div>
-                        <div className="export-icon">
+                        <div className="export-icon" title="导出">
                             <img src={ex}/>
                         </div>
                     </div>

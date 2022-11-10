@@ -9,8 +9,8 @@ type User struct {
 	Model
 	Name     string `json:"name"`
 	Avatar   string `json:"avatar"`
-	Phone    string `json:"phone"`
-	Password string `json:"password"` //密码先暂时密文存储，后续有时间采用加密
+	Phone    string `json:"-"`
+	Password string `json:"-"`
 }
 
 func NewUser(phone string, password string) *User {

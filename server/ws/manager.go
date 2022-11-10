@@ -8,6 +8,7 @@ import (
 	"server/common/cts"
 	"server/common/utils"
 	"server/models"
+	"server/models/bind"
 	"strconv"
 	"strings"
 )
@@ -174,7 +175,7 @@ func NewHub(boardId int64) *Hub {
 	return &Hub{BoardId: boardId, Connections: utils.NewConcurrentMap[int64, *UserConnection]()}
 }
 
-// Broadcast 给Hub中每一个用户发送CMD，在排除列表中的除外
+// Broadcast 给Hub中每一个用户发送消息，在排除列表中的除外
 func (hub *Hub) Broadcast(obj any, exceptUsers ...int64) {
 	//迭代每一个连接，发送消息
 	hub.Connections.Data().Range(func(key, value any) bool {
@@ -253,30 +254,39 @@ func (c *UserConnection) ListenJSONMessage(handler func(o *models.Cmd, boardId i
 				cmd := utils.Deserialize[models.Cmd](o.Data)
 				err := handler(cmd, c.BoardId, c.UserId)
 				if err != nil {
-					//TODO 日志
+					if websocket.IsUnexpectedCloseError(err) || errors.Is(err, net.ErrClosed) {
+						c.isClosed = true
+					} else {
+						go c.onError(err)
+					}
+				}
+			case models.LoadMessage:
+				loadPageReq := utils.Deserialize[bind.PageReq](o.Data)
+				pageData, err := LoadingHandler(loadPageReq.BoardId, loadPageReq.PageId)
+				if err != nil {
+					//发送错误信息
+					return
+				}
+				//将处理结果发送
+				err = c.SendLoadingData(pageData)
+				if err != nil {
 					return
 				}
 			}
-			if err != nil {
-				if websocket.IsUnexpectedCloseError(err) || errors.Is(err, net.ErrClosed) {
-					c.isClosed = true
-				} else {
-					go c.onError(err)
-				}
-			}
+
 		}
 	}
 }
 
-func (c *UserConnection) SendCmdJSON(cmd *models.Cmd) error {
-	return c.SendJSON(struct {
-		Type string      `json:"type"`
-		Data *models.Cmd `json:"data"`
-	}{
-		models.CmdMessage,
-		cmd,
-	})
-}
+//func (c *UserConnection) SendCmdJSON(cmd *models.Cmd) error {
+//	return c.SendJSON(struct {
+//		Type string      `json:"type"`
+//		Data *models.Cmd `json:"data"`
+//	}{
+//		models.CmdMessage,
+//		cmd,
+//	})
+//}
 
 func (c *UserConnection) SendLoadingData(vo *models.PageVO) error {
 	return c.SendJSON(struct {

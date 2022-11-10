@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import "./index.css";
 import Background from "../components/Background";
 import {Input, Form, Button} from "antd";
@@ -14,11 +14,14 @@ function Reset() {
             if(res.success){
                 localStorage.setItem("token",res.data.token);
                 navigate('/home');
+                console.log("数据：",res.data)
             }else {
                 console.log(res.errorMessage);
             }
         });
     }
+
+
 
     return (
         <div className="reset">

@@ -42,3 +42,9 @@ func (this *pageRepo) GetPageVo(pageId int64) (*models.PageVO, error) {
 	}
 	return page.BuildVo()
 }
+
+func (this *pageRepo) GetBoardPages(boardId int64) ([]*models.Page, error) {
+	return this.Find(map[string]interface{}{
+		"whiteBoardId": boardId,
+	})
+}

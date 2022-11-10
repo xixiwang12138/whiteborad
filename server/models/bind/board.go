@@ -6,5 +6,6 @@ type BoardReq struct {
 }
 
 type PageReq struct {
-	PageId int64 `json:"pageId"`
+	BoardId int64 `json:"boardId"`
+	PageId  int64 `json:"pageId"`
 }

@@ -87,9 +87,15 @@ func joinBoard(ctx *gin.Context, req *bind.BoardReq) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
+	pages, err := dao.PageRepo.GetBoardPages(bId)
+	if err != nil {
+		return nil, err
+	}
 	return struct {
 		Board *models.WhiteBoard `json:"board"`
+		Pages []*models.Page     `json:"pages"`
 	}{
 		res,
+		pages,
 	}, nil
 }

@@ -3,8 +3,8 @@ package cache
 import "strconv"
 
 // ElementKey 用于保存元素
-func ElementKey(elementId int64) string {
-	return "element:" + strconv.FormatInt(elementId, 10)
+func ElementKey(elementId string) string {
+	return "element:" + elementId
 }
 
 // ElementKeyString 用于保存元素, id以字符串传入

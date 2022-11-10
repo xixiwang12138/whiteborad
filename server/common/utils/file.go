@@ -22,3 +22,22 @@ func ReadFile(filePath string) ([]byte, error) {
 	}
 	return os.ReadFile(filePath)
 }
+
+func WriteFile(filePath string, data []byte) error {
+	var file *os.File
+	if !ExistFile(filePath) {
+		newFile, err := os.Create(filePath)
+		if err != nil {
+			return err
+		}
+		file = newFile
+	} else {
+		existFile, err := os.Open(filePath)
+		if err != nil {
+			return err
+		}
+		file = existFile
+	}
+	_, err := file.Write(data)
+	return err
+}

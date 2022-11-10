@@ -29,6 +29,7 @@ type WhiteBoard struct {
 	Name        string    `json:"name"`
 	DefaultPage int64     `json:"defaultPage"`
 	Model
+	Pages []*Page `json:"pages" gorm:"-"` //页面信息
 }
 
 const (
@@ -98,27 +99,3 @@ type PageVO struct {
 	*Page
 	Elements []ElementKV `json:"elements"`
 }
-
-type GraphType int8
-
-const (
-	StraightLine GraphType = 0 //直线
-	Rectangle    GraphType = 1 //矩形
-	Oval         GraphType = 2 //椭圆
-	Free         GraphType = 3 //自由曲线
-	Text         GraphType = 4 //文本
-)
-
-//type BaseGraph struct {
-//}
-//
-//type Graph struct {
-//	ID         int64     `json:"id"`
-//	PageId     int64     `json:"pageId"`  //所属页面的id
-//	Creator    int64     `json:"creator"` //创建者id
-//	CreateTime int64     `json:"createTime"`
-//	Type       GraphType `json:"type"`
-//	Content    []byte    `json:"content"`
-//	Deleted    bool      `json:"deleted"` //是否擦除
-//	//TODO undo redo
-//}

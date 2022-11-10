@@ -13,7 +13,7 @@ import (
 func registerBoard(g *gin.RouterGroup) {
 	g.GET("/boards", NoParamHandler(getCreatedBoards))
 	g.GET("/boards/joined", NoParamHandler(getJoinedBoards))
-	g.GET("/boardPages", Handler(getPages))
+	//g.GET("/boardPages", Handler(getPages))
 	g.POST("/board", Handler(createBoard))
 	g.POST("/join", Handler(joinBoard))
 }
@@ -45,19 +45,19 @@ func getJoinedBoards(ctx *gin.Context) (interface{}, error) {
 	}, nil
 }
 
-// getPages 查询一个board中所有的pageId
-func getPages(ctx *gin.Context, req *bind.BoardReq) (interface{}, error) {
-	bId := req.BoardId
-	pages, err := logic.GetBoardPages(bId)
-	if err != nil {
-		return nil, err
-	}
-	return struct {
-		Pages interface{} `json:"pages"`
-	}{
-		pages,
-	}, nil
-}
+//// getPages 查询一个board中所有的pageId
+//func getPages(ctx *gin.Context, req *bind.BoardReq) (interface{}, error) {
+//	bId := req.BoardId
+//	pages, err := logic.GetBoardPages(bId)
+//	if err != nil {
+//		return nil, err
+//	}
+//	return struct {
+//		Pages interface{} `json:"pages"`
+//	}{
+//		pages,
+//	}, nil
+//}
 
 func createBoard(ctx *gin.Context, req *bind.BoardReq) (interface{}, error) {
 	uId := GetUser(ctx)
@@ -91,11 +91,10 @@ func joinBoard(ctx *gin.Context, req *bind.BoardReq) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
+	res.Pages = pages
 	return struct {
 		Board *models.WhiteBoard `json:"board"`
-		Pages []*models.Page     `json:"pages"`
 	}{
 		res,
-		pages,
 	}, nil
 }

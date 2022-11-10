@@ -15,7 +15,7 @@ func Register(phone string, password string) (*bind.LoginResponse, error) {
 	}
 	if f {
 		//TODO 该号码已经注册
-		return nil, err
+		return nil, errors.New("the phone has been registered")
 	}
 	u, err := dao.UserRepo.Init(phone, password)
 	if err != nil {

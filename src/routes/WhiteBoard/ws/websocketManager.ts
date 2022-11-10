@@ -1,6 +1,6 @@
 import {Cmd, CmdPayloads, CmdType} from "./message";
 
-const host = 'ws://175.178.81.93:10400'
+const host = 'ws://localhost:10400'
 
 export interface IWebsocket {
     onOpen: ((ev: Event) => any) | null;

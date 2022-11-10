@@ -1,5 +1,6 @@
 import {ElementBase, ElementType} from "./ElementBase";
 import {RotateUtil} from "../../../../utils/math";
+import {CanvasScaledCtx} from "../DrawingScene";
 
 export type GenericElementType = "rectangle" | "ellipse" | "triangle";
 
@@ -50,10 +51,10 @@ export class RectangleElement extends GenericElement {
         super(id, x, y, "rectangle");
     }
 
-    public drawBeforeCtxRestore(ctx: CanvasRenderingContext2D) {
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-        ctx.restore();
+    public drawBeforeCtxRestore(ctx: CanvasScaledCtx): void {
+        const s = ctx._scale;
+        ctx.strokeRect(this.x * s, this.y * s, this.width * s, this.height * s);
+        ctx.fillRect(this.x * s, this.y * s, this.width * s, this.height * s);
     }
 
 }
@@ -64,16 +65,15 @@ export class EllipseElement extends GenericElement {
         super(id, x, y, "ellipse");
     }
 
-    public drawBeforeCtxRestore(ctx: CanvasRenderingContext2D) {
+    public drawBeforeCtxRestore(ctx: CanvasScaledCtx): void {
         const center = this.getCenter();
+        center.x = center.x * ctx._scale; center.y = center.y * ctx._scale;
         ctx.beginPath();
-        ctx.ellipse(center.x, center.y, this.width / 2, this.height / 2,
+        ctx.ellipse(center.x, center.y, (this.width / 2) * ctx._scale, (this.height / 2) * ctx._scale,
             0, 0, 360);
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
-
-        ctx.restore();
     }
 
 

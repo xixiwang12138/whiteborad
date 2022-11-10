@@ -14,7 +14,7 @@ function Register() {
                 localStorage.setItem("token",res.data.token);
                 navigate('/home');
             }else {
-                console.log(res.errorMessage);
+                console.log("data form",res.errorMessage);
             }
         });
     }

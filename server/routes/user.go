@@ -15,7 +15,7 @@ func registerUser(g *gin.RouterGroup) {
 	g.POST("/login", Handler(login))
 	g.POST("/reset", Handler(reset))
 	g.GET("/info", NoParamHandler(info))
-	g.GET("/rename", Handler(rename))
+	g.POST("/rename", Handler(rename))
 }
 
 func register(_ *gin.Context, req *bind.LoginReq) (*bind.LoginResponse, error) {

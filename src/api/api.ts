@@ -32,24 +32,28 @@ export async function doRegister(form: RegisterForm) {
     );
 }
 
-export function doReset(admin: RegisterForm) {
+export function doReset(form: RegisterForm) {
     return request.post<any, ResponseSuccess<{token: string}>>(
         "/api/user/reset",
-        admin
+        form
     );
 }
 
-export function doCreateBoard(admin: any) {
-    return request.post<any, ResponseSuccess<{token: string}>>(
+type CreateBoardResp = {
+    boardId:number
+}
+
+export function doCreateBoard(boardName:string) {
+    return request.post<any, CreateBoardResp>(
         "/api/board/board",
-        admin
+        {boardName}
     );
 }
 
 export async function joinBoard(boardId: number):Promise<WhiteBoard> {
     let res = await request.post<any, {board:WhiteBoard}>(
         "/api/board/join",
-        boardId
+        {boardId}
     );
     return DataLoader.load(WhiteBoard, res.board);
 }

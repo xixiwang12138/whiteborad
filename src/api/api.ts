@@ -32,8 +32,9 @@ export async function doRegister(form: RegisterForm) {
     );
 }
 
-export function doReset(form: RegisterForm) {
-    return request.post<any, ResponseSuccess<{token: string}>>(
+type ResetForm = RegisterForm;
+export async function doReset(form: ResetForm) {
+    return request.post<any, null>(
         "/api/user/reset",
         form
     );

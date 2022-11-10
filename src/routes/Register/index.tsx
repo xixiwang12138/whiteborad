@@ -19,7 +19,7 @@ function Register() {
             password: userPassword
         });
         message.success("账号注册成功！")
-        navigate.push("/home");
+        navigate.push(`/home/${UserManager.getId()}`);
     }
 
     return (

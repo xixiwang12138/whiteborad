@@ -33,6 +33,7 @@ request.interceptors.request.use((c)=>{
 });
 
 request.interceptors.response.use((res)=> {
+    console.log("打印：",res.data.data)
     return res.data.data;
 },(e:AxiosError)=> {
     const resp = e.response?.data as ErrorResponse;

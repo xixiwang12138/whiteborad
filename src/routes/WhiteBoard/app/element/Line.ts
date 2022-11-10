@@ -1,6 +1,7 @@
 import {PathElement} from "./PathElement";
 import {ElementType} from "./ElementBase";
 import {RotateUtil} from "../../../../utils/math";
+import {CanvasScaledCtx} from "../DrawingScene";
 
 
 export class Line extends PathElement {
@@ -42,20 +43,24 @@ export class Line extends PathElement {
 
 export class Arrow extends Line {
 
-    public drawBeforeCtxRestore(ctx: CanvasRenderingContext2D) {
+    public drawBeforeCtxRestore(ctx: CanvasScaledCtx): void {
         super.drawBeforeCtxRestore(ctx);
-        const l = this.strokeWidth * 4;
+        const l = this.strokeWidth * 4 * ctx._scale;
         const angle = 30 * Math.PI / 180;
         const p = this.points;
         let a = Math.atan2(p[3] - p[1], p[2] - p[0]);
-        let a1x = p[2] - l * Math.cos(a + angle);
-        let a1y = p[3] - l * Math.sin(a + angle);
-        let a2x = p[2] - l * Math.cos(a - angle);
-        let a2y = p[3] - l * Math.sin(a - angle);
+        let c = [
+            p[2] - l * Math.cos(a + angle),
+            p[3] - l * Math.sin(a + angle),
+            p[2],
+            p[3],
+            p[2] - l * Math.cos(a - angle),
+            p[3] - l * Math.sin(a - angle)
+        ].map(t => t*ctx._scale);
         ctx.beginPath();
-        ctx.moveTo(a1x, a1y);
-        ctx.lineTo(p[2], p[3]);
-        ctx.lineTo(a2x, a2y);
+        ctx.moveTo(c[0], c[1]);
+        ctx.lineTo(c[2], c[3]);
+        ctx.lineTo(c[4], c[5]);
         ctx.stroke();
         ctx.closePath();
     }

@@ -73,6 +73,7 @@ class WhiteBoard extends React.Component implements IOpListener {
             if (this.refactoringScene) {
                 if(this.app.zoomScene(-Math.sign(e.deltaY) * 0.05, e.x, e.y)){
                     this.app.refreshScene();
+                    // TODO UI同步到缩放按钮上
                 }
             }}, {passive:false});
     }
@@ -133,9 +134,7 @@ class WhiteBoard extends React.Component implements IOpListener {
     private refreshShowCanvas(s:DrawingScene) {
         this.clearCanvas();
         this.showCanvasCtx.save();
-        this.showCanvasCtx.translate(s.x, s.y); // 让显示画布原点与场景画布同步
-        this.showCanvasCtx.scale(s.scale, s.scale);
-        this.showCanvasCtx.drawImage(s.realCvs, 0,0);
+        this.showCanvasCtx.drawImage(s.realCvs, s.x,s.y);
         this.showCanvasCtx.restore();
     }
 

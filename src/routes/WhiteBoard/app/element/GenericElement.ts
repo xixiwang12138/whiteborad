@@ -10,7 +10,7 @@ export abstract class GenericElement extends ElementBase {
     private readonly startX:number;
     private readonly startY:number;
 
-    protected constructor(id:number, x:number, y:number, type:GenericElementType) {
+    protected constructor(id:string, x:number, y:number, type:GenericElementType) {
         super(id, x, y, ElementType.generic);
         this.startX = x; this.startY = y;
         this.genericType = type;
@@ -31,7 +31,7 @@ export abstract class GenericElement extends ElementBase {
         }
     }
 
-    public static newGenericElement(type:GenericElementType, id:number, x:number, y:number) {
+    public static newGenericElement(type:GenericElementType, id:string, x:number, y:number) {
         switch (type) {
             case "rectangle":
                 return new RectangleElement(id, x, y);
@@ -46,7 +46,7 @@ export abstract class GenericElement extends ElementBase {
 
 export class RectangleElement extends GenericElement {
 
-    public constructor(id:number, x:number, y:number) {
+    public constructor(id:string, x:number, y:number) {
         super(id, x, y, "rectangle");
     }
 
@@ -60,7 +60,7 @@ export class RectangleElement extends GenericElement {
 
 export class EllipseElement extends GenericElement {
 
-    public constructor(id:number, x:number, y:number) {
+    public constructor(id:string, x:number, y:number) {
         super(id, x, y, "ellipse");
     }
 

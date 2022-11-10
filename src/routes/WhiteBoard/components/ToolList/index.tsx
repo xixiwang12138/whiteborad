@@ -1,20 +1,60 @@
-import React from "react";
+import React, {useState} from "react";
 import "./index.css";
+import "../../../../App.css"
 import undo from "../../icon/undo.svg"
 import redo from "../../icon/redo.svg";
-//icon接下来准备写一个单独的文件，就不用引入这么多
+import {Button} from "antd";
 import {ToolType} from "../../app/tools/Tool";
 import {GenericElementType} from "../../app/element/GenericElement";
 import {LinearElementType} from "../../app/tools/LinearTool";
 
+
+// export const DODOs = [
+//     {
+//         name: "undo",
+//         src: undo,
+//         disabled: false
+//     },
+//     {
+//         name: "redo",
+//         src: redo,
+//         disabled: true
+//     }
+//
+// ]
+
 export type SecondLevelType = GenericElementType | LinearElementType; // 二级类型，比如椭圆是通用类型的二级类型
-type OnToolSelected = (type:ToolType, secondType?:SecondLevelType) => void
+type OnToolSelected = (type:ToolType, secondType?:SecondLevelType) => void;
+export interface IOpListener {
+    onUndo():void;
+    onRedo():void;
+}
 
 class ToolListProp {
     onToolSelected:OnToolSelected = () => {};
+    opListener:IOpListener = new class implements IOpListener {
+        onRedo(): void {}
+        onUndo(): void {}
+    }()
 }
 
 class ToolList extends React.Component<ToolListProp> {
+
+    private DODOs = [
+        {
+            name: "undo",
+            src: undo,
+            cb: () => {},
+            disabled: false
+        },
+        {
+            name: "redo",
+            src: redo,
+            cb: () => {},
+            disabled: true
+        }
+
+    ]
 
     // 这里的类型意思是，一级类型数组 | 一级类型，[二级类型数组]
     private iconGroups:(ToolType[]|[ToolType, SecondLevelType[]])[] = [
@@ -25,19 +65,43 @@ class ToolList extends React.Component<ToolListProp> {
         ["text", "image"]
     ]
 
+
     private readonly onToolSelected:OnToolSelected;
+
+    private readonly opListener:IOpListener;
 
     public constructor(props:ToolListProp) {
         super(props);
         this.onToolSelected = props.onToolSelected;
+        this.opListener = props.opListener;
+        this.DODOs[0].cb = this.opListener.onUndo;
+        this.DODOs[1].cb = this.opListener.onRedo;
     }
 
+
     render() {
+
         return <div className="tool-list">
             <div className="tool-do">
-                <div className="do-box">
-                    <div className="icon"><img src={undo}/></div>
-                    <div className="icon"><img src={redo}/></div>
+
+                <div className="do-box">{
+                    this.DODOs.map((dodo)=> {
+                        // const [isDoDisabled, setIsDoDisabled] = useState(false)
+
+                        let className = "icon";
+                        if(dodo.disabled) className = "icon-disabled";
+
+                        return<div>
+                            <Button className={className} name={dodo.name} disabled={dodo.disabled} onClick={dodo.cb}>
+                                <img src={dodo.src}/>
+                            </Button>
+                        </div>
+                    })
+                }
+                    {/*<Button className="icon" disabled={true}><img src={undo}/></Button>*/}
+                    {/*<Button className="icon" disabled={false}><img src={redo}/></Button>*/}
+                    {/*<div className="icon"><img src={undo}/></div>*/}
+                    {/*<div className="icon"><img src={redo}/></div>*/}
                 </div>
             </div>
             <div className="tool-bar"> {

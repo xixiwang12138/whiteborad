@@ -2,6 +2,7 @@ import {GenericElement, GenericElementType} from "../element/GenericElement";
 import {GenericDrawingTool} from "./GenericDrawingTool";
 import {DrawingScene} from "../DrawingScene";
 import {SceneTouchEvent} from "../element/TouchEvent";
+import {IdGenerator} from "../../../../utils/IdGenerator";
 
 export class GenericElementTool extends GenericDrawingTool {
 
@@ -19,7 +20,7 @@ export class GenericElementTool extends GenericDrawingTool {
     protected onDown(e: SceneTouchEvent, scene: DrawingScene) {
         this.last.x = e.x; this.last.y = e.y;
         scene.actElem = GenericElement.newGenericElement(
-            this._shape, new Date().valueOf(), e.x, e.y);
+            this._shape, IdGenerator.genElementId(), e.x, e.y);
     }
 
 

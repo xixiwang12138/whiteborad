@@ -8,9 +8,9 @@ export class TextElement extends ElementBase {
 
     public text:string;
 
-    public textAlign: TextAlign = "center";
+    public textAlign: TextAlign = "left";
 
-    public constructor(id:number, x:number, y:number) {
+    public constructor(id:string, x:number, y:number) {
         super(id, x, y, ElementType.text);
         this.text = "";
     }
@@ -22,7 +22,7 @@ export class TextElement extends ElementBase {
             ctx.font = `${this.fontSize}px 宋体`;
             const lines = this.text.split("\n");
             for(let i = 0;i < lines.length;i++) {
-                ctx.fillText(lines[i], this.x + this.width / 2, this.y + this.fontSize * (1.2 * i + 1), this.width);
+                ctx.fillText(lines[i], this.x , this.y + this.fontSize * (1.2 * i + 1), this.width);
             }
         }
     }

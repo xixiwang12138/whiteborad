@@ -1,21 +1,26 @@
-import {Point, Tool} from "../../app/tools/Tool";
-import {SceneTouchEvent} from "../../app/element/TouchEvent";
-import {DrawingScene} from "../../app/DrawingScene";
+import {Modifier, Point} from "./Tool";
+import {SceneTouchEvent} from "../element/TouchEvent";
+import {DrawingScene} from "../DrawingScene";
 import {ElementBase, ElementType} from "../element/ElementBase";
 import {RotateUtil} from "../../../../utils/math";
 import {TextTool} from "./TextTool";
+import {CmdType} from "../../ws/message";
+import {ElementState} from "../element/ElementState";
 
 
 enum SelectionOperation {
     None, Moving, Rotating, Scaling
 }
 
-
-export class Selection extends Tool {
+export class Selection extends Modifier<CmdType.Adjust>{
 
     private selectionOp: SelectionOperation = SelectionOperation.None; // 选中元素后进行的操作
 
     protected last: Point = new Point(0, 0); // 上次点击位置
+
+    private curSelectedElem:ElementBase | null = null;
+
+    private oldState:ElementState<any> | null = null;
 
     constructor() {
         super("selection");
@@ -30,55 +35,126 @@ export class Selection extends Tool {
         }
     }
 
+    // 处理对文本的双击事件
     private onDoubleClick(e:SceneTouchEvent, scene:DrawingScene) {
-        let elem = scene.findElemByEvent(e);
-        if(elem && elem.type === ElementType.text) {
+        let cse = this.curSelectedElem;
+        if(cse && cse.type === ElementType.text) {
+            this.unSelectedCurElem(); // 取消选择，托管给文字工具，注意此时场景中的文字还是激活的
             let t = this.parent.getTool("text") as TextTool;
-            scene.actElem = elem;
-            scene.actElem.finish = false;
-            e.rawX = scene.actElem.x; e.rawY = scene.actElem.y;
+            [e.rawX, e.rawY] = scene.toRawXY(cse.x, cse.y);
             t.op(e, scene);
+            scene.activate(t.curElem!);
         }
     }
 
+    public unSelectedCurElem() {
+        let cse = this.curSelectedElem;
+        if(cse) {
+            // 对当前选择元素判断属性是否被修改，并逐一回调
+            // if(this.oldState!.isScaled(cse))
+            //     this.onModify(CmdType.Adjust, {
+            //         factorH: cse.width / this.oldState!.width,
+            //         factorV: cse.height / this.oldState!.height
+            //     });
+            // if(this.oldState!.isMoved(cse)) this.onModify(CmdType.Move, {x:cse.x, y:cse.y});
+            // if(this.oldState!.isRotated(cse)) this.onModify(CmdType.Adjust, {p:"angle", value: cse.angle});
+            let change = this.oldState!.analyseDiff(this.curSelectedElem);
+            if(change) this.onModify(CmdType.Adjust, cse, change)
+            // 更新当前选中元素信息
+            cse.selected = false;
+            this.curSelectedElem = null; this.oldState = null;
+        }
+    }
+
+    /**
+     *  1、
+     */
     protected onDown(e: SceneTouchEvent, scene: DrawingScene) {
         this.last.x = e.x; this.last.y = e.y;
-        let trySelectNewElem = () => {
-            let elem = scene.findElemByEvent(e);
-            if(elem !== null) {
-                if(scene.actElem) scene.actElem.selected = false;
-                elem.selected = true;
-                scene.setBackgroundOf(elem);
-                scene.actElem = elem;
-                scene.render();
+        let cse = this.curSelectedElem;
+        if(cse) {
+            if (cse.isRotateHandle(e.x, e.y)) {
+                this.selectionOp = SelectionOperation.Rotating;
+            } else if (cse.isScaleHandle(e.x, e.y)) {
+                this.selectionOp = SelectionOperation.Scaling;
+                cse.onScaleStart();
+            } else if (!cse.inRectRange(e.x, e.y)) {
+                // 当前有被选择元素但是不在范围内
+                this.unSelectedCurElem(); // 由于双击后，文本元素托管给文本工具，所以如果有被选中元素一定不会是编辑中的文本元素
+                // 更新场景中的元素信息
+                scene.deactivateElem();
+                // 并且选择工具选择了其他
+                this.trySelectNewElem(e, scene);
             }
-        }
-        if(scene.actElem == null) {
-            trySelectNewElem();
         } else {
-            if(scene.actElem.finish) {
-                if(scene.actElem.isRotateHandle(e.x, e.y)) {
-                    this.selectionOp = SelectionOperation.Rotating;
-                } else if (scene.actElem.isScaleHandle(e.x, e.y)) {
-                    this.selectionOp = SelectionOperation.Scaling;
-                    scene.actElem.onScaleStart();
-                } else if(!scene.actElem.inRectRange(e.x, e.y)) {
-                    trySelectNewElem();
+            // 没有元素选中时，先考虑是否有文本工具在使用，如果在范围内就不选择新元素
+            let textTool = (this.parent.getTool("text") as TextTool);
+            if(textTool.curElem) {
+                if(textTool.outOfBound(e)) {
+                    if(textTool.finishEditing()) scene.deactivateElem();
+                    else scene.dropActElem();
+                    this.trySelectNewElem(e, scene);
                 }
             } else {
-                // 使用选择工具按下时，如果激活元素未完成，完成并绘制到背景
-                let textTool = this.parent.getTool("text") as TextTool;
-                if(textTool.editing && textTool.outOfBound(e)) {
-                    textTool.closeEditor();
-                    scene.actElem.finish = true;
-                    if(!scene.getElem(scene.actElem.id)) scene.addElem(scene.actElem);
-                    scene.actElem = null;
-                    scene.render();
-                }
-
+                this.trySelectNewElem(e, scene);
             }
         }
     }
+
+    private trySelectNewElem(e:SceneTouchEvent, scene:DrawingScene) {
+        let elem = scene.findElemByEvent(e);
+        if(elem) {
+            elem.selected = true;
+            this.curSelectedElem = elem;
+            this.oldState = new ElementState(elem);
+            // if(elem instanceof TextElement) this.oldState.extra = [{key:"text", value:elem.text}];
+            scene.activate(elem);
+        }
+    }
+    // protected onDown(e: SceneTouchEvent, scene: DrawingScene) {
+    //     this.last.x = e.x; this.last.y = e.y;
+    //     let trySelectNewElem = () => {
+    //         let elem = scene.findElemByEvent(e);
+    //         if(elem !== null) {
+    //             if(scene.actElem) scene.actElem.selected = false;
+    //             elem.selected = true;
+    //             scene.setBackgroundOf(elem);
+    //             scene.actElem = elem;
+    //             scene.render();
+    //         }
+    //     }
+    //     if(this.curSelectedElem == null) {
+    //         trySelectNewElem();
+    //     } else {
+    //         if(this.curSelectedElem = finish) {
+    //             if(scene.actElem.isRotateHandle(e.x, e.y)) {
+    //                 this.selectionOp = SelectionOperation.Rotating;
+    //             } else if (scene.actElem.isScaleHandle(e.x, e.y)) {
+    //                 this.selectionOp = SelectionOperation.Scaling;
+    //                 scene.actElem.onScaleStart();
+    //             } else if(!scene.actElem.inRectRange(e.x, e.y)) {
+    //                 trySelectNewElem();
+    //             }
+    //         } else {
+    //             // 使用选择工具按下时，如果激活元素未完成，完成并绘制到背景
+    //             let textTool = this.parent.getTool("text") as TextTool;
+    //             if(textTool.editing && textTool.outOfBound(e)) {
+    //                 textTool.closeEditor();
+    //                 scene.actElem.finish = true;
+    //                 const empty = (scene.actElem as TextElement).text === ""
+    //                 if(!scene.getElem(scene.actElem.id)) {
+    //                     if(!empty) scene.addElem(scene.actElem);
+    //                     scene.actElem = null;
+    //                 } else {
+    //                     if(empty) scene.removeElem(scene.actElem); // 如果修改之后为空，删除元素
+    //                     else scene.unSelectAll();
+    //                 }
+    //
+    //             }
+    //
+    //         }
+    //     }
+    // }
 
     protected onMove(e: SceneTouchEvent, scene: DrawingScene) {
         if(this.selectionOp === SelectionOperation.Rotating) this.doRotation(e, scene.actElem!)
@@ -113,6 +189,7 @@ export class Selection extends Tool {
             elem.move(e.x - this.last.x, e.y - this.last.y);
         }
     }
+
 
 
 }

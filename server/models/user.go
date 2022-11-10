@@ -20,6 +20,6 @@ func NewUser(phone string, password string) *User {
 		Phone:    phone,
 		Password: password,
 		Avatar:   utils.RandomPick(as),
-		Name:     utils.RandomPick(names) + utils.RandomString(2),
+		Name:     utils.RandomPick(names) + "_" + utils.RandomString(2),
 	}
 }

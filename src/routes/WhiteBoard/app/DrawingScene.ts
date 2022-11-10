@@ -1,6 +1,7 @@
 import {ElementBase} from "./element/ElementBase";
 import {SceneTouchEvent, SceneTouchEventType} from "./element/TouchEvent";
 import {ScaleUtil} from "../../../utils/math";
+import {Page} from "./data/Page";
 
 export type OnRenderListener = (cvs:DrawingScene)=>void
 
@@ -246,6 +247,18 @@ export class DrawingScene {
      */
     public toRawXY(x:number, y:number):number[] {
         return [x * this.scale + this.x, y * this.scale + this.y];
+    }
+
+    public renderPage(page:Page) {
+        this.clearCanvas();
+        this.deactivateElem();
+        this.elements = new Map<string, ElementBase>();
+        page.elements.forEach(e => {
+            e.finish = true;
+           this.elements.set(e.id, e);
+           e.draw(this.getScaledCtx(this.bufCvsCtx));
+        });
+        this.render();
     }
 
 }

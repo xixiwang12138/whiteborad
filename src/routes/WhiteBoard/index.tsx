@@ -6,8 +6,15 @@ import WindowToolBar from "./components/WindowToolBar";
 import {WhiteBoardApp} from "./app/WhiteBoardApp";
 import {ToolType} from "./app/tools/Tool";
 import {DrawingScene} from "./app/DrawingScene";
+import {joinBoard} from "../../api/api";
+import {RouteComponentProps} from "react-router-dom";
 
-class WhiteBoard extends React.Component implements IOpListener {
+
+export interface WhiteBoardRouteParam {
+    id:string
+}
+
+class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRouteParam>> implements IOpListener {
     private app!:WhiteBoardApp;
 
     private root!:HTMLElement;
@@ -34,11 +41,11 @@ class WhiteBoard extends React.Component implements IOpListener {
         </div>
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setupCanvas();
         this.setupWindow();
         this.setupRootNode();
-        this.setupApp();
+        await this.setupApp();
     }
 
     private setupCanvas() {
@@ -78,8 +85,10 @@ class WhiteBoard extends React.Component implements IOpListener {
             }}, {passive:false});
     }
 
-    private setupApp() {
-        this.app = new WhiteBoardApp();
+    private async setupApp() {
+        let boardId = Number.parseInt(this.props.match.params.id);
+        if(!boardId) throw "error id format";
+        this.app = new WhiteBoardApp(await joinBoard(boardId));
         this.app.setOnRenderListener(this.refreshShowCanvas.bind(this));
         this.app.translateScene((this.showCanvas.width - 1920) / 2, (this.showCanvas.height - 1080) / 2);
         this.app.refreshScene();

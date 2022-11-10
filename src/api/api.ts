@@ -1,48 +1,60 @@
 import React from "react";
 import request from "../utils/request";
+import {WhiteBoard} from "../routes/WhiteBoard/app/data/WhiteBoard";
+import {DataLoader} from "../utils/data/DataLoader";
+import {UserInfo} from "../UserManager";
 
-interface DataUser{
+export type LoginForm = {
     phone: string;
     password: string;
 }
-interface DataJoin{
-    boardId: number
-}
-interface DataCreate{
-    boardName: string
+
+export type LoginResp = {
+    token: string;
+    user: UserInfo
 }
 
-export function doLogin(admin: any) {
-    return request.post<any, any>(
+export async function doLogin(form: LoginForm) {
+    return request.post<any, LoginResp>(
         "/api/user/login",
-        admin
+        form
     );
 }
 
-export function doRegister(admin: any) {
-    return request.post<any, any>(
+export type RegisterForm = LoginForm;
+
+type RegisterResp = LoginResp;
+
+export async function doRegister(form: RegisterForm) {
+    return request.post<any, RegisterResp>(
         "/api/user/register",
-        admin
+        form
     );
 }
 
-export function doReset(admin: any) {
-    return request.post<any, any>(
+type ResetForm = RegisterForm;
+export async function doReset(form: ResetForm) {
+    return request.post<any, null>(
         "/api/user/reset",
-        admin
+        form
     );
 }
 
-export function doCreateBoard(admin: any) {
-    return request.post<any, any>(
+type CreateBoardResp = {
+    boardId:number
+}
+
+export function doCreateBoard(boardName:string) {
+    return request.post<any, CreateBoardResp>(
         "/api/board/board",
-        admin
+        {boardName}
     );
 }
 
-export function doJoinBoard(admin: any) {
-    return request.post<any, any>(
+export async function joinBoard(boardId: number):Promise<WhiteBoard> {
+    let res = await request.post<any, {board:WhiteBoard}>(
         "/api/board/join",
-        admin
+        {boardId}
     );
+    return DataLoader.load(WhiteBoard, res.board);
 }

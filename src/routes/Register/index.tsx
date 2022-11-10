@@ -2,38 +2,30 @@ import React, {useState} from "react";
 import "./index.css";
 import Background from "../components/Background";
 import {Input, Form, Button, message} from "antd";
-import {useNavigate} from "react-router-dom";
-import {doRegister} from "../../api/api";
-import axios from "axios";
+import {useHistory} from "react-router-dom";
+import {UserManager} from "../../UserManager";
 
 function Register() {
-    const navigate = useNavigate();
+    const navigate = useHistory();
 
-    const onFinishregister = (values: any) => {
-        doRegister(values).then((res) => {
-            localStorage.setItem("token", res.data.token);
-            message.success("账号注册成功！")
-            navigate("/home")
-        });
-    }
+
 
     const [userPhone, setUserPhone] = useState(" ");
     const [userPassword, setUserPassword] = useState(" ");
-    const onDoRegister = () => {
-        axios.post('http://175.178.81.93:10300/api/user/register',{
-            params: {
-                phone: userPhone,
-                password: userPassword
-            }
-        }).catch(function (error){
-            console.log("register error", error)
-        })
+
+    const onFinishRegister = async () => {
+        await UserManager.register({
+            phone: userPhone,
+            password: userPassword
+        });
+        message.success("账号注册成功！")
+        navigate.push("/home");
     }
 
     return (
         <div className="register">
             <Background />
-            <Form className="form-reg" onFinish={onFinishregister}>
+            <Form className="form-reg" onFinish={onFinishRegister}>
                 <div className="form-box">
                     <div className="form-title">Join us</div>
                     <div className="form-inputs">
@@ -52,7 +44,7 @@ function Register() {
                         </Form.Item>
                     </div>
                     <div className="form-tip">
-                        <div className="tip-text" onClick={()=>navigate('/')}>已有账户？点击登录</div>
+                        <div className="tip-text" onClick={()=>navigate.push('/')}>已有账户？点击登录</div>
                     </div>
                     <div className="form-btns-reg">
                         <Form.Item>

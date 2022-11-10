@@ -1,5 +1,6 @@
 import {ElementBase} from "../app/element/ElementBase";
 import {IdGenerator} from "../../../utils/IdGenerator";
+import {SerializableData} from "../../../utils/data/DataLoader";
 
 type MessageType = "load" | "cmd" | "member"; // load是加载白板的意思
 
@@ -41,14 +42,14 @@ export type CmdPayloads = {
 }
 
 export class Cmd<T extends CmdType>{
-    id?: string;
-    pageId?: number;
-    type?: T;
+    id!: string;
+    pageId!: number;
+    type!: T;
     o?: string; //操作对象的id
-    payload?: CmdPayloads[T];  //操作的payload
-    time?: number; //操作的时间戳
-    boardId?: number; //操作所属的白板
-    creator?: number; //操作创建人的userId
+    payload!: CmdPayloads[T];  //操作的payload
+    time!: number; //操作的时间戳
+    boardId!: number; //操作所属的白板
+    creator!: number; //操作创建人的userId
 
     constructor() {
         this.time = new Date().getTime()

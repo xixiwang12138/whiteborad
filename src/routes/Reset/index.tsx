@@ -1,23 +1,21 @@
-import React, {useState} from "react";
+import React from "react";
 import "./index.css";
 import Background from "../components/Background";
 import {Input, Form, Button, message} from "antd";
-import {useNavigate} from "react-router-dom";
 import {doReset} from "../../api/api";
+import {useHistory} from "react-router-dom";
 
 function Reset() {
-    const navigate = useNavigate();
+    const history = useHistory();
 
     const onFinishreset = (values: any) => {
         console.log(values);
         doReset(values).then((res)=> {
             // localStorage.setItem("token",res.data.token);
             message.success("密码重置成功！")
-            navigate("/home")
+            history.push("/home")
         });
     }
-
-
 
     return (
         <div className="reset">

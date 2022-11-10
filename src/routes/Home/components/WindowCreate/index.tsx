@@ -3,19 +3,14 @@ import "./index.css";
 import close from "../../icon/close.svg";
 import {Input, Form, Button} from "antd";
 import {doCreateBoard} from "../../../../api/api";
-import {useNavigate} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 function WindowCreate(){
-    const navigate = useNavigate();
+    const navigate = useHistory();
 
-    const onFinishCreate = (values: any) => {
-        doCreateBoard(values).then((res)=> {
-            if(res.success){
-                localStorage.setItem("token",res.data.token);
-            }else {
-                console.log(res.errorMessage);
-            }
-        })
+    const onFinishCreate = async (values: {boardName:string}) => {
+        let res = await doCreateBoard(values.boardName);
+        navigate.push(`/board/${res.boardId}`);
     }
 
     return(
@@ -38,7 +33,7 @@ function WindowCreate(){
                     <div style={{marginTop:'40px'}}/>
                     <div className="win-btn">
                         <Form.Item>
-                            <Button className="btn-win" htmlType={"submit"}>创 建</Button>
+                            <Button className="btn-win" htmlType="submit">创 建</Button>
                         </Form.Item>
                         {/*<div className="btn-win">创 建</div>*/}
                     </div>

@@ -3,37 +3,23 @@ import "./index.css";
 // import "../../App.css";
 import Background from "../components/Background";
 import {Input, Form, Button, message} from "antd";
-import {useNavigate} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {doLogin} from "../../api/api";
-
-import axios from "axios";
+import {UserManager} from "../../UserManager";
 
 function Login() {
-    const navigate = useNavigate();
-
-    const onFinishlogin = (values: any) => {
-        console.log("login form:",values);
-        doLogin(values).then((res)=> {
-            localStorage.setItem("token",res.data.token);
-            const user = res.data.user;
-            message.success("登录成功！")
-            console.log("用户id：",user.id)
-            navigate("/home")
-        });
-    }
+    const navigate = useHistory();
 
     const [userPhone, setUserPhone] = useState(" ");
     const [userPassword, setUserPassword] = useState(" ");
 
-    const onDoLogin= () => {
-        axios.post('http://175.178.81.93:10300/api/user/login', {
-            params: {
-                phone: userPhone,
-                password: userPassword
-            }
-        }).catch(function (error) {
-            console.log("error", error);
-        })
+    const onFinishlogin = async () => {
+        await UserManager.login({
+            phone: userPhone,
+            password: userPassword
+        });
+        message.success("登录成功！")
+        navigate.push('/home');
     }
 
     return (
@@ -58,11 +44,11 @@ function Login() {
                         </Form.Item>
                     </div>
                     <div className="form-tip">
-                        <div className="tip-text" onClick={()=>navigate('/reset')}>忘记密码？点击重置</div>
+                        <div className="tip-text" onClick={()=>navigate.push('/reset')}>忘记密码？点击重置</div>
                     </div>
                     <div className="form-btns-log">
                         <Form.Item>
-                            <Button className="btn-reg-log" onClick={()=>navigate('/register')}>注 册</Button>
+                            <Button className="btn-reg-log" onClick={()=>navigate.push('/register')}>注 册</Button>
                         </Form.Item>
                         <Form.Item>
                             <Button className="btn-login" htmlType="submit">登 录</Button>

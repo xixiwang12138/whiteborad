@@ -98,7 +98,8 @@ export class TextTool extends Tool
                 // 新创建
                 this._curElem = scene.actElem = new TextElement(IdGenerator.genElementId(), e.x, e.y);
                 this.editState = "create";
-                this.textEditor.style.width = "5px"; this.textEditor.style.height = `${this.fontSize}px`
+                this.textEditor.style.width = "5px"; this.textEditor.style.height = `${this._curElem.fontSize}px`
+                this.textEditor.style.fontSize = `${this._curElem.fontSize}px`;
                 this.textEditor.style.textAlign = this._textAlign;
                 this.textEditor.style.transform = `scale(${scene.scale},${scene.scale})`;
             } else {

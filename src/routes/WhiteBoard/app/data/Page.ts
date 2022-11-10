@@ -1,5 +1,5 @@
-import {ElementBase} from "./element/ElementBase";
-import {field, SerializableData} from "../../../utils/DataLoader";
+import {ElementBase} from "../element/ElementBase";
+import {field, SerializableData} from "../../../../utils/data/DataLoader";
 
 export class Page extends SerializableData {
 
@@ -15,7 +15,7 @@ export class Page extends SerializableData {
     whiteBoardId:number;
     @field
     displayName:string
-    @field
+    @field(Array<ElementBase>)
     elements:ElementBase[] = []
 
     constructor(id:number, whiteBoardId:number, displayName:string) {

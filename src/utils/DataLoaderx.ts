@@ -6,13 +6,13 @@ type Constructor<T> = new(...args:any[]) => T;
 export abstract class SerializableData {}
 
 export function field(proto:any, key:string) {
-    let arr = Dataloader.fields.get(proto.constructor.name);
+    let arr = DataLoaderx.fields.get(proto.constructor.name);
     if(arr) arr.push(key);
     else arr = [key];
-    Dataloader.fields.set(proto.constructor.name, arr);
+    DataLoaderx.fields.set(proto.constructor.name, arr);
 }
 
-export class Dataloader {
+export class DataLoaderx {
 
     public static fields:Map<string, string[]> = new Map<string, string[]>();
 

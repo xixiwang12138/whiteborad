@@ -10,21 +10,25 @@ import {Cmd, CmdBuilder, CmdPayloads, CmdType, Message} from "../ws/message";
 import {Selection} from "./tools/Selection";
 import {IWebsocket, WebsocketManager} from "../ws/websocketManager";
 import {OperationTracker} from "./operationTracker/OperationTracker";
-import {Page} from "./Page";
+import {Page} from "./data/Page";
+import {DataLoader} from "../../../utils/data/DataLoader";
+import {WhiteBoard} from "./data/WhiteBoard";
+import {UserManager} from "../../../UserManager";
 
 
 export class WhiteBoardApp implements IWebsocket {
+
+    private whiteBoard:WhiteBoard;
+
+    private pages:Map<string, Page> = new Map<string, Page>();
 
     private wsClient:WebsocketManager;
 
     private readonly scene:DrawingScene;
 
-    private pages:Page[] = [];
-
     private toolBox: ToolBox;
 
     private cmdTracker:OperationTracker<Cmd<keyof CmdPayloads>>;
-
 
     public onClose = () => {}
 
@@ -36,6 +40,9 @@ export class WhiteBoardApp implements IWebsocket {
         const message = JSON.parse(e.data) as Message;
         switch (message.type) {
             case "load":
+                let page = DataLoader.load(Page, message.data);
+                this.pages[page.id] = page;
+                this.scene.renderPage(page);
                 break;
             case "cmd":
                 const cmd = JSON.parse(message.data) as Cmd<any>;
@@ -49,11 +56,13 @@ export class WhiteBoardApp implements IWebsocket {
         }
     }
 
-    constructor() {
+    constructor(whiteBoard:WhiteBoard) {
         this.scene = new DrawingScene();
         this.toolBox  = new ToolBox();
         this.wsClient = new WebsocketManager(this);
+        this.wsClient.connect(whiteBoard.id, UserManager.getId());
         this.cmdTracker = new OperationTracker<Cmd<keyof CmdPayloads>>(10);
+        this.whiteBoard = whiteBoard;
         this.setupListeners();
     }
 
@@ -134,6 +143,7 @@ export class WhiteBoardApp implements IWebsocket {
                     this.deleteElem(cmd.pageId!, cmd.o!); break;
                 case CmdType.Delete:
                     this.restoreElem(cmd.pageId!, cmd.o!); break;
+
             }
             let wdCmd = new CmdBuilder<CmdType.Withdraw>()
                 .setType(CmdType.Withdraw)

@@ -3,6 +3,8 @@ import "./index.css";
 import "../../../../App.css";
 import sort from "../../icon/排序.svg";
 import {Button, Modal, Input, Form, Tabs, Popover} from "antd";
+import {doCreateBoard} from "../../../../api/api";
+import {useHistory} from "react-router-dom";
 
 function MyBoard(){
 
@@ -22,6 +24,7 @@ function MyBoard(){
 
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isJoinOpen, setIsJoinOpen] = useState(false);
+    const navigate = useHistory();
 
     const showCreate = () => {
         setIsCreateOpen(true);
@@ -30,8 +33,10 @@ function MyBoard(){
         setIsJoinOpen(true);
     }
 
-    const handleCreate = () => {
+    const handleCreate = async (values:any) => {
         setIsCreateOpen(false)
+        let res = await doCreateBoard(values.boardName);
+        navigate.push(`/board/${res.boardId}`);
     }
     const handleJoin = () => {
         setIsJoinOpen(false)

@@ -1,6 +1,7 @@
 
 import {ElementBase, ElementType} from "./ElementBase";
 import {ScaleUtil} from "../../../../utils/math";
+import {CanvasScaledCtx} from "../DrawingScene";
 
 /**
  * 由点阵构成的路径抽象元素，比如直线，箭头，自由绘制
@@ -17,16 +18,16 @@ export abstract class PathElement extends ElementBase {
         this.points[0] = x; this.points[1] = y;
     }
 
-    public drawBeforeCtxRestore(ctx: CanvasRenderingContext2D) {
-        const points = this.points;
+    public drawBeforeCtxRestore(ctx:CanvasScaledCtx): void {
+        const points = this.points.map(c => c * ctx._scale);
         ctx.beginPath();
         ctx.moveTo(points[0], points[1]);
         const bound = points.length / 2;
-        const b = bound > 2;
+        const free = bound > 2;
         for(let i = 1;i < bound;i++) {
             const endX = (points[2 * (i - 1)] + points[2 * i]) / 2;
             const endY = (points[2 * (i - 1) + 1] + points[2 * i + 1]) / 2;
-            if(b) {
+            if(free) {
                 ctx.quadraticCurveTo(points[2 * (i - 1)], points[2 * (i - 1) + 1], endX, endY);// 贝塞尔曲线
             } else {
                 ctx.lineTo(points[2 * i], points[2 * i + 1])

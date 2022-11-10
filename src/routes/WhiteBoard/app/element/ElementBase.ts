@@ -1,5 +1,6 @@
 import {RotateUtil, ScaleUtil} from "../../../../utils/math";
 import {SceneTouchEvent} from "./TouchEvent";
+import {CanvasScaledCtx} from "../DrawingScene";
 
 type OnselectedListener = (e: ElementBase) => void;
 
@@ -56,7 +57,7 @@ export abstract class ElementBase {
     /**
      * 获取元素的中心点
      */
-    public getCenter():{x:number;y:number} {
+    public getCenter():{ x: number; y: number } {
         return {
             x: this.x + this.width / 2,
             y: this.y + this.height / 2
@@ -64,13 +65,13 @@ export abstract class ElementBase {
     }
 
     // 绘制选中边框
-    public drawFrame(ctx:CanvasRenderingContext2D) {
-        // 绘制边框
+    public drawFrame(ctx:CanvasScaledCtx) {
+        // 绘制边框，线宽度与scale无关
         const o = this.strokeWidth / 2 + 5;
         const corners = [this.x - o, this.y - o,
             this.x + this.width + o, this.y - o,
             this.x + this.width + o, this.y + this.height + o,
-            this.x - o, this.y + this.height + o];
+            this.x - o, this.y + this.height + o].map(c => c * ctx._scale);
         ctx.beginPath();
         ctx.moveTo(corners[0], corners[1]);
         ctx.setLineDash([5])
@@ -80,9 +81,9 @@ export abstract class ElementBase {
         ctx.setLineDash([0])
     }
 
-    // 绘制旋转句柄
-    public drawRotateHandle(ctx:CanvasRenderingContext2D) {
-        const x = this.x + this.width / 2; const y = this.y - this.strokeWidth / 2 - 20;
+    // 绘制旋转句柄，圆圈大小与scale无关
+    public drawRotateHandle(ctx:CanvasScaledCtx) {
+        const x = (this.x + this.width / 2) * ctx._scale; const y = (this.y - this.strokeWidth / 2 - 20) * ctx._scale;
         ctx.beginPath();
         ctx.arc(x, y, 5, 0, 360);
         ctx.closePath();
@@ -90,10 +91,10 @@ export abstract class ElementBase {
     }
 
     // 绘制缩放句柄
-    public drawScaleHandle(ctx:CanvasRenderingContext2D) {
+    public drawScaleHandle(ctx:CanvasScaledCtx) {
         ctx.beginPath();
         const o = this.strokeWidth / 2 + 5;
-        const baseX = this.x + this.width + o, baseY =  this.y + this.height + o;
+        const baseX = (this.x + this.width + o) * ctx._scale, baseY = (this.y + this.height + o) * ctx._scale;
         let points = [baseX, baseY,
             baseX + 8, baseY,
             baseX + 8, baseY + 8,
@@ -105,8 +106,9 @@ export abstract class ElementBase {
         ctx.stroke();
     }
 
-    public draw(ctx:CanvasRenderingContext2D) {
+    public draw(ctx: CanvasScaledCtx) {
         const center = this.getCenter();
+        center.x = center.x * ctx._scale; center.y = center.y * ctx._scale;
         ctx.save();
         ctx.translate(center.x, center.y);
         ctx.rotate(this.angle);
@@ -117,13 +119,13 @@ export abstract class ElementBase {
         ctx.globalAlpha = this.opacity;
         ctx.fillStyle = this.backgroundColor;
         ctx.strokeStyle = this.strokeColor;
-        ctx.lineWidth = this.strokeWidth;
+        ctx.lineWidth = this.strokeWidth * ctx._scale;
         this.drawBeforeCtxRestore(ctx);
         ctx.restore();
     }
 
     // ctx恢复状态之前进行的绘制操作
-    public abstract drawBeforeCtxRestore(ctx:CanvasRenderingContext2D):void;
+    public abstract drawBeforeCtxRestore(ctx: CanvasScaledCtx):void;
 
     // 创建过程向某点绘制
     public abstract drawTo(x:number, y:number):void;

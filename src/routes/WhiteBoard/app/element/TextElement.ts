@@ -1,4 +1,5 @@
 import {ElementBase, ElementType} from "../../app/element/ElementBase";
+import {CanvasScaledCtx} from "../DrawingScene";
 
 export type TextAlign = "left" | "center" | "right";
 
@@ -15,14 +16,15 @@ export class TextElement extends ElementBase {
         this.text = "";
     }
 
-    public drawBeforeCtxRestore(ctx: CanvasRenderingContext2D) {
+    public drawBeforeCtxRestore(ctx: CanvasScaledCtx): void {
         if(this.finish){
+            const s = ctx._scale;
             ctx.fillStyle = this.strokeColor;
             ctx.textAlign = this.textAlign;
-            ctx.font = `${this.fontSize}px 宋体`;
+            ctx.font = `${this.fontSize * s}px 宋体`;
             const lines = this.text.split("\n");
             for(let i = 0;i < lines.length;i++) {
-                ctx.fillText(lines[i], this.x , this.y + this.fontSize * (1.2 * i + 1), this.width);
+                ctx.fillText(lines[i], this.x * s, (this.y + this.fontSize * (1.2 * i + 1)) * s, this.width * s);
             }
         }
     }

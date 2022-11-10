@@ -4,6 +4,10 @@ import {ScaleUtil} from "../../../utils/math";
 
 export type OnRenderListener = (cvs:DrawingScene)=>void
 
+export interface CanvasScaledCtx extends CanvasRenderingContext2D {
+    _scale:number
+}
+
 export class DrawingScene {
 
     _pageId:number = 0; // TODO 默认渲染页面0？
@@ -13,6 +17,9 @@ export class DrawingScene {
     public  x:number = 0;
     public y:number = 0;
     public scale:number = 1;
+
+    public readonly width = 1920;
+    public readonly height = 1080;
 
     private elements:Map<string, ElementBase> = new Map<string, ElementBase>();
 
@@ -38,7 +45,7 @@ export class DrawingScene {
         this.clearCanvas("real");
         this.realCvsCtx.drawImage(this.bufCvs, 0, 0); // 绘制背景
         if(this._actElem) {
-            this._actElem.draw(this.realCvsCtx);
+            this._actElem.draw(this.getScaledCtx(this.realCvsCtx));
         }
         if(this.onRender !== null) this.onRender(this);
     }
@@ -50,6 +57,11 @@ export class DrawingScene {
     //     this.elements.set(elem.id, elem);
     // }
 
+    private getScaledCtx(ctx:CanvasRenderingContext2D):CanvasScaledCtx {
+        let c = ctx as CanvasScaledCtx;
+        c._scale = this.scale;
+        return c;
+    }
     /**
      * 激活元素, 也就是和背景画布分离
      */
@@ -66,7 +78,7 @@ export class DrawingScene {
     public deactivateElem() {
         if(this._actElem !== null) {
             if(!this.elements.get(this._actElem.id)) this.elements.set(this._actElem.id, this._actElem);
-            this._actElem.draw(this.bufCvsCtx);
+            this._actElem.draw(this.getScaledCtx(this.bufCvsCtx));
             this._actElem = null;
             this.render();
         }
@@ -107,7 +119,7 @@ export class DrawingScene {
     public addElem(elem:ElementBase) {
         if(elem.id === null) throw "null id";
         this.elements.set(elem.id, elem);
-        elem.draw(this.bufCvsCtx);
+        elem.draw(this.getScaledCtx(this.bufCvsCtx));
         this.render();
     }
 
@@ -115,7 +127,7 @@ export class DrawingScene {
         let e = this.elements.get(id);
         if(e) {
             e.isDeleted = false;
-            e.draw(this.bufCvsCtx);
+            e.draw(this.getScaledCtx(this.bufCvsCtx));
             this.render();
         }
     }
@@ -153,8 +165,8 @@ export class DrawingScene {
     }
 
     private setupCanvas() {
-        this.realCvs.width = this.bufCvs.width = 1920;
-        this.realCvs.height = this.bufCvs.height = 1080;
+        this.realCvs.width = this.bufCvs.width = this.width;
+        this.realCvs.height = this.bufCvs.height = this.height;
         this.bufCvsCtx = this.bufCvs.getContext('2d')!;
         this.realCvsCtx = this.realCvs.getContext('2d')!;
         this.clearCanvas();
@@ -162,16 +174,27 @@ export class DrawingScene {
 
     private clearCanvas(which?: "real" | "buffer" ) {
         if(which) {
-            if(which === "real") this.realCvs.width = 1920;
-            else {
-                this.bufCvsCtx.fillStyle = "white";
-                this.bufCvsCtx.fillRect(0,0, 1920, 1080);
+            if(which === "real") {
+                this.realCvs.width = this.width * this.scale;
+            } else {
+                this.bufCvsCtx.fillStyle = "white"; // 背景板用白色填充
+                this.bufCvsCtx.fillRect(0,0, this.width * this.scale, this.height * this.scale);
             }
         } else {
-            this.realCvs.width = 1920;
+            this.realCvs.width = this.width * this.scale;
             this.bufCvsCtx.fillStyle = "white";
-            this.bufCvsCtx.fillRect(0,0, 1920, 1080);
+            this.bufCvsCtx.fillRect(0,0, this.width * this.scale, this.height * this.scale);
         }
+    }
+
+    /**
+     *  缩放之后重新调整canvas的大小
+     */
+    private refreshCanvasSize() {
+        this.realCvs.width = this.width * this.scale;
+        this.realCvs.height = this.height * this.scale;
+        this.bufCvs.width = this.width * this.scale;
+        this.bufCvs.height = this.height * this.scale;
     }
 
     /**
@@ -181,7 +204,7 @@ export class DrawingScene {
         this.clearCanvas("buffer");
         for(let elem of this.elements.values()) {
             if(!(this._actElem?.id === elem.id ) && !elem.isDeleted) {
-                elem.draw(this.bufCvsCtx);
+                elem.draw(this.getScaledCtx(this.bufCvsCtx));
             }
         }
     }
@@ -196,6 +219,8 @@ export class DrawingScene {
         const pScale = (this.scale + dScale) / this.scale; // 缩放倍数变化倍数
         this.scale += dScale;
         [this.x, this.y] = ScaleUtil.scale(this.x, this.y, pScale, pScale, sx, sy);
+        this.refreshCanvasSize();
+        this.drawAllElement();
     }
 
     public translate(dx:number, dy:number) {

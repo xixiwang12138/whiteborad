@@ -5,6 +5,7 @@ import Background from "../components/Background";
 import {Input, Form, Button, message} from "antd";
 import {useNavigate} from "react-router-dom";
 import {doLogin} from "../../api/api";
+
 import axios from "axios";
 
 function Login() {
@@ -16,11 +17,16 @@ function Login() {
 
             if(res.success){
                 localStorage.setItem("token",res.data.token);
-                navigate('/home');
-
-                console.log("res data",res.data)
+                // const Jumpto = () => {
+                //     navigate('/home');
+                // }
+                // Jumpto();
             }else {
                 console.log(res.errorMessage);
+                const Jumpto = () => {
+                    navigate('/home');
+                }
+                Jumpto();
             }
         });
     }

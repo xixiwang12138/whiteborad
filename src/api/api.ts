@@ -5,6 +5,10 @@ interface DataLogin {
     phone: string;
     password: string;
 }
+interface DataUser{
+    phone: string;
+    password: string;
+}
 
 export function doLogin(admin: DataLogin) {
     return request.post<any, ResponseSuccess<{token: string}>>(
@@ -13,14 +17,14 @@ export function doLogin(admin: DataLogin) {
     );
 }
 
-export function doRegister(admin: any) {
+export function doRegister(admin: DataUser) {
     return request.post<any, ResponseSuccess<{token: string}>>(
         "/api/user/register",
         admin
     );
 }
 
-export function doReset(admin: any) {
+export function doReset(admin: DataUser) {
     return request.post<any, ResponseSuccess<{token: string}>>(
         "/api/user/reset",
         admin

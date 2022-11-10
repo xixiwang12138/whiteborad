@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import "./index.css";
-// import "../../../../App.css";
+import "../../../../App.css";
 import home from "../../icon/home.svg";
 import file from "../../icon/导入文件.svg";
 import ex from "../../icon/导出.svg";
@@ -9,7 +9,9 @@ import {useNavigate} from "react-router-dom";
 // import list from "../../icon/属性-收起.svg"; 这个用不了，先用下面的顶替
 import type {MenuProps}  from "antd";
 import shuxing from "../../icon/属性选中.svg";
-import {Avatar, Tooltip, Dropdown, Button, Modal} from "antd";
+import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio} from "antd";
+import type {CheckboxChangeEvent} from "antd/es/checkbox";
+import type {RadioChangeEvent} from "antd";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
 
@@ -32,6 +34,30 @@ function BaseRow(){
     const handleInviteClose = () => {
         setIsInviteOpen(false)
     }
+
+    const onChangeNihe = (e: CheckboxChangeEvent) => {
+        console.log(`check = ${e.target.checked}`);
+    }
+    const [useRadio, setUseRadio] = useState(1)
+    const onChangeQuanxian = (e: RadioChangeEvent) => {
+        console.log('radio checked',e.target.value);
+        setUseRadio(e.target.value);
+    }
+
+    const ShuXingTool = (
+        <div>
+            <div>
+                <Radio.Group onChange={onChangeQuanxian} value={useRadio} style={{display: "flex", flexDirection: "column"}}>
+                    <Radio value={1}>编辑模式</Radio>
+                    <Radio value={2}>只读模式</Radio>
+                </Radio.Group>
+            </div>
+            <div>
+                <Checkbox onChange={onChangeNihe}>线条拟合</Checkbox>
+            </div>
+            <div>一键清空</div>
+        </div>
+    )
 
     return(
         <div>
@@ -58,7 +84,10 @@ function BaseRow(){
                 </div>
                 <div className="row-right">
                     <div className="right1">
-                        <img src={shuxing}/>
+                        <Popover placement="bottom" content={ShuXingTool} trigger="hover">
+                            <img src={shuxing}/>
+                        </Popover>
+                        {/*<img src={shuxing}/>*/}
                     </div>
                     <div className="right2">
                         <div className="import-icon">

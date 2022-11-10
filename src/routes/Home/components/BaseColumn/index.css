@@ -31,8 +31,9 @@
 .avatar {
     height: 60px;
     width: 60px;
-    background-color: #9C6262;
+    /*background-color: #9C6262;*/
     border-radius: 30px;
+    cursor: not-allowed;
 }
 .base-name {
     height: 20px;
@@ -41,21 +42,33 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
     /*background-color: white;*/
 }
 .name {
     height: 20px;
     width: 80px;
     color: black;
+    /*background-color: #FAA6A4;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.name-input {
+    height: 20px !important;
+    width: 80px !important;
+    color: black !important;
 }
 .name-icon {
     height: 20px;
     width: 20px;
+    transform: translateY(-2px);
+    /*background-color: #DC8AF9;*/
 }
 .name-icon img {
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
+    height: 80%;
+    width: 80%;
+    object-fit: cover;
 }
 .column-bottom{
     height: 120px;
@@ -78,6 +91,7 @@
 .item-icon {
     height: 20px;
     width: 20px;
+    transform: translateY(-2px);
 }
 .item-icon img {
     height: 100%;

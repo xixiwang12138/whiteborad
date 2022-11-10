@@ -10,10 +10,10 @@
 }
 .contain {
     height: 500px;
-    width: 1000px;
+    width: 900px;
     max-width: 100vw;
     position: absolute;
-    left: 200px;
+    left: 300px;
     /*background-color: #DC8AF9;*/
     display: flex;
     flex-direction: column;
@@ -51,7 +51,8 @@
 }
 .box-text {
     cursor: pointer;
-    color: grey;
+    /*color: grey;*/
+    color: black;
 }
 .box-text:hover {
     color: black;
@@ -69,6 +70,8 @@
     width: 20px;
     height: 20px;
     cursor: pointer;
+    transform: translateY(-4px);
+    /*background-color: #FAA6A4;*/
 }
 .right-icon img {
     width: 100%;
@@ -80,17 +83,23 @@
     height: 25px;
     color: grey;
     cursor: pointer;
+    /*background-color: #DC8AF9;*/
 }
 .right-box:hover{
     color: black;
 }
 .board-container {
-    width: 1000px;
-    height: 400px;
-    background-color: #282c34;
+    width: 850px;
+    height: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-flow: wrap;
+    /*border: 1px black solid;*/
+    /*background-color: rgba(179,190,194,0.1);*/
 }
 .contain-btns {
-    width: 1000px;
+    width: 900px;
     height: 40px;
     /*background-color: #282c34;*/
     display: flex;
@@ -189,6 +198,21 @@
     padding-left: 10px !important;
     font-size: 15px !important;
 }
+.ant-tabs-tab {
+    color: grey !important;
+}
+.ant-tabs-tab:hover {
+    color: black !important;
+}
+.ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: black !important;
+    text-shadow: 0 0 0.25px currentcolor !important;
+}
+.ant-tabs-ink-bar {
+    position: absolute;
+    background: none !important;
+    pointer-events: none;
+}
 /*.ant-input:hover {*/
 /*    border: none !important;*/
 /*    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);*/
@@ -197,3 +221,47 @@
 /*    border: none !important;*/
 /*    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);*/
 /*}*/
+.mini-board-container {
+    width: 250px;
+    height: 180px;
+    /*background-color: #DC8AF9;*/
+    /*border: 1px grey solid;*/
+    margin-right: 20px;
+    margin-bottom: 20px;
+}
+.mini-board-box {
+    width: 250px;
+    height: 150px;
+    background-color: rgba(179,190,194,0.5);
+    border-radius: 10px;
+}
+.mini-board-tool {
+    width: 250px;
+    height: 30px;
+    /*background-color: #DC8AF9;*/
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}
+.tool-icon {
+    height: 30px;
+    width: 30px;
+    /*background-color: red;*/
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mini-board-name {
+    height: 20px;
+    line-height: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    color: black;
+}
+.tool-content {
+    height: 15px;
+    line-height: 15px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}

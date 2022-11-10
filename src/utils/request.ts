@@ -3,6 +3,7 @@ import {message} from "antd";
 
 const request = axios.create({
     timeout: 5000,
+    baseURL: "http://175.178.81.93:10300"
 });
 request.interceptors.request.use((c)=>{
     const token = localStorage.getItem("token")

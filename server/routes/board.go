@@ -3,6 +3,8 @@ package routes
 import (
 	"errors"
 	"github.com/gin-gonic/gin"
+	"log"
+	"server/common/cts"
 	"server/dao"
 	"server/logic"
 	"server/models"
@@ -64,6 +66,7 @@ func createBoard(ctx *gin.Context, req *bind.BoardReq) (interface{}, error) {
 	bName := req.BoardName
 	bId, err := dao.WhiteBoardRepo.Init(uId, bName)
 	if err != nil {
+		log.Printf(cts.ErrorFormat, err)
 		return nil, err
 	}
 	return struct {

@@ -23,7 +23,11 @@ var NotDeleted = &Condition{
 type BaseRepo[T interface{}] struct{}
 
 func (this *BaseRepo[T]) Create(o *T) error {
-	return sources.MysqlSource.Db.Create(o).Error
+	err := sources.MysqlSource.Db.Create(o).Error
+	if err != nil {
+		return errors.Wrap(err, "create record")
+	}
+	return nil
 }
 
 func (this *BaseRepo[T]) FindByID(pk int64) (*T, error) {

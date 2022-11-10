@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"log"
 	"server/common/repo"
 	"server/common/utils"
 	"server/models"
@@ -33,6 +34,7 @@ func (this *whiteBoardRepo) Init(creator int64, boardName ...string) (int64, err
 	if err != nil {
 		return 0, err
 	}
+	log.Println("create board, ", "name:", wb.Name)
 	return boardId, nil
 }
 

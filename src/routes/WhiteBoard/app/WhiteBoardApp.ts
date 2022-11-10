@@ -3,7 +3,7 @@ import {ToolType} from "./tools/Tool";
 import {ToolBox} from "./tools/ToolBox";
 import {SecondLevelType} from "../components/ToolList";
 import {GenericElementTool} from "./tools/GenericElementTool";
-import {GenericElementType} from "./element/GenericElement";
+import {GenericElement, GenericElementType} from "./element/GenericElement";
 import {LinearElementType, LinearTool} from "./tools/LinearTool";
 import {TextTool} from "./tools/TextTool";
 import {Cmd, CmdBuilder, CmdPayloads, CmdType, Message} from "../ws/message";
@@ -14,6 +14,10 @@ import {Page} from "./data/Page";
 import {DataLoader} from "../../../utils/data/DataLoader";
 import {WhiteBoard} from "./data/WhiteBoard";
 import {UserManager} from "../../../UserManager";
+import {ElementBase, ElementType} from "./element/ElementBase";
+import {FreeDraw} from "./element/FreeDraw";
+import {TextElement} from "./element/TextElement";
+import {Line} from "./element/Line";
 
 
 export class WhiteBoardApp implements IWebsocket {
@@ -42,13 +46,17 @@ export class WhiteBoardApp implements IWebsocket {
             case "load":
                 let page = DataLoader.load(Page, message.data);
                 this.pages[page.id] = page;
+                this.scene._pageId = page.id;
                 this.scene.renderPage(page);
                 break;
             case "cmd":
-                const cmd = JSON.parse(message.data) as Cmd<any>;
-                switch (cmd.type) { //TODO 完善处理方式
+                const cmd = DataLoader.load(Cmd, message.data);
+                switch (cmd.type) {
                     case CmdType.Add:
-                        // this.scene.restoreElem()
+                        let elem = this.loadElemByCmd(cmd);
+                        let page = this.pages[cmd.pageId];
+                        page.addElem(elem);
+                        this.scene.addElem(elem);
                         break
                     case CmdType.Delete:
                         break
@@ -68,7 +76,12 @@ export class WhiteBoardApp implements IWebsocket {
 
     private setupListeners() {
         this.toolBox.setOnCreateListener( (e) => {
-            console.log(e);
+            let cmd = new CmdBuilder().setType(CmdType.Add)
+                .setPage(this.whiteBoard.id, this.scene._pageId)
+                .setUser(UserManager.getId())
+                .setElement(e.id)
+                .setPayload(e).build();
+            this.wsClient.sendCmd(cmd);
         })
         this.toolBox.addOnModifyListener(CmdType.Adjust, (t, e,p) => {
             console.log(p);
@@ -147,15 +160,15 @@ export class WhiteBoardApp implements IWebsocket {
             }
             let wdCmd = new CmdBuilder<CmdType.Withdraw>()
                 .setType(CmdType.Withdraw)
-                .setUser(123) // TODO 用户管理对象获取id
-                .setPage(1,2)
+                .setUser(UserManager.getId()) // TODO 用户管理对象获取id
+                .setPage(cmd.boardId,cmd.pageId)
                 .setPayload(cmd)
                 .build()
             this.wsClient.sendCmd(wdCmd);
         }
     }
 
-    private deleteElem(pageId:number, elemId:string) {
+    private deleteElem(pageId:string, elemId:string) {
         if(this.scene.pageId === pageId) {
             let elem = this.scene.getElem(elemId);
             if(elem) this.scene.removeElem(elem);
@@ -163,7 +176,7 @@ export class WhiteBoardApp implements IWebsocket {
         this.pages[pageId].deleteElemById(elemId);
     }
 
-    private restoreElem(pageId:number, id:string) {
+    private restoreElem(pageId:string, id:string) {
         const page = this.pages[pageId];
         let i = page.findElemIdxById(id, true);
         if(i !== -1) {
@@ -179,6 +192,21 @@ export class WhiteBoardApp implements IWebsocket {
                 case CmdType.Add:
 
             }
+        }
+    }
+
+    private loadElemByCmd(cmd:Cmd<any>):ElementBase {
+        switch (cmd.elementType) {
+            case ElementType.freedraw:
+                return DataLoader.load(FreeDraw, cmd.payload);
+            case ElementType.generic:
+                return DataLoader.load(GenericElement, cmd.payload);
+            case ElementType.text:
+                return DataLoader.load(TextElement, cmd.payload);
+            case ElementType.linear:
+                return DataLoader.load(Line, cmd.payload);
+            default:
+                throw "unknown element type";
         }
     }
 

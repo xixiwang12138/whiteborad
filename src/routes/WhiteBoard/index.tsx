@@ -8,6 +8,7 @@ import {ToolType} from "./app/tools/Tool";
 import {DrawingScene} from "./app/DrawingScene";
 import {joinBoard} from "../../api/api";
 import {RouteComponentProps} from "react-router-dom";
+import {UserManager} from "../../UserManager";
 
 
 export interface WhiteBoardRouteParam {
@@ -45,6 +46,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.setupCanvas();
         this.setupWindow();
         this.setupRootNode();
+        await UserManager.syncUser();
         await this.setupApp();
     }
 
@@ -78,16 +80,15 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
             e.preventDefault();
             e.stopPropagation();
             if (this.refactoringScene) {
-                if(this.app.zoomScene(-Math.sign(e.deltaY) * 0.05, e.x, e.y)){
-                    this.app.refreshScene();
+                if(this.app?.zoomScene(-Math.sign(e.deltaY) * 0.05, e.x, e.y)){
+                    this.app?.refreshScene();
                     // TODO UI同步到缩放按钮上
                 }
             }}, {passive:false});
     }
 
     private async setupApp() {
-        let boardId = Number.parseInt(this.props.match.params.id);
-        if(!boardId) throw "error id format";
+        let boardId = this.props.match.params.id;
         this.app = new WhiteBoardApp(await joinBoard(boardId));
         this.app.setOnRenderListener(this.refreshShowCanvas.bind(this));
         this.app.translateScene((this.showCanvas.width - 1920) / 2, (this.showCanvas.height - 1080) / 2);
@@ -102,10 +103,10 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         } else {
             let newTime = new Date();
             if(newTime.valueOf() - this.lastTime.valueOf() < 400) {
-                this.app.dispatchMouseEvent(e, true);
+                this.app?.dispatchMouseEvent(e, true);
                 newTime.setFullYear(2000); // 设置一个足够久的时间，防止三连击
             } else {
-                this.app.dispatchMouseEvent(e); // 双击时不触发down事件
+                this.app?.dispatchMouseEvent(e); // 双击时不触发down事件
             }
             this.lastTime = newTime;
         }
@@ -113,18 +114,18 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
 
     private onUp(e:MouseEvent) {
         if(!this.refactoringScene) {
-            this.app.dispatchMouseEvent(e);
+            this.app?.dispatchMouseEvent(e);
         }
         this.root.onmousemove = null;
     }
 
     private onMove(e:MouseEvent) {
         if(this.refactoringScene) {
-            this.app.translateScene(e.x - this.lastX, e.y - this.lastY);
-            this.app.refreshScene();
+            this.app?.translateScene(e.x - this.lastX, e.y - this.lastY);
+            this.app?.refreshScene();
             this.lastX = e.x; this.lastY = e.y;
         } else {
-            this.app.dispatchMouseEvent(e);
+            this.app?.dispatchMouseEvent(e);
         }
     }
 
@@ -132,7 +133,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.showCanvas.width = this.showCanvas.clientWidth;
         this.showCanvas.height = this.showCanvas.clientHeight;
         this.clearCanvas();
-        this.app.refreshScene();
+        this.app?.refreshScene();
     }
 
 
@@ -153,13 +154,13 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
             this.refactoringScene = true;
         } else {
             this.refactoringScene = false;
-            this.app.selectTool(type, second);
+            this.app?.selectTool(type, second);
         }
     }
 
-    onRedo(): void {this.app.redo();}
+    onRedo(): void {this.app?.redo();}
 
-    onUndo(): void {this.app.undo();}
+    onUndo(): void {this.app?.undo();}
 
 }
 

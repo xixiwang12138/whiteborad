@@ -2,17 +2,19 @@
 import {ElementBase, ElementType} from "./ElementBase";
 import {ScaleUtil} from "../../../../utils/math";
 import {CanvasScaledCtx} from "../DrawingScene";
+import {field} from "../../../../utils/data/DataLoader";
 
 /**
  * 由点阵构成的路径抽象元素，比如直线，箭头，自由绘制
  */
-export abstract class PathElement extends ElementBase {
+export class PathElement extends ElementBase {
 
+    @field(Array<number>)
     public points: Array<number>;
 
     public _points!: Array<number>;
 
-    protected constructor(id:string, x:number, y:number, type:ElementType) {
+    public constructor(id:string, x:number, y:number, type:ElementType) {
         super(id, x, y, type);
         this.points = new Array<number>(2);
         this.points[0] = x; this.points[1] = y;

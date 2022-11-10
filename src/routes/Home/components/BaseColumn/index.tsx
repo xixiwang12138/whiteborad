@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./index.css";
 import {Button, Form, Input, Modal} from "antd";
 import write from "../../icon/编辑名称.svg";
@@ -6,19 +6,24 @@ import bin from "../../icon/回收站.svg";
 import reset from "../../icon/重置密码.svg";
 import logout from "../../icon/退出.svg";
 import {useHistory} from "react-router-dom";
+import {UserManager} from "../../../../UserManager";
 
 function BaseColumn() {
-    const navigate = useHistory();
+    const history = useHistory();
+
+    const ava = UserManager.getAvatar();
 
     const [isNameOpen, setIsNameOpen] = useState(false);
     const [userName, setUserName] = useState("未命名");
+
     const showNameWin = () => {
         setIsNameOpen(true);
     }
     // const onFinishChange = (values: any) => {
     //     console.log("用户昵称：",values);
     // }
-    const handleChange = () => {
+
+    const handleChange = async () => {
 
         setIsNameOpen(false);
     }
@@ -30,8 +35,7 @@ function BaseColumn() {
         <div className="base-column">
             <div className="column-top">
                 <div className="base-avatar">
-                    {/*简单点的话那就头像统一颜色就好，复杂的话，登录/注册/重置返回数据中还要有系统随机生成的颜色*/}
-                    <div className="avatar" style={{backgroundColor: "#9C6262"}}></div>
+                    <div className="avatar" style={{backgroundColor: `#${ava}`}}></div>
                 </div>
                 <div style={{marginTop:'10px'}}/>
                 <div className="base-name" onClick={showNameWin}>
@@ -51,14 +55,14 @@ function BaseColumn() {
                 {/*    <div className="item-text">回收站</div>*/}
                 {/*</div>*/}
                 <div style={{marginTop:'10px'}}/>
-                <div className="bottom-item" onClick={()=>navigate.push('/reset')}>
+                <div className="bottom-item" onClick={()=>history.push('/reset')}>
                     <div className="item-icon">
                         <img src={reset}/>
                     </div>
                     <div className="item-text">重置密码</div>
                 </div>
                 <div style={{marginTop:'10px'}}/>
-                <div className="bottom-item" onClick={()=>navigate.push('/')}>
+                <div className="bottom-item" onClick={()=>history.push('/')}>
                     <div className="item-icon">
                         <img src={logout}/>
                     </div>
@@ -71,7 +75,7 @@ function BaseColumn() {
                        <Button key="copy" onClick={handleChange}>确 认</Button>
                    }>
                 {/*<Form.Item name="userName">*/}
-                    <Input className="win-form-input" placeholder="请输入昵称" id="username"/>
+                    <Input className="win-form-input" placeholder="请输入昵称" id="username" onChange={(e)=> {setUserName(e.target.value)}}/>
                 {/*</Form.Item>*/}
             </Modal>
 

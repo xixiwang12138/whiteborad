@@ -1,5 +1,11 @@
 
 import {getMetaData, isChildClassOf} from "./TypeUtils";
+import {Line} from "../../routes/WhiteBoard/app/element/Line";
+import {FreeDraw} from "../../routes/WhiteBoard/app/element/FreeDraw";
+import {TextElement} from "../../routes/WhiteBoard/app/element/TextElement";
+import {GenericElement} from "../../routes/WhiteBoard/app/element/GenericElement";
+import {Cmd} from "../../routes/WhiteBoard/ws/message";
+import {ElementBase, ElementType} from "../../routes/WhiteBoard/app/element/ElementBase";
 
 export type Constructor<T = any> = new (...args: any[]) => T;
 
@@ -321,6 +327,17 @@ export class DataLoader {
 			(setting.occasions[key] & occasion) != 0;
 	}
 
+
+
 }
+
+// interface ElemTypeMapping {
+// 	[ElementType.linear]: Line;
+// 	[ElementType.freedraw]: FreeDraw;
+// 	[ElementType.text]: TextElement;
+// 	[ElementType.generic]: GenericElement;
+// }
+
+
 
 

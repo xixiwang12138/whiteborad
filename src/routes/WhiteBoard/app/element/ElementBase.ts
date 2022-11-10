@@ -1,7 +1,7 @@
 import {RotateUtil, ScaleUtil} from "../../../../utils/math";
 import {SceneTouchEvent} from "./TouchEvent";
 import {CanvasScaledCtx} from "../DrawingScene";
-import {field} from "../../../../utils/data/DataLoader";
+import {field, SerializableData} from "../../../../utils/data/DataLoader";
 
 type OnselectedListener = (e: ElementBase) => void;
 
@@ -9,10 +9,13 @@ export enum ElementType {
     freedraw, text, generic, linear
 }
 
-export abstract class ElementBase {
+
+
+export class ElementBase extends SerializableData {
+
     @field
     public id:string;
-    @field(ElementType)
+    @field(Number)
     public type:ElementType;
     @field
     public x:number; // 左上角点的x坐标
@@ -31,7 +34,7 @@ export abstract class ElementBase {
 
     public opacity:number = 1;
 
-    public isDeleted:boolean;
+    public isDeleted:boolean = false;
 
     private onSelected!: OnselectedListener;
 
@@ -48,7 +51,8 @@ export abstract class ElementBase {
     get finish(){return this._finish;}
     set finish(f){this._finish = f;}
 
-    protected constructor(id:string, x:number, y:number, type:ElementType) {
+    public constructor(id:string, x:number, y:number, type:ElementType) {
+        super();
         this.id = id;
         this.x = x; this.y = y;
         this.type = type;
@@ -133,10 +137,10 @@ export abstract class ElementBase {
     }
 
     // ctx恢复状态之前进行的绘制操作
-    public abstract drawBeforeCtxRestore(ctx: CanvasScaledCtx):void;
+    public drawBeforeCtxRestore(ctx: CanvasScaledCtx):void{};
 
     // 创建过程向某点绘制
-    public abstract drawTo(x:number, y:number):void;
+    public drawTo(x:number, y:number):void{};
 
     public move(dx:number, dy:number) {
         this.x += dx; this.y += dy;
@@ -270,3 +274,4 @@ export abstract class ElementBase {
     }
 
 }
+

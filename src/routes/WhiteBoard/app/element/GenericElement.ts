@@ -4,14 +4,14 @@ import {CanvasScaledCtx} from "../DrawingScene";
 
 export type GenericElementType = "rectangle" | "ellipse" | "triangle";
 
-export abstract class GenericElement extends ElementBase {
+export class GenericElement extends ElementBase {
 
     public genericType:GenericElementType;
 
     private readonly startX:number;
     private readonly startY:number;
 
-    protected constructor(id:string, x:number, y:number, type:GenericElementType) {
+    public constructor(id:string, x:number, y:number, type:GenericElementType) {
         super(id, x, y, ElementType.generic);
         this.startX = x; this.startY = y;
         this.genericType = type;

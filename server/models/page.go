@@ -15,19 +15,19 @@ const (
 )
 
 type Model struct {
-	ID         int64 `json:"id"`                                     //主键
-	CreatTime  int64 `json:"creatTime" gorm:"autoCreateTime:milli"`  //创建时间
-	UpdateTime int64 `json:"updateTime" gorm:"autoUpdateTime:milli"` //最后一次更新时间
-	DeleteTime int64 `json:"deleteTime"`                             //删除时间
+	ID         string `json:"id"`                                     //主键
+	CreatTime  int64  `json:"creatTime" gorm:"autoCreateTime:milli"`  //创建时间
+	UpdateTime int64  `json:"updateTime" gorm:"autoUpdateTime:milli"` //最后一次更新时间
+	DeleteTime int64  `json:"deleteTime"`                             //删除时间
 }
 
 //默认情况下，GORM 会使用 ID 作为表的主键
 
 type WhiteBoard struct {
 	Mode        BoardType `json:"mode"`    //模式
-	Creator     int64     `json:"creator"` //创建者
+	Creator     string    `json:"creator"` //创建者
 	Name        string    `json:"name"`
-	DefaultPage int64     `json:"defaultPage"`
+	DefaultPage string    `json:"defaultPage"`
 	Model
 	Pages []*Page `json:"pages" gorm:"-"` //页面信息
 }
@@ -39,7 +39,7 @@ const (
 
 type Page struct {
 	Model
-	WhiteBoardID int64  `json:"whiteBoardId" gorm:"column:whiteBoardId"` //所属白板的id
+	WhiteBoardID string `json:"whiteBoardId" gorm:"column:whiteBoardId"` //所属白板的id
 	DisplayName  string `json:"displayName"`                             //展示的名字
 	Content      string `json:"-" gorm:"type:LONGTEXT"`                  //存储的一页上的所有图形对象,存储pageStringContent序列化后的字符串
 }

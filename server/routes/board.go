@@ -70,7 +70,7 @@ func createBoard(ctx *gin.Context, req *bind.BoardReq) (interface{}, error) {
 		return nil, err
 	}
 	return struct {
-		BoardId int64 `json:"boardId"`
+		BoardId string `json:"boardId"`
 	}{
 		bId,
 	}, nil

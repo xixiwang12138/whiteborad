@@ -4,7 +4,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
-	"strconv"
 	"time"
 )
 
@@ -12,7 +11,7 @@ type JWT struct {
 	SigningKey []byte
 }
 
-func CreateJWT(userId int64) (string, error) {
+func CreateJWT(userId string) (string, error) {
 	j := NewJWT()
 	cs := CustomClaims{
 		UserId: userId,
@@ -30,7 +29,7 @@ func CreateJWT(userId int64) (string, error) {
 }
 
 type CustomClaims struct {
-	UserId int64
+	UserId string
 	jwt.StandardClaims
 }
 
@@ -45,7 +44,7 @@ func (j *JWT) CreateToken(claims CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedString, err := token.SignedString(j.SigningKey)
 	if err != nil {
-		return "", errors.Wrap(err, "create token err: "+strconv.Itoa(int(claims.UserId)))
+		return "", errors.Wrap(err, "create token err: "+claims.UserId)
 	}
 	return signedString, nil
 }
@@ -98,7 +97,7 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 	return "", errors.New("invalid token")
 }
 
-func getOpenid(c *gin.Context) int64 {
+func getOpenid(c *gin.Context) string {
 	cc, _ := c.Get("payload")
 	return cc.(*CustomClaims).UserId
 }

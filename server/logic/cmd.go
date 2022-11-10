@@ -1,10 +1,12 @@
 package logic
 
 import (
+	"encoding/json"
 	"log"
 	"server/common/cache"
 	"server/common/cts"
 	"server/common/sources"
+	"server/common/utils"
 	"server/dao"
 	"server/models"
 	"server/ws"
@@ -19,7 +21,7 @@ func init() {
 	ws.UserInfoHandler = dao.UserRepo.FindByID
 }
 
-func CmdHandler(o *models.Cmd, boardId int64, userId int64) error {
+func CmdHandler(o *models.Cmd, boardId string, userId string) error {
 	//广播
 	go func() {
 		defer func() {
@@ -43,7 +45,10 @@ func CmdHandler(o *models.Cmd, boardId int64, userId int64) error {
 // AddCmd 在页面上增加某一个元素
 func AddCmd(cmd *models.Cmd) error {
 	//存储元素对象
-	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.Payload.GetAfter()).Err()
+	p := cmd.Payload
+	m := utils.DeserializeMap(p)
+	models.StringElementArray(m)
+	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), m).Err()
 	if err != nil {
 		return err
 	}
@@ -74,7 +79,16 @@ func WithdrawCmd(cmd *models.Cmd) error { //TODO
 
 // AdjustCmd 调整一个对象的某一个属性
 func AdjustCmd(cmd *models.Cmd) error {
-	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), cmd.Payload.GetAfter()).Err()
+	p := cmd.Payload
+	var data models.ReceiveCmdElement
+	err := json.Unmarshal([]byte(p), &data)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	after := data.GetAfter()
+	models.StringElementArray(after)
+	err = sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), after).Err()
 	if err != nil {
 		return err
 	}

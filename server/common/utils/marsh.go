@@ -14,6 +14,15 @@ func Serialize[T interface{}](v T) string {
 	return string(marshal)
 }
 
+func SerializeMap[T interface{}](v T) string {
+	marshal, err := json.Marshal(v)
+	if err != nil {
+		log.Println("[Marshal Error]", err)
+		return ""
+	}
+	return string(marshal)
+}
+
 func SerializeBytes[T interface{}](v T) []byte {
 	marshal, err := json.Marshal(v)
 	if err != nil {
@@ -34,6 +43,19 @@ func Deserialize[T interface{}](seq string) *T {
 		return nil
 	}
 	return res
+}
+
+func DeserializeMap(seq string) map[string]any {
+	if seq == "" {
+		return nil
+	}
+	var data map[string]any
+	err := json.Unmarshal([]byte(seq), &data)
+	if err != nil {
+		log.Println("[Unmarshal Error]", err)
+		return nil
+	}
+	return data
 }
 
 func DeserializeBytes[T interface{}](seq []byte) *T {

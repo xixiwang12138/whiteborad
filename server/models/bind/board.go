@@ -1,11 +1,11 @@
 package bind
 
 type BoardReq struct {
-	BoardId   int64  `json:"boardId"`
+	BoardId   string `json:"boardId"`
 	BoardName string `json:"boardName"`
 }
 
 type PageReq struct {
-	BoardId int64 `json:"boardId"`
-	PageId  int64 `json:"pageId"`
+	BoardId string `json:"boardId"`
+	PageId  string `json:"pageId"`
 }

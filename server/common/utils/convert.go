@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"github.com/pkg/errors"
 	"reflect"
 	"strconv"
@@ -101,6 +102,13 @@ func MapValueConvert(filedMap FiledTypeMap, v map[string]string) (map[string]int
 				return nil, err
 			}
 			result[field] = parseValue
+		case reflect.Array:
+			var arrayData []float64
+			err := json.Unmarshal([]byte(value), &arrayData)
+			if err != nil {
+				return nil, err
+			}
+			result[field] = arrayData
 		default:
 			panic("no-basic data type is not supported")
 		}

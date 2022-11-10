@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/json"
 	"reflect"
 	"server/common/utils"
 )
@@ -27,6 +28,19 @@ var ElementFiledMap utils.FiledTypeMap = map[string]reflect.Kind{
 	"verticalAlign":   reflect.Int8,
 	"containerId":     reflect.Int64,
 	"originText":      reflect.Float64,
+	"points":          reflect.Array,
+}
+
+func StringElementArray(e map[string]any) {
+	v, ok := e["points"]
+	if ok {
+		points := v.([]float64)
+		bytes, err := json.Marshal(points)
+		if err != nil {
+			return
+		}
+		e["points"] = string(bytes)
+	}
 }
 
 //type BaseElement struct {

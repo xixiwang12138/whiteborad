@@ -26,17 +26,18 @@ func (e ReceiveCmdElement) GetAfter() map[string]any {
 }
 
 type Cmd struct {
-	ID      string            `json:"id"`      //操作id
-	PageId  int64             `json:"pageId"`  //操作的页面
-	Type    CmdType           `json:"type"`    //操作类型
-	O       string            `json:"o"`       //操作对象
-	Payload ReceiveCmdElement `json:"payload"` //操作后的值
-	Time    int64             `json:"time"`    //操作的时间
-	BoardId int64             `json:"boardId"` //所在的白板id
-	Creator int64             `json:"creator"` //操作人id
+	ID          string  `json:"id"`          //操作id
+	PageId      string  `json:"pageId"`      //操作的页面
+	Type        CmdType `json:"type"`        //操作类型
+	O           string  `json:"o"`           //操作对象
+	Payload     string  `json:"payload"`     //操作后的值
+	Time        int64   `json:"time"`        //操作的时间
+	BoardId     string  `json:"boardId"`     //所在的白板id
+	Creator     string  `json:"creator"`     //操作人id
+	ElementType int     `json:"elementType"` //操作的值的类型
 }
 
-func (cmd *Cmd) Fill(boardId int64, creator int64) {
+func (cmd *Cmd) Fill(boardId string, creator string) {
 	cmd.BoardId = boardId
 	cmd.Creator = creator
 }

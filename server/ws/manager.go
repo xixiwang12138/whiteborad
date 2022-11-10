@@ -9,16 +9,15 @@ import (
 	"server/common/utils"
 	"server/models"
 	"server/models/bind"
-	"strconv"
 	"strings"
 )
 
-type CmdHandlerFunType func(cmd *models.Cmd, boardId int64, userId int64) error
+type CmdHandlerFunType func(cmd *models.Cmd, boardId string, userId string) error
 
 var CmdHandler CmdHandlerFunType
-var StoreHandler func(int64)
-var LoadingHandler func(int64, int64) (*models.PageVO, error)
-var UserInfoHandler func(int64) (*models.User, error)
+var StoreHandler func(string)
+var LoadingHandler func(string, string) (*models.PageVO, error)
+var UserInfoHandler func(string) (*models.User, error)
 
 //每一个白板为Hub
 
@@ -31,8 +30,8 @@ func ConnectHandler(conn *websocket.Conn, processPath string) {
 	//提取路径参数，读取所在白板以及连接的用户
 	res := strings.Split(processPath, "/")
 	boardIdStr, userIdStr := res[1], res[2]
-	userId, _ := strconv.ParseInt(userIdStr, 10, 64)
-	boardId, _ := strconv.ParseInt(boardIdStr, 10, 64)
+	userId := userIdStr
+	boardId := boardIdStr
 
 	log.Println("user: ", userIdStr, "=========> "+"enter board: ", boardIdStr)
 	//处理用户进入某个白板
@@ -45,13 +44,13 @@ func ConnectHandler(conn *websocket.Conn, processPath string) {
 
 // region HubManager部分
 
-var HubMgr = &HubManager{Hubs: utils.NewConcurrentMap[int64, *Hub]()}
+var HubMgr = &HubManager{Hubs: utils.NewConcurrentMap[string, *Hub]()}
 
 type HubManager struct {
-	Hubs *utils.ConcurrentMap[int64, *Hub]
+	Hubs *utils.ConcurrentMap[string, *Hub]
 }
 
-func (h *HubManager) GetHub(boardId int64) *Hub {
+func (h *HubManager) GetHub(boardId string) *Hub {
 	r, ok := h.Hubs.Get(boardId)
 	if !ok {
 		return nil
@@ -59,19 +58,19 @@ func (h *HubManager) GetHub(boardId int64) *Hub {
 	return r
 }
 
-func (h *HubManager) HubCreated(boardId int64) bool {
+func (h *HubManager) HubCreated(boardId string) bool {
 	return h.Hubs.Has(boardId)
 }
 
-func (h *HubManager) CreateHub(boardId int64) {
+func (h *HubManager) CreateHub(boardId string) {
 	h.Hubs.Set(boardId, NewHub(boardId))
 }
 
-func (h *HubManager) DeleteHub(boardId int64) {
+func (h *HubManager) DeleteHub(boardId string) {
 	h.Hubs.Delete(boardId)
 }
 
-func (h *HubManager) EnterHub(boardId int64, userId int64, conn *websocket.Conn) {
+func (h *HubManager) EnterHub(boardId string, userId string, conn *websocket.Conn) {
 	//判断hub白板是否创建
 	if !h.HubCreated(boardId) {
 		h.CreateHub(boardId)
@@ -102,7 +101,7 @@ func (h *HubManager) EnterHub(boardId int64, userId int64, conn *websocket.Conn)
 
 	}()
 	//获取默认页信息
-	vo, err := LoadingHandler(boardId, 0)
+	vo, err := LoadingHandler(boardId, "")
 	if err != nil {
 		log.Printf(cts.ErrorFormat, err)
 		//TODO 返回给前端
@@ -116,7 +115,7 @@ func (h *HubManager) EnterHub(boardId int64, userId int64, conn *websocket.Conn)
 	}
 }
 
-func (h *HubManager) LeaveHub(boardId int64, userId int64) {
+func (h *HubManager) LeaveHub(boardId string, userId string) {
 	//获取hub
 	hub := h.GetHub(boardId)
 	userConnection := hub.GetUserConnection(userId)
@@ -150,7 +149,7 @@ func (h *HubManager) LeaveHub(boardId int64, userId int64) {
 
 }
 
-func (h *HubManager) BroadcastCmd(boardId int64, cmd *models.Cmd, exceptUser ...int64) {
+func (h *HubManager) BroadcastCmd(boardId string, cmd *models.Cmd, exceptUser ...string) {
 	//获取hub
 	hub := h.GetHub(boardId)
 	hub.Broadcast(struct {
@@ -167,19 +166,19 @@ func (h *HubManager) BroadcastCmd(boardId int64, cmd *models.Cmd, exceptUser ...
 //region Hub部分
 
 type Hub struct {
-	BoardId     int64                                        //白板id
-	Connections *utils.ConcurrentMap[int64, *UserConnection] //当前白板下所有的连接
+	BoardId     string                                        //白板id
+	Connections *utils.ConcurrentMap[string, *UserConnection] //当前白板下所有的连接
 }
 
-func NewHub(boardId int64) *Hub {
-	return &Hub{BoardId: boardId, Connections: utils.NewConcurrentMap[int64, *UserConnection]()}
+func NewHub(boardId string) *Hub {
+	return &Hub{BoardId: boardId, Connections: utils.NewConcurrentMap[string, *UserConnection]()}
 }
 
 // Broadcast 给Hub中每一个用户发送消息，在排除列表中的除外
-func (hub *Hub) Broadcast(obj any, exceptUsers ...int64) {
+func (hub *Hub) Broadcast(obj any, exceptUsers ...string) {
 	//迭代每一个连接，发送消息
 	hub.Connections.Data().Range(func(key, value any) bool {
-		userId := key.(int64)
+		userId := key.(string)
 		_, ok := utils.FindBasic(exceptUsers, userId)
 		if ok { //如果在排除名单中，直接跳过
 			return true
@@ -194,7 +193,7 @@ func (hub *Hub) Broadcast(obj any, exceptUsers ...int64) {
 	})
 }
 
-func (hub *Hub) GetUserConnection(userId int64) *UserConnection {
+func (hub *Hub) GetUserConnection(userId string) *UserConnection {
 	h, ok := hub.Connections.Get(userId)
 	if !ok {
 		return nil
@@ -206,7 +205,7 @@ func (hub *Hub) AddUser(c *UserConnection) {
 	hub.Connections.Set(c.UserId, c)
 }
 
-func (hub *Hub) DeleteUser(userId int64) {
+func (hub *Hub) DeleteUser(userId string) {
 	hub.Connections.Delete(userId)
 }
 
@@ -220,11 +219,11 @@ func (hub *Hub) IsEmpty() bool {
 
 type UserConnection struct {
 	*BaseConnection
-	UserId  int64
-	BoardId int64 //所属的白板id
+	UserId  string
+	BoardId string //所属的白板id
 }
 
-func NewUserConnection(baseConnection *BaseConnection, userId int64, boardId int64) *UserConnection {
+func NewUserConnection(baseConnection *BaseConnection, userId string, boardId string) *UserConnection {
 	res := &UserConnection{BaseConnection: baseConnection, UserId: userId, BoardId: boardId}
 	res.BaseConnection.WsConn.SetCloseHandler(func(code int, text string) error {
 		log.Println(code, text, "===========> websocket close")
@@ -238,7 +237,7 @@ func (c *UserConnection) CloseHandler() {
 	HubMgr.LeaveHub(c.BoardId, c.UserId)
 }
 
-func (c *UserConnection) ListenJSONMessage(handler func(o *models.Cmd, boardId int64, userId int64) error) {
+func (c *UserConnection) ListenJSONMessage(handler func(o *models.Cmd, boardId string, userId string) error) {
 	defer func() {
 		err := c.Close()
 		if err != nil {

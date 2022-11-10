@@ -211,10 +211,10 @@ func Cors() gin.HandlerFunc {
 	}
 }
 
-func GetUser(ctx *gin.Context) int64 {
+func GetUser(ctx *gin.Context) string {
 	data, ok := ctx.Get("payload")
 	if !ok {
-		return 0
+		return ""
 	}
 	p := data.(*jwt.CustomClaims)
 	return p.UserId

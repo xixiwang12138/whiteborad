@@ -12,7 +12,7 @@ type pageRepo struct {
 	repo.BaseRepo[models.Page]
 }
 
-func (this *pageRepo) CreatePage(boardId int64, displayName string) (int64, error) {
+func (this *pageRepo) CreatePage(boardId string, displayName string) (string, error) {
 	pageId := utils.GenerateId()
 	p := &models.Page{
 		Model:        models.Model{ID: pageId},
@@ -21,18 +21,18 @@ func (this *pageRepo) CreatePage(boardId int64, displayName string) (int64, erro
 	}
 	err := this.Create(p)
 	if err != nil {
-		return 0, err
+		return "", err
 	}
 	return pageId, nil
 }
 
-func (this *pageRepo) SavePageContent(pageId int64, data []string) error {
+func (this *pageRepo) SavePageContent(pageId string, data []string) error {
 	return this.UpdateFiled(pageId, map[string]interface{}{
 		"content": models.DataToStringFiled(data),
 	})
 }
 
-func (this *pageRepo) GetPageVo(pageId int64) (*models.PageVO, error) {
+func (this *pageRepo) GetPageVo(pageId string) (*models.PageVO, error) {
 	page, err := this.FindByID(pageId)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (this *pageRepo) GetPageVo(pageId int64) (*models.PageVO, error) {
 	return page.BuildVo()
 }
 
-func (this *pageRepo) GetBoardPages(boardId int64) ([]*models.Page, error) {
+func (this *pageRepo) GetBoardPages(boardId string) ([]*models.Page, error) {
 	return this.Find(map[string]interface{}{
 		"whiteBoardId": boardId,
 	})

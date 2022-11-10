@@ -2,6 +2,7 @@ package utils
 
 import (
 	"github.com/bwmarrin/snowflake"
+	"strconv"
 )
 
 var node *snowflake.Node
@@ -14,7 +15,7 @@ func init() {
 	node = nodeNew
 }
 
-func GenerateId() int64 {
+func GenerateId() string {
 	// Generate a snowflake ID.
-	return int64(node.Generate())
+	return strconv.FormatInt(int64(node.Generate()), 10)
 }

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import "./index.css";
 import Background from "../components/Background";
-import {Input, Form, Button} from "antd";
+import {Input, Form, Button, message} from "antd";
 import {useNavigate} from "react-router-dom";
 import {doRegister} from "../../api/api";
 import axios from "axios";
@@ -11,12 +11,9 @@ function Register() {
 
     const onFinishregister = (values: any) => {
         doRegister(values).then((res) => {
-            if(res.success){
-                localStorage.setItem("token",res.data.token);
-                navigate('/home');
-            }else {
-                console.log("data form",res.errorMessage);
-            }
+            localStorage.setItem("token", res.data.token);
+            message.success("账号注册成功！")
+            navigate("/home")
         });
     }
 
@@ -40,7 +37,13 @@ function Register() {
                 <div className="form-box">
                     <div className="form-title">Join us</div>
                     <div className="form-inputs">
-                        <Form.Item name="phone">
+                        <Form.Item name="phone" rules={[
+                            {
+                                required: false,
+                                pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"),
+                                message: '请输入正确的手机号'
+                            }
+                        ]}>
                             <Input className="input-box" placeholder="请输入手机号" onChange={(e)=>{setUserPhone(e.target.value);}}/>
                         </Form.Item>
                         <div style={{marginBottom: '20px'}}/>

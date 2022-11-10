@@ -5,6 +5,7 @@ import Background from "../components/Background";
 import {Input, Form, Button, message} from "antd";
 import {useNavigate} from "react-router-dom";
 import {doLogin} from "../../api/api";
+
 import axios from "axios";
 
 function Login() {
@@ -13,15 +14,11 @@ function Login() {
     const onFinishlogin = (values: any) => {
         console.log("login form:",values);
         doLogin(values).then((res)=> {
-
-            if(res.success){
-                localStorage.setItem("token",res.data.token);
-                navigate('/home');
-
-                console.log("res data",res.data)
-            }else {
-                console.log(res.errorMessage);
-            }
+            localStorage.setItem("token",res.data.token);
+            const user = res.data.user;
+            message.success("登录成功！")
+            console.log("用户id：",user.id)
+            navigate("/home")
         });
     }
 
@@ -46,7 +43,13 @@ function Login() {
                 <div className="form-box">
                     <div className="form-title">Explore with us</div>
                     <div className="form-inputs">
-                        <Form.Item name="phone">
+                        <Form.Item name="phone" rules={[
+                            {
+                                required: false,
+                                pattern: new RegExp(/^1(3|4|5|6|7|8|9)\d{9}$/, "g"),
+                                message: '请输入正确的手机号'
+                            }
+                        ]}>
                             <Input className="input-box" placeholder="请输入手机号" onChange={(e)=>{setUserPhone(e.target.value);}}/>
                         </Form.Item>
                         <div style={{marginBottom: '20px'}}/>

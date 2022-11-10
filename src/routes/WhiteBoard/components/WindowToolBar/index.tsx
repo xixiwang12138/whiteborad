@@ -36,20 +36,24 @@ class WinToolList extends React.Component<WinToolListProp> {
         ["changeBackgroundColor"],
         ["changeStrokeColor"]
     ]
+    private genericTitles = ["填充", "描边"]
     private lineFics:(WinToolType[] | [WinToolType, SecondLevelType[]])[] = [
         ["changeStrokeColor"],
         ["changeStrokeWidth", ["sStroke", "mStroke", "lStroke"]]
     ]
+    private lineTitles = ["描边", "边宽"]
     private textFics:(WinToolType[] | [WinToolType, SecondLevelType[]])[] =[
         ["changeFontSize", ["sFont", "mFont", "lFont"]],
         ["changeFontStyle", ["bold", "italic", "underline"]],
         ["changeTextAlign", ["left", "center", "right"]]
     ]
+    private textTitles = ["字体大小", "字体样式", "文本对齐"]
     private publicGroups: (WinToolType[] | [WinToolType, SecondLevelType[]])[] = [
         ["changeElementOpacity"],
         ["changeElementPosition",["toTop", "toBottom", "toNext", "toLast"]],
         ["operations", ["copy", "delete"]]
     ]
+    private publicTitles = ["透明度", "图层", "操作"]
 
     private itemGroups:(WinToolType[] | [WinToolType, SecondLevelType[]])[] = [
         ["changeBackgroundColor"],
@@ -75,7 +79,9 @@ class WinToolList extends React.Component<WinToolListProp> {
                 this.genericFics.map((t,i)=> {
                     return <div className="figure-bar">
                         <div className="single-box" key={i}>
-                            {/*填充 || 描边*/}
+                            <div className="single-box-title" key={i}>
+                                {this.genericTitles[i]}
+                            </div>
                         </div>
                     </div>
                 })
@@ -83,7 +89,9 @@ class WinToolList extends React.Component<WinToolListProp> {
             this.lineFics.map((t,i)=> {
                 return <div className="line-bar">
                     <div className="single-box" key={i}>
-                        {/*描边 || 线宽*/}
+                        <div className="single-box-title" key={i}>
+                            {this.lineTitles[i]}
+                        </div>
                     </div>
                 </div>
             })
@@ -91,7 +99,9 @@ class WinToolList extends React.Component<WinToolListProp> {
             this.textFics.map((t,i) => {
                 return <div className="text-bar">
                     <div className="single-box" key={i}>
-                        {/*字体大小 || 字体样式 || 文本对齐*/}
+                        <div className="single-box-title">
+                            {this.textTitles[i]}
+                        </div>
                     </div>
                 </div>
             })
@@ -99,7 +109,9 @@ class WinToolList extends React.Component<WinToolListProp> {
                 this.publicGroups.map((t, i)=> {
                     return<div className="public-box">
                         <div className="single-box" key={i}>
-                            {/*透明度 || 图层 || 操作*/}
+                            <div className="single-box-title">
+                                {this.publicTitles[i]}
+                            </div>
                         </div>
                     </div>
                 })

@@ -4,7 +4,7 @@ import {field, SerializableData} from "../../../../utils/data/DataLoader";
 export class Page extends SerializableData {
 
     @field
-    id:number;
+    id:string;
     @field
     createTime:number;
     @field
@@ -12,13 +12,13 @@ export class Page extends SerializableData {
     @field
     updateTime:number;
     @field
-    whiteBoardId:number;
+    whiteBoardId:string;
     @field
     displayName:string
     @field(Array<ElementBase>)
     elements:ElementBase[] = []
 
-    constructor(id:number, whiteBoardId:number, displayName:string) {
+    constructor(id:string, whiteBoardId:string, displayName:string) {
         super();
         this.id = id;
         this.createTime = this.updateTime = new Date().valueOf();
@@ -44,6 +44,11 @@ export class Page extends SerializableData {
         let i = this.findElemIdxById(id);
         if(i !== -1) this.elements[i].isDeleted = true;
     }
+
+    public addElem(elem:ElementBase) {
+        this.elements.push(elem);
+    }
+
 
 }
 

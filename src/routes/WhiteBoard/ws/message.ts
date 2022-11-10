@@ -1,6 +1,6 @@
-import {ElementBase} from "../app/element/ElementBase";
+import {ElementBase, ElementType} from "../app/element/ElementBase";
 import {IdGenerator} from "../../../utils/IdGenerator";
-import {SerializableData} from "../../../utils/data/DataLoader";
+import {field, SerializableData} from "../../../utils/data/DataLoader";
 
 type MessageType = "load" | "cmd" | "member"; // load是加载白板的意思
 
@@ -41,17 +41,28 @@ export type CmdPayloads = {
     // [CmdType.Scale]: {factorH: number, factorV: number} //缩放因子
 }
 
-export class Cmd<T extends CmdType>{
+export class Cmd<T extends CmdType> extends SerializableData{
+    @field
     id!: string;
-    pageId!: number;
+    @field
+    pageId!: string;
+    @field
     type!: T;
+    @field
+    elementType: ElementType;
+    @field
     o?: string; //操作对象的id
-    payload!: CmdPayloads[T];  //操作的payload
+    @field
+    payload!: string;  //操作的payload, 由于go无法绑定到确定类型，使用string
+    @field
     time!: number; //操作的时间戳
-    boardId!: number; //操作所属的白板
-    creator!: number; //操作创建人的userId
+    @field
+    boardId!: string; //操作所属的白板
+    @field
+    creator!: string; //操作创建人的userId
 
     constructor() {
+        super();
         this.time = new Date().getTime()
     }
 }
@@ -65,19 +76,19 @@ export class CmdBuilder<T extends CmdType> {
         return this
     }
 
-    public setUser(userId: number) {
+    public setUser(userId: string) {
         this.cmd.creator = userId
         this.cmd.id = IdGenerator.genCmdId(userId)
         return this
     }
-    public setPage(boardId: number, pageId: number) {
+    public setPage(boardId: string, pageId: string) {
         this.cmd.pageId = pageId;
         this.cmd.boardId = boardId;
         return this
     }
 
     public setPayload(e: CmdPayloads[T]) {
-        this.cmd.payload = e
+        this.cmd.payload = JSON.stringify(e);
         return this
     }
 

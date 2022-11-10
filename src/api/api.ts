@@ -32,6 +32,12 @@ export async function doRegister(form: RegisterForm) {
     );
 }
 
+export async function getUserInfo():Promise<UserInfo> {
+    return (await request.get<any, {user:UserInfo}>(
+        "/api/user/info"
+    )).user;
+}
+
 type ResetForm = RegisterForm;
 export async function doReset(form: ResetForm) {
     return request.post<any, null>(
@@ -41,7 +47,7 @@ export async function doReset(form: ResetForm) {
 }
 
 type CreateBoardResp = {
-    boardId:number
+    boardId:string
 }
 
 export function doCreateBoard(boardName:string) {
@@ -51,7 +57,7 @@ export function doCreateBoard(boardName:string) {
     );
 }
 
-export async function joinBoard(boardId: number):Promise<WhiteBoard> {
+export async function joinBoard(boardId: string):Promise<WhiteBoard> {
     let res = await request.post<any, {board:WhiteBoard}>(
         "/api/board/join",
         {boardId}

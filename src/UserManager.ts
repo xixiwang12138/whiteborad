@@ -1,7 +1,7 @@
-import {doLogin, doRegister, LoginForm, RegisterForm} from "./api/api";
+import {doLogin, doRegister, getUserInfo, LoginForm, RegisterForm} from "./api/api";
 
 export type UserInfo =  {
-    id:number,
+    id:string,
     name:string,
     avatar:string,
     creatTime:number,
@@ -23,6 +23,10 @@ export class UserManager {
         let res = await doRegister(form);
         localStorage.setItem("token",res.token);
         this.userInfo = res.user;
+    }
+
+    public static async syncUser() {
+        if(!this.userInfo) this.userInfo = await getUserInfo();
     }
 
     public static getId() {

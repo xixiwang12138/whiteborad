@@ -11,8 +11,8 @@ export interface CanvasScaledCtx extends CanvasRenderingContext2D {
 
 export class DrawingScene {
 
-    _pageId:number = 0; // TODO 默认渲染页面0？
-    set pageId(i:number) {this._pageId = i;}
+    _pageId:string = ""; // TODO 默认渲染页面0？
+    set pageId(i:string) {this._pageId = i;}
 
     // 场景画布位置信息
     public  x:number = 0;

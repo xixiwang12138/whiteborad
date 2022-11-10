@@ -7,8 +7,8 @@ export enum BoardType {
 
 export class WhiteBoard extends SerializableData {
     @field
-    public id:number;
-    @field(BoardType)
+    public id:string;
+    @field
     public mode:BoardType;
     @field
     public creator:number;
@@ -18,7 +18,8 @@ export class WhiteBoard extends SerializableData {
     public deleteTime:number;
     @field
     public updateTime:number;
-    @field
+
+    @field(Array<Page>)
     public pages:Page[];
 
 }

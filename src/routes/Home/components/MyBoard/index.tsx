@@ -24,6 +24,8 @@ function MyBoard(){
 
     const [isCreateOpen, setIsCreateOpen] = useState(false);
     const [isJoinOpen, setIsJoinOpen] = useState(false);
+    const [boardName, setBoardName] = useState(" ");
+    const [boardIdToJoin, setBoardIdToJoin] = useState("")
     const navigate = useHistory();
 
     const showCreate = () => {
@@ -35,11 +37,12 @@ function MyBoard(){
 
     const handleCreate = async (values:any) => {
         setIsCreateOpen(false)
-        let res = await doCreateBoard(values.boardName);
+        let res = await doCreateBoard(boardName);
         navigate.push(`/board/${res.boardId}`);
     }
     const handleJoin = () => {
         setIsJoinOpen(false)
+        navigate.push(`/board/${boardIdToJoin}`)
     }
 
     const handleCreateClose = () => {
@@ -137,7 +140,7 @@ function MyBoard(){
                    footer={<Button key="copy" onClick={handleJoin}>加 入</Button> }>
                 <Form>
                     <Form.Item name="boardId">
-                        <Input className="win-form-input" placeholder="请输入序列号"/>
+                        <Input className="win-form-input" placeholder="请输入序列号" onChange={(e)=>{setBoardIdToJoin(e.target.value);}}/>
                     </Form.Item>
                 </Form>
             </Modal>
@@ -146,7 +149,7 @@ function MyBoard(){
                    footer={<Button key="copy" onClick={handleCreate}>创 建</Button> }>
                 <Form>
                     <Form.Item name="boardName">
-                        <Input className="win-form-input" placeholder="请输入白板名称"/>
+                        <Input className="win-form-input" placeholder="请输入白板名称" onChange={(e)=>{setBoardName(e.target.value);}}/>
                     </Form.Item>
                 </Form>
             </Modal>

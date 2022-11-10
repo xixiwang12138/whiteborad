@@ -4,7 +4,6 @@ import "../../../../App.css";
 import home from "../../icon/home.svg";
 import file from "../../icon/导入文件.svg";
 import ex from "../../icon/导出.svg";
-import {useNavigate} from "react-router-dom";
 
 // import list from "../../icon/属性-收起.svg"; 这个用不了，先用下面的顶替
 import type {MenuProps}  from "antd";
@@ -14,12 +13,13 @@ import type {CheckboxChangeEvent} from "antd/es/checkbox";
 import type {RadioChangeEvent} from "antd";
 import {Simulate} from "react-dom/test-utils";
 import input = Simulate.input;
+import {NavLink} from 'react-router-dom';
 
 
 
 function BaseRow(){
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const [isInviteOpen, setIsInviteOpen] = useState(false);
 
@@ -65,7 +65,9 @@ function BaseRow(){
                 <div className="row-left">
                     <div style={{marginLeft:'20px'}}/>
                     <div className="home-icon">
-                        <img src={home} onClick={()=>navigate('/home')}/>
+                        <NavLink to="/home">
+                            <img src={home} />
+                        </NavLink>
                     </div>
                     <div style={{marginLeft:'20px'}}/>
                     <div className="board-name">白板名称</div>

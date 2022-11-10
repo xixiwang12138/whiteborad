@@ -2,21 +2,17 @@ import React from "react";
 import "./index.css";
 import close from "../../icon/close.svg";
 import {Input, Form, Button} from "antd";
-import {doJoinBoard} from "../../../../api/api";
-import {useNavigate} from "react-router-dom";
 
 function WindowJoin(){
 
-    const navigate = useNavigate();
-
     const onFinishJoin = (values: any) => {
-        doJoinBoard(values).then((res)=> {
-            if(res.success){
-                localStorage.setItem("token",res.data.token);
-            }else {
-                console.log(res.errorMessage);
-            }
-        })
+        // doJoinBoard(values).then((res)=> {
+        //     if(res.success){
+        //         localStorage.setItem("token",res.data.token);
+        //     }else {
+        //         console.log(res.errorMessage);
+        //     }
+        // })
     }
 
     return(

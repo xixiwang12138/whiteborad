@@ -2,18 +2,19 @@ import React from "react";
 import "./index.css";
 import Background from "../components/Background";
 import {Input, Form, Button} from "antd";
-import {useNavigate} from "react-router-dom";
+// import {useNavigate} from "react-router-dom";
 import {doReset} from "../../api/api";
+import {useHistory} from "react-router-dom";
 
 function Reset() {
-    const navigate = useNavigate();
+    const history = useHistory();
 
     const onFinishreset = (values: any) => {
         console.log(values);
         doReset(values).then((res)=> {
             if(res.success){
                 localStorage.setItem("token",res.data.token);
-                navigate('/home');
+                history.push("/home")
             }else {
                 console.log(res.errorMessage);
             }

@@ -3,10 +3,10 @@ import "./index.css";
 import close from "../../icon/close.svg";
 import {Input, Form, Button} from "antd";
 import {doCreateBoard} from "../../../../api/api";
-import {useNavigate} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 function WindowCreate(){
-    const navigate = useNavigate();
+    const navigate = useHistory();
 
     const onFinishCreate = (values: any) => {
         doCreateBoard(values).then((res)=> {

@@ -1,6 +1,7 @@
 import {RotateUtil, ScaleUtil} from "../../../../utils/math";
 import {SceneTouchEvent} from "./TouchEvent";
 import {CanvasScaledCtx} from "../DrawingScene";
+import {field} from "../../../../utils/data/DataLoader";
 
 type OnselectedListener = (e: ElementBase) => void;
 
@@ -9,12 +10,19 @@ export enum ElementType {
 }
 
 export abstract class ElementBase {
+    @field
     public id:string;
+    @field(ElementType)
     public type:ElementType;
+    @field
     public x:number; // 左上角点的x坐标
+    @field
     public y:number;
+    @field
     public width:number = 0;
+    @field
     public height:number = 0;
+    @field
     public angle:number = 0; // 弧度制
 
     public strokeColor:string = "#000000"; // 十六进制整数
@@ -23,7 +31,7 @@ export abstract class ElementBase {
 
     public opacity:number = 1;
 
-    public isDeleted:boolean = false;
+    public isDeleted:boolean;
 
     private onSelected!: OnselectedListener;
 

@@ -5,10 +5,10 @@ import write from "../../icon/编辑名称.svg";
 import bin from "../../icon/回收站.svg";
 import reset from "../../icon/重置密码.svg";
 import logout from "../../icon/退出.svg";
-import {useNavigate} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 function BaseColumn() {
-    const navigate = useNavigate();
+    const navigate = useHistory();
 
     const [isNameOpen, setIsNameOpen] = useState(false);
     const [userName, setUserName] = useState("未命名");
@@ -51,14 +51,14 @@ function BaseColumn() {
                 {/*    <div className="item-text">回收站</div>*/}
                 {/*</div>*/}
                 <div style={{marginTop:'10px'}}/>
-                <div className="bottom-item" onClick={()=>navigate('/reset')}>
+                <div className="bottom-item" onClick={()=>navigate.push('/reset')}>
                     <div className="item-icon">
                         <img src={reset}/>
                     </div>
                     <div className="item-text">重置密码</div>
                 </div>
                 <div style={{marginTop:'10px'}}/>
-                <div className="bottom-item" onClick={()=>navigate('/')}>
+                <div className="bottom-item" onClick={()=>navigate.push('/')}>
                     <div className="item-icon">
                         <img src={logout}/>
                     </div>

@@ -3,23 +3,16 @@ import "./index.css";
 // import "../../App.css";
 import Background from "../components/Background";
 import {Input, Form, Button, message} from "antd";
-import {useNavigate} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import {doLogin} from "../../api/api";
+import {UserManager} from "../../UserManager";
 
 function Login() {
-    const navigate = useNavigate();
+    const navigate = useHistory();
 
-    const onFinishlogin = (values: any) => {
-        console.log("login form:",values);
-        doLogin(values).then((res)=> {
-
-            if(res.success){
-                localStorage.setItem("token",res.data.token);
-                navigate('/home');
-            }else {
-                console.log(res.errorMessage);
-            }
-        });
+    const onFinishlogin = async (values: any) => {
+        await UserManager.login(values);
+        navigate.push('/home');
     }
 
     return (
@@ -38,11 +31,11 @@ function Login() {
                         </Form.Item>
                     </div>
                     <div className="form-tip">
-                        <div className="tip-text" onClick={()=>navigate('/reset')}>忘记密码？点击重置</div>
+                        <div className="tip-text" onClick={()=>navigate.push('/reset')}>忘记密码？点击重置</div>
                     </div>
                     <div className="form-btns-log">
                         <Form.Item>
-                            <Button className="btn-reg-log" onClick={()=>navigate('/register')}>注 册</Button>
+                            <Button className="btn-reg-log" onClick={()=>navigate.push('/register')}>注 册</Button>
                         </Form.Item>
                         <Form.Item>
                             <Button className="btn-login" htmlType="submit">登 录</Button>

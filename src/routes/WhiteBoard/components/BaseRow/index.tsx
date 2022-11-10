@@ -50,15 +50,12 @@ function BaseRow(){
 
     const ShuXingTool = (
         <div>
-            {isCreateUser ?
-                <div>
-                    <Radio.Group onChange={onChangeQuanxian} value={useRadio} style={{display: "flex", flexDirection: "column"}}>
-                        <Radio value={1}>编辑模式</Radio>
-                        <Radio value={2}>只读模式</Radio>
-                    </Radio.Group>
-                </div> :
-                <div></div>
-            }
+            <div>
+                <Radio.Group onChange={onChangeQuanxian} value={useRadio} style={{display: "flex", flexDirection: "column"}}>
+                    <Radio value={1} disabled={!isCreateUser}>编辑模式</Radio>
+                    <Radio value={2} disabled={!isCreateUser}>只读模式</Radio>
+                </Radio.Group>
+            </div>
             <div>
                 <Checkbox onChange={onChangeNihe}>线条拟合</Checkbox>
             </div>

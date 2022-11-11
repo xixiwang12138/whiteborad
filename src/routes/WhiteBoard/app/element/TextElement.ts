@@ -15,7 +15,7 @@ export class TextElement extends ElementBase {
     @field(String)
     public textAlign: TextAlign = "left";
 
-    public constructor(id:string, x:number, y:number) {
+    public constructor(id:string = "", x:number = 0 , y:number = 0) {
         super(id, x, y, ElementType.text);
         this.text = "";
     }

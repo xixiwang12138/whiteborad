@@ -1,11 +1,5 @@
 
 import {getMetaData, isChildClassOf} from "./TypeUtils";
-import {Line} from "../../routes/WhiteBoard/app/element/Line";
-import {FreeDraw} from "../../routes/WhiteBoard/app/element/FreeDraw";
-import {TextElement} from "../../routes/WhiteBoard/app/element/TextElement";
-import {GenericElement} from "../../routes/WhiteBoard/app/element/GenericElement";
-import {Cmd} from "../../routes/WhiteBoard/ws/message";
-import {ElementBase, ElementType} from "../../routes/WhiteBoard/app/element/ElementBase";
 
 export type Constructor<T = any> = new (...args: any[]) => T;
 
@@ -55,7 +49,8 @@ const DataSettingKey = "setting";
  * 需要序列化的字段
  */
 export function field<T>(
-	typeOrObj: Constructor<T> | Constructor<T>[] | Object = null, key: string | null = null): any {
+	typeOrObj: Constructor<T> | Constructor<T>[] | Object = null,
+	key: string | null = null): any {
 
 	// 根据参数判断是否本身就是一个修饰器
 	const isDesc = key && (typeof typeOrObj !== 'function');
@@ -74,6 +69,7 @@ export function field<T>(
 	if (isDesc) process(typeOrObj, key);
 	else return process;
 }
+
 
 /**
  * 见{@link occasion}
@@ -125,7 +121,7 @@ export class DataLoader {
 			type, DataSettingKey, {
 				default: new type(),
 				properties: {}, occasions: {},
-				dataPK: undefined
+				dataPK: undefined,
 			});
 	}
 
@@ -211,22 +207,26 @@ export class DataLoader {
 	private static loadProp(occasion: DataOccasion, res: SerializableData, key: string, prop, data) {
 		try {
 			let pType = prop.type || prop.default?.constructor;
+			let interceptor = prop.interceptor;
 
-			res[key] = this.loadType(occasion, pType, data, res);
+			res[key] = this.loadType(occasion, pType, data, res, interceptor);
 		} catch (e) {
 			console.error(e, res, key, data, prop);
 		}
 	}
 
-	private static loadType(occasion: DataOccasion, type, data, parent, index?) {
+	private static loadType(occasion: DataOccasion, type, data, parent, interceptor, index?) {
 		if (data == null) return null;
 
 		if (type instanceof Array) {
 			this.ensureType(Array, data);
 
-			const eType = type[0]; // 元素类型
-			return data.map((d, idx) =>
-				this.loadType(occasion, eType, d, parent, idx));
+			let eType = type[0]; // 元素类型
+			return data.map((d, idx) => {
+				if(eType.interceptor)
+					eType = interceptor(data); // 根据data判断拦截具体类型
+				return this.loadType(occasion, eType, d, parent, null, idx)
+			});
 		}
 
 		this.ensureType(type, data);
@@ -332,9 +332,9 @@ export class DataLoader {
 			(setting.occasions[key] & occasion) != 0;
 	}
 
-
-
 }
+
+
 
 // interface ElemTypeMapping {
 // 	[ElementType.linear]: Line;

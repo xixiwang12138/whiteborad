@@ -1,7 +1,7 @@
 import {ElementBase, ElementType} from "./ElementBase";
 import {RotateUtil} from "../../../../utils/math";
 import {CanvasScaledCtx} from "../DrawingScene";
-import {field} from "../../../../utils/data/DataLoader";
+import {DataLoader, field} from "../../../../utils/data/DataLoader";
 
 export type GenericElementType = "rectangle" | "ellipse" | "triangle";
 
@@ -18,6 +18,7 @@ export class GenericElement extends ElementBase {
         this.startX = x; this.startY = y;
         this.genericType = type;
     }
+
 
     public drawTo(x:number, y:number) {
         if(x < this.startX) {
@@ -50,7 +51,7 @@ export class GenericElement extends ElementBase {
 
 export class RectangleElement extends GenericElement {
 
-    public constructor(id:string, x:number, y:number) {
+    public constructor(id:string = "", x:number = 0, y:number = 0) {
         super(id, x, y, "rectangle");
     }
 
@@ -64,9 +65,10 @@ export class RectangleElement extends GenericElement {
 
 export class EllipseElement extends GenericElement {
 
-    public constructor(id:string, x:number, y:number) {
+    public constructor(id:string = "", x:number = 0, y:number = 0) {
         super(id, x, y, "ellipse");
     }
+
 
     public drawBeforeCtxRestore(ctx: CanvasScaledCtx): void {
         const center = this.getCenter();

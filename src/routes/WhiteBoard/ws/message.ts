@@ -145,27 +145,29 @@ export class CmdBuilder<T extends CmdType> {
     }
 }
 
-export function loadElemByCmd(cmd:Cmd<any>):ElementBase {
-    switch (cmd.elementType) {
+export function loadElemByObject(obj:any):ElementBase {
+    switch (obj.type) {
         case ElementType.freedraw:
-            return DataLoader.load(FreeDraw, cmd.payload);
+            return Object.assign<FreeDraw, any>(new FreeDraw(), obj);
         case ElementType.generic:
-            let generic = DataLoader.load(GenericElement, cmd.payload);
-            // @ts-ignore
-            if(generic.genericType === "rectangle") return new RectangleElement(generic);
-            // @ts-ignore
-            else return new EllipseElement(generic);
+            if(obj.genericType === "rectangle")
+                return Object.assign<RectangleElement, any>(new RectangleElement(), obj);
+            else
+                return Object.assign<EllipseElement, any>(new EllipseElement(), obj);
         case ElementType.text:
-            return DataLoader.load(TextElement, cmd.payload);
+            return Object.assign<TextElement, any>(new TextElement(), obj);
         case ElementType.linear:
-            let linear = DataLoader.load(Line, cmd.payload);
-            // @ts-ignore
-            if(linear.linearType === "line") return new Line(linear);
-            // @ts-ignore
-            else return new Arrow(linear);
+            if(obj.linearType === "line")
+                return Object.assign<Line, any>(new Line(), obj);
+            else
+                return Object.assign<Arrow, any>(new Arrow(), obj);
         default:
             throw "unknown element type";
     }
+}
+
+export function loadElemByCmd(cmd:Cmd<any>):ElementBase {
+   return loadElemByObject(JSON.parse(cmd.payload));
 }
 
 export function onMessageHandler(ev: MessageEvent) {

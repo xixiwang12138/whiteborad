@@ -1,14 +1,14 @@
 import {RotateUtil, ScaleUtil} from "../../../../utils/math";
 import {SceneTouchEvent} from "./TouchEvent";
 import {CanvasScaledCtx} from "../DrawingScene";
-import {field, SerializableData} from "../../../../utils/data/DataLoader";
+import {DataLoader, field, SerializableData} from "../../../../utils/data/DataLoader";
+
 
 type OnselectedListener = (e: ElementBase) => void;
 
 export enum ElementType {
     freedraw, text, generic, linear
 }
-
 
 
 export class ElementBase extends SerializableData {
@@ -277,4 +277,6 @@ export class ElementBase extends SerializableData {
     }
 
 }
+
+
 

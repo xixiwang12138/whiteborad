@@ -88,7 +88,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                     </div>
                     <div className="row-right">
                         <div className="right1-click">
-                            <Popover placement="bottom" content={this.propertyTool} trigger="click">
+                            <Popover placement="bottom" content={this.propertyTool.bind(this)} trigger="click">
                                 <img src={shuxing}/>
                             </Popover>
                             {/*<img src={shuxing}/>*/}

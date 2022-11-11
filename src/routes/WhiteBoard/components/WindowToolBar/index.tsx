@@ -2,35 +2,25 @@ import React, {useState} from "react";
 import {Col, InputNumber, Row, Slider} from "antd";
 import "./index.css";
 import "../../../../App.css";
-import lineWid1 from "../../icon/sStroke.svg";
-import lineWid2 from "../../icon/mStroke.svg";
-import lineWid3 from "../../icon/lStroke.svg";
-import toTop from "../../icon/toTop.svg";
-import toBottom from "../../icon/toBottom.svg";
-import jumps from "../../icon/toNext.svg";
-import jumpx from "../../icon/toLast.svg";
-import fuzhi from "../../icon/copy.svg";
-import shanchu from "../../icon/delete.svg";
-import bianzu from "../../icon/编组.svg";
-import fontB from "../../icon/bold.svg";
-import fontI from "../../icon/italic.svg";
-import fontU from "../../icon/underline.svg";
-import fontl from "../../icon/left.svg";
-import fontr from "../../icon/right.svg";
-import fontc from "../../icon/center.svg";
 import {GenericElementType} from "../../app/element/GenericElement";
 import {LinearElementType} from "../../app/tools/LinearTool";
-import {WinToolType, StrokeWidthType, FontSizeType, FontStyleType, TextAlignType, ElementPositionType, OperationsType} from "../../app/tools/WinTool";
+import {WinToolType, StrokeWidthType, FontSizeType, FontStyleType, TextAlignType, ElementPositionType, OperationsType, ColorType} from "../../app/tools/WinTool";
 
 export type SecondLevelType = StrokeWidthType | FontSizeType |
     FontStyleType | TextAlignType | ElementPositionType | OperationsType;
 type OnWinToolSelected = (type: WinToolType, secondType?:SecondLevelType) => void;
 
-class WinToolListProp {
-    OnWinToolSelected: OnWinToolSelected = () => {};
+type OnWinTypeSelected = (type: ColorType | StrokeWidthType | FontSizeType | FontStyleType
+ | TextAlignType | ElementPositionType | OperationsType) => void;
+
+// class WinToolListProp {
+//     OnWinToolSelected: OnWinToolSelected = () => {};
+// }
+class WinTypeListProp {
+    OnWinTypeSelected: OnWinTypeSelected = () => {};
 }
 
-class WinToolList extends React.Component<WinToolListProp> {
+class WinToolList extends React.Component<WinTypeListProp> {
     // 不同元素特有的
     private genericFics:(WinToolType[])[] = [
         ["changeBackgroundColor"],
@@ -43,40 +33,11 @@ class WinToolList extends React.Component<WinToolListProp> {
     ]
     private lineTitles = ["描边", "边宽"]
     private textFics:(WinToolType[] | [WinToolType, SecondLevelType[]])[] =[
-        ["changeFontSize", ["sFont", "mFont", "lFont"]],
+        // ["changeFontSize", ["sFont", "mFont", "lFont"]],
         ["changeFontStyle", ["bold", "italic", "underline"]],
         ["changeTextAlign", ["left", "center", "right"]]
     ]
     private textTitles = ["字体大小", "字体样式", "文本对齐"]
-    private textContains = [
-        [{
-            title: "缩小字体",
-        },
-        {
-            title: "原始字体",
-        },
-        {
-            title: "增大字体",
-        }],
-        [{
-            title: "加粗"
-        },
-        {
-            title: "斜体"
-        },
-        {
-            title: "下划线"
-        }],
-        [{
-            title: "向左对齐"
-        },
-        {
-            title: "向右对齐"
-        },
-        {
-            title: "居中对齐"
-        }]
-    ]
     private publicGroups: (WinToolType[] | [WinToolType, SecondLevelType[]])[] = [
         ["changeElementOpacity"],
         ["changeElementPosition",["toTop", "toBottom", "toNext", "toLast"]],
@@ -95,59 +56,141 @@ class WinToolList extends React.Component<WinToolListProp> {
         ["changeElementPosition",["toTop", "toBottom", "toNext", "toLast"]],
         ["operations", ["copy", "delete"]]
     ]
-    private readonly onWinToolSelected:OnWinToolSelected;
-    public constructor(props: WinToolListProp) {
+
+    private colorGroups: (ColorType[]) [] = [
+        ["color1"], ["color2"], ["color3"], ["color4"], ["color5"], ["color6"]
+    ]
+    private widthGroups: (StrokeWidthType[]) [] = [
+        ["sStroke"], ["mStroke"], ["lStroke"]
+    ]
+    private sizeGroups: (FontSizeType[]) [] = [
+        ["sFont"], ["mFont"], ["lFont"]
+    ]
+    private sizeText = ["S", "M", "L"]
+    private styleGroups: (FontStyleType[]) [] = [
+        ["bold"], ["italic"], ["underline"]
+    ]
+    private alignGroups: (TextAlignType[]) [] = [
+        ["left"], ["center"], ["right"]
+    ]
+    private positionGroups: (ElementPositionType[]) [] = [
+        ["toTop"], ["toBottom"], ["toNext"], ["toLast"]
+    ]
+    private operationGroups: (OperationsType[]) [] = [
+        ["copy"], ["delete"]
+    ]
+
+    // private readonly onWinToolSelected:OnWinToolSelected;
+    // public constructor(props: WinToolListProp) {
+    //     super(props);
+    //     this.onWinToolSelected = props.OnWinToolSelected;
+    // };
+
+    private readonly onWinTypeSelected:OnWinTypeSelected;
+    public constructor(props: WinTypeListProp) {
         super(props);
-        this.onWinToolSelected = props.OnWinToolSelected;
+        this.onWinTypeSelected = props.OnWinTypeSelected;
     }
+
 
     render() {
         return <div className="win-tool-bar">
-            {/*缺个判断类型：generic || linear && freePen || text*/}
-            {
-                this.genericFics.map((t,i)=> {
-                    return <div className="figure-bar">
-                        <div className="single-box" key={i}>
-                            <div className="single-box-title" key={i}>
-                                {this.genericTitles[i]}
-                            </div>
-                        </div>
-                    </div>
-                })
-            } {
-            this.lineFics.map((t,i)=> {
-                return <div className="line-bar">
-                    <div className="single-box" key={i}>
-                        <div className="single-box-title" key={i}>
-                            {this.lineTitles[i]}
-                        </div>
-                    </div>
+            {/*缺个判断类型：isGeneric || isPen || isText --> display为flex或none */}
+            <div className="single-box" style={{display: false ? "flex" : "none"}}>
+                <div className="single-box-title">填充</div>
+                <div className="single-box-contain">
+                    <div className="single-box-contain">{
+                        this.colorGroups.map((t,i) => {
+                            return <div key={i} className="color-box">{
+                                t.map(s =>
+                                    <img style={{width: "30px", height: "30px"}} src={require(`../../icon/${s}.svg`)}/>)
+                            }</div>
+                        })
+                    }</div>
                 </div>
-            })
-        } {
-            this.textFics.map((t,i) => {
-                return <div className="text-bar">
-                    <div className="single-box" key={i}>
-                        <div className="single-box-title">
-                            {this.textTitles[i]}
-                        </div>
-                        <div className="single-box-contain" key={i}>
-                            <div className="border-box">youma</div>
-                        </div>
-                    </div>
+            </div>
+            <div className="single-box">
+                <div className="single-box-title">描边</div>
+                <div className="single-box-contain">{
+                    this.colorGroups.map((t,i) => {
+                        return <div key={i} className="color-box">{
+                            t.map(s =>
+                            <img style={{width: "30px", height: "30px"}} src={require(`../../icon/${s}.svg`)}/>)
+                        }</div>
+                    })
+                }</div>
+            </div>
+            <div className="single-box">
+                <div className="single-box-title">描边宽度</div>
+                <div className="single-box-contain">{
+                    this.widthGroups.map((t,i) => {
+                        return <div key={i} className="border-box">{
+                            t.map(s =>
+                                <img src={require(`../../icon/${s}.svg`)}/>)
+                        }</div>
+                    })
+                }</div>
+            </div>
+            <div className="single-box">
+                <div className="single-box-title">字体大小</div>
+                <div className="single-box-contain">{
+                    this.sizeGroups.map((t,i) => {
+                        return <div className="border-box" key={i} style={{color: "black"}}>{
+                            this.sizeText[i]
+                        }</div>
+                    })
+                }</div>
+            </div>
+            <div className="single-box">
+                <div className="single-box-title">字体样式</div>
+                <div className="single-box-contain">{
+                    this.styleGroups.map((t,i) => {
+                        return <div key={i} className="border-box">{
+                            t.map(s =>
+                            <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
+                        }</div>
+                    })
+                }</div>
+            </div>
+            <div className="single-box">
+                <div className="single-box-title">文本对齐</div>
+                <div className="single-box-contain">{
+                    this.alignGroups.map((t,i) => {
+                        return <div key={i} className="border-box">{
+                            t.map(s =>
+                                <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
+                        }</div>
+                    })
+                }</div>
+            </div>
+            <div className="single-box">
+                <div className="single-box-title">透明度</div>
+                <div className="single-box-contain">
+                    <Slider min={0} max={100}></Slider>
                 </div>
-            })
-        } {
-                this.publicGroups.map((t, i)=> {
-                    return<div className="public-box">
-                        <div className="single-box" key={i}>
-                            <div className="single-box-title">
-                                {this.publicTitles[i]}
-                            </div>
-                        </div>
-                    </div>
-                })
-        }
+            </div>
+            <div className="single-box">
+                <div className="single-box-title">图层</div>
+                <div className="single-box-contain">{
+                    this.positionGroups.map((t,i) => {
+                        return <div key={i} className="border-box">{
+                            t.map(s =>
+                                <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
+                        }</div>
+                    })
+                }</div>
+            </div>
+            <div className="single-box">
+                <div className="single-box-title">操作</div>
+                <div className="single-box-contain">{
+                    this.operationGroups.map((t,i) => {
+                        return <div key={i} className="border-box">{
+                            t.map(s =>
+                                <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
+                        }</div>
+                    })
+                }</div>
+            </div>
         </div>
     }
 }

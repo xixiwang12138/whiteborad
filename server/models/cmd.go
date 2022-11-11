@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 type CmdType int8
 
 const (
@@ -8,6 +10,8 @@ const (
 	Withdraw   CmdType = 2
 	Adjust     CmdType = 3
 	SwitchPage CmdType = 4
+
+	SwitchMode CmdType = 5
 )
 
 type ElementKV map[string]any
@@ -35,6 +39,10 @@ type Cmd struct {
 	BoardId     string  `json:"boardId"`     //所在的白板id
 	Creator     string  `json:"creator"`     //操作人id
 	ElementType int     `json:"elementType"` //操作的值的类型
+}
+
+func NewCmd(t CmdType, payload string, boardId string, creator string) *Cmd {
+	return &Cmd{Type: t, Payload: payload, BoardId: boardId, Creator: creator, Time: time.Now().UnixMilli()}
 }
 
 func (cmd *Cmd) Fill(boardId string, creator string) {

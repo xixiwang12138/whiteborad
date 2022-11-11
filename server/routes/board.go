@@ -9,6 +9,8 @@ import (
 	"server/logic"
 	"server/models"
 	"server/models/bind"
+	"server/ws"
+	"strconv"
 )
 
 //注册所有路由
@@ -18,6 +20,8 @@ func registerBoard(g *gin.RouterGroup) {
 	//g.GET("/boardPages", Handler(getPages))
 	g.POST("/board", Handler(createBoard))
 	g.POST("/join", Handler(joinBoard))
+
+	g.POST("/switchMode", Handler(switchMode))
 }
 
 // getCreatedBoards 查询用户创建的所有的Board
@@ -100,4 +104,26 @@ func joinBoard(ctx *gin.Context, req *bind.BoardReq) (interface{}, error) {
 	}{
 		res,
 	}, nil
+}
+
+func switchMode(ctx *gin.Context, req *bind.BoardMode) (interface{}, error) {
+	uId := GetUser(ctx)
+	bId := req.BoardId
+	res, err := dao.WhiteBoardRepo.FindByID(bId)
+	if err != nil {
+		return nil, err
+	}
+	if res.Creator != uId {
+		return nil, errors.New("only Board Owner Can Switch Mode")
+	}
+	//广播切换的命令
+	ws.HubMgr.BroadcastCmd(bId, models.NewCmd(models.SwitchMode, strconv.Itoa(int(req.Mode)), bId, uId), uId)
+
+	err = dao.WhiteBoardRepo.UpdateFiled(bId, map[string]interface{}{
+		"mode": req.Mode,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
 }

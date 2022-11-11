@@ -73,7 +73,7 @@ func DeleteCmd(cmd *models.Cmd) error {
 	return nil
 }
 
-func WithdrawCmd(cmd *models.Cmd) error { //TODO
+func WithdrawCmd(cmd *models.Cmd) error {
 	return nil
 }
 

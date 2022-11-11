@@ -284,7 +284,7 @@ func (c *UserConnection) ListenJSONMessage(handler func(o *models.Cmd, boardId s
 //	}{
 //		models.CmdMessage,
 //		cmd,
-//	})
+//	}) hello
 //}
 
 func (c *UserConnection) SendLoadingData(vo *models.PageVO) error {

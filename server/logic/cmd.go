@@ -48,6 +48,7 @@ func AddCmd(cmd *models.Cmd) error {
 	p := cmd.Payload
 	m := utils.DeserializeMap(p)
 	models.StringElementArray(m)
+
 	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), m).Err()
 	if err != nil {
 		return err

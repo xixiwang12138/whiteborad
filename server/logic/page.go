@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/go-redis/redis"
 	"github.com/pkg/errors"
+	"log"
 	"server/common/cache"
 	"server/common/sources"
 	"server/dao"
@@ -87,16 +88,28 @@ func LoadPage(pageId string) (*models.PageVO, error) {
 	// loading to redis - pipeline
 	elements := vo.Elements //all elements in a page, each element is map[string]any
 	pipe := sources.RedisSource.Client.TxPipeline()
+
 	for _, element := range elements {
 		id := element.GetElementId()
-		models.StringElementArray(element)
+		containsPoints, err := models.StringElementArray(element)
+		if err != nil {
+			log.Println(err)
+		}
 		pipe.HMSet(cache.ElementKey(id), element)
+		if containsPoints {
+			//将points重新转换为数组
+			var arrayData []any
+			err := json.Unmarshal([]byte((element["points"]).(string)), &arrayData)
+			if err != nil {
+				return nil, err
+			}
+			element["points"] = arrayData
+		}
 	}
 	_, err = pipe.Exec()
 	if err != nil {
 		return nil, err
 	}
-
 	// send response to front
 	return vo, nil
 }

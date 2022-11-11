@@ -56,10 +56,10 @@ class WinToolList extends React.Component<WinTypeListProp> {
         ["changeElementPosition",["toTop", "toBottom", "toNext", "toLast"]],
         ["operations", ["copy", "delete"]]
     ]
-
     private colorGroups: (ColorType[]) [] = [
         ["color1"], ["color2"], ["color3"], ["color4"], ["color5"], ["color6"]
     ]
+    //1.black 2.#3E6182 3.#956AA4 4.#A46A6A 5.#609A7E 6.#CE6464
     private widthGroups: (StrokeWidthType[]) [] = [
         ["sStroke"], ["mStroke"], ["lStroke"]
     ]

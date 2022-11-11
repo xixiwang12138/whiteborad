@@ -7,28 +7,31 @@ import (
 )
 
 var ElementFiledMap utils.FiledTypeMap = map[string]reflect.Kind{
-	"id":              reflect.Int64,
+	"id":              reflect.String,
 	"type":            reflect.Int8,
 	"x":               reflect.Float64,
 	"y":               reflect.Float64,
 	"strokeColor":     reflect.String,
-	"backGroundColor": reflect.String,
+	"backgroundColor": reflect.String,
 	"strokeWidth":     reflect.Float64,
 	"opacity":         reflect.Float64,
 	"width":           reflect.Float64,
 	"height":          reflect.Float64,
 	"angle":           reflect.Float64,
 	"isDeleted":       reflect.Bool,
-	"updated":         reflect.Bool,
-	"fontSize":        reflect.Float64,
-	"fontFamily":      reflect.Float64,
-	"text":            reflect.String,
-	"baseline":        reflect.Float64,
-	"textAlign":       reflect.Int8,
-	"verticalAlign":   reflect.Int8,
-	"containerId":     reflect.Int64,
-	"originText":      reflect.Float64,
-	"points":          reflect.Array,
+
+	"genericType": reflect.String,
+	"linearType":  reflect.String,
+	//"updated":       reflect.Bool,
+	"fontSize": reflect.Float64,
+	//"fontFamily":    reflect.Float64,
+	"text": reflect.String,
+	//"baseline":      reflect.Float64,
+	"textAlign": reflect.String,
+	//"verticalAlign": reflect.Int8,
+	//"containerId":   reflect.Int64,
+	//"originText":    reflect.Float64,
+	"points": reflect.Array,
 }
 
 func StringElementArray(e map[string]any) {

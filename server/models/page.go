@@ -56,7 +56,10 @@ func DataToStringFiled(d []string) string {
 func (p *Page) BuildVo() (*PageVO, error) {
 	res := &PageVO{
 		Page:     p,
-		Elements: nil,
+		Elements: make([]ElementKV, 0),
+	}
+	if res.Content == "" {
+		return res, nil
 	}
 
 	model := &pageStringContent{}

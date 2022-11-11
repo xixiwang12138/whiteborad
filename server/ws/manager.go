@@ -289,11 +289,11 @@ func (c *UserConnection) ListenJSONMessage(handler func(o *models.Cmd, boardId s
 
 func (c *UserConnection) SendLoadingData(vo *models.PageVO) error {
 	return c.SendJSON(struct {
-		Type string         `json:"type"`
-		Data *models.PageVO `json:"data"`
+		Type string `json:"type"`
+		Data string `json:"data"`
 	}{
 		models.LoadMessage,
-		vo,
+		utils.Serialize(vo),
 	})
 }
 

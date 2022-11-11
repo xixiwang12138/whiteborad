@@ -14,7 +14,7 @@ export class Eraser extends Modifier<CmdType.Delete> {
             let elem = scene.findElemByEvent(e);
             if(elem){
                 scene.removeElem(elem);
-                this.onModify(CmdType.Delete, null!, elem.id); // 不发送原对象
+                this.onModify(CmdType.Delete, elem, null); // 不发送原对象
             }
         }
     }

@@ -1,11 +1,13 @@
 import {ElementBase, ElementType} from "./ElementBase";
 import {RotateUtil} from "../../../../utils/math";
 import {CanvasScaledCtx} from "../DrawingScene";
+import {field} from "../../../../utils/data/DataLoader";
 
 export type GenericElementType = "rectangle" | "ellipse" | "triangle";
 
 export class GenericElement extends ElementBase {
 
+    @field(String)
     public genericType:GenericElementType;
 
     private readonly startX:number;
@@ -42,6 +44,7 @@ export class GenericElement extends ElementBase {
                 return null;
         }
     }
+
 
 }
 

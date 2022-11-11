@@ -3,10 +3,10 @@ import {ToolType} from "./tools/Tool";
 import {ToolBox} from "./tools/ToolBox";
 import {SecondLevelType} from "../components/ToolList";
 import {GenericElementTool} from "./tools/GenericElementTool";
-import {GenericElement, GenericElementType} from "./element/GenericElement";
+import {EllipseElement, GenericElement, GenericElementType, RectangleElement} from "./element/GenericElement";
 import {LinearElementType, LinearTool} from "./tools/LinearTool";
 import {TextTool} from "./tools/TextTool";
-import {Cmd, CmdBuilder, CmdPayloads, CmdType, Message} from "../ws/message";
+import {Cmd, CmdBuilder, CmdPayloads, CmdType, loadElemByCmd, Message} from "../ws/message";
 import {Selection} from "./tools/Selection";
 import {IWebsocket, WebsocketManager} from "../ws/websocketManager";
 import {OperationTracker} from "./operationTracker/OperationTracker";
@@ -17,7 +17,8 @@ import {UserManager} from "../../../UserManager";
 import {ElementBase, ElementType} from "./element/ElementBase";
 import {FreeDraw} from "./element/FreeDraw";
 import {TextElement} from "./element/TextElement";
-import {Line} from "./element/Line";
+import {Arrow, Line} from "./element/Line";
+import {message} from "antd";
 
 
 export class WhiteBoardApp implements IWebsocket {
@@ -36,7 +37,9 @@ export class WhiteBoardApp implements IWebsocket {
 
     public onClose = () => {}
 
-    public onOpen = () => {}
+    public onOpen = () => {
+        message.success("连接到远程白板").then();
+    }
 
     public onError = () => {}
 
@@ -53,7 +56,8 @@ export class WhiteBoardApp implements IWebsocket {
                 const cmd = DataLoader.load(Cmd, message.data);
                 switch (cmd.type) {
                     case CmdType.Add:
-                        let elem = this.loadElemByCmd(cmd);
+                        let elem = loadElemByCmd(cmd);
+                        console.log(elem);
                         let page = this.pages[cmd.pageId];
                         page.addElem(elem);
                         this.scene.addElem(elem);
@@ -73,25 +77,34 @@ export class WhiteBoardApp implements IWebsocket {
 
     }
 
-    private setup() {
+    public setup() {
         this.wsClient.connect(this.whiteBoard.id, UserManager.getId());
         this.setupListeners();
     }
 
     private setupListeners() {
         this.toolBox.setOnCreateListener( (e) => {
-            let cmd = new CmdBuilder().setType(CmdType.Add)
+            let cmd = new CmdBuilder<CmdType.Add>().setType(CmdType.Add)
                 .setPage(this.whiteBoard.id, this.scene._pageId)
-                .setUser(UserManager.getId())
-                .setElement(e.id)
+                .setUser(UserManager.getId()).setElement(e)
                 .setPayload(e).build();
+            this.cmdTracker.do(cmd);
             this.wsClient.sendCmd(cmd);
         })
         this.toolBox.addOnModifyListener(CmdType.Adjust, (t, e,p) => {
-            console.log(p);
+            let cmd = new CmdBuilder<CmdType.Adjust>().setType(CmdType.Adjust)
+                .setPage(this.whiteBoard.id, this.scene._pageId)
+                .setUser(UserManager.getId()).setElement(e)
+                .setPayload(p).build();
+            this.cmdTracker.do(cmd);
+            this.wsClient.sendCmd(cmd);
         })
-        this.toolBox.addOnModifyListener(CmdType.Delete, (t, e,p ) => {
-            console.log(p);
+        this.toolBox.addOnModifyListener(CmdType.Delete, (t, e) => {
+            let cmd = new CmdBuilder<CmdType.Delete>().setType(CmdType.Delete)
+                .setPage(this.whiteBoard.id, this.scene._pageId)
+                .setUser(UserManager.getId()).setElement(e).build();
+            this.cmdTracker.do(cmd);
+            this.wsClient.sendCmd(cmd);
         })
     }
 
@@ -212,21 +225,6 @@ export class WhiteBoardApp implements IWebsocket {
     private updateElemState(pageId:string, elemId:string, adjust:CmdPayloads[CmdType.Adjust], backTrace:boolean = false) {
         this.pages.get(pageId).updateElemStateById(elemId, adjust, backTrace);
         if(this.scene.pageId === pageId) this.scene.refreshBackground();
-    }
-
-    private loadElemByCmd(cmd:Cmd<any>):ElementBase {
-        switch (cmd.elementType) {
-            case ElementType.freedraw:
-                return DataLoader.load(FreeDraw, cmd.payload);
-            case ElementType.generic:
-                return DataLoader.load(GenericElement, cmd.payload);
-            case ElementType.text:
-                return DataLoader.load(TextElement, cmd.payload);
-            case ElementType.linear:
-                return DataLoader.load(Line, cmd.payload);
-            default:
-                throw "unknown element type";
-        }
     }
 
 

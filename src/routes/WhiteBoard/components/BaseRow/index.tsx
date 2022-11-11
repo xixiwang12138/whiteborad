@@ -25,7 +25,7 @@ class BaseRow extends React.Component<BaseRowProps> {
         isInviteOpen: false,
         useRadio: 1,
         fitted: false,
-        avatar: "" // TODO 设置默认头像
+        avatar: "#956AA4" // TODO 设置默认头像
     }
 
     async componentDidMount() {

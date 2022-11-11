@@ -28,12 +28,15 @@ export class ElementBase extends SerializableData {
     @field
     public angle:number = 0; // 弧度制
 
+    @field
     public strokeColor:string = "#000000"; // 十六进制整数
+    @field
     public backgroundColor:string = "#fff10000";
+    @field
     public strokeWidth:number = 5;
-
+    @field
     public opacity:number = 1;
-
+    @field
     public isDeleted:boolean = false;
 
     private onSelected!: OnselectedListener;

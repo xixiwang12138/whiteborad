@@ -1,6 +1,10 @@
 import {ElementBase, ElementType} from "../app/element/ElementBase";
 import {IdGenerator} from "../../../utils/IdGenerator";
-import {field, SerializableData} from "../../../utils/data/DataLoader";
+import {DataLoader, DataOccasion, field, SerializableData} from "../../../utils/data/DataLoader";
+import {Arrow, Line} from "../app/element/Line";
+import {FreeDraw} from "../app/element/FreeDraw";
+import {TextElement} from "../app/element/TextElement";
+import {EllipseElement, GenericElement, RectangleElement} from "../app/element/GenericElement";
 
 type MessageType = "load" | "cmd" | "member"; // load是加载白板的意思
 
@@ -34,7 +38,7 @@ type Element  = any
 
 export type CmdPayloads = {
     [CmdType.Add]: ElementBase, //需要增加的元素
-    [CmdType.Delete]: string //需要删除的元素
+    [CmdType.Delete]: null //需要删除的元素
     // [CmdType.Move]: {x: number, y: number}  //移动后的新位置
     [CmdType.Withdraw]: Cmd<CmdType> //需要撤销的操作
     [CmdType.Adjust]: Record<string, [any, any]> //p键值为操作的属性，[0]:before, [1]:after
@@ -69,9 +73,36 @@ export class Cmd<T extends CmdType> extends SerializableData{
     }
 }
 
+interface ElemTypeMapping {
+	[ElementType.linear]: Line;
+	[ElementType.freedraw]: FreeDraw;
+	[ElementType.text]: TextElement;
+	[ElementType.generic]: GenericElement;
+}
 
 export class CmdBuilder<T extends CmdType> {
     private cmd = new Cmd<T>();
+
+    private convertElem(e: CmdPayloads[T]) {
+        let c = this.cmd;
+        switch (c.elementType) {
+            case ElementType.freedraw:
+                c.payload = DataLoader.convert(FreeDraw, e); break;
+            case ElementType.generic:
+                if((e as GenericElement).genericType === "rectangle") c.payload = DataLoader.convert(RectangleElement, e);
+                else c.payload = DataLoader.convert(EllipseElement, e);
+                break;
+            case ElementType.text:
+                c.payload = DataLoader.convert(TextElement, e);
+                break;
+            case ElementType.linear:
+                if((e as Line).linearType === "line") c.payload = DataLoader.convert(Line, e);
+                else c.payload = DataLoader.convert(Arrow, e);
+                break;
+            default:
+                throw "unknown element type";
+        }
+    }
 
     public setType(t: T) {
         this.cmd.type = t
@@ -89,18 +120,53 @@ export class CmdBuilder<T extends CmdType> {
         return this
     }
 
+    /**
+     * 后于setType调用
+     */
     public setPayload(e: CmdPayloads[T]) {
-        this.cmd.payload = JSON.stringify(e);
-        return this
+        let c = this.cmd;
+        switch (this.cmd.type) {
+            case CmdType.Add: this.convertElem(e);break;
+            case CmdType.Delete: c.payload = null; break;
+            case CmdType.SwitchPage: case CmdType.Adjust: c.payload = JSON.stringify(e); break;
+            case CmdType.Withdraw: c.payload = DataLoader.convert(Cmd, e); break;
+            default:
+                throw "cmd type is not supported";
+        }
+        return this;
     }
 
-    public setElement(id: string) {
-        this.cmd.o = id
-        return this
+    public setElement(elem:ElementBase) {
+        this.cmd.o = elem.id;
+        this.cmd.elementType = elem.type;
+        return this;
     }
 
     public build(): Cmd<T> {
         return this.cmd
+    }
+}
+
+export function loadElemByCmd(cmd:Cmd<any>):ElementBase {
+    switch (cmd.elementType) {
+        case ElementType.freedraw:
+            return DataLoader.load(FreeDraw, cmd.payload);
+        case ElementType.generic:
+            let generic = DataLoader.load(GenericElement, cmd.payload);
+            // @ts-ignore
+            if(generic.genericType === "rectangle") return new RectangleElement(generic);
+            // @ts-ignore
+            else return new EllipseElement(generic);
+        case ElementType.text:
+            return DataLoader.load(TextElement, cmd.payload);
+        case ElementType.linear:
+            let linear = DataLoader.load(Line, cmd.payload);
+            // @ts-ignore
+            if(linear.linearType === "line") return new Line(linear);
+            // @ts-ignore
+            else return new Arrow(linear);
+        default:
+            throw "unknown element type";
     }
 }
 

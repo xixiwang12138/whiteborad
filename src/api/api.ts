@@ -65,3 +65,9 @@ export async function joinBoard(boardId: string):Promise<WhiteBoard> {
     return DataLoader.load(WhiteBoard, res.board);
 }
 
+export async function rename(name:string) {
+    await request.post<any, null>(
+        "/api/user/rename",
+        {name}
+    )
+}

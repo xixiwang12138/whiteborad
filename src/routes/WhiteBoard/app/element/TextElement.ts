@@ -1,14 +1,18 @@
 import {ElementBase, ElementType} from "../../app/element/ElementBase";
 import {CanvasScaledCtx} from "../DrawingScene";
+import {field} from "../../../../utils/data/DataLoader";
 
 export type TextAlign = "left" | "center" | "right";
 
 export class TextElement extends ElementBase {
 
+    @field
     public fontSize:number = 30;
 
-    public text:string;
+    @field(String)
+    public text:string = "";
 
+    @field(String)
     public textAlign: TextAlign = "left";
 
     public constructor(id:string, x:number, y:number) {

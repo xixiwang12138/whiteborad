@@ -59,8 +59,8 @@ class BaseRow extends React.Component<BaseRowProps> {
             <div>
                 <Radio.Group onChange={(e) => this.setState({useRadio:e.target.value})}
                              value={this.state.useRadio} style={{display: "flex", flexDirection: "column"}}>
-                    <Radio value={1} disabled={!this.props.isCreator}>编辑模式</Radio>
-                    <Radio value={2} disabled={!this.props.isCreator}>只读模式</Radio>
+                    <Radio value={1} disabled={!this.state.isCreator}>编辑模式</Radio>
+                    <Radio value={2} disabled={!this.state.isCreator}>只读模式</Radio>
                 </Radio.Group>
                 {/*{this.props.isCreator ?*/}
                 {/*    <div>*/}

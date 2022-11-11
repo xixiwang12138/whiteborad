@@ -11,7 +11,7 @@ export class WhiteBoard extends SerializableData {
     @field
     public mode:BoardType;
     @field
-    public creator:number;
+    public creator:string;
     @field
     public creatTime:number;
     @field

@@ -1,6 +1,5 @@
 import {Cmd, CmdPayloads, CmdType, Message} from "./message";
 
-
 const host = 'ws://localhost:10400'
 
 // const host = 'ws://175.178.81.93:10400'
@@ -86,7 +85,3 @@ export class WebsocketManager {
     }
 
 }
-
-
-
-// export const websocketManager = new WebsocketManager(() => {}, () => {}, onMessageHandler, () => {});

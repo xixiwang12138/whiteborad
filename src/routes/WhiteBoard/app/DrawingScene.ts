@@ -124,12 +124,17 @@ export class DrawingScene {
         this.render();
     }
 
+    /**
+     *  恢复被删除元素并绘制到背景板
+     */
     public restoreElem(id:string) {
         let e = this.elements.get(id);
         if(e) {
             e.isDeleted = false;
             e.draw(this.getScaledCtx(this.bufCvsCtx));
             this.render();
+        } else {
+            throw "element not found"
         }
     }
 
@@ -139,10 +144,8 @@ export class DrawingScene {
     public removeElem(elem:ElementBase) {
         if(elem.id === null) throw "null id";
         let e = this.elements.get(elem.id);
-        if(e) e.isDeleted = true;
-        this.clearCanvas("buffer");
-        this.drawAllElement();
-        this.render();
+        if(e) e.isDeleted = true; // 这里不能直接删除，因为恢复的时候要保证顺序
+        this.refreshBackground();
     }
 
     public getElem(id:string) {
@@ -258,6 +261,12 @@ export class DrawingScene {
            this.elements.set(e.id, e);
            e.draw(this.getScaledCtx(this.bufCvsCtx));
         });
+        this.render();
+    }
+
+    public refreshBackground() {
+        this.clearCanvas("buffer");
+        this.drawAllElement();
         this.render();
     }
 

@@ -41,6 +41,7 @@ export class TextTool extends Tool
 
     public finishEditing():boolean {
         let flag = false;
+        (this.curElem! as TextElement).text = this.textEditor.value;
         if(this.editState === "create") {
             if(this.textEditor.value) {
                 this.onCreate(this._curElem!); // 字符串不为空才保留
@@ -51,10 +52,9 @@ export class TextTool extends Tool
                 this.onModify(CmdType.Adjust, this.curElem!, {text:[this._curElem!.text, this.textEditor.value]})
                 flag = true;
             } else {
-                this.onModify(CmdType.Delete, null!, this.curElem!.id);
+                this.onModify(CmdType.Delete, this.curElem!, null);
             }
         }
-        (this.curElem! as TextElement).text = this.textEditor.value;
         this._curElem!.finish = true;
         this._curElem = null;
         this.textEditor.value = "";

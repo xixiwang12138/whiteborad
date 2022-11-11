@@ -19,7 +19,7 @@ root.render(
         <Switch>
             <Route path="/reset" component={Reset} />
             <Route path="/register" component={Register} />
-            <Route path="/home/:uid" component={Home} />
+            <Route path="/home" component={Home} />
             <Route path="/board/:id" component={WhiteBoard} />
             <Route path="/" component={Login} />
         </Switch>

@@ -2,12 +2,18 @@ import {PathElement} from "./PathElement";
 import {ElementType} from "./ElementBase";
 import {RotateUtil} from "../../../../utils/math";
 import {CanvasScaledCtx} from "../DrawingScene";
+import {field} from "../../../../utils/data/DataLoader";
+import {LinearElementType} from "../tools/LinearTool";
 
 
 export class Line extends PathElement {
 
-    public constructor(id:string, x:number, y:number) {
+    @field(String)
+    public linearType:LinearElementType;
+
+    public constructor(id:string, x:number, y:number, type:LinearElementType = "line") {
         super(id, x, y, ElementType.linear);
+        this.linearType = type;
         this.points.push(null!, null!);
     }
 
@@ -42,6 +48,10 @@ export class Line extends PathElement {
 }
 
 export class Arrow extends Line {
+
+    constructor(id:string, x:number, y:number) {
+        super(id, x, y, "arrow");
+    }
 
     public drawBeforeCtxRestore(ctx: CanvasScaledCtx): void {
         super.drawBeforeCtxRestore(ctx);

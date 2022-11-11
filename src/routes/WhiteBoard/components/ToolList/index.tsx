@@ -74,8 +74,8 @@ class ToolList extends React.Component<ToolListProp> {
         super(props);
         this.onToolSelected = props.onToolSelected;
         this.opListener = props.opListener;
-        this.DODOs[0].cb = this.opListener.onUndo;
-        this.DODOs[1].cb = this.opListener.onRedo;
+        this.DODOs[0].cb = this.opListener.onUndo.bind(this.opListener);
+        this.DODOs[1].cb = this.opListener.onRedo.bind(this.opListener);
     }
 
 

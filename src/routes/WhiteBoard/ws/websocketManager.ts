@@ -1,7 +1,8 @@
 import {Cmd, CmdPayloads, CmdType, Message} from "./message";
+import {DataLoader, DataOccasion} from "../../../utils/data/DataLoader";
 
-const host = 'ws://175.178.81.93:10400'
-// const host = 'ws://192.168.137.17:10400';
+// const host = 'ws://175.178.81.93:10400'
+const host = 'ws://192.168.137.17:10400';
 
 export interface IWebsocket {
     onOpen: ((ev: Event) => any) | null;
@@ -77,7 +78,7 @@ export class WebsocketManager {
     /**
      * 发送消息
      */
-    public sendCmd(cmd: Cmd<CmdType>) {
+    public sendCmd<T extends CmdType>(cmd: Cmd<T>) {
         let msg:Message = {type: "cmd", data:JSON.stringify(cmd)};
         this.ws?.send(JSON.stringify(msg));
     }

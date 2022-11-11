@@ -6,6 +6,7 @@ import bin from "../../icon/回收站.svg";
 import reset from "../../icon/重置密码.svg";
 import logout from "../../icon/退出.svg";
 import {UserManager} from "../../../../UserManager";
+import {rename} from "../../../../api/api";
 
 import {NavLink} from 'react-router-dom';
 
@@ -14,7 +15,7 @@ class BaseColumn extends React.Component {
     state = {
         isNameOpen: false,
         userName: "未命名",
-        avatar: "#FFFFFF",
+        avatar: "#956AA4",
     }
 
     async componentDidMount() {
@@ -22,8 +23,8 @@ class BaseColumn extends React.Component {
         this.setState({avatar: await UserManager.getAvatar()})
     }
 
-    private rename(e: React.MouseEvent<HTMLElement>) {
-
+    private async rename(e: React.MouseEvent<HTMLElement>) {
+        await rename(this.state.userName);
     }
 
     render() {

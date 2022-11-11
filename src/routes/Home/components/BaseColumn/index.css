@@ -87,6 +87,7 @@
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    color: #000000;
 }
 .item-icon {
     height: 20px;

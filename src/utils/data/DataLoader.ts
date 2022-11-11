@@ -183,9 +183,11 @@ export class DataLoader {
 
 		if (data) {
 			const properties = this.getProperties(type);
-			for (const key in properties)
+			for (const key in properties){
 				if (key in data && this.matchOccasion(occasion, type, key))
 					this.loadProp(occasion, res, key, properties[key], data[key]);
+			}
+
 		}
 		res.onCreated();
 		return res;
@@ -250,7 +252,7 @@ export class DataLoader {
 	public static convert<T extends SerializableData>(
 		occasionOrTypeOrData: DataOccasion | Constructor<T> | any,
 		typeOrData?: Constructor<T> | any,
-		data?: any): Partial<T> {
+		data?: any): string {
 
 		// region 解析参数
 		let occasion = DataOccasion.Default,
@@ -258,6 +260,7 @@ export class DataLoader {
 
 		if (typeof occasionOrTypeOrData == 'function') {
 			type = occasionOrTypeOrData;
+			data = typeOrData;
 		} else if (typeof occasionOrTypeOrData == 'object') {
 			data = occasionOrTypeOrData;
 			if (data instanceof SerializableData)
@@ -279,9 +282,11 @@ export class DataLoader {
 		const res = {};
 		if (type) { // 赋值 type
 			const properties = this.getProperties(type);
-			for (const key in properties)
+			for (const key in properties){
 				if (key in data && this.matchOccasion(occasion, type, key))
 					this.convertProp(occasion, res, key, properties[key], data[key]);
+			}
+
 
 		} else { // 没有赋值 type
 			const keys = Object.keys(data);
@@ -289,7 +294,7 @@ export class DataLoader {
 				this.convertProp(occasion, res, key, null, data[key]);
 		}
 
-		return res;
+		return JSON.stringify(res);
 	}
 
 	private static convertProp(occasion: DataOccasion,

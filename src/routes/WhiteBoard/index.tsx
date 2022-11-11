@@ -96,6 +96,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
     private async setupApp() {
         let boardId = this.props.match.params.id;
         this.app = new WhiteBoardApp(await joinBoard(boardId));
+        this.app.setup();
         this.app.setOnRenderListener(this.refreshShowCanvas.bind(this));
         this.app.translateScene((this.showCanvas.width - 1920) / 2, (this.showCanvas.height - 1080) / 2);
         this.app.refreshScene();

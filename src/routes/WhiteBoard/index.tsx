@@ -37,12 +37,11 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         return <div className="board">
             <BaseRow isCreator={this.state.isCreator}/>
             <ToolList onToolSelected={this.selectTool.bind(this)} opListener={this}/>
-            {/*<WindowInvite />*/}
             <div id="canvas-root" style={{width:"100%", height:"100%", overflow:"hidden"}}>
                 <div id={"text-editor-container"}/>
                 <canvas style={{width: "100%", height: "100%", backgroundColor:"gray"}} id="show-canvas"/>
             </div>
-            <WindowToolBar />
+            {/*<WindowToolBar OnWinToolSelected={this.selectTool.bind(this)} />*/}
         </div>
     }
 

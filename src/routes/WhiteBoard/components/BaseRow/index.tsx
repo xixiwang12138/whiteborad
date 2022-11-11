@@ -28,6 +28,8 @@ class BaseRow extends React.Component<BaseRowProps> {
         useRadio: 1,
         isExportImage: 0,
         fitted: false,
+        boardId: "id",
+        boardName: "名称",
         avatar: "#956AA4" // TODO 设置默认头像
     }
 
@@ -38,30 +40,33 @@ class BaseRow extends React.Component<BaseRowProps> {
 
     private handleCopy(e:React.MouseEvent<HTMLElement>) {
         // TODO 获取内容
+        console.log("复制")
     }
 
+
     private handleExport(e:React.MouseEvent<HTMLElement>){
-        if(this.state.isExportImage) {
-            console.log("导出图片")
-        }else {
-            console.log("导出文件")
-        }
+        // if(this.state.isExportImage) {
+        //     console.log("导出图片")
+        // }else {
+        //     console.log("导出文件")
+        // }
 
     }
 
     private propertyTool() {
         return (
             <div>
-                {this.props.isCreator ?
-                    <div>
-                        <Radio.Group onChange={(e) => this.setState({useRadio:e.target.value})}
-                                     value={this.state.useRadio} style={{display: "flex", flexDirection: "column"}}>
-                            <Radio value={1}>编辑模式</Radio>
-                            <Radio value={2}>只读模式</Radio>
-                        </Radio.Group>
-                    </div> :
-                    <div></div>
-                }
+                <Radio.Group onChange={(e) => this.setState({useRadio:e.target.value})}
+                             value={this.state.useRadio} style={{display: "flex", flexDirection: "column"}}>
+                    <Radio value={1} disabled={!this.props.isCreator}>编辑模式</Radio>
+                    <Radio value={2} disabled={!this.props.isCreator}>只读模式</Radio>
+                </Radio.Group>
+                {/*{this.props.isCreator ?*/}
+                {/*    <div>*/}
+
+                {/*    </div> :*/}
+                {/*    <div></div>*/}
+                {/*}*/}
                 <div>
                     <Checkbox onChange={(e) => this.setState({fitted:e.target.value})}>
                         线条拟合
@@ -84,14 +89,14 @@ class BaseRow extends React.Component<BaseRowProps> {
                             </NavLink>
                         </div>
                         <div style={{marginLeft:'20px'}}/>
-                        <div className="board-name">白板名称</div>
+                        <div className="board-name">{this.state.boardName}</div>
                     </div>
                     <div className="row-middle">
                         <div className="avatar-group">
                             {/*一些逻辑待细化*/}
                             <Avatar.Group maxCount={3} maxStyle={{color: 'white', backgroundColor: '#AD7878'}}>
                                 <Avatar style={{backgroundColor: `#${this.state.avatar}`,width: "40px", height: "40px", borderRadius: "20px"}}/>
-                                <Avatar style={{backgroundColor: 'white',width: "40px", height: "40px", borderRadius: "20px"}}/>
+                                <Avatar style={{backgroundColor: `#${this.state.avatar}`,width: "40px", height: "40px", borderRadius: "20px"}}/>
                                 <Tooltip placement="top">
                                     <Avatar style={{backgroundColor:'#87d068',width: "40px", height: "40px", borderRadius: "20px"}}/>
                                 </Tooltip>
@@ -122,7 +127,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                        onCancel={() => this.setState({isInviteOpen : false})}
                        footer={<Button key="copy" onClick={this.handleCopy}>复 制</Button> }>
                     {/*<p>SOME</p>*/}
-                    <p className="info-text" id="text">白板id</p>
+                    <p className="info-text" id="text">{this.state.boardId}</p>
                     {/*<textarea id="input">copy</textarea>*/}
                 </Modal>
                 <Modal title="Export" open={this.state.isExportOpen} onOk={this.handleExport}

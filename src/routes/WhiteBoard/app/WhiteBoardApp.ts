@@ -3,37 +3,44 @@ import {ToolType} from "./tools/Tool";
 import {ToolBox} from "./tools/ToolBox";
 import {SecondLevelType} from "../components/ToolList";
 import {GenericElementTool} from "./tools/GenericElementTool";
-import {EllipseElement, GenericElement, GenericElementType, RectangleElement} from "./element/GenericElement";
+import {GenericElementType} from "./element/GenericElement";
 import {LinearElementType, LinearTool} from "./tools/LinearTool";
 import {TextTool} from "./tools/TextTool";
-import {Cmd, CmdBuilder, CmdPayloads, CmdType, loadElemByCmd, loadElemByObject, Message} from "../ws/message";
+import {
+    Cmd,
+    CmdBuilder,
+    CmdPayloads,
+    CmdType,
+    loadElemByCmd,
+    MemberMessage,
+    MemberMessageType,
+    Message
+} from "../ws/message";
 import {Selection} from "./tools/Selection";
 import {IWebsocket, WebsocketManager} from "../ws/websocketManager";
 import {OperationTracker} from "./operationTracker/OperationTracker";
-import {Page} from "./data/Page";
 import {DataLoader} from "../../../utils/data/DataLoader";
 import {WhiteBoard} from "./data/WhiteBoard";
-import {UserManager} from "../../../UserManager";
-import {ElementBase, ElementType} from "./element/ElementBase";
-import {FreeDraw} from "./element/FreeDraw";
-import {TextElement} from "./element/TextElement";
-import {Arrow, Line} from "./element/Line";
+import {UserInfo, UserManager} from "../../../UserManager";
 import {message} from "antd";
+import {PictureBook} from "./PictureBook";
+import {ElementBase} from "./element/ElementBase";
 
+export type OnMember = (user:UserInfo, type:MemberMessageType) => void;
 
 export class WhiteBoardApp implements IWebsocket {
 
     public whiteBoard:WhiteBoard;
 
-    private pages:Map<string, Page> = new Map<string, Page>();
+    private readonly scene:DrawingScene;
+
+    private book:PictureBook = new PictureBook(); // 管理页面的对象
 
     private wsClient:WebsocketManager;
 
-    private readonly scene:DrawingScene;
-
     private toolBox: ToolBox;
 
-    private cmdTracker:OperationTracker<Cmd<any>>;
+    public cmdTracker:OperationTracker<Cmd<any>>;
 
     public onClose = () => {}
 
@@ -47,29 +54,25 @@ export class WhiteBoardApp implements IWebsocket {
         const message = JSON.parse(e.data) as Message;
         switch (message.type) {
             case "load":
-                let page = new Page();
-                Object.assign(page, JSON.parse(message.data))
-                page.elements = page.elements.map(obj => loadElemByObject(obj));
-                this.pages[page.id] = page;
-                this.scene._pageId = page.id;
-                this.scene.renderPage(page);
+                this.book.loadPage(message.data);
+                this.scene.renderPage(this.book.curPage);
                 break;
             case "cmd":
                 const cmd = DataLoader.load(Cmd, message.data);
-                switch (cmd.type) {
-                    case CmdType.Add:
-                        let elem = loadElemByCmd(cmd);
-                        let page = this.pages[cmd.pageId];
-                        page.addElem(elem);
-                        if(this.scene._pageId === cmd.pageId) {
-                            this.scene.addElem(elem);
-                        }
-                        break
-                    case CmdType.Delete:
-                        break
+                this.handleCmdMessage(cmd);
+                break;
+            case "member":
+                let memberMsg = message.data as MemberMessage;
+                if(memberMsg.type === "enter") {
+                    this.onMember(memberMsg.payload, "enter");
+                } else {
+                    this.onMember(memberMsg.payload, "leave")
                 }
+                break;
         }
     }
+
+    public onMember:OnMember = () => {}
 
     constructor(whiteBoard:WhiteBoard) {
         this.scene = new DrawingScene();
@@ -77,7 +80,6 @@ export class WhiteBoardApp implements IWebsocket {
         this.wsClient = new WebsocketManager(this);
         this.cmdTracker = new OperationTracker<Cmd<any>>(10);
         this.whiteBoard = whiteBoard;
-
     }
 
     public setup() {
@@ -87,28 +89,37 @@ export class WhiteBoardApp implements IWebsocket {
 
     private setupListeners() {
         this.toolBox.setOnCreateListener( (e) => {
-            let cmd = new CmdBuilder<CmdType.Add>().setType(CmdType.Add)
-                .setPage(this.whiteBoard.id, this.scene._pageId)
+            let cmd = new CmdBuilder<CmdType.Add>()
+                .setType(CmdType.Add).setPage(this.whiteBoard.id, this.book.curPage)
                 .setUser(UserManager.getId()).setElement(e)
                 .setPayload(e).build();
-            this.cmdTracker.do(cmd);
+            this.cmdTracker.do(cmd); // 执行操作
+            this.book.addElemInPage(e, this.book.curPage.id);
             this.wsClient.sendCmd(cmd);
-        })
+        });
         this.toolBox.addOnModifyListener(CmdType.Adjust, (t, e,p) => {
-            let cmd = new CmdBuilder<CmdType.Adjust>().setType(CmdType.Adjust)
-                .setPage(this.whiteBoard.id, this.scene._pageId)
+            let cmd = new CmdBuilder<CmdType.Adjust>()
+                .setType(CmdType.Adjust).setPage(this.whiteBoard.id, this.book.curPage)
                 .setUser(UserManager.getId()).setElement(e)
                 .setPayload(p).build();
             this.cmdTracker.do(cmd);
+            // let elem = this.book.curPage.findElemById(cmd.o);
+            // if(elem) {
+            //     let adjust = JSON.parse(cmd.payload) as CmdPayloads[CmdType.Adjust];
+            //     this.updateElemState(elem, adjust);
+            // } 工具已经执行过了
             this.wsClient.sendCmd(cmd);
-        })
+        });
         this.toolBox.addOnModifyListener(CmdType.Delete, (t, e) => {
             let cmd = new CmdBuilder<CmdType.Delete>().setType(CmdType.Delete)
-                .setPage(this.whiteBoard.id, this.scene._pageId)
-                .setUser(UserManager.getId()).setElement(e).build();
+                .setPage(this.whiteBoard.id, this.book.curPage)
+                .setUser(UserManager.getId()).setElement(e)
+                .build();
             this.cmdTracker.do(cmd);
+            // this.book.deletePage() 设置了delete属性，所有引用都会同步
+            // this.deleteElem(e); 工具已经执行过了
             this.wsClient.sendCmd(cmd);
-        })
+        });
     }
 
     public setOnRenderListener(listener:OnRenderListener) {
@@ -143,8 +154,8 @@ export class WhiteBoardApp implements IWebsocket {
 
     }
 
-    public dispatchMouseEvent(e:MouseEvent, doubleClick:boolean = false) {
-        this.toolBox.curTool.op(this.scene.toSceneEvent(e, doubleClick), this.scene);
+    public dispatchMouseEvent(e:MouseEvent, isDown:boolean, doubleClick:boolean = false) {
+        this.toolBox.curTool.op(this.scene.toSceneEvent(e, isDown, doubleClick), this.scene);
         // 使用完除了选择工具之后，切换回选择工具
         if(e.type === "mouseup" && this.toolBox.curTool.type !== "selection" && this.toolBox.curTool.type !== "eraser") {
             this.toolBox.setCurTool("selection");
@@ -169,38 +180,43 @@ export class WhiteBoardApp implements IWebsocket {
     }
 
     public undo() {
-        let cmd = this.cmdTracker.undo();
+        let cmd = this.cmdTracker.undo()
         if(cmd) {
-            switch (cmd.type) {
-                case CmdType.Add:
-                case CmdType.Delete:
-                    this.reverseElemExist(cmd.pageId, cmd.o); break;
-                case CmdType.Adjust:
-                    let adjust  = JSON.parse(cmd.payload) as CmdPayloads[CmdType.Adjust];
-                    this.updateElemState(cmd.pageId, cmd.o, adjust, true); break;
-                default:
-                    throw "command is not supported";
-            }
+            let elem = this.undoCmd(cmd);
             let wdCmd = new CmdBuilder<CmdType.Withdraw>()
-                .setType(CmdType.Withdraw)
-                .setUser(UserManager.getId())
-                .setPage(cmd.boardId,cmd.pageId)
-                .setPayload(cmd)
-                .build()
+                .setType(CmdType.Withdraw).setUser(UserManager.getId())
+                .setElement(elem).setPage(cmd.boardId, this.book.curPage)
+                .setPayload(cmd).build();
             this.wsClient.sendCmd(wdCmd);
         }
     }
 
+    /**
+     *  @return 受到影响的元素
+     */
+    private undoCmd(cmd:Cmd<any>):ElementBase | null {
+        let elem = this.book.findElemInPage(cmd.o,  true);
+        switch (cmd.type) {
+            case CmdType.Add: this.deleteElemByCmd(cmd); break;
+            case CmdType.Delete: this.addElemByCmd(cmd); break;
+            case CmdType.Adjust: this.adjustByCmd(cmd, true); break;
+            default:
+                throw "command is not supported";
+        }
+        return elem;
+    }
+
     public redo() {
-        let cmd = this.cmdTracker.redo();
+        let cmd = this.cmdTracker.redo()
         if(cmd) {
+            let elem = this.book.curPage.findElemById(cmd.o, true);
             switch (cmd.type) {
                 case CmdType.Add:
+                    this.scene.addElem(elem);break;
                 case CmdType.Delete:
-                    this.reverseElemExist(cmd.pageId, cmd.o); break;
+                    this.scene.removeElem(elem); break;
                 case CmdType.Adjust:
-                    let adjust  = JSON.parse(cmd.payload) as CmdPayloads[CmdType.Adjust];
-                    this.updateElemState(cmd.pageId, cmd.o, adjust, true); break;
+                    this.adjustByCmd(cmd); break;
                 default:
                     throw "command is not supported";
             }
@@ -209,26 +225,104 @@ export class WhiteBoardApp implements IWebsocket {
         }
     }
 
-    /**
-     *  反转元素的存在状态
-     */
-    private reverseElemExist(pageId:string, elemId:string) {
-        let elem = this.pages.get(pageId).findElemById(elemId, true);
-        if(elem) {
-            if(elem.isDeleted) {
-                elem.isDeleted = false;
-                if(this.scene.pageId === pageId) this.scene.restoreElem(elemId);
-            } else {
-                elem.isDeleted = true;
-                if(this.scene.pageId === pageId) this.scene.refreshBackground();
-            }
+    // /**
+    //  *  反转元素的存在状态, 只对当前页面进行
+    //  */
+    // public reverseElemExist(elem:ElementBase | null) {
+    //     if(elem) {
+    //         if(elem.isDeleted) {
+    //             elem.isDeleted = false;
+    //             this.scene.restoreElem(elem);
+    //         } else {
+    //             elem.isDeleted = true;
+    //             this.scene.refreshBackground();
+    //         }
+    //     } else {
+    //         console.error(`elem not found`);
+    //     }
+    // }
+
+    // /**
+    //  *  删除元素，注意删除已经被其他人删除的元素的情况
+    //  */
+    // public deleteElem(elem:ElementBase | null) {
+    //     if(elem && !elem.isDeleted) {
+    //         elem.isDeleted = true;
+    //         this.scene.refreshBackground();
+    //     } else {
+    //         console.error(`elem not found`);
+    //     }
+    // }
+
+    // public restoreElem(elem:ElementBase | null) {
+    //     if(elem && elem.isDeleted) {
+    //         elem.isDeleted = false;
+    //         this.scene.addElem(elem);
+    //     } else {
+    //         console.error(`elem not found`);
+    //     }
+    // }
+
+    // public updateElemState(elem:ElementBase, adjust:CmdPayloads[CmdType.Adjust], backTrace:boolean = false) {
+    //     if(elem) {
+    //         Object.keys(adjust).forEach(k => {
+    //             if(backTrace) elem[k] = adjust[k][0];
+    //             else elem[k] = adjust[k][1];
+    //         });
+    //         this.scene.refreshBackground();
+    //     } else {
+    //         console.error(`elem not found`);
+    //     }
+    // }
+
+    private handleCmdMessage(cmd:Cmd<any>) {
+        switch (cmd.type) {
+            case CmdType.Add: this.addElemByCmd(cmd); break;
+            case CmdType.Delete: this.deleteElemByCmd(cmd); break;
+            case CmdType.Adjust: this.adjustByCmd(cmd); break;
+            case CmdType.Withdraw:
+                const subCmd = DataLoader.load(Cmd, cmd.payload);
+                this.undoCmd(subCmd);
+                break;
+            case CmdType.SwitchPage:
+                throw "待实现";
         }
     }
 
-    private updateElemState(pageId:string, elemId:string, adjust:CmdPayloads[CmdType.Adjust], backTrace:boolean = false) {
-        this.pages.get(pageId).updateElemStateById(elemId, adjust, backTrace);
-        if(this.scene.pageId === pageId) this.scene.refreshBackground();
+    /**
+     *  @param cmd 可以来自本地撤销栈，也可以来自远程
+     */
+
+    private deleteElemByCmd(cmd:Cmd<any>) {
+        if(cmd.pageId === this.book.curPage.id) {
+            let elem = this.book.curPage.findElemById(cmd.o);
+            if(elem) this.scene.removeElem(elem);
+        } else {
+            this.book.deleteElemInPage(cmd.o, cmd.pageId);
+        }
     }
 
+    private addElemByCmd(cmd:Cmd<any>) {
+        let elem;
+        if(!cmd.payload) {
+            elem = this.book.findElemInPage(cmd.o, true, cmd.pageId);
+        } else {
+            elem = loadElemByCmd(cmd);
+        }
+        this.book.addElemInPage(elem, cmd.pageId);
+        if(cmd.pageId === this.book.curPage.id) this.scene.addElem(elem);
+    }
+
+    private adjustByCmd(cmd:Cmd<any>, backTrace:boolean = false) {
+        let adjust = JSON.parse(cmd.payload) as CmdPayloads[CmdType.Adjust];
+        this.book.adjustElemInPage(cmd.o, adjust, cmd.pageId, backTrace);
+        if(cmd.pageId === this.book.curPage.id) {
+            this.scene.refreshBackground();
+        }
+    }
+
+    public usingSelection() {
+        return this.toolBox.curTool.type === "selection";
+    }
 
 }

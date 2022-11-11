@@ -5,19 +5,20 @@ import {Arrow, Line} from "../app/element/Line";
 import {FreeDraw} from "../app/element/FreeDraw";
 import {TextElement} from "../app/element/TextElement";
 import {EllipseElement, GenericElement, RectangleElement} from "../app/element/GenericElement";
+import {Page} from "../app/data/Page";
 
 type MessageType = "load" | "cmd" | "member"; // load是加载白板的意思
 
 export type Message =  {
     type: MessageType,
-    data: string
+    data: any
 }
 
-type MemberMessageType = "enter" | "leave";
+export type MemberMessageType = "enter" | "leave";
 
 export type MemberMessage = {
     type: MemberMessageType
-    payload: any; // 待定
+    payload: any;
 }
 
 export enum CmdType { //枚举从最后开始添加
@@ -29,9 +30,6 @@ export enum CmdType { //枚举从最后开始添加
     SwitchPage,  //切换页面
     // Scale, //缩放
 }
-
-//TODO 修改element数据类型
-type Element  = any
 
 //此处CmdPayloads中的值,即为payload
 
@@ -112,8 +110,8 @@ export class CmdBuilder<T extends CmdType> {
         this.cmd.id = IdGenerator.genCmdId(userId)
         return this
     }
-    public setPage(boardId: string, pageId: string) {
-        this.cmd.pageId = pageId;
+    public setPage(boardId: string, page: Page) {
+        this.cmd.pageId = page.id;
         this.cmd.boardId = boardId;
         return this
     }

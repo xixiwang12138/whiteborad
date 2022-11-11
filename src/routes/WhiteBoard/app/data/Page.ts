@@ -70,22 +70,46 @@ export class Page extends SerializableData {
     /**
      *  更新页面中的元素状态
      */
-    public updateElemStateById(id:string, adjust:CmdPayloads[CmdType.Adjust], backTrace:boolean) {
-        let elem = this.findElemById(id) as any;
+    // public updateElemStateById(id:string, adjust:CmdPayloads[CmdType.Adjust], backTrace:boolean) {
+    //     let elem = this.findElemById(id) as any;
+    //     if(elem) {
+    //         Object.keys(adjust).forEach(k => {
+    //             if(backTrace) elem[k] = adjust[k][0];
+    //             else elem[k] = adjust[k][1];
+    //         });
+    //     } else {
+    //         throw "element not found"
+    //     }
+    // }
+
+    public addElem(elem:ElementBase) {
+        let exist = this.findElemById(elem.id, true);
+        if(exist) {
+            elem.isDeleted = false;
+        } else {
+            this.elements.push(elem);
+        }
+    }
+
+    /**
+     * 一般是离屏页面调用
+     */
+    public deleteElemById(elemId:string) {
+        let exist = this.findElemById(elemId);
+        if(exist) {
+            exist.isDeleted = true;
+        }
+    }
+
+    public adjustElemById(elemId:string, adjust:CmdPayloads[CmdType.Adjust],
+                          backTrace = false) {
+        let elem = this.findElemById(elemId);
         if(elem) {
             Object.keys(adjust).forEach(k => {
                 if(backTrace) elem[k] = adjust[k][0];
                 else elem[k] = adjust[k][1];
             });
-        } else {
-            throw "element not found"
         }
     }
-
-    public addElem(elem:ElementBase) {
-        this.elements.push(elem);
-    }
-
-
 }
 

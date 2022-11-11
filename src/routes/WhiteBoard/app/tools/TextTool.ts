@@ -41,7 +41,15 @@ export class TextTool extends Tool
 
     public finishEditing():boolean {
         let flag = false;
-        (this.curElem! as TextElement).text = this.textEditor.value;
+        // 统计变化
+        let change:Record<string, [any, any]> = {
+            text: [this.curElem!.text, this.textEditor.value],
+        }
+        if(this.editorW !== this._curElem!.width) change["width"] = [this._curElem!.width, this.editorW];
+        if(this.editorH !== this._curElem!.height) change["height"] = [this._curElem!.height, this.editorH];
+        // 更新对象
+        this.curElem!.text = this.textEditor.value;
+        this._curElem!.resize(this.editorW, this.editorH);
         if(this.editState === "create") {
             if(this.textEditor.value) {
                 this.onCreate(this._curElem!); // 字符串不为空才保留
@@ -49,9 +57,10 @@ export class TextTool extends Tool
             }
         } else {
             if(this.textEditor.value) {
-                this.onModify(CmdType.Adjust, this.curElem!, {text:[this._curElem!.text, this.textEditor.value]})
+                this.onModify(CmdType.Adjust, this.curElem!, change)
                 flag = true;
             } else {
+                this._curElem.isDeleted = true;
                 this.onModify(CmdType.Delete, this.curElem!, null);
             }
         }
@@ -86,7 +95,7 @@ export class TextTool extends Tool
         style.border = "none";
         style.resize = "none";
         style.overflow = "hidden";
-        style.fontFamily = "宋体";
+        style.fontFamily = "黑体";
         style.lineHeight = "1.2"; // 字高的1.2倍
     }
 
@@ -106,8 +115,8 @@ export class TextTool extends Tool
                 // 重新编辑
                 this.editState = "edit";
                 const el = this._curElem = scene.actElem! as TextElement;
-                this.textEditor.style.width = `${el.width}px`;
-                this.textEditor.style.height = `${el.height}px`;
+                this.textEditor.style.width = `${el.width}px`; this.editorW = el.width;
+                this.textEditor.style.height = `${el.height}px`; this.editorH = el.height;
                 this.textEditor.style.textAlign = el.textAlign;
                 this.textEditor.style.fontSize = `${el.fontSize}px`;
                 this.textEditor.value = el.text;
@@ -121,8 +130,6 @@ export class TextTool extends Tool
                 this.textEditor.style.width = `${size.width}px`;
                 this.textEditor.style.height = `${size.height}px`;
                 this.editorW = size.width; this.editorH = size.height;
-                this._curElem!.resize(size.width, size.height);
-                // (scene.actElem as TextElement).text = this.textEditor.value;
             }
             this.container.appendChild(this.textEditor);
             // 自动获得焦点

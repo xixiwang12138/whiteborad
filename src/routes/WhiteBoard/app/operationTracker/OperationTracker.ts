@@ -3,11 +3,11 @@ import {FixedSizeStack} from "./Stack";
 /**
  * 可否执行undo/redo操作监听器, 用于更新UI
  */
+
+export type Op = "undo" | "redo";
+
 export interface OperableListener {
-    onRedoable():void;
-    onUndoable():void;
-    onNotRedoable():void;
-    onNotUndoable():void;
+    onAbilityChange(op:Op, ability:boolean);
 }
 
 export class OperationTracker<T> {
@@ -33,9 +33,9 @@ export class OperationTracker<T> {
     public do(op: T){
         this.doStack.push(op);
         this.undoStack.empty();
-        this.listener?.onNotRedoable();
+        this.listener?.onAbilityChange("redo", false);
         if(this.doStack.size == 1) {
-            this.listener?.onUndoable();
+            this.listener?.onAbilityChange("undo", true);
         }
     }
 
@@ -46,8 +46,8 @@ export class OperationTracker<T> {
         if(this.doStack.isEmpty() || this.undoStack.isFull()) return null;
         let ret = this.doStack.pop();
         this.undoStack.push(ret);
-        if(this.undoStack.size == 1) this.listener?.onRedoable();
-        if(this.doStack.isEmpty() || this.undoStack.isFull()) this.listener?.onNotUndoable();
+        if(this.undoStack.size == 1) this.listener?.onAbilityChange("redo", true);
+        if(this.doStack.isEmpty() || this.undoStack.isFull()) this.listener?.onAbilityChange("undo", false);
         return ret;
     }
 
@@ -55,7 +55,8 @@ export class OperationTracker<T> {
         if(this.undoStack.isEmpty() || this.doStack.isFull()) return null;
         let ret = this.undoStack.pop();
         this.doStack.push(ret);
-        if(this.undoStack.isEmpty() || this.doStack.isFull()) this.listener?.onNotRedoable();
+        if(this.doStack.size === 1) this.listener?.onAbilityChange("undo", true);
+        if(this.undoStack.isEmpty() || this.doStack.isFull()) this.listener?.onAbilityChange("redo", false);
         return ret;
     }
 

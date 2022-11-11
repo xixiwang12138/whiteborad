@@ -11,9 +11,6 @@ export interface CanvasScaledCtx extends CanvasRenderingContext2D {
 
 export class DrawingScene {
 
-    _pageId:string = ""; // TODO 默认渲染页面0？
-    set pageId(i:string) {this._pageId = i;}
-
     // 场景画布位置信息
     public  x:number = 0;
     public y:number = 0;
@@ -119,7 +116,13 @@ export class DrawingScene {
      */
     public addElem(elem:ElementBase) {
         if(elem.id === null) throw "null id";
-        this.elements.set(elem.id, elem);
+        let e = this.elements.get(elem.id);
+        if(e) {
+            e.isDeleted = false;
+        } else {
+            this.elements.set(elem.id, elem);
+        }
+        elem.finish = true;
         elem.draw(this.getScaledCtx(this.bufCvsCtx));
         this.render();
     }
@@ -127,10 +130,9 @@ export class DrawingScene {
     /**
      *  恢复被删除元素并绘制到背景板
      */
-    public restoreElem(id:string) {
-        let e = this.elements.get(id);
+    public restoreElem(elem:ElementBase) {
+        let e = this.elements.get(elem.id);
         if(e) {
-            e.isDeleted = false;
             e.draw(this.getScaledCtx(this.bufCvsCtx));
             this.render();
         } else {
@@ -142,7 +144,7 @@ export class DrawingScene {
      *  删除元素重新绘制背景板
      */
     public removeElem(elem:ElementBase) {
-        if(elem.id === null) throw "null id";
+        if(elem?.id === null) throw "null error";
         let e = this.elements.get(elem.id);
         if(e) e.isDeleted = true; // 这里不能直接删除，因为恢复的时候要保证顺序
         this.refreshBackground();
@@ -234,15 +236,18 @@ export class DrawingScene {
     /**
      *  将原生触摸事件转化成场景事件
      */
-    public toSceneEvent(e:MouseEvent, doubleClick:boolean):SceneTouchEvent {
-        if(doubleClick) {
-            return new SceneTouchEvent("doubleClick",
-                (e.x - this.x) / this.scale,
-                (e.y -this.y) / this.scale, e.x, e.y);
-        }
-        return new SceneTouchEvent(e.type.slice(5) as SceneTouchEventType,
+    public toSceneEvent(e:MouseEvent, isDown:boolean, doubleClick:boolean = false):SceneTouchEvent {
+        let event =  new SceneTouchEvent(
             (e.x - this.x) / this.scale,
             (e.y -this.y) / this.scale, e.x, e.y);
+        if(doubleClick) event.type = "doubleClick";
+        switch (e.type.slice(5)) {
+            case "up": case "down" : event.type = e.type.slice(5) as SceneTouchEventType; break;
+            case "move":
+                if(isDown) event.type = "move";
+                else event.type = "hover";
+        }
+        return event;
     }
 
     /**

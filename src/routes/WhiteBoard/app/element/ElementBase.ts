@@ -29,7 +29,7 @@ export class ElementBase extends SerializableData {
     public angle:number = 0; // 弧度制
 
     @field
-    public strokeColor:string = "#000000"; // 十六进制整数
+    public strokeColor:string = "#ff5656"; // 十六进制整数
     @field
     public backgroundColor:string = "#fff10000";
     @field

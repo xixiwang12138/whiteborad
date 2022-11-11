@@ -15,41 +15,42 @@ import {UserManager} from "../../../../UserManager";
 import {exportFile} from "../../../../api/api";
 
 class BaseRowProps {
-    isCreator:boolean = false;
+    boardInfo:{id:string, name:string}
+    memberList:{id:string, name:string, avatar:string}[]
 }
 
 
 class BaseRow extends React.Component<BaseRowProps> {
 
     state = {
-        isCreateUser: true,
+        isCreator: true,
         isInviteOpen: false,
         isExportOpen: false,
         useRadio: 1,
         isExportImage: 0,
         fitted: false,
-        boardId: "id",
-        boardName: "名称",
         avatar: "#956AA4" // TODO 设置默认头像
     }
 
     async componentDidMount() {
         await UserManager.syncUser();
-        this.setState({avatar:await UserManager.getAvatar()})
+        this.setState({
+            avatar: await UserManager.getAvatar(),
+            isCreator: this.props.boardInfo.id === UserManager.getId()
+        })
     }
 
-    private handleCopy(e:React.MouseEvent<HTMLElement>) {
-        // TODO 获取内容
-        console.log("复制")
+    private async handleCopy(e:React.MouseEvent<HTMLElement>) {
+        await navigator.clipboard.writeText(this.props.boardInfo.id);
+        message.success("已复制到剪切板");
     }
-
 
     private handleExport(e:React.MouseEvent<HTMLElement>){
-        // if(this.state.isExportImage) {
-        //     console.log("导出图片")
-        // }else {
-        //     console.log("导出文件")
-        // }
+        if(this.state.isExportImage) {
+            console.log("导出图片")
+        }else {
+            console.log("导出文件")
+        }
 
     }
 
@@ -58,8 +59,8 @@ class BaseRow extends React.Component<BaseRowProps> {
             <div>
                 <Radio.Group onChange={(e) => this.setState({useRadio:e.target.value})}
                              value={this.state.useRadio} style={{display: "flex", flexDirection: "column"}}>
-                    <Radio value={1} disabled={!this.props.isCreator}>编辑模式</Radio>
-                    <Radio value={2} disabled={!this.props.isCreator}>只读模式</Radio>
+                    <Radio value={1} disabled={!this.state.isCreator}>编辑模式</Radio>
+                    <Radio value={2} disabled={!this.state.isCreator}>只读模式</Radio>
                 </Radio.Group>
                 {/*{this.props.isCreator ?*/}
                 {/*    <div>*/}
@@ -89,17 +90,19 @@ class BaseRow extends React.Component<BaseRowProps> {
                             </NavLink>
                         </div>
                         <div style={{marginLeft:'20px'}}/>
-                        <div className="board-name">{this.state.boardName}</div>
+                        <div className="board-name">{this.props.boardInfo.name}</div>
                     </div>
                     <div className="row-middle">
                         <div className="avatar-group">
                             {/*一些逻辑待细化*/}
                             <Avatar.Group maxCount={3} maxStyle={{color: 'white', backgroundColor: '#AD7878'}}>
-                                <Avatar style={{backgroundColor: `#${this.state.avatar}`,width: "40px", height: "40px", borderRadius: "20px"}}/>
-                                <Avatar style={{backgroundColor: `#${this.state.avatar}`,width: "40px", height: "40px", borderRadius: "20px"}}/>
-                                <Tooltip placement="top">
-                                    <Avatar style={{backgroundColor:'#87d068',width: "40px", height: "40px", borderRadius: "20px"}}/>
-                                </Tooltip>
+                                {
+                                    this.props.memberList.slice(-3).map((m,i )=> {
+                                    return <Tooltip key={i} placement="top" title={m.name}>
+                                        <Avatar style={{backgroundColor: `#${this.state.avatar}`,width: "40px", height: "40px", borderRadius: "20px"}}/>
+                                    </Tooltip>
+                                    })
+                                }
                             </Avatar.Group>
                         </div>
                     </div>
@@ -123,11 +126,11 @@ class BaseRow extends React.Component<BaseRowProps> {
                         </div>
                     </div>
                 </div>
-                <Modal title="Invite" open={this.state.isInviteOpen} onOk={this.handleCopy}
+                <Modal title="Invite" open={this.state.isInviteOpen}
                        onCancel={() => this.setState({isInviteOpen : false})}
-                       footer={<Button key="copy" onClick={this.handleCopy}>复 制</Button> }>
+                       footer={<Button key="copy" onClick={this.handleCopy.bind(this)}>复 制</Button> }>
                     {/*<p>SOME</p>*/}
-                    <p className="info-text" id="text">{this.state.boardId}</p>
+                    <p className="info-text" id="text">{this.props.boardInfo.id}</p>
                     {/*<textarea id="input">copy</textarea>*/}
                 </Modal>
                 <Modal title="Export" open={this.state.isExportOpen} onOk={this.handleExport}

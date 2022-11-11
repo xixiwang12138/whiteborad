@@ -19,7 +19,7 @@ function Login() {
             password: userPassword
         });
         message.success("登录成功！")
-        navigate.push(`/home/${UserManager.getId()}`);
+        navigate.push(`/home/${await UserManager.getId()}`);
     }
 
     return (

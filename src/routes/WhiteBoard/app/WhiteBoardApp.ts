@@ -22,7 +22,7 @@ import {Line} from "./element/Line";
 
 export class WhiteBoardApp implements IWebsocket {
 
-    private whiteBoard:WhiteBoard;
+    public whiteBoard:WhiteBoard;
 
     private pages:Map<string, Page> = new Map<string, Page>();
 
@@ -32,7 +32,7 @@ export class WhiteBoardApp implements IWebsocket {
 
     private toolBox: ToolBox;
 
-    private cmdTracker:OperationTracker<Cmd<keyof CmdPayloads>>;
+    private cmdTracker:OperationTracker<Cmd<any>>;
 
     public onClose = () => {}
 
@@ -68,9 +68,13 @@ export class WhiteBoardApp implements IWebsocket {
         this.scene = new DrawingScene();
         this.toolBox  = new ToolBox();
         this.wsClient = new WebsocketManager(this);
-        this.wsClient.connect(whiteBoard.id, UserManager.getId());
-        this.cmdTracker = new OperationTracker<Cmd<keyof CmdPayloads>>(10);
+        this.cmdTracker = new OperationTracker<Cmd<any>>(10);
         this.whiteBoard = whiteBoard;
+
+    }
+
+    private setup() {
+        this.wsClient.connect(this.whiteBoard.id, UserManager.getId());
         this.setupListeners();
     }
 
@@ -153,35 +157,21 @@ export class WhiteBoardApp implements IWebsocket {
         if(cmd) {
             switch (cmd.type) {
                 case CmdType.Add:
-                    this.deleteElem(cmd.pageId!, cmd.o!); break;
                 case CmdType.Delete:
-                    this.restoreElem(cmd.pageId!, cmd.o!); break;
-
+                    this.reverseElemExist(cmd.pageId, cmd.o); break;
+                case CmdType.Adjust:
+                    let adjust  = JSON.parse(cmd.payload) as CmdPayloads[CmdType.Adjust];
+                    this.updateElemState(cmd.pageId, cmd.o, adjust, true); break;
+                default:
+                    throw "command is not supported";
             }
             let wdCmd = new CmdBuilder<CmdType.Withdraw>()
                 .setType(CmdType.Withdraw)
-                .setUser(UserManager.getId()) // TODO 用户管理对象获取id
+                .setUser(UserManager.getId())
                 .setPage(cmd.boardId,cmd.pageId)
                 .setPayload(cmd)
                 .build()
             this.wsClient.sendCmd(wdCmd);
-        }
-    }
-
-    private deleteElem(pageId:string, elemId:string) {
-        if(this.scene.pageId === pageId) {
-            let elem = this.scene.getElem(elemId);
-            if(elem) this.scene.removeElem(elem);
-        }
-        this.pages[pageId].deleteElemById(elemId);
-    }
-
-    private restoreElem(pageId:string, id:string) {
-        const page = this.pages[pageId];
-        let i = page.findElemIdxById(id, true);
-        if(i !== -1) {
-            page.elements[i].isDeleted = false;
-            this.scene.restoreElem(id);
         }
     }
 
@@ -190,9 +180,38 @@ export class WhiteBoardApp implements IWebsocket {
         if(cmd) {
             switch (cmd.type) {
                 case CmdType.Add:
+                case CmdType.Delete:
+                    this.reverseElemExist(cmd.pageId, cmd.o); break;
+                case CmdType.Adjust:
+                    let adjust  = JSON.parse(cmd.payload) as CmdPayloads[CmdType.Adjust];
+                    this.updateElemState(cmd.pageId, cmd.o, adjust, true); break;
+                default:
+                    throw "command is not supported";
+            }
+            cmd.time = new Date().valueOf();
+            this.wsClient.sendCmd(cmd);
+        }
+    }
 
+    /**
+     *  反转元素的存在状态
+     */
+    private reverseElemExist(pageId:string, elemId:string) {
+        let elem = this.pages.get(pageId).findElemById(elemId, true);
+        if(elem) {
+            if(elem.isDeleted) {
+                elem.isDeleted = false;
+                if(this.scene.pageId === pageId) this.scene.restoreElem(elemId);
+            } else {
+                elem.isDeleted = true;
+                if(this.scene.pageId === pageId) this.scene.refreshBackground();
             }
         }
+    }
+
+    private updateElemState(pageId:string, elemId:string, adjust:CmdPayloads[CmdType.Adjust], backTrace:boolean = false) {
+        this.pages.get(pageId).updateElemStateById(elemId, adjust, backTrace);
+        if(this.scene.pageId === pageId) this.scene.refreshBackground();
     }
 
     private loadElemByCmd(cmd:Cmd<any>):ElementBase {

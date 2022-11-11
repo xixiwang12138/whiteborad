@@ -64,3 +64,4 @@ export async function joinBoard(boardId: string):Promise<WhiteBoard> {
     );
     return DataLoader.load(WhiteBoard, res.board);
 }
+

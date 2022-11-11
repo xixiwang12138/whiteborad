@@ -29,9 +29,13 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
 
     private refactoringScene:boolean = false; // 防止传播移动场景结束后的up事件也传播到工具去
 
+    state = {
+        isCreator: false
+    }
+
     render() {
         return <div className="board">
-            <BaseRow />
+            <BaseRow isCreator={this.state.isCreator}/>
             <ToolList onToolSelected={this.selectTool.bind(this)} opListener={this}/>
             {/*<WindowInvite />*/}
             <div id="canvas-root" style={{width:"100%", height:"100%", overflow:"hidden"}}>
@@ -46,8 +50,11 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.setupCanvas();
         this.setupWindow();
         this.setupRootNode();
-        await UserManager.syncUser();
         await this.setupApp();
+        await UserManager.syncUser();
+        this.setState({
+            isCreator: this.app.whiteBoard.creator === UserManager.getId()
+        })
     }
 
     private setupCanvas() {

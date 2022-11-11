@@ -11,10 +11,10 @@ function Reset() {
 
     const onFinishreset = (values: any) => {
         console.log(values);
-        doReset(values).then((res)=> {
+        doReset(values).then(async (res)=> {
             // localStorage.setItem("token",res.data.token);
             message.success("密码重置成功！")
-            history.push(`/home/${UserManager.getId()}`);
+            history.push(`/home/${await UserManager.getId()}`);
         });
     }
 

@@ -12,7 +12,7 @@ import attribute from "../../icon/属性选中.svg";
 import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, message} from "antd";
 import {NavLink} from 'react-router-dom';
 import {UserManager} from "../../../../UserManager";
-
+import {exportFile} from "../../../../api/api";
 
 class BaseRowProps {
     boardInfo:{id:string, name:string}
@@ -57,16 +57,17 @@ class BaseRow extends React.Component<BaseRowProps> {
     private propertyTool() {
         return (
             <div>
-                {this.state.isCreator ?
-                    <div>
-                        <Radio.Group onChange={(e) => this.setState({useRadio:e.target.value})}
-                                     value={this.state.useRadio} style={{display: "flex", flexDirection: "column"}}>
-                            <Radio value={1}>编辑模式</Radio>
-                            <Radio value={2}>只读模式</Radio>
-                        </Radio.Group>
-                    </div> :
-                    <div></div>
-                }
+                <Radio.Group onChange={(e) => this.setState({useRadio:e.target.value})}
+                             value={this.state.useRadio} style={{display: "flex", flexDirection: "column"}}>
+                    <Radio value={1} disabled={!this.props.isCreator}>编辑模式</Radio>
+                    <Radio value={2} disabled={!this.props.isCreator}>只读模式</Radio>
+                </Radio.Group>
+                {/*{this.props.isCreator ?*/}
+                {/*    <div>*/}
+
+                {/*    </div> :*/}
+                {/*    <div></div>*/}
+                {/*}*/}
                 <div>
                     <Checkbox onChange={(e) => this.setState({fitted:e.target.value})}>
                         线条拟合
@@ -93,7 +94,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                     </div>
                     <div className="row-middle">
                         <div className="avatar-group">
-                            {/*一些逻辑待细化, 只取最后三个加入的人可以吗？*/ }
+                            {/*一些逻辑待细化*/}
                             <Avatar.Group maxCount={3} maxStyle={{color: 'white', backgroundColor: '#AD7878'}}>
                                 {
                                     this.props.memberList.slice(-3).map((m,i )=> {

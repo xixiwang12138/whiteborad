@@ -91,7 +91,7 @@
 .board-container {
     width: 850px;
     height: 300px;
-    max-height: 300px;
+    /*max-height: 300px;*/
     overflow-y: auto;
     display: flex;
     flex-flow: wrap;

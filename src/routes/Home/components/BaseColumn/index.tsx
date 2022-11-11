@@ -37,7 +37,6 @@ class BaseColumn extends React.Component {
                     </div>
                     <div style={{marginTop:'10px'}}/>
                     <div className="base-name" onClick={() => this.setState({isNameOpen:true})}>
-                        {/*后期加个判断：username是否为空*/}
                         <div className="name" >{this.state.userName}</div>
                         <div className="name-icon">
                             <img src={write}/>

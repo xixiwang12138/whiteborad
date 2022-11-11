@@ -3,8 +3,9 @@ import "./index.css";
 import "../../../../App.css";
 import sort from "../../icon/排序.svg";
 import {Button, Modal, Input, Form, Tabs, Popover} from "antd";
-import {doCreateBoard} from "../../../../api/api";
+import {doCreateBoard, getCreatedBoards, getJoinedBoards} from "../../../../api/api";
 import {useHistory} from "react-router-dom";
+import {WhiteBoard} from "../../../WhiteBoard/app/data/WhiteBoard";
 
 function MyBoard(){
 
@@ -15,10 +16,83 @@ function MyBoard(){
             <path d="M22.531 9.30902C23.889 9.30902 24.9898 10.4098 24.9898 11.7678C24.9898 13.1257 23.889 14.2266 22.531 14.2266C21.1731 14.2266 20.0723 13.1257 20.0723 11.7678C20.0723 10.4098 21.1731 9.30902 22.531 9.30902Z" fill="black"/>
         </svg>
     )
+    const miniBoard = (boardName: string, bId: string) => {
+        return (
+            <div className="mini-board-container" >
+                <div className="mini-board-box" style={{ cursor: "pointer" }} id={bId} onClick={(e)=> handleClickJoin(e)}>
+                    <div className="mini-board-tool">
+                        <Popover placement="top" content={MiniBoardTool} trigger="hover">
+                            {/*<Button>tool</Button>*/}
+                            <div className="tool-icon" id="toolbtn">
+                                {tool}
+                            </div>
+                        </Popover>
+                    </div>
+                </div>
+                <div className="mini-board-name">{boardName}</div>
+            </div>
+        )
+    }
+    const creatListDiv = []
+    const joinListDiv = []
+    const allListDiv = []
+
+    const createBoardList = []
+    const joinBoardList = []
+    const allList = []
+
+    //请求获取board列表
+    const loadMyCreatList = async () => {
+        const c = await getCreatedBoards()
+        c.forEach((board) => {
+            createBoardList.push(board)
+            creatListDiv.push(
+                miniBoard(board.name, board.id)
+            )
+        })
+    }
+
+    const loadMyJoinList = async () => {
+        const c = await getJoinedBoards()
+        c.forEach((board) => {
+            joinBoardList.push(board)
+            joinListDiv.push(
+                miniBoard(board.name, board.id)
+            )
+        })
+    }
+
+    const getAllList = () => {
+        const c = createBoardList.concat(joinBoardList)
+        c.forEach((board) => {
+            allList.push(c)
+            allListDiv.push(
+                miniBoard(board.name, board.id)
+            )
+        })
+    }
+
+    const refreshList = async () => {
+        await loadMyCreatList()
+        await loadMyJoinList()
+        await getAllList()
+    }
 
 
     const onTabsChange = (key: string) => {
-        console.log(key);
+        switch (key) {
+            case '1': {
+                refreshList().then();
+            } break;
+            case '2':{
+                loadMyCreatList().then()
+                break;
+            }
+            case '3':{
+                loadMyJoinList().then();
+                break;
+            }
+        }
     }
 
 
@@ -52,35 +126,27 @@ function MyBoard(){
         setIsJoinOpen(false)
     }
 
+
+    const handleClickJoin = (e) => {
+        const boardId =  e.target.id;
+        navigate.push(`/board/${boardId}`);
+    }
+
+
     const MiniBoardTool = (
         <div>
             <div className="tool-content">邀请成员</div>
-            <div className="tool-content">删除会议</div>
+            <div className="tool-content">删除白板</div>
             <div className="tool-content">导出</div>
         </div>
     )
 
-    const AllBoard = <div className="board-container">
-        {/*这里是全部白板*/}
-        {/*思路：miniboard嵌套 按钮和图片 图片是最后一次更新的白板的快照（好像不好搞...）*/}
-        {/*按钮点击跳转到响应 白板id 的 board页面*/}
-        <div className="mini-board-container">
-            <div className="mini-board-box">
-                <div className="mini-board-tool">
-                    <Popover placement="top" content={MiniBoardTool} trigger="hover">
-                        {/*<Button>tool</Button>*/}
-                        <div className="tool-icon" id="toolbtn">
-                            {tool}
-                        </div>
-                    </Popover>
-                </div>
-            </div>
-            <div className="mini-board-name">这里是白板的名字</div>
-        </div>
-    </div>
-    const MyCreate = <div className="board-container">这里是我创建的</div>
-    const MyJoin = <div className="board-container">这里是我参与的</div>
-    const LikeBoard = <div className="board-container">这里是收藏白板</div>
+
+    refreshList().then()
+    const AllBoard = <div className="board-container">{allListDiv}</div>
+    const MyCreate = <div className="board-container"> {creatListDiv}</div>
+    const MyJoin = <div className="board-container"> {joinListDiv}</div>
+    // const LikeBoard = <div className="board-container">这里是收藏白板</div>
 
     return(
         <div className="my-board">

@@ -8,10 +8,11 @@ import allDelete from "../../icon/一键清空.svg";
 
 // import list from "../../icon/属性-收起.svg"; 这个用不了，先用下面的顶替
 import type {MenuProps}  from "antd";
-import shuxing from "../../icon/属性选中.svg";
+import attribute from "../../icon/属性选中.svg";
 import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, message} from "antd";
 import {NavLink} from 'react-router-dom';
 import {UserManager} from "../../../../UserManager";
+import {exportFile} from "../../../../api/api";
 
 class BaseRowProps {
     isCreator:boolean = false;
@@ -23,7 +24,9 @@ class BaseRow extends React.Component<BaseRowProps> {
     state = {
         isCreateUser: true,
         isInviteOpen: false,
+        isExportOpen: false,
         useRadio: 1,
+        isExportImage: 0,
         fitted: false,
         avatar: "#956AA4" // TODO 设置默认头像
     }
@@ -35,6 +38,15 @@ class BaseRow extends React.Component<BaseRowProps> {
 
     private handleCopy(e:React.MouseEvent<HTMLElement>) {
         // TODO 获取内容
+    }
+
+    private handleExport(e:React.MouseEvent<HTMLElement>){
+        if(this.state.isExportImage) {
+            console.log("导出图片")
+        }else {
+            console.log("导出文件")
+        }
+
     }
 
     private propertyTool() {
@@ -88,8 +100,8 @@ class BaseRow extends React.Component<BaseRowProps> {
                     </div>
                     <div className="row-right">
                         <div className="right1-click">
-                            <Popover placement="bottom" content={this.propertyTool} trigger="click">
-                                <img src={shuxing}/>
+                            <Popover placement="bottom" content={this.propertyTool.bind(this)} trigger="click">
+                                <img src={attribute}/>
                             </Popover>
                             {/*<img src={shuxing}/>*/}
                         </div>
@@ -98,7 +110,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                                 <img src={file}/>
                             </div>
                             <div className="export-icon" title="导出">
-                                <img src={ex}/>
+                                <img src={ex} onClick={()=>this.setState({isExportOpen:true})}/>
                             </div>
                         </div>
                         <div className="right3">
@@ -112,6 +124,21 @@ class BaseRow extends React.Component<BaseRowProps> {
                     {/*<p>SOME</p>*/}
                     <p className="info-text" id="text">白板id</p>
                     {/*<textarea id="input">copy</textarea>*/}
+                </Modal>
+                <Modal title="Export" open={this.state.isExportOpen} onOk={this.handleExport}
+                       onCancel={() => this.setState({isExportOpen : false})}
+                       footer={<Button key="copy" onClick={this.handleExport}>导 出</Button> }>
+                    <div>请选择导出类型：</div>
+                    <div style={{marginBottom:'10px'}}/>
+                    <div>
+                        <Radio.Group onChange={(e) => this.setState({exportType:e.target.value})}
+                                     value={this.state.isExportImage} style={{display: "flex", flexDirection: "column"}}>
+                            <div style={{display: 'flex', flexDirection: 'row'}}>
+                                <Radio value={0}>文件</Radio>
+                                <Radio value={1} disabled={true}>图片</Radio>
+                            </div>
+                        </Radio.Group>
+                    </div>
                 </Modal>
             </div>
         )

@@ -1,6 +1,11 @@
-import {ElementBase} from "../element/ElementBase";
-import {field, SerializableData} from "../../../../utils/data/DataLoader";
+import {ElementBase, ElementType} from "../element/ElementBase";
+import {Constructor, field, SerializableData} from "../../../../utils/data/DataLoader";
 import {CmdPayloads, CmdType} from "../../ws/message";
+import {EllipseElement, GenericElement, RectangleElement} from "../element/GenericElement";
+import {FreeDraw} from "../element/FreeDraw";
+import {Arrow, Line} from "../element/Line";
+
+
 
 export class Page extends SerializableData {
 
@@ -16,10 +21,10 @@ export class Page extends SerializableData {
     whiteBoardId:string;
     @field
     displayName:string
-    @field(Array<ElementBase>)
-    elements:ElementBase[] = []
+    @field([ElementBase])
+    elements:Array<ElementBase> = []
 
-    constructor(id:string, whiteBoardId:string, displayName:string) {
+    constructor(id:string = "", whiteBoardId:string = "", displayName:string = "") {
         super();
         this.id = id;
         this.createTime = this.updateTime = new Date().valueOf();
@@ -41,7 +46,9 @@ export class Page extends SerializableData {
         return null;
     }
 
-    // /**
+
+
+// /**
     //  *  删除页面中的元素
     //  */
     // public deleteElemById(id:string) {

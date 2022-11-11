@@ -6,6 +6,7 @@ const host = 'ws://localhost:10400'
 // const host = 'ws://175.178.81.93:10400'
 // const host = 'ws://192.168.137.17:10400'
 // const host = 'ws://175.178.81.93:10400'
+// const host = 'ws://172.21.216.71:10400';
 
 export interface IWebsocket {
     onOpen: ((ev: Event) => any) | null;

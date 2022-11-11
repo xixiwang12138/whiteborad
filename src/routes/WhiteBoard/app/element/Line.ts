@@ -11,7 +11,7 @@ export class Line extends PathElement {
     @field(String)
     public linearType:LinearElementType;
 
-    public constructor(id:string, x:number, y:number, type:LinearElementType = "line") {
+    public constructor(id:string = "", x:number = 0, y:number = 0, type:LinearElementType = "line") {
         super(id, x, y, ElementType.linear);
         this.linearType = type;
         this.points.push(null!, null!);
@@ -49,7 +49,7 @@ export class Line extends PathElement {
 
 export class Arrow extends Line {
 
-    constructor(id:string, x:number, y:number) {
+    constructor(id:string = "", x:number = 0, y:number = 0) {
         super(id, x, y, "arrow");
     }
 

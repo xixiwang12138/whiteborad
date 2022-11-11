@@ -42,4 +42,9 @@ export class UserManager {
         if(!this.userInfo) await this.syncUser();
         return this.userInfo.avatar;
     }
+
+    public static async getUserName() {
+        if(!this.userInfo) await this.syncUser();
+        return this.userInfo.name;
+    }
 }

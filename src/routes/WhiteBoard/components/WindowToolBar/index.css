@@ -72,9 +72,10 @@
     margin-bottom: 5px;
 }
 .single-box-contain {
-    width: fit-content;
+    /*width: fit-content;*/
     height: 25px;
-    /*background-color: orange;*/
+    width: 100px;
+    background-color: orange;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

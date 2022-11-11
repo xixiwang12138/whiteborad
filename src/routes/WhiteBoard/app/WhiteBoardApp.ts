@@ -6,7 +6,7 @@ import {GenericElementTool} from "./tools/GenericElementTool";
 import {EllipseElement, GenericElement, GenericElementType, RectangleElement} from "./element/GenericElement";
 import {LinearElementType, LinearTool} from "./tools/LinearTool";
 import {TextTool} from "./tools/TextTool";
-import {Cmd, CmdBuilder, CmdPayloads, CmdType, loadElemByCmd, Message} from "../ws/message";
+import {Cmd, CmdBuilder, CmdPayloads, CmdType, loadElemByCmd, loadElemByObject, Message} from "../ws/message";
 import {Selection} from "./tools/Selection";
 import {IWebsocket, WebsocketManager} from "../ws/websocketManager";
 import {OperationTracker} from "./operationTracker/OperationTracker";
@@ -47,7 +47,9 @@ export class WhiteBoardApp implements IWebsocket {
         const message = JSON.parse(e.data) as Message;
         switch (message.type) {
             case "load":
-                let page = DataLoader.load(Page, message.data);
+                let page = new Page();
+                Object.assign(page, JSON.parse(message.data))
+                page.elements = page.elements.map(obj => loadElemByObject(obj));
                 this.pages[page.id] = page;
                 this.scene._pageId = page.id;
                 this.scene.renderPage(page);
@@ -57,10 +59,11 @@ export class WhiteBoardApp implements IWebsocket {
                 switch (cmd.type) {
                     case CmdType.Add:
                         let elem = loadElemByCmd(cmd);
-                        console.log(elem);
                         let page = this.pages[cmd.pageId];
                         page.addElem(elem);
-                        this.scene.addElem(elem);
+                        if(this.scene._pageId === cmd.pageId) {
+                            this.scene.addElem(elem);
+                        }
                         break
                     case CmdType.Delete:
                         break

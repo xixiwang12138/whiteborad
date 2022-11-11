@@ -48,6 +48,35 @@ class WinToolList extends React.Component<WinToolListProp> {
         ["changeTextAlign", ["left", "center", "right"]]
     ]
     private textTitles = ["字体大小", "字体样式", "文本对齐"]
+    private textContains = [
+        [{
+            title: "缩小字体",
+        },
+        {
+            title: "原始字体",
+        },
+        {
+            title: "增大字体",
+        }],
+        [{
+            title: "加粗"
+        },
+        {
+            title: "斜体"
+        },
+        {
+            title: "下划线"
+        }],
+        [{
+            title: "向左对齐"
+        },
+        {
+            title: "向右对齐"
+        },
+        {
+            title: "居中对齐"
+        }]
+    ]
     private publicGroups: (WinToolType[] | [WinToolType, SecondLevelType[]])[] = [
         ["changeElementOpacity"],
         ["changeElementPosition",["toTop", "toBottom", "toNext", "toLast"]],
@@ -101,6 +130,9 @@ class WinToolList extends React.Component<WinToolListProp> {
                     <div className="single-box" key={i}>
                         <div className="single-box-title">
                             {this.textTitles[i]}
+                        </div>
+                        <div className="single-box-contain" key={i}>
+                            <div className="border-box">youma</div>
                         </div>
                     </div>
                 </div>

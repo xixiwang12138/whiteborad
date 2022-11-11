@@ -30,7 +30,7 @@
     justify-content: space-between;
     align-items: center;
 }
-.icon {
+.do-box .icon {
     height: 40px !important;
     width: 40px !important;
     border-radius: 10px !important;
@@ -40,7 +40,7 @@
     justify-content: center !important;
     cursor: pointer !important;
 }
-.icon-disabled {
+.do-box .icon-disabled {
     height: 40px !important;
     width: 40px !important;
     border-radius: 10px !important;
@@ -50,12 +50,12 @@
     justify-content: center !important;
     cursor: not-allowed !important;
 }
-.icon-disabled img {
+.do-box .icon-disabled img {
     width: 30px;
     height: 30px;
     object-fit: contain;
 }
-.icon img {
+.do-box .icon img {
     width: 30px;
     height: 30px;
     object-fit: contain;

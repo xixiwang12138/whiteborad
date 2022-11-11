@@ -65,6 +65,17 @@ export async function joinBoard(boardId: string):Promise<WhiteBoard> {
     return DataLoader.load(WhiteBoard, res.board);
 }
 
+type ExportFileResp = {
+    pageId:string
+}
+
+export async function exportFile(pageId: string) {
+    return request.post<any, ExportFileResp>(
+        " /api/page/export",
+        {pageId}
+    );
+}
+
 export async function rename(name:string) {
     await request.post<any, null>(
         "/api/user/rename",

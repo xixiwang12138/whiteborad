@@ -14,7 +14,7 @@ function Reset() {
         doReset(values).then(async (res)=> {
             // localStorage.setItem("token",res.data.token);
             message.success("密码重置成功！")
-            history.push(`/home/${await UserManager.getId()}`);
+            history.push(`/`);
         });
     }
 

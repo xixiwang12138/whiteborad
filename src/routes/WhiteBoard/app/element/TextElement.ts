@@ -21,7 +21,7 @@ export class TextElement extends ElementBase {
             const s = ctx._scale;
             ctx.fillStyle = this.strokeColor;
             ctx.textAlign = this.textAlign;
-            ctx.font = `${this.fontSize * s}px 宋体`;
+            ctx.font = `${this.fontSize * s}px 黑体`;
             const lines = this.text.split("\n");
             for(let i = 0;i < lines.length;i++) {
                 ctx.fillText(lines[i], this.x * s, (this.y + this.fontSize * (1.2 * i + 1)) * s, this.width * s);

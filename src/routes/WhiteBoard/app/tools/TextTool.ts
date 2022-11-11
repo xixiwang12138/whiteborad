@@ -86,7 +86,7 @@ export class TextTool extends Tool
         style.border = "none";
         style.resize = "none";
         style.overflow = "hidden";
-        style.fontFamily = "宋体";
+        style.fontFamily = "黑体";
         style.lineHeight = "1.2"; // 字高的1.2倍
     }
 

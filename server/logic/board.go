@@ -19,7 +19,7 @@ func InitBoard(userId string) error {
 // GetBoards 返回用户创建的所有的board
 func GetBoards(userId string) ([]*models.WhiteBoard, error) {
 	list, err := dao.WhiteBoardRepo.Find(map[string]interface{}{
-		"Creator": userId,
+		"creator": userId,
 	}, repo.NotDeleted)
 	if err != nil {
 		return nil, err

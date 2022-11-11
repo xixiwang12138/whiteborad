@@ -73,7 +73,7 @@ func (this *userJoinRepo) Join(userId string, bId string) error {
 
 func (this *userJoinRepo) GetUserJoins(uId string) ([]*models.WhiteBoard, error) {
 	joins, err := this.Find(map[string]interface{}{
-		"UserId": uId,
+		"user_id": uId,
 	})
 	if err != nil {
 		return nil, err
@@ -82,5 +82,5 @@ func (this *userJoinRepo) GetUserJoins(uId string) ([]*models.WhiteBoard, error)
 	for i, j := range joins {
 		ids[i] = j.BoardId
 	}
-	return WhiteBoardRepo.FindPKArray(ids)
+	return WhiteBoardRepo.FindPKArray(ids, &repo.Condition{Filed: "creator", Opr: "!=", Value: uId})
 }

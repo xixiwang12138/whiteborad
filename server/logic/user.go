@@ -40,8 +40,8 @@ func Register(phone string, password string) (*bind.LoginResponse, error) {
 
 func Login(phone string, password string) (*bind.LoginResponse, error) {
 	one, err := dao.UserRepo.FindOne(map[string]interface{}{
-		"Phone":    phone,
-		"Password": password,
+		"phone":    phone,
+		"password": password,
 	})
 	if err != nil {
 		return nil, err
@@ -84,7 +84,7 @@ func Reset(phone string, newPassword string) error {
 
 func userExist(phone string) (bool, error) {
 	one, err := dao.UserRepo.FindOne(map[string]interface{}{
-		"Phone": phone,
+		"phone": phone,
 	})
 	if err != nil {
 		return false, err

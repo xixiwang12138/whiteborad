@@ -15,7 +15,7 @@ type Condition struct {
 }
 
 var NotDeleted = &Condition{
-	Filed: "DeleteTime",
+	Filed: "delete_time",
 	Opr:   "=",
 	Value: "0",
 }
@@ -77,9 +77,12 @@ func (this *BaseRepo[T]) FindFields(filter map[string]interface{}, fields ...str
 	return *t, err
 }
 
-func (this *BaseRepo[T]) FindPKArray(ids []string) ([]*T, error) {
+func (this *BaseRepo[T]) FindPKArray(ids []string, conditions ...*Condition) ([]*T, error) {
 	t := new([]*T)
 	db := sources.MysqlSource.Db
+	for _, condition := range conditions {
+		db = db.Where(condition.Filed+" "+condition.Opr+" ?", condition.Value)
+	}
 	err := db.Where(ids).Find(t).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) { //没有找到返回空
 		return nil, nil

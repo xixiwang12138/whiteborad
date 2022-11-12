@@ -175,6 +175,20 @@ export class DrawingScene {
         this.realCvs.height = this.bufCvs.height = this.height;
         this.bufCvsCtx = this.bufCvs.getContext('2d')!;
         this.realCvsCtx = this.realCvs.getContext('2d')!;
+        // const ratio = window.devicePixelRatio
+        // console.log("===============================================================>", ratio)
+        // this.bufCvs.style.width = this.bufCvs.width + 'px';
+        // this.bufCvs.style.height = this.bufCvs.height + 'px';
+        //
+        // this.bufCvs.width = this.bufCvs.width * ratio;
+        // this.bufCvs.height = this.bufCvs.height * ratio;
+        //
+        //
+        // this.realCvs.style.width = this.realCvs.width + 'px';
+        // this.realCvs.style.height = this.realCvs.height + 'px';
+        //
+        // this.realCvs.width = this.realCvs.width * ratio;
+        // this.realCvs.height = this.realCvs.height * ratio;
         this.clearCanvas();
     }
 

@@ -18,12 +18,23 @@ export abstract class Tool {
 
     public type:ToolType;
 
+    // 工具的默认属性
+    public opacity:number = 1;
+    public strokeColor:string = "#000000";
+    public strokeWidth:number = 5;
+
     protected parent!:ToolBox;
+
+    protected scene!:DrawingScene;
 
     protected constructor(type:ToolType) {this.type = type}
 
     public setToolBox(box:ToolBox) {
         this.parent = box;
+    }
+
+    public setScene(scene:DrawingScene) {
+        this.scene = scene;
     }
 
     public abstract op(e: SceneTouchEvent, scene: DrawingScene):void;

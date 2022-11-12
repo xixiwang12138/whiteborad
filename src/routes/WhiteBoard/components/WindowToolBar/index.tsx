@@ -2,7 +2,7 @@ import React from "react";
 import {Slider} from "antd";
 import "./index.css";
 import "../../../../App.css";
-import {RectangleElement} from "../../app/element/GenericElement";
+import {GenericElement, RectangleElement} from "../../app/element/GenericElement";
 import {
     ColorType,
     ElementPositionType,
@@ -16,6 +16,7 @@ import {
 import {ElementType} from "../../app/element/ElementBase";
 import {TextElement} from "../../app/element/TextElement";
 import {PathElement} from "../../app/element/PathElement";
+import {Line} from "../../app/element/Line";
 
 export type SecondLevelType = StrokeWidthType | FontSizeType |
     FontStyleType | TextAlignType | ElementPositionType | OperationsType;
@@ -42,12 +43,12 @@ enum ToolBar {
     Operation
 }
 class WinTypeListProp {
-    OnWinTypeSelected: OnWinTypeSelected = () => {};
+    // OnWinTypeSelected: OnWinTypeSelected = () => {};
     propSetter:ToolReactor
     toolOrElemType: ToolType | ElementType;
 }
 
-export type ElementSum = TextElement & PathElement & RectangleElement
+export type ElementSum = TextElement & PathElement & GenericElement & Line;
 
 
 export interface ToolReactor {
@@ -106,15 +107,15 @@ class WinToolList extends React.Component<WinTypeListProp> {
     }
 
     private widthMap = {
-        '0': 20,
-        '1': 40,
-        '2': 60,
+        '0': 5,
+        '1': 10,
+        '2': 20,
     }
 
     private sizeMap = {
-        '0': 100,
-        '1': 200,
-        '2': 300,
+        '0': 20,
+        '1': 30,
+        '2': 40,
     }
 
     private textAlignMap = {
@@ -150,18 +151,40 @@ class WinToolList extends React.Component<WinTypeListProp> {
     //     this.onWinToolSelected = props.OnWinToolSelected;
     // };
 
-    private readonly onWinTypeSelected:OnWinTypeSelected;
+    // private readonly onWinTypeSelected:OnWinTypeSelected;
 
     private winToolType: ToolType | ElementType;
     private propSetter: ToolReactor
 
     public constructor(props: WinTypeListProp) {
         super(props);
-        this.onWinTypeSelected = props.OnWinTypeSelected;
+        // this.onWinTypeSelected = props.OnWinTypeSelected;
         this.winToolType = props.toolOrElemType;
         this.propSetter = props.propSetter
     }
 
+    state = {
+        displays : [false, false, false, false, false, false, false, false]
+    }
+
+    componentWillReceiveProps(nextProps: Readonly<WinTypeListProp>, nextContext: any) {
+        let displays = [false, false, false, false, false, false, false, false] ;
+        displays[ToolBar.StrokeColor] = true
+        displays[ToolBar.Strokewidth] = true
+        displays[ToolBar.Opacity] = true
+        displays[ToolBar.Operation] = true
+        switch (nextProps.toolOrElemType) {
+            case ElementType.generic: displays[ToolBar.Fill] = true; break;
+            case ElementType.text: {
+                displays[ToolBar.Strokewidth] = false;
+                displays[ToolBar.FontStyle] = true
+                displays[ToolBar.FontSize] = true
+                displays[ToolBar.TextAlign] = true
+                break
+            }
+        }
+        this.setState({displays})
+    }
 
     render() {
         //填充颜色
@@ -215,127 +238,115 @@ class WinToolList extends React.Component<WinTypeListProp> {
             }
         }
 
-        const displays = [false, false, false, false, false, false, false, false]
 
-        const freshDisplay = () => {
-            displays[ToolBar.StrokeColor] = true
-            displays[ToolBar.Strokewidth] = true
-            displays[ToolBar.Opacity] = true
-            displays[ToolBar.Operation] = true
-            switch (this.winToolType) {
-                case ElementType.generic: displays[ToolBar.Fill] = true; break;
-                case ElementType.text: {
-                    displays[ToolBar.FontStyle] = true
-                    displays[ToolBar.FontSize] = true
-                    displays[ToolBar.TextAlign] = true
-                    break
-                }
-            }
-        }
 
-        freshDisplay()
 
 
         const str = (i: number)  => { return i + ""}
 
-        return <div className="win-tool-bar">
-            {/*缺个判断类型：isGeneric || isPen || isText --> display为flex或none */}
-            <div className="single-box" style={{display: displays[ToolBar.Fill] ? "flex" : "none"}}>
-                <div className="single-box-title">填充</div>
-                <div className="single-box-contain">
+        return <div> {
+            this.props.toolOrElemType !== ElementType.none && <div className="win-tool-bar">
+                {/*缺个判断类型：isGeneric || isPen || isText --> display为flex或none */}
+                <div className="single-box" style={{display: this.state.displays[ToolBar.Fill] ? "flex" : "none"}}>
+                    <div className="single-box-title">填充</div>
+                    <div className="single-box-contain">
+                        <div className="single-box-contain">{
+                            this.colorGroups.map((t,i) => {
+                                return <div key={i} id={str(i)} className="color-box" onClick={(e) => clickFillColor(e)}>{
+                                    t.map(s =>
+                                        <img style={{width: "30px", height: "30px"}} src={require(`../../icon/${s}.svg`)}/>)
+                                }</div>
+                            })
+                        }</div>
+                    </div>
+                </div>
+                <div className="single-box" style={{display:  this.state.displays[ToolBar.StrokeColor]  ? "flex" : "none"}}>
+                    <div className="single-box-title">描边</div>
                     <div className="single-box-contain">{
                         this.colorGroups.map((t,i) => {
-                            return <div key={i} id={str(i)} className="color-box" onClick={(e) => clickFillColor(e)}>{
+                            return <div key={i} id={str(i)} className="color-box" onClick={(e) => clickLineColor(e)} >{
                                 t.map(s =>
                                     <img style={{width: "30px", height: "30px"}} src={require(`../../icon/${s}.svg`)}/>)
                             }</div>
                         })
                     }</div>
                 </div>
-            </div>
-            <div className="single-box" style={{display:  displays[ToolBar.StrokeColor]  ? "flex" : "none"}}>
-                <div className="single-box-title">描边</div>
-                <div className="single-box-contain">{
-                    this.colorGroups.map((t,i) => {
-                        return <div key={i} id={str(i)} className="color-box" onClick={(e) => clickLineColor(e)} >{
-                            t.map(s =>
-                                <img style={{width: "30px", height: "30px"}} src={require(`../../icon/${s}.svg`)}/>)
-                        }</div>
-                    })
-                }</div>
-            </div>
-            <div className="single-box" style={{display:  displays[ToolBar.Strokewidth]  ? "flex" : "none"}}>
-                <div className="single-box-title">描边宽度</div>
-                <div className="single-box-contain" >{
-                    this.widthGroups.map((t,i) => {
-                        return <div key={i} id={str(i)} className="border-box" onClick={(e) => clickWidth(e)}>{
-                            t.map(s =>
-                                <img src={require(`../../icon/${s}.svg`)}/>)
-                        }</div>
-                    })
-                }</div>
-            </div>
-            <div className="single-box" style={{display:  displays[ToolBar.FontSize]  ? "flex" : "none"}}>
-                <div className="single-box-title">字体大小</div>
-                <div className="single-box-contain">{
-                    this.sizeGroups.map((t,i) => {
-                        return <div className="border-box" key={i} id={str(i)} style={{color: "black"}} onClick={(e) => clickFontSize(e)}>{
-                            this.sizeText[i]
-                        }</div>
-                    })
-                }</div>
-            </div>
-            <div className="single-box" style={{display:  displays[ToolBar.FontStyle]  ? "flex" : "none"}}>
-                <div className="single-box-title">字体样式</div>
-                <div className="single-box-contain">{
-                    this.styleGroups.map((t,i) => {
-                        return <div key={i} id={str(i)} className="border-box" onClick={(e) => clickFontStyle(e)} >{
-                            t.map(s =>
-                                <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
-                        }</div>
-                    })
-                }</div>
-            </div>
-            <div className="single-box" style={{display:  displays[ToolBar.TextAlign]  ? "flex" : "none"}}>
-                <div className="single-box-title">文本对齐</div>
-                <div className="single-box-contain">{
-                    this.alignGroups.map((t,i) => {
-                        return <div key={i}  className="border-box"  id={str(i)}  onClick={(e) => clickTextAlign(e)}  >{
-                            t.map(s =>
-                                <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
-                        }</div>
-                    })
-                }</div>
-            </div>
-            <div className="single-box" style={{display:  displays[ToolBar.Opacity]  ? "flex" : "none"}}>
-                <div className="single-box-title">透明度</div>
-                <div className="single-box-contain">
-                    <Slider className="slider-opacity" defaultValue={10} onChange={(value) => changeOpacity(value)}></Slider>
+                <div className="single-box" style={{display:  this.state.displays[ToolBar.Strokewidth]  ? "flex" : "none"}}>
+                    <div className="single-box-title">描边宽度</div>
+                    <div className="single-box-contain" >{
+                        this.widthGroups.map((t,i) => {
+                            return <div key={i} id={str(i)} className="border-box" onClick={(e) => clickWidth(e)}>{
+                                t.map(s =>
+                                    <img src={require(`../../icon/${s}.svg`)}/>)
+                            }</div>
+                        })
+                    }</div>
+                </div>
+                <div className="single-box" style={{display:  this.state.displays[ToolBar.FontSize]  ? "flex" : "none"}}>
+                    <div className="single-box-title">字体大小</div>
+                    <div className="single-box-contain">{
+                        this.sizeGroups.map((t,i) => {
+                            return <div className="border-box" key={i} id={str(i)} style={{color: "black"}} onClick={(e) => clickFontSize(e)}>{
+                                this.sizeText[i]
+                            }</div>
+                        })
+                    }</div>
+                </div>
+                <div className="single-box" style={{display:  this.state.displays[ToolBar.FontStyle]  ? "flex" : "none"}}>
+                    <div className="single-box-title">字体样式</div>
+                    <div className="single-box-contain">{
+                        this.styleGroups.map((t,i) => {
+                            return <div key={i} id={str(i)} className="border-box" onClick={(e) => clickFontStyle(e)} >{
+                                t.map(s =>
+                                    <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
+                            }</div>
+                        })
+                    }</div>
+                </div>
+                <div className="single-box" style={{display:  this.state.displays[ToolBar.TextAlign]  ? "flex" : "none"}}>
+                    <div className="single-box-title">文本对齐</div>
+                    <div className="single-box-contain">{
+                        this.alignGroups.map((t,i) => {
+                            return <div key={i}  className="border-box"  id={str(i)}  onClick={(e) => clickTextAlign(e)}  >{
+                                t.map(s =>
+                                    <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
+                            }</div>
+                        })
+                    }</div>
+                </div>
+                <div className="single-box" style={{display:  this.state.displays[ToolBar.Opacity]  ? "flex" : "none"}}>
+                    <div className="single-box-title">透明度</div>
+                    <div className="single-box-contain">
+                        <Slider className="slider-opacity" defaultValue={10} onAfterChange={(value) => {
+                            changeOpacity(value / 100)
+                        }}/>
+                    </div>
+                </div>
+                {/*图层暂时不做*/}
+                {/*<div className="single-box">*/}
+                {/*    <div className="single-box-title">图层</div>*/}
+                {/*    <div className="single-box-contain">{*/}
+                {/*        this.positionGroups.map((t,i) => {*/}
+                {/*            return <div key={i} className="border-box" id={str(i)} onClick={(e) => clickPosition(e)}>{*/}
+                {/*                t.map(s =>*/}
+                {/*                    <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)*/}
+                {/*            }</div>*/}
+                {/*        })*/}
+                {/*    }</div>*/}
+                {/*</div>*/}
+                <div className="single-box" style={{display:  this.state.displays[ToolBar.Operation]  ? "flex" : "none"}}>
+                    <div className="single-box-title">操作</div>
+                    <div className="single-box-contain">{
+                        this.operationGroups.map((t,i) => {
+                            return <div key={i} className="border-box" id={str(i)} onClick={(e) => clickOperation(e)}>{
+                                t.map(s =>
+                                    <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
+                            }</div>
+                        })
+                    }</div>
                 </div>
             </div>
-            {/*图层暂时不做*/}
-            {/*<div className="single-box">*/}
-            {/*    <div className="single-box-title">图层</div>*/}
-            {/*    <div className="single-box-contain">{*/}
-            {/*        this.positionGroups.map((t,i) => {*/}
-            {/*            return <div key={i} className="border-box" id={str(i)} onClick={(e) => clickPosition(e)}>{*/}
-            {/*                t.map(s =>*/}
-            {/*                    <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)*/}
-            {/*            }</div>*/}
-            {/*        })*/}
-            {/*    }</div>*/}
-            {/*</div>*/}
-            <div className="single-box" style={{display:  displays[ToolBar.Operation]  ? "flex" : "none"}}>
-                <div className="single-box-title">操作</div>
-                <div className="single-box-contain">{
-                    this.operationGroups.map((t,i) => {
-                        return <div key={i} className="border-box" id={str(i)} onClick={(e) => clickOperation(e)}>{
-                            t.map(s =>
-                                <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
-                        }</div>
-                    })
-                }</div>
-            </div>
+        }
         </div>
     }
 }

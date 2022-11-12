@@ -16,7 +16,7 @@ import {
     MemberMessageType,
     Message
 } from "../ws/message";
-import {Selection} from "./tools/Selection";
+import {OnElemSelected, Selection} from "./tools/Selection";
 import {IWebsocket, WebsocketManager} from "../ws/websocketManager";
 import {OperationTracker} from "./operationTracker/OperationTracker";
 import {DataLoader} from "../../../utils/data/DataLoader";
@@ -27,10 +27,11 @@ import {PictureBook} from "./PictureBook";
 import {ElementBase} from "./element/ElementBase";
 import {createPage} from "../../../api/api";
 import {Page} from "./data/Page";
+import {ElementSum, ToolReactor} from "../components/WindowToolBar";
 
 export type OnMember = (user:UserInfo, type:MemberMessageType) => void;
 
-export class WhiteBoardApp implements IWebsocket {
+export class WhiteBoardApp implements IWebsocket, ToolReactor {
 
     public whiteBoard:WhiteBoard;
 
@@ -78,7 +79,7 @@ export class WhiteBoardApp implements IWebsocket {
 
     constructor(whiteBoard:WhiteBoard) {
         this.scene = new DrawingScene();
-        this.toolBox  = new ToolBox();
+        this.toolBox  = new ToolBox(this.scene);
         this.wsClient = new WebsocketManager(this);
         this.cmdTracker = new OperationTracker<Cmd<any>>(10);
         this.whiteBoard = whiteBoard;
@@ -117,12 +118,20 @@ export class WhiteBoardApp implements IWebsocket {
             // this.deleteElem(e); 工具已经执行过了
             this.wsClient.sendCmd(cmd);
         });
+
     }
 
     public setOnRenderListener(listener:OnRenderListener) {
         this.scene.onRender =  (c:DrawingScene) => {
             listener(c);
         }
+    }
+
+    /**
+     * 注册有元素被选择监听器
+     */
+    public setOnElemSelectedListener(onSelected:OnElemSelected) {
+        (this.toolBox.getTool("selection") as Selection).onElemSelected = onSelected;
     }
 
     public selectTool(type:ToolType, second?:SecondLevelType) {
@@ -294,6 +303,19 @@ export class WhiteBoardApp implements IWebsocket {
         this.book.addPage(l); this.book.switchPage(l.id);
         this.scene.renderPage(this.book.curPage);
         return pages;
+    }
+
+    public setProps(prop: keyof ElementSum, value: any) {
+        if(this.toolBox.curTool.type === "selection") {
+            if((this.toolBox.curTool as Selection).setProp(prop, value))
+                this.scene.render();
+        } else {
+            (this.toolBox.curTool as any)[prop] = value;
+        }
+    }
+
+    public delete() {
+
     }
 
 }

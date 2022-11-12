@@ -17,7 +17,10 @@ export class FreePen extends GenericDrawingTool {
 
     protected onDown(e: SceneTouchEvent, scene: DrawingScene) {
         this.last.x = e.x; this.last.y = e.y;
-        scene.actElem = new FreeDraw(IdGenerator.genElementId(), e.x, e.y);
+        let el = scene.actElem = new FreeDraw(IdGenerator.genElementId(), e.x, e.y);
+        el.strokeColor = this.strokeColor;
+        el.strokeWidth = this.strokeWidth;
+        el.opacity = this.opacity;
     }
 
 

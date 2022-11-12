@@ -7,7 +7,7 @@ import {DataLoader, field, SerializableData} from "../../../../utils/data/DataLo
 type OnselectedListener = (e: ElementBase) => void;
 
 export enum ElementType {
-    freedraw, text, generic, linear
+    freedraw, text, generic, linear, none
 }
 
 
@@ -27,11 +27,8 @@ export class ElementBase extends SerializableData {
     public height:number = 0;
     @field
     public angle:number = 0; // 弧度制
-
     @field
     public strokeColor:string = "#ff5656"; // 十六进制整数
-    @field
-    public backgroundColor:string = "#fff10000";
     @field
     public strokeWidth:number = 5;
     @field
@@ -132,7 +129,6 @@ export class ElementBase extends SerializableData {
             this.drawFrame(ctx); this.drawRotateHandle(ctx); this.drawScaleHandle(ctx);
         }
         ctx.globalAlpha = this.opacity;
-        ctx.fillStyle = this.backgroundColor;
         ctx.strokeStyle = this.strokeColor;
         ctx.lineWidth = this.strokeWidth * ctx._scale;
         this.drawBeforeCtxRestore(ctx);

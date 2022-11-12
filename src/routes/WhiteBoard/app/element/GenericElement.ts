@@ -7,6 +7,9 @@ export type GenericElementType = "rectangle" | "ellipse" | "triangle";
 
 export class GenericElement extends ElementBase {
 
+    @field
+    public backgroundColor:string = "#fff10000";
+
     @field(String)
     public genericType:GenericElementType;
 
@@ -56,6 +59,7 @@ export class RectangleElement extends GenericElement {
     }
 
     public drawBeforeCtxRestore(ctx: CanvasScaledCtx): void {
+        ctx.fillStyle = this.backgroundColor;
         const s = ctx._scale;
         ctx.strokeRect(this.x * s, this.y * s, this.width * s, this.height * s);
         ctx.fillRect(this.x * s, this.y * s, this.width * s, this.height * s);
@@ -71,6 +75,7 @@ export class EllipseElement extends GenericElement {
 
 
     public drawBeforeCtxRestore(ctx: CanvasScaledCtx): void {
+        ctx.fillStyle = this.backgroundColor;
         const center = this.getCenter();
         center.x = center.x * ctx._scale; center.y = center.y * ctx._scale;
         ctx.beginPath();

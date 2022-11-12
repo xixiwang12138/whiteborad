@@ -19,7 +19,17 @@ export interface WhiteBoardRouteParam {
     id:string
 }
 
-class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRouteParam>> implements IOpListener, ToolReactor, IWidget {
+function toolElementTypeMapping(type:ToolType):ElementType {
+    switch (type) {
+        case "text": return ElementType.text;
+        case "linear": return ElementType.linear;
+        case "generic": return ElementType.generic;
+        case "freePen": return ElementType.freedraw;
+        default: return ElementType.none;
+    }
+}
+
+class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRouteParam>> implements IOpListener, IWidget, ToolReactor {
     private app!:WhiteBoardApp;
 
     private root!:HTMLElement;
@@ -43,6 +53,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         scale:1,
         pages: [] as Partial<Page>[],
         memberList:[],
+        toolOrElemType: ElementType.none
     }
 
     render() {
@@ -55,7 +66,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
                 <canvas style={{width: "100%", height: "100%", backgroundColor:"#F2F0F1"}} id="show-canvas"/>
             </div>
             {/*TODO 完善propSetter 和 toolOrElemType*/}
-            <WindowToolBar OnWinTypeSelected={this.selectTool.bind(this)}  propSetter={this} toolOrElemType={null}/>
+            <WindowToolBar  propSetter={this} toolOrElemType={this.state.toolOrElemType}/>
         </div>
     }
 
@@ -119,7 +130,6 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
                 });
                 message.info(`用户${m.name}加入`);
             } else {
-                // eslint-disable-next-line array-callback-return
                 let i = this.state.memberList.findIndex((v) => {if(v.id === m.id) return true});
                 this.setState({
                     memberList: this.state.memberList.splice(i, 1)
@@ -127,6 +137,9 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
                 message.info(`用户${m.name}离开`);
             }
         }
+        this.app.setOnElemSelectedListener((e) => {
+            this.setState({toolOrElemType: e.type})
+        })
         this.app.translateScene((this.showCanvas.width - 1920) / 2, (this.showCanvas.height - 1080) / 2);
         this.app.refreshScene();
     }
@@ -195,7 +208,10 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         if(type === "translation") {
             this.refactoringScene = true;
             this.root.style.cursor = "grab";
+            if(this.state.toolOrElemType !== ElementType.none) this.setState({toolOrElemType: ElementType.none});
         } else {
+            let elemType = toolElementTypeMapping(type);
+            this.setState({toolOrElemType: elemType});
             this.refactoringScene = false;
             this.app?.selectTool(type, second);
         }
@@ -225,14 +241,12 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         return res;
     }
 
-    public setProps(prop: keyof ElementSum, value: any) {
-        console.log(prop)
-        console.log(value)
+    delete() {
+        this.app.delete();
     }
 
-
-    public delete() {
-
+    setProps(prop: keyof ElementSum, value: any) {
+        this.app.setProps(prop, value);
     }
 
 }

@@ -17,6 +17,7 @@ import {ElementType} from "../../app/element/ElementBase";
 import {TextElement} from "../../app/element/TextElement";
 import {PathElement} from "../../app/element/PathElement";
 import {Line} from "../../app/element/Line";
+import {ToolType} from "../../app/tools/Tool";
 
 export type SecondLevelType = StrokeWidthType | FontSizeType |
     FontStyleType | TextAlignType | ElementPositionType | OperationsType;
@@ -25,7 +26,6 @@ type OnWinToolSelected = (type: WinToolType, secondType?:SecondLevelType) => voi
 type OnWinTypeSelected = (type: ColorType | StrokeWidthType | FontSizeType | FontStyleType
     | TextAlignType | ElementPositionType | OperationsType) => void;
 
-type ToolType = ElementType;
 
 // class WinToolListProp {
 //     OnWinToolSelected: OnWinToolSelected = () => {};
@@ -55,6 +55,8 @@ export interface ToolReactor {
     setProps(prop: keyof ElementSum, value: any)
     delete()
 }
+
+
 
 class WinToolList extends React.Component<WinTypeListProp> {
     // 不同元素特有的
@@ -112,6 +114,12 @@ class WinToolList extends React.Component<WinTypeListProp> {
         '2': 20,
     }
 
+    private styleMap = {
+        0: "bold",
+        1: "italic",
+        2: "underline"
+    }
+
     private sizeMap = {
         '0': 20,
         '1': 30,
@@ -164,17 +172,27 @@ class WinToolList extends React.Component<WinTypeListProp> {
     }
 
     state = {
-        displays : [false, false, false, false, false, false, false, false]
+        displays : [false, false, false, false, false, false, false, false],
+        propertyState:{
+            [ElementType.text]:{},
+            [ElementType.linear]:{},
+            [ElementType.generic]:{},
+            [ElementType.freedraw]:{}
+        }
     }
 
     componentWillReceiveProps(nextProps: Readonly<WinTypeListProp>, nextContext: any) {
-        let displays = [false, false, false, false, false, false, false, false] ;
+        let displays = [false, false, false, false, false, false, false, false] ;        // 如果不为工具类型, 表示为选中元素，才提供操作
+        if(typeof nextProps.toolOrElemType !== "string") {
+            displays[ToolBar.Operation] = true;
+        }
         displays[ToolBar.StrokeColor] = true
         displays[ToolBar.Strokewidth] = true
         displays[ToolBar.Opacity] = true
-        displays[ToolBar.Operation] = true
         switch (nextProps.toolOrElemType) {
+            case "generic":
             case ElementType.generic: displays[ToolBar.Fill] = true; break;
+            case "text":
             case ElementType.text: {
                 displays[ToolBar.Strokewidth] = false;
                 displays[ToolBar.FontStyle] = true
@@ -212,10 +230,9 @@ class WinToolList extends React.Component<WinTypeListProp> {
             this.propSetter.setProps("fontSize", this.sizeMap[selectedId])
         }
 
-        //文字样式——————TODO 待定
         const clickFontStyle = (e: React.MouseEvent<HTMLDivElement>) => {
             const selectedId = e.currentTarget.id
-            this.propSetter.setProps("fontSize", this.widthMap[selectedId])
+            this.propSetter.setProps("fontStyle", this.styleMap[selectedId])
         }
 
         //文本对其
@@ -237,10 +254,6 @@ class WinToolList extends React.Component<WinTypeListProp> {
                 default: throw new Error("no supported operation");
             }
         }
-
-
-
-
 
         const str = (i: number)  => { return i + ""}
 
@@ -317,7 +330,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
                 <div className="single-box" style={{display:  this.state.displays[ToolBar.Opacity]  ? "flex" : "none"}}>
                     <div className="single-box-title">透明度</div>
                     <div className="single-box-contain">
-                        <Slider className="slider-opacity" defaultValue={10} onAfterChange={(value) => {
+                        <Slider className="slider-opacity" defaultValue={10} onChange={(value) => {
                             changeOpacity(value / 100)
                         }}/>
                     </div>

@@ -28,6 +28,7 @@ import {ElementBase} from "./element/ElementBase";
 import {createPage} from "../../../api/api";
 import {Page} from "./data/Page";
 import {ElementSum, ToolReactor} from "../components/WindowToolBar";
+import {Eraser} from "./tools/Eraser";
 
 export type OnMember = (user:UserInfo, type:MemberMessageType) => void;
 
@@ -162,10 +163,10 @@ export class WhiteBoardApp implements IWebsocket, ToolReactor {
 
     public dispatchMouseEvent(e:MouseEvent, isDown:boolean, doubleClick:boolean = false) {
         this.toolBox.curTool.op(this.scene.toSceneEvent(e, isDown, doubleClick), this.scene);
-        // 使用完除了选择工具之后，切换回选择工具
-        if(e.type === "mouseup" && this.toolBox.curTool.type !== "selection" && this.toolBox.curTool.type !== "eraser") {
-            this.toolBox.setCurTool("selection");
-        }
+        // // 使用完除了选择工具之后，切换回选择工具
+        // if(e.type === "mouseup" && this.toolBox.curTool.type !== "selection" && this.toolBox.curTool.type !== "eraser") {
+        //     this.toolBox.setCurTool("selection");
+        // }
     }
 
     public refreshScene() {
@@ -277,10 +278,6 @@ export class WhiteBoardApp implements IWebsocket, ToolReactor {
         }
     }
 
-    public usingSelection() {
-        return this.toolBox.curTool.type === "selection";
-    }
-
     public switchPage(pageId:string) {
         // 先尝试从本地缓存读取
         if(this.book.switchPage(pageId)) {
@@ -315,7 +312,9 @@ export class WhiteBoardApp implements IWebsocket, ToolReactor {
     }
 
     public delete() {
-
+        let elemToRm = this.scene.actElem;
+        elemToRm.selected = false;
+        this.toolBox.getTool("eraser").erase(elemToRm);
     }
 
 }

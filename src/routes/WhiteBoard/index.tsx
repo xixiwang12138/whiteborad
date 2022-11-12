@@ -53,19 +53,22 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         scale:1,
         pages: [] as Partial<Page>[],
         memberList:[],
-        toolOrElemType: ElementType.none
+        toolOrElemType: ElementType.none,
+
+        undoAble:false,
+        redoAble:false
     }
 
     render() {
         return <div className="board">
             <BaseRow boardInfo={this.state.boardInfo} memberList={this.state.memberList}/>
             <Widget boardId={this.state.boardInfo.id} wCtrl={this} scale={this.state.scale}/>
-            <ToolList onToolSelected={this.selectTool.bind(this)} opListener={this} />
+            <ToolList undoAble={this.state.undoAble} redoAble={this.state.redoAble}
+                      onToolSelected={this.selectTool.bind(this)} opListener={this} />
             <div id="canvas-root" style={{width:"100%", height:"100%", overflow:"hidden"}}>
                 <div id={"text-editor-container"}/>
                 <canvas style={{width: "100%", height: "100%", backgroundColor:"#F2F0F1"}} id="show-canvas"/>
             </div>
-            {/*TODO 完善propSetter 和 toolOrElemType*/}
             <WindowToolBar  propSetter={this} toolOrElemType={this.state.toolOrElemType}/>
         </div>
     }
@@ -140,6 +143,10 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.app.setOnElemSelectedListener((e) => {
             this.setState({toolOrElemType: e.type})
         })
+        this.app.cmdTracker.setOperableListener((o,a ) => {
+            if(o === "redo") this.setState({redoAble:a});
+            else this.setState({undoAble:a});
+        })
         this.app.translateScene((this.showCanvas.width - 1920) / 2, (this.showCanvas.height - 1080) / 2);
         this.app.refreshScene();
     }
@@ -151,7 +158,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
             this.lastX = e.x; this.lastY = e.y;
         } else {
             let newTime = new Date();
-            if(newTime.valueOf() - this.lastTime.valueOf() < 300) {
+            if(newTime.valueOf() - this.lastTime.valueOf() < 400) {
                 this.app?.dispatchMouseEvent(e, true, true);
                 newTime.setFullYear(2000); // 设置一个足够久的时间，防止三连击
             } else {
@@ -191,7 +198,6 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.app?.refreshScene();
     }
 
-
     private clearCanvas() {
         this.showCanvasCtx.clearRect(0,0, this.showCanvas.clientWidth, this.showCanvas.clientHeight);
     }
@@ -203,15 +209,13 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.showCanvasCtx.restore();
     }
 
-
     private selectTool(type:ToolType, second?:SecondLevelType) {
         if(type === "translation") {
             this.refactoringScene = true;
             this.root.style.cursor = "grab";
             if(this.state.toolOrElemType !== ElementType.none) this.setState({toolOrElemType: ElementType.none});
         } else {
-            let elemType = toolElementTypeMapping(type);
-            this.setState({toolOrElemType: elemType});
+            this.setState({toolOrElemType: type});
             this.refactoringScene = false;
             this.app?.selectTool(type, second);
         }

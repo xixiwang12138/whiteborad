@@ -10,6 +10,15 @@ import {DrawingScene} from "../DrawingScene";
 
 export type CursorStyle = "default" | "grab" | "move" | "se-resize" | "cell" | "crosshair" | "text";
 
+interface TypeMapping {
+    generic: GenericElementTool
+    linear: LinearTool
+    text:TextTool
+    eraser:Eraser
+    freePen:FreePen
+    selection:Selection
+}
+
 export class ToolBox {
 
     private scene:DrawingScene;
@@ -60,11 +69,12 @@ export class ToolBox {
             case "linear": this.changeCursorStyle("crosshair"); break;
             case "text": this.changeCursorStyle("text"); break;
             case "eraser" : this.changeCursorStyle("cell"); break;
+            case "freePen" : this.changeCursorStyle("default"); break;
         }
     }
 
-    public getTool(type:ToolType) {
-        return this.tools.get(type);
+    public getTool<T extends keyof TypeMapping>(type:T):TypeMapping[T] {
+        return this.tools.get(type) as TypeMapping[T];
     }
 
     onCreate:OnCreate = () => {};

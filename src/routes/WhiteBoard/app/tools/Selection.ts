@@ -24,7 +24,7 @@ export class Selection extends Modifier<CmdType.Adjust>{
 
     protected last: Point = new Point(0, 0); // 上次点击位置
 
-    private curSelectedElem:ElementBase | null = null;
+    public curSelectedElem:ElementBase | null = null;
 
     private oldState:ElementState<any> | null = null;
 
@@ -51,8 +51,9 @@ export class Selection extends Modifier<CmdType.Adjust>{
             this.unSelectedCurElem(); // 取消选择，托管给文字工具，注意此时场景中的文字还是激活的
             let t = this.parent.getTool("text") as TextTool;
             [e.rawX, e.rawY] = scene.toRawXY(cse.x, cse.y);
-            t.op(e, scene);
+            t.op(e, scene); // 转发事件
             scene.activate(t.curElem!);
+            this.parent.setCurTool("text");
         }
     }
 
@@ -85,17 +86,7 @@ export class Selection extends Modifier<CmdType.Adjust>{
                 this.trySelectNewElem(e, scene);
             }
         } else {
-            // 没有元素选中时，先考虑是否有文本工具在使用，如果在范围内就不选择新元素
-            let textTool = (this.parent.getTool("text") as TextTool);
-            if(textTool.curElem) {
-                if(textTool.outOfBound(e)) {
-                    if(textTool.finishEditing()) scene.deactivateElem();
-                    else scene.dropActElem();
-                    this.trySelectNewElem(e, scene);
-                }
-            } else {
-                this.trySelectNewElem(e, scene);
-            }
+            this.trySelectNewElem(e, scene);
         }
     }
 
@@ -186,4 +177,6 @@ export class Selection extends Modifier<CmdType.Adjust>{
             return false;
         }
     }
+
+
 }

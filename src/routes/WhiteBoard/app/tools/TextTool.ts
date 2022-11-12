@@ -16,8 +16,7 @@ export class TextTool extends Tool
 
     protected fontStyle:FontStyle = "normal";
 
-    private _textAlign:TextAlign = "left";
-    set textAlign(a:TextAlign){this._textAlign = a;}
+    private textAlign:TextAlign = "left";
 
     private container!:HTMLElement;
 
@@ -54,7 +53,10 @@ export class TextTool extends Tool
         if(this.editorW !== this._curElem!.width) change["width"] = [this._curElem!.width, this.editorW];
         if(this.editorH !== this._curElem!.height) change["height"] = [this._curElem!.height, this.editorH];
         // 更新对象
-        this.curElem!.text = this.textEditor.value;
+        this._curElem!.text = this.textEditor.value;
+        this._curElem!.fontStyle = this.fontStyle;
+        this._curElem!.strokeColor = this.strokeColor;
+        this._curElem!.textAlign = this.textAlign;
         this._curElem!.resize(this.editorW, this.editorH);
         if(this.editState === "create") {
             if(this.textEditor.value) {
@@ -107,48 +109,68 @@ export class TextTool extends Tool
 
     public op(e: SceneTouchEvent, scene: DrawingScene) {
         if(e.type === "down" || e.type === "doubleClick") {
-            this.textEditor.style.top = `${e.rawY}px`; this.textEditor.style.left = `${e.rawX}px`;
-            this.textEditor.style.transformOrigin = "left top"; // 设置缩放中心点为左上角
-            if(e.type === "down") {
-                // 新创建
-                this._curElem = scene.actElem = new TextElement(IdGenerator.genElementId(), e.x, e.y);
-                this.editState = "create";
-                this.textEditor.style.width = "5px"; this.textEditor.style.height = `${this.fontSize}px`;
-                this.textEditor.style.font = this.getStandardFont();
-                this.textEditor.style.textAlign = this._textAlign;
-                this.textEditor.style.color = this.strokeColor;
-                this.textEditor.style.opacity = `${this.opacity}`;
-                this.textEditor.style.transform = `scale(${scene.scale},${scene.scale})`;
+            if(this.curElem) {
+                if(this.outOfBound(e)) {
+                    if(this.finishEditing()) scene.deactivateElem();
+                    else scene.dropActElem();
+                }
             } else {
-                // 重新编辑
-                this.editState = "edit";
-                const el = this._curElem = scene.actElem! as TextElement;
-                this.textEditor.style.width = `${el.width}px`; this.editorW = el.width;
-                this.textEditor.style.height = `${el.height}px`; this.editorH = el.height;
-                if(el.fontStyle === "underline") this.textEditor.style.textDecoration = "underline";
-                this.textEditor.style.font = el.getStandardFont();
-                this.textEditor.style.textAlign = el.textAlign;
-                this.textEditor.style.color = el.strokeColor;
-                this.textEditor.value = el.text;
-                this.textEditor.style.opacity = `${this.opacity}`;
-                this.textEditor.style.transform = `scale(${scene.scale},${scene.scale}) rotate(${el.angle / Math.PI * 180}deg)`;
-                // TODO 编辑器打开的时候还是有小bug
+                if(e.type === "down") this.createText(e, scene);
+                else {
+                    if(!this.editText(e, scene)) return;
+                }
+                this._curElem.finish = false;
+                this.editorX = e.rawX; this.editorY = e.rawY;
+                this.textEditor.oninput = () => {
+                    let size = scene.measureTextArea(this.textEditor);
+                    this.textEditor.style.width = `${size.width}px`;
+                    this.textEditor.style.height = `${size.height}px`;
+                    this.editorW = size.width; this.editorH = size.height;
+                }
+                this.container.appendChild(this.textEditor);
+                // 自动获得焦点
+                setTimeout(()=>{
+                    this.textEditor.focus();
+                })
             }
-            this._curElem.finish = false;
-            this.editorX = e.rawX; this.editorY = e.rawY;
-            this.textEditor.oninput = () => {
-                let size = scene.measureTextArea(this.textEditor);
-                this.textEditor.style.width = `${size.width}px`;
-                this.textEditor.style.height = `${size.height}px`;
-                this.editorW = size.width; this.editorH = size.height;
-            }
-            this.container.appendChild(this.textEditor);
-            // 自动获得焦点
-            setTimeout(()=>{
-                this.textEditor.focus();
-            })
         }
+    }
 
+    private createText(e: SceneTouchEvent, scene: DrawingScene) {
+        this.textEditor.style.top = `${e.rawY}px`; this.textEditor.style.left = `${e.rawX}px`;
+        this.textEditor.style.transformOrigin = "left top"; // 设置缩放中心点为左上角
+        // 新创建
+        this._curElem = scene.actElem = new TextElement(IdGenerator.genElementId(), e.x, e.y);
+        this.editState = "create";
+        this.textEditor.style.width = "5px"; this.textEditor.style.height = `${this.fontSize}px`;
+        this.textEditor.style.font = this.getStandardFont();
+        this.textEditor.style.textAlign = this.textAlign;
+        this.textEditor.style.color = this.strokeColor;
+        this.textEditor.style.opacity = `${this.opacity}`;
+        this.textEditor.style.transform = `scale(${scene.scale},${scene.scale})`;
+    }
+
+    /**
+     *  返回是否进入编辑状态，主要是因为，当用户使用文本工具，超范围第一次down完成编辑，第二次发送doubleClick会激活编辑状态
+     */
+    private editText(e: SceneTouchEvent, scene: DrawingScene):boolean {
+        const el = this._curElem = scene.actElem! as TextElement;
+        if(!el) return false;
+        this.textEditor.style.top = `${e.rawY}px`; this.textEditor.style.left = `${e.rawX}px`;
+        this.textEditor.style.transformOrigin = "left top"; // 设置缩放中心点为左上角
+        // 重新编辑
+        this.editState = "edit";
+        this.textEditor.style.width = `${el.width}px`; this.editorW = el.width;
+        this.textEditor.style.height = `${el.height}px`; this.editorH = el.height;
+        if(el.fontStyle === "underline") this.textEditor.style.textDecoration = "underline";
+        this.textEditor.style.font = el.getStandardFont();
+        this.textEditor.style.textAlign = el.textAlign;
+        this.textEditor.style.color = el.strokeColor;
+        this.textEditor.value = el.text;
+        this.textEditor.style.opacity = `${this.opacity}`;
+        this.textEditor.style.transform = `scale(${scene.scale},${scene.scale}) rotate(${el.angle / Math.PI * 180}deg)`;
+        // TODO 编辑器打开的时候还是有小bug
+        return true;
     }
 
     onCreate:OnCreate = () => {}

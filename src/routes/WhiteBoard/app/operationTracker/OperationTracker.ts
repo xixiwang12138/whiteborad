@@ -6,9 +6,7 @@ import {FixedSizeStack} from "./Stack";
 
 export type Op = "undo" | "redo";
 
-export interface OperableListener {
-    onAbilityChange(op:Op, ability:boolean);
-}
+export type OnOpAbilityChange = (op:Op, ability:boolean) => void;
 
 export class OperationTracker<T> {
 
@@ -16,7 +14,7 @@ export class OperationTracker<T> {
 
     private undoStack:FixedSizeStack<T>; // 撤销栈
 
-    private listener: OperableListener | null = null;
+    private listener: OnOpAbilityChange = () => {}
 
     /**
      * @param maxStep 最大可undo步数，即为doStack的栈大小
@@ -26,16 +24,16 @@ export class OperationTracker<T> {
         this.undoStack = new FixedSizeStack<T>(maxStep);
     }
 
-    public setOperableListener(listener: OperableListener) {
+    public setOperableListener(listener: OnOpAbilityChange) {
         this.listener = listener;
     }
 
     public do(op: T){
         this.doStack.push(op);
         this.undoStack.empty();
-        this.listener?.onAbilityChange("redo", false);
+        this.listener("redo", false);
         if(this.doStack.size == 1) {
-            this.listener?.onAbilityChange("undo", true);
+            this.listener("undo", true);
         }
     }
 
@@ -46,8 +44,8 @@ export class OperationTracker<T> {
         if(this.doStack.isEmpty() || this.undoStack.isFull()) return null;
         let ret = this.doStack.pop();
         this.undoStack.push(ret);
-        if(this.undoStack.size == 1) this.listener?.onAbilityChange("redo", true);
-        if(this.doStack.isEmpty() || this.undoStack.isFull()) this.listener?.onAbilityChange("undo", false);
+        if(this.undoStack.size == 1) this.listener("redo", true);
+        if(this.doStack.isEmpty() || this.undoStack.isFull()) this.listener("undo", false);
         return ret;
     }
 
@@ -55,8 +53,8 @@ export class OperationTracker<T> {
         if(this.undoStack.isEmpty() || this.doStack.isFull()) return null;
         let ret = this.undoStack.pop();
         this.doStack.push(ret);
-        if(this.doStack.size === 1) this.listener?.onAbilityChange("undo", true);
-        if(this.undoStack.isEmpty() || this.doStack.isFull()) this.listener?.onAbilityChange("redo", false);
+        if(this.doStack.size === 1) this.listener("undo", true);
+        if(this.undoStack.isEmpty() || this.doStack.isFull()) this.listener("redo", false);
         return ret;
     }
 

@@ -296,4 +296,8 @@ export class WhiteBoardApp implements IWebsocket {
         return pages;
     }
 
+    public async loadPageFile(name:string, encryptedData: string) {
+        let pages = await createPage(this.whiteBoard.id, name, encryptedData);
+    }
+
 }

@@ -83,9 +83,9 @@ export async function getJoinedBoards():Promise<any> {
     return res.boards
 }
 
-export async function createPage(boardId:string, name:string):Promise<Page[]> {
+export async function createPage(boardId:string, name:string, pageData?: string):Promise<Page[]> {
     let res = await request.post<any, {pages:Page[]}>(
-        "/api/page",{boardId, name}
+        "/api/page",{boardId, name, pageData}
     );
     return res.pages.map(r => Object.assign(new Page(), r));
 }

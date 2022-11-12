@@ -7,10 +7,15 @@ import ex from "../../icon/topexport.svg";
 import allDelete from "../../icon/一键清空.svg";
 import type {MenuProps}  from "antd";
 import attribute from "../../icon/属性选中.svg";
-import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, message} from "antd";
+import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, message, Form, Input} from "antd";
 import {NavLink} from 'react-router-dom';
 import {UserManager} from "../../../../UserManager";
-import {exportFile} from "../../../../api/api";
+import {createPage, exportFile} from "../../../../api/api";
+import { Base64 }  from 'js-base64';
+import reduce from "../../icon/reduce.svg";
+import plus from "../../icon/plus.svg";
+import up from "../../icon/up.svg";
+import down from "../../icon/down.svg";
 class BaseRowProps {
     boardInfo:{id:string, name:string}
     memberList:{id:string, name:string, avatar:string}[]
@@ -28,13 +33,18 @@ class BaseRow extends React.Component<BaseRowProps> {
         exportType: 0,
         fitted: false,
         currentPageId:"",
-        avatar: "#956AA4" // TODO 设置默认头像
+        avatar: "#956AA4", // TODO 设置默认头像
+        userId: "",
+        creatingPage: false,
+        pageNameUpload: "新页面1",
+        pageContentUpload: "",
     }
 
     async componentDidMount() {
         await UserManager.syncUser();
         this.setState({
             avatar: await UserManager.getAvatar(),
+            userId: UserManager.getId(),
             isCreator: this.props.boardInfo.id === UserManager.getId()
         })
     }
@@ -57,11 +67,11 @@ class BaseRow extends React.Component<BaseRowProps> {
         this.setState({isExportOpen : false})
     }
     private async handleExportImage(e:React.MouseEvent<HTMLElement>){
-        var canvas = document.getElementById("show-canvas");
-        var MIME_TYPE = "image/png";
+        const canvas = document.getElementById("show-canvas");
+        const MIME_TYPE = "image/png";
         // @ts-ignore
-        var imgURL = canvas.toDataURL(MIME_TYPE);
-        var dlLink = document.createElement('a');
+        const imgURL = canvas.toDataURL(MIME_TYPE);
+        const dlLink = document.createElement('a');
         dlLink.download = "画布";
         dlLink.href = imgURL;
         dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
@@ -72,8 +82,10 @@ class BaseRow extends React.Component<BaseRowProps> {
     }
 
     private async handleImportFile(e:React.MouseEvent<HTMLElement>){
-        document.getElementById("open").click();
+        const open = document.getElementById("open")
+        open.click();
     }
+
 
     private propertyTool() {
         return (
@@ -99,8 +111,24 @@ class BaseRow extends React.Component<BaseRowProps> {
         )
     }
 
+    private async createPage() {
+        await createPage(this.props.boardInfo.id, this.state.pageNameUpload, this.state.pageContentUpload)
+        message.success("文件在新页面上传成功");
+        this.setState({creatingPage: false}) //弹窗
+    }
+
 
     render() {
+        const loadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+            const  files = e.target.files
+            if(files.length >= 2 || files.length <= 0) message.error("一次只能上传一个文件")
+            for (let i = 0; i < files.length; i++) {
+                const f = files.item(i)
+                const base64Data = await f.text()
+                this.setState({creatingPage: true}) //弹窗
+                this.setState({pageContentUpload: base64Data})
+            }
+        }
         return(
             <div className="container">
                 <div className="base-row1">
@@ -138,7 +166,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                             <div className="import-icon" title="导入">
                                 <img src={file} onClick={this.handleImportFile}/>
                                 {/*下面的input组件其实就是个工具*/}
-                                <input type="file" name="filename" id="open" style={{display: "none"}}/>
+                                <input type="file" name="filename" id="open" accept= ".wb" onChange={(e) => loadFile(e)} style={{display: "none"}}/>
                             </div>
                             <div className="export-icon" title="导出">
                                 <img src={ex} onClick={()=>this.setState({isExportOpen:true})}/>
@@ -175,6 +203,19 @@ class BaseRow extends React.Component<BaseRowProps> {
                     {/*        </div>*/}
                     {/*    </Radio.Group>*/}
                     {/*</div>*/}
+                </Modal>
+
+
+                <Modal title="创建新页面" open={this.state.creatingPage}
+                       onCancel={() => this.setState({creatingPage:false})}
+                       footer={
+                           <Button key="copy" onClick={this.createPage.bind(this)}>创 建</Button> }>
+                    <Form>
+                        <Form.Item name="boardName" initialValue={this.state.pageNameUpload}>
+                            <Input className="win-form-input" placeholder="请输入导入的新页面名称"
+                                   onChange={(e)=>{ this.setState({pageNameUpload:e.target.value})}}/>
+                        </Form.Item>
+                    </Form>
                 </Modal>
             </div>
         )

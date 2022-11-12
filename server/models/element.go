@@ -32,7 +32,8 @@ var ElementFiledMap utils.FiledTypeMap = map[string]reflect.Kind{
 	//"verticalAlign": reflect.Int8,
 	//"containerId":   reflect.Int64,
 	//"originText":    reflect.Float64,
-	"points": reflect.Array,
+	"points":    reflect.Array,
+	"fontStyle": reflect.String,
 }
 
 func StringElementArray(e map[string]any) (bool, error) {

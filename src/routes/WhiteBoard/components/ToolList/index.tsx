@@ -52,7 +52,6 @@ class ToolList extends React.Component<ToolListProp> implements OperableListener
         ["text", "image"]
     ]
 
-
     private readonly onToolSelected:OnToolSelected;
 
     private readonly opListener:IOpListener;
@@ -93,7 +92,7 @@ class ToolList extends React.Component<ToolListProp> implements OperableListener
                             t.length > 1 && t[1] instanceof Array ?
                                 t[1].map(s =>
                                     <div key={s} className="bar-icon" onClick={()=>this.onToolSelected(t[0], s)}>
-                                        <img src={require(`../../icon/${s}.svg`)}/>
+                                        <img className="bar-icon-selected" src={require(`../../icon/${s}.svg`)}/>
                                     </div>
                                 ) :
                                 t.map(f =>

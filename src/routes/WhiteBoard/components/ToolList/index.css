@@ -73,6 +73,11 @@
 .bar-icon:hover{
     background-color: #FFEDED;
 }
+
+.bar-icon-selected {
+    color:#F3A1A1;
+}
+
 .bar-icon img {
     width: 30px;
     height: 30px;

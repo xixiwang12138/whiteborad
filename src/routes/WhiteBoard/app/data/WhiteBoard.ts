@@ -20,8 +20,6 @@ export class WhiteBoard extends SerializableData {
     public deleteTime:number;
     @field
     public updateTime:number;
-    @field
-    public name:string;
 
     @field
     public defaultPage:string;

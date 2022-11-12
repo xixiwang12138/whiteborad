@@ -18,8 +18,18 @@ export class PictureBook {
         this.pages.delete(pageId)
     }
 
-    public switchPage() {
-
+    /**
+     *
+     * @param pageId
+     */
+    public switchPage(pageId:string):boolean {
+        let page = this.pages.get(pageId);
+        if(page) {
+            this._curPage = page;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public loadPage(serializedPage: string) {

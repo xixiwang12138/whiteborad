@@ -12,6 +12,8 @@ export class Page extends SerializableData {
     @field
     id:string;
     @field
+    displayName:string
+    @field
     createTime:number;
     @field
     deleteTime:number = -1;
@@ -19,8 +21,6 @@ export class Page extends SerializableData {
     updateTime:number;
     @field
     whiteBoardId:string;
-    @field
-    displayName:string
     @field([ElementBase])
     elements:Array<ElementBase> = []
 

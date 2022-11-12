@@ -235,30 +235,36 @@
     align-items: center;
     justify-content: center;
 }
-.box {
-    width: 100px;
-    height: 20px;
+
+.box-wrapper {
     position: absolute;
-    border-radius: 10px;
+    width: fit-content;
+    height: auto;
+}
+
+.box {
+    width: fit-content;
+    height: 30px;
+    padding: 0 10px;
     background-color: #FDD3D3;
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 }
-.icon {
-    height: 20px;
-    width: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+.box-main {
+    border-radius: 20px;
 }
-.icon img{
-    height: 15px;
-    width: 15px;
-    object-fit: contain;
-    cursor: pointer;
+
+.box-top {
+    border-radius: 20px 20px 0 0 ;
 }
+
+.box-bottom {
+    border-radius: 0 0 20px 20px;
+}
+
 
 /*.ant-checkbox-checked:hover {*/
 /*    border-color: #F3A1A1 !important;*/

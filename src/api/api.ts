@@ -80,15 +80,6 @@ export async function getJoinedBoards():Promise<any> {
     return res.boards
 }
 
-
-
-
-
-
-
-
-
-
 type ExportFileResp = {
     pageId:string
 }

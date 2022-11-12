@@ -10,6 +10,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 0 4px 2px #d7d7d7;
 }
 .row-left{
     height: 40px;

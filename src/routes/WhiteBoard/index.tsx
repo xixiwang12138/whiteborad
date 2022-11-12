@@ -46,9 +46,9 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
             <ToolList onToolSelected={this.selectTool.bind(this)} opListener={this} />
             <div id="canvas-root" style={{width:"100%", height:"100%", overflow:"hidden"}}>
                 <div id={"text-editor-container"}/>
-                <canvas style={{width: "100%", height: "100%", backgroundColor:"gray"}} id="show-canvas"/>
+                <canvas style={{width: "100%", height: "100%", backgroundColor:"#F2F0F1"}} id="show-canvas"/>
             </div>
-            <WindowToolBar OnWinTypeSelected={this.selectTool.bind(this)} />
+            <WindowToolBar OnWinTypeSelected={(type)=>{console.log(type)}} />
         </div>
     }
 
@@ -160,7 +160,9 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
                 this.app?.dispatchMouseEvent(e, true);
             }
         } else {
-            this.app?.dispatchMouseEvent(e, false);
+            if(!this.refactoringScene) {
+                this.app?.dispatchMouseEvent(e, false);
+            }
         }
     }
 

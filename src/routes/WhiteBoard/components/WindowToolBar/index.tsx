@@ -52,7 +52,6 @@ export type ElementSum = TextElement & PathElement & RectangleElement
 
 export interface ToolReactor {
     setProps(prop: keyof ElementSum, value: any)
-    copy()
     delete()
 }
 
@@ -77,7 +76,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
     private publicGroups: (WinToolType[] | [WinToolType, SecondLevelType[]])[] = [
         ["changeElementOpacity"],
         ["changeElementPosition",["toTop", "toBottom", "toNext", "toLast"]],
-        ["operations", ["copy", "delete"]]
+        ["operations", ["delete"]]
     ]
     private publicTitles = ["透明度", "图层", "操作"]
 
@@ -90,7 +89,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
         ["changeTextAlign", ["left", "center", "right"]],
         ["changeElementOpacity"],
         // ["changeElementPosition",["toTop", "toBottom", "toNext", "toLast"]],
-        ["operations", ["copy", "delete"]]
+        ["operations", ["delete"]]
     ]
     private colorGroups: (ColorType[]) [] = [
         ["color1"], ["color2"], ["color3"], ["color4"], ["color5"], ["color6"]
@@ -142,7 +141,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
         ["toTop"], ["toBottom"], ["toNext"], ["toLast"]
     ]
     private operationGroups: (OperationsType[]) [] = [
-        ["copy"], ["delete"]
+        ["delete"]
     ]
 
     // private readonly onWinToolSelected:OnWinToolSelected;
@@ -202,12 +201,16 @@ class WinToolList extends React.Component<WinTypeListProp> {
             this.propSetter.setProps("textAlign", this.textAlignMap[selectedId])
         }
 
+        //文本对其
+        const changeOpacity  = (value: number) => {
+            this.propSetter.setProps("opacity", value)
+        }
+
         //操作
         const clickOperation = (e: React.MouseEvent<HTMLDivElement>) => {
             const selectedId = e.currentTarget.id
             switch (selectedId) {
-                case '0': this.propSetter.copy();break;
-                case '1': this.propSetter.delete();break;
+                case '0': this.propSetter.delete();break;
                 default: throw new Error("no supported operation");
             }
         }
@@ -307,7 +310,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
             <div className="single-box" style={{display:  displays[ToolBar.Opacity]  ? "flex" : "none"}}>
                 <div className="single-box-title">透明度</div>
                 <div className="single-box-contain">
-                    <Slider min={0} max={100}></Slider>
+                    <Slider className="slider-opacity" defaultValue={10} onChange={(value) => changeOpacity(value)}></Slider>
                 </div>
             </div>
             {/*图层暂时不做*/}

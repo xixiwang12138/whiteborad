@@ -205,9 +205,6 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         console.log(value)
     }
 
-    public copy() {
-
-    }
 
     public delete() {
 

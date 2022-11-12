@@ -5,8 +5,6 @@ import home from "../../icon/home.svg";
 import file from "../../icon/导入文件.svg";
 import ex from "../../icon/导出.svg";
 import allDelete from "../../icon/一键清空.svg";
-
-// import list from "../../icon/属性-收起.svg"; 这个用不了，先用下面的顶替
 import type {MenuProps}  from "antd";
 import attribute from "../../icon/属性选中.svg";
 import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, message} from "antd";
@@ -15,7 +13,7 @@ import {UserManager} from "../../../../UserManager";
 import {exportFile} from "../../../../api/api";
 
 class BaseRowProps {
-    boardInfo:{id:string, name:string}
+    boardInfo:{id:string, name:string, defaultPage:string}
     memberList:{id:string, name:string, avatar:string}[]
 }
 
@@ -27,8 +25,10 @@ class BaseRow extends React.Component<BaseRowProps> {
         isInviteOpen: false,
         isExportOpen: false,
         useRadio: 1,
-        isExportImage: 0,
+        isExportImage: false,
+        exportType: 0,
         fitted: false,
+        currentPageId:"",
         avatar: "#956AA4" // TODO 设置默认头像
     }
 
@@ -43,15 +43,26 @@ class BaseRow extends React.Component<BaseRowProps> {
     private async handleCopy(e:React.MouseEvent<HTMLElement>) {
         await navigator.clipboard.writeText(this.props.boardInfo.id);
         message.success("已复制到剪切板");
+        this.setState({isInviteOpen:false})
     }
-
-    private handleExport(e:React.MouseEvent<HTMLElement>){
-        if(this.state.isExportImage) {
-            console.log("导出图片")
-        }else {
-            console.log("导出文件")
-        }
-
+    private async handleExportFile(e:React.MouseEvent<HTMLElement>){
+        // await exportFile(this.props.boardInfo.defaultPage)
+        console.log("导出文件")
+        this.setState({isExportOpen : false})
+    }
+    private async handleExportImage(e:React.MouseEvent<HTMLElement>){
+        var canvas = document.getElementById("show-canvas");
+        var MIME_TYPE = "image/png";
+        // @ts-ignore
+        var imgURL = canvas.toDataURL(MIME_TYPE);
+        var dlLink = document.createElement('a');
+        dlLink.download = "画布";
+        dlLink.href = imgURL;
+        dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
+        document.body.appendChild(dlLink);
+        dlLink.click();
+        document.body.removeChild(dlLink);
+        this.setState({isExportOpen : false})
     }
 
     private propertyTool() {
@@ -95,7 +106,6 @@ class BaseRow extends React.Component<BaseRowProps> {
                     </div>
                     <div className="row-middle">
                         <div className="avatar-group">
-                            {/*一些逻辑待细化*/}
                             <Avatar.Group maxCount={3} maxStyle={{color: 'white', backgroundColor: '#AD7878'}}>
                                 {
                                     this.props.memberList.slice(-3).map((m,i )=> {
@@ -134,20 +144,25 @@ class BaseRow extends React.Component<BaseRowProps> {
                     <p className="info-text" id="text">{this.props.boardInfo.id}</p>
                     {/*<textarea id="input">copy</textarea>*/}
                 </Modal>
-                <Modal title="Export" open={this.state.isExportOpen} onOk={this.handleExport}
+                <Modal title="Export" open={this.state.isExportOpen}
                        onCancel={() => this.setState({isExportOpen : false})}
-                       footer={<Button key="copy" onClick={this.handleExport}>导 出</Button> }>
-                    <div>请选择导出类型：</div>
-                    <div style={{marginBottom:'10px'}}/>
-                    <div>
-                        <Radio.Group onChange={(e) => this.setState({exportType:e.target.value})}
-                                     value={this.state.isExportImage} style={{display: "flex", flexDirection: "column"}}>
-                            <div style={{display: 'flex', flexDirection: 'row'}}>
-                                <Radio value={0}>文件</Radio>
-                                <Radio value={1} disabled={true}>图片</Radio>
-                            </div>
-                        </Radio.Group>
-                    </div>
+                       footer={<div style={{width: "fit-content", height: "fit-content",
+                       display: "flex", flexDirection: "row", alignItems: "center"}}>
+                           <Button key="exportFile" onClick={this.handleExportFile}>导出文件</Button>
+                           <Button key="exportImage" onClick={this.handleExportImage}>导出图片</Button>
+                       </div>
+                }>
+                    {/*<div>请选择导出类型：</div>*/}
+                    {/*<div style={{marginBottom:'10px'}}/>*/}
+                    {/*<div>*/}
+                    {/*    <Radio.Group onChange={(e) => this.setState({exportType:e.target.value})}*/}
+                    {/*                 value={this.state.exportType} style={{display: "flex", flexDirection: "column"}}>*/}
+                    {/*        <div style={{display: 'flex', flexDirection: 'row'}}>*/}
+                    {/*            <Radio value={0}>文件</Radio>*/}
+                    {/*            <Radio value={1} disabled={true}>图片</Radio>*/}
+                    {/*        </div>*/}
+                    {/*    </Radio.Group>*/}
+                    {/*</div>*/}
                 </Modal>
 
                 <div className="base-row2">

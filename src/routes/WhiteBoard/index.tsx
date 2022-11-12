@@ -35,14 +35,15 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
     state = {
         boardInfo: {
             id: "白板id",
-            name:"白板名字"
+            name:"白板名字",
+            defaultPage:"",
         },
-        memberList:[]
+        memberList:[],
     }
 
     render() {
         return <div className="board">
-            <BaseRow boardInfo={this.state.boardInfo} memberList={this.state.memberList}/>
+            <BaseRow boardInfo={this.state.boardInfo} memberList={this.state.memberList} />
             <ToolList onToolSelected={this.selectTool.bind(this)} opListener={this} />
             <div id="canvas-root" style={{width:"100%", height:"100%", overflow:"hidden"}}>
                 <div id={"text-editor-container"}/>

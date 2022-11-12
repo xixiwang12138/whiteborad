@@ -1,23 +1,59 @@
-import React, {useState} from "react";
-import {Col, InputNumber, Row, Slider} from "antd";
+import React from "react";
+import {Slider} from "antd";
 import "./index.css";
 import "../../../../App.css";
-import {GenericElementType} from "../../app/element/GenericElement";
-import {LinearElementType} from "../../app/tools/LinearTool";
-import {WinToolType, StrokeWidthType, FontSizeType, FontStyleType, TextAlignType, ElementPositionType, OperationsType, ColorType} from "../../app/tools/WinTool";
+import {RectangleElement} from "../../app/element/GenericElement";
+import {
+    ColorType,
+    ElementPositionType,
+    FontSizeType,
+    FontStyleType,
+    OperationsType,
+    StrokeWidthType,
+    TextAlignType,
+    WinToolType
+} from "../../app/tools/WinTool";
+import {ElementType} from "../../app/element/ElementBase";
+import {TextElement} from "../../app/element/TextElement";
+import {PathElement} from "../../app/element/PathElement";
 
 export type SecondLevelType = StrokeWidthType | FontSizeType |
     FontStyleType | TextAlignType | ElementPositionType | OperationsType;
 type OnWinToolSelected = (type: WinToolType, secondType?:SecondLevelType) => void;
 
 type OnWinTypeSelected = (type: ColorType | StrokeWidthType | FontSizeType | FontStyleType
- | TextAlignType | ElementPositionType | OperationsType) => void;
+    | TextAlignType | ElementPositionType | OperationsType) => void;
+
+type ToolType = ElementType;
 
 // class WinToolListProp {
 //     OnWinToolSelected: OnWinToolSelected = () => {};
 // }
+
+
+enum ToolBar {
+    Fill,
+    StrokeColor,
+    Strokewidth,
+    FontSize,
+    FontStyle,
+    TextAlign,
+    Opacity,
+    Operation
+}
 class WinTypeListProp {
     OnWinTypeSelected: OnWinTypeSelected = () => {};
+    propSetter:ToolReactor
+    toolOrElemType: ToolType | ElementType;
+}
+
+export type ElementSum = TextElement & PathElement & RectangleElement
+
+
+export interface ToolReactor {
+    setProps(prop: keyof ElementSum, value: any)
+    copy()
+    delete()
 }
 
 class WinToolList extends React.Component<WinTypeListProp> {
@@ -53,13 +89,42 @@ class WinToolList extends React.Component<WinTypeListProp> {
         ["changeFontStyle", ["bold", "italic", "underline"]],
         ["changeTextAlign", ["left", "center", "right"]],
         ["changeElementOpacity"],
-        ["changeElementPosition",["toTop", "toBottom", "toNext", "toLast"]],
+        // ["changeElementPosition",["toTop", "toBottom", "toNext", "toLast"]],
         ["operations", ["copy", "delete"]]
     ]
     private colorGroups: (ColorType[]) [] = [
         ["color1"], ["color2"], ["color3"], ["color4"], ["color5"], ["color6"]
     ]
+
     //1.black 2.#3E6182 3.#956AA4 4.#A46A6A 5.#609A7E 6.#CE6464
+    private colorMap = {
+        '1': "#000000",
+        '2': "#3E6182",
+        '3': "#956AA4",
+        '4': "#A46A6A",
+        '5': "#609A7E",
+        '6': "#CE6464",
+    }
+
+    private widthMap = {
+        '1': 0,
+        '2': 0,
+        '3': 0,
+    }
+
+    private sizeMap = {
+        '1': 0,
+        '2': 0,
+        '3': 0,
+    }
+
+    private textAlignMap = {
+        '1': this.textFics[1][1][0],
+        '2': this.textFics[1][1][1],
+        '3': this.textFics[1][1][2],
+    }
+
+
     private widthGroups: (StrokeWidthType[]) [] = [
         ["sStroke"], ["mStroke"], ["lStroke"]
     ]
@@ -87,31 +152,97 @@ class WinToolList extends React.Component<WinTypeListProp> {
     // };
 
     private readonly onWinTypeSelected:OnWinTypeSelected;
+
+    private winToolType: ToolType | ElementType;
+    private propSetter: ToolReactor
+
     public constructor(props: WinTypeListProp) {
         super(props);
         this.onWinTypeSelected = props.OnWinTypeSelected;
+        this.winToolType = props.toolOrElemType;
+        this.propSetter = props.propSetter
     }
 
 
-
     render() {
-        const clickColor = (e: React.MouseEvent<HTMLDivElement>) => {
+        //填充颜色
+        const clickFillColor = (e: React.MouseEvent<HTMLDivElement>) => {
             const selectedColorIdx = e.currentTarget.id
-            console.log(selectedColorIdx)
+            this.propSetter.setProps("strokeWidth", this.colorMap[selectedColorIdx]);
+        }
 
-            // console.log(e)
+        //边框颜色
+        const clickLineColor = (e: React.MouseEvent<HTMLDivElement>) => {
+            const selectedColorIdx = e.currentTarget.id
+            this.propSetter.setProps("strokeWidth", this.colorMap[selectedColorIdx]);
         }
 
 
+        //描边宽度
+        const clickWidth = (e: React.MouseEvent<HTMLDivElement>) => {
+            const selectedId = e.currentTarget.id
+            this.propSetter.setProps("strokeWidth", this.widthMap[selectedId])
+        }
+
+        //字体大小
+        const clickFontSize = (e: React.MouseEvent<HTMLDivElement>) => {
+            const selectedId = e.currentTarget.id
+            this.propSetter.setProps("fontSize", this.widthMap[selectedId])
+        }
+
+        //文字样式——————TODO 待定
+        const clickFontStyle = (e: React.MouseEvent<HTMLDivElement>) => {
+            const selectedId = e.currentTarget.id
+            this.propSetter.setProps("fontSize", this.widthMap[selectedId])
+        }
+
+        //文本对其
+        const clickTextAlign = (e: React.MouseEvent<HTMLDivElement>) => {
+            const selectedId = e.currentTarget.id
+            this.propSetter.setProps("textAlign", this.textAlignMap[selectedId])
+        }
+
+        //操作
+        const clickOperation = (e: React.MouseEvent<HTMLDivElement>) => {
+            const selectedId = e.currentTarget.id
+            switch (selectedId) {
+                case '1': this.propSetter.copy();break;
+                case '2': this.propSetter.delete();break;
+                default: throw new Error("no supported operation");
+            }
+        }
+
+        const displays = [false, false, false, false, false, false, false, false]
+
+        const freshDisplay = () => {
+            displays[ToolBar.StrokeColor] = true
+            displays[ToolBar.Strokewidth] = true
+            displays[ToolBar.Opacity] = true
+            displays[ToolBar.Operation] = true
+            switch (this.winToolType) {
+                case ElementType.generic: displays[ToolBar.Fill] = true; break;
+                case ElementType.text: {
+                    displays[ToolBar.FontStyle] = true
+                    displays[ToolBar.FontSize] = true
+                    displays[ToolBar.TextAlign] = true
+                    break
+                }
+            }
+        }
+
+
+
+        const str = (i: number)  => { return i + ""}
+
         return <div className="win-tool-bar">
             {/*缺个判断类型：isGeneric || isPen || isText --> display为flex或none */}
-            <div className="single-box" style={{display: false ? "flex" : "none"}}>
+            <div className="single-box" style={{display: displays[ToolBar.Fill] ? "flex" : "none"}}>
                 <div className="single-box-title">填充</div>
                 <div className="single-box-contain">
                     <div className="single-box-contain">{
                         this.colorGroups.map((t,i) => {
 
-                            return <div key={i} className="color-box" onClick={(e) => clickColor(e)}>{
+                            return <div key={i} id={str(i)} className="color-box" onClick={(e) => clickFillColor(e)}>{
                                 t.map(s =>
                                     <img style={{width: "30px", height: "30px"}} src={require(`../../icon/${s}.svg`)}/>)
                             }</div>
@@ -119,82 +250,83 @@ class WinToolList extends React.Component<WinTypeListProp> {
                     }</div>
                 </div>
             </div>
-            <div className="single-box" style={{display: false ? "flex" : "none"}}>
+            <div className="single-box" style={{display:  displays[ToolBar.StrokeColor]  ? "flex" : "none"}}>
                 <div className="single-box-title">描边</div>
                 <div className="single-box-contain">{
                     this.colorGroups.map((t,i) => {
-                        return <div key={i} className="color-box" onClick={(e) => clickColor(e)} >{
+                        return <div key={i} id={str(i)} className="color-box" onClick={(e) => clickLineColor(e)} >{
                             t.map(s =>
-                            <img style={{width: "30px", height: "30px"}} src={require(`../../icon/${s}.svg`)}/>)
+                                <img style={{width: "30px", height: "30px"}} src={require(`../../icon/${s}.svg`)}/>)
                         }</div>
                     })
                 }</div>
             </div>
-            <div className="single-box" style={{display: false ? "flex" : "none"}}>
+            <div className="single-box" style={{display:  displays[ToolBar.Strokewidth]  ? "flex" : "none"}}>
                 <div className="single-box-title">描边宽度</div>
                 <div className="single-box-contain" >{
                     this.widthGroups.map((t,i) => {
-                        return <div key={i} className="border-box">{
+                        return <div key={i} id={str(i)} className="border-box" onClick={(e) => clickWidth(e)}>{
                             t.map(s =>
                                 <img src={require(`../../icon/${s}.svg`)}/>)
                         }</div>
                     })
                 }</div>
             </div>
-            <div className="single-box">
+            <div className="single-box" style={{display:  displays[ToolBar.FontSize]  ? "flex" : "none"}}>
                 <div className="single-box-title">字体大小</div>
                 <div className="single-box-contain">{
                     this.sizeGroups.map((t,i) => {
-                        return <div className="border-box" key={i} style={{color: "black"}}>{
+                        return <div className="border-box" key={i} id={str(i)} style={{color: "black"}} onClick={(e) => clickFontSize(e)}>{
                             this.sizeText[i]
                         }</div>
                     })
                 }</div>
             </div>
-            <div className="single-box">
+            <div className="single-box" style={{display:  displays[ToolBar.FontStyle]  ? "flex" : "none"}}>
                 <div className="single-box-title">字体样式</div>
                 <div className="single-box-contain">{
                     this.styleGroups.map((t,i) => {
-                        return <div key={i} className="border-box">{
-                            t.map(s =>
-                            <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
-                        }</div>
-                    })
-                }</div>
-            </div>
-            <div className="single-box">
-                <div className="single-box-title">文本对齐</div>
-                <div className="single-box-contain">{
-                    this.alignGroups.map((t,i) => {
-                        return <div key={i} className="border-box">{
+                        return <div key={i} id={str(i)} className="border-box" onClick={(e) => clickFontStyle(e)} >{
                             t.map(s =>
                                 <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
                         }</div>
                     })
                 }</div>
             </div>
-            <div className="single-box">
+            <div className="single-box" style={{display:  displays[ToolBar.TextAlign]  ? "flex" : "none"}}>
+                <div className="single-box-title">文本对齐</div>
+                <div className="single-box-contain">{
+                    this.alignGroups.map((t,i) => {
+                        return <div key={i}  className="border-box"  id={str(i)}  onClick={(e) => clickTextAlign(e)}  >{
+                            t.map(s =>
+                                <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
+                        }</div>
+                    })
+                }</div>
+            </div>
+            <div className="single-box" style={{display:  displays[ToolBar.Opacity]  ? "flex" : "none"}}>
                 <div className="single-box-title">透明度</div>
                 <div className="single-box-contain">
                     <Slider min={0} max={100}></Slider>
                 </div>
             </div>
-            <div className="single-box">
-                <div className="single-box-title">图层</div>
-                <div className="single-box-contain">{
-                    this.positionGroups.map((t,i) => {
-                        return <div key={i} className="border-box">{
-                            t.map(s =>
-                                <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
-                        }</div>
-                    })
-                }</div>
-            </div>
-            <div className="single-box">
+            {/*图层暂时不做*/}
+            {/*<div className="single-box">*/}
+            {/*    <div className="single-box-title">图层</div>*/}
+            {/*    <div className="single-box-contain">{*/}
+            {/*        this.positionGroups.map((t,i) => {*/}
+            {/*            return <div key={i} className="border-box" id={str(i)} onClick={(e) => clickPosition(e)}>{*/}
+            {/*                t.map(s =>*/}
+            {/*                    <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)*/}
+            {/*            }</div>*/}
+            {/*        })*/}
+            {/*    }</div>*/}
+            {/*</div>*/}
+            <div className="single-box" style={{display:  displays[ToolBar.Operation]  ? "flex" : "none"}}>
                 <div className="single-box-title">操作</div>
                 <div className="single-box-contain">{
                     this.operationGroups.map((t,i) => {
-                        return <div key={i} className="border-box">{
+                        return <div key={i} className="border-box" id={str(i)} onClick={(e) => clickOperation(e)}>{
                             t.map(s =>
                                 <img style={{width: "16px", height: "16px"}} src={require(`../../icon/${s}.svg`)}/>)
                         }</div>

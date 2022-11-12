@@ -48,7 +48,8 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
                 <div id={"text-editor-container"}/>
                 <canvas style={{width: "100%", height: "100%", backgroundColor:"gray"}} id="show-canvas"/>
             </div>
-            <WindowToolBar OnWinTypeSelected={this.selectTool.bind(this)} />
+            {/*TODO 完善propSetter 和 toolOrElemType*/}
+            <WindowToolBar OnWinTypeSelected={this.selectTool.bind(this)}  propSetter={null} toolOrElemType={null}/>
         </div>
     }
 

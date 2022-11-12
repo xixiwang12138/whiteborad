@@ -35,15 +35,13 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
     private isMouseDown = false;
 
     state = {
-        scale:1,
         boardInfo: {
             id: "白板id",
-            name:"白板名字",
+            name:"白板名字"
         },
         pages: [] as Partial<Page>[],
         memberList:[],
     }
-
 
     render() {
         return <div className="board">
@@ -65,10 +63,6 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.setupRootNode();
         await this.setupApp();
         await UserManager.syncUser();
-    }
-
-    componentDidUpdate(prevProps: Readonly<RouteComponentProps<WhiteBoardRouteParam>>, prevState: Readonly<{}>, snapshot?: any) {
-        console.log(this.state)
     }
 
     private setupCanvas() {
@@ -181,6 +175,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.app?.refreshScene();
     }
 
+
     private clearCanvas() {
         this.showCanvasCtx.clearRect(0,0, this.showCanvas.clientWidth, this.showCanvas.clientHeight);
     }
@@ -191,6 +186,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.showCanvasCtx.drawImage(s.realCvs, s.x,s.y);
         this.showCanvasCtx.restore();
     }
+
 
     private selectTool(type:ToolType, second?:SecondLevelType) {
         if(type === "translation") {

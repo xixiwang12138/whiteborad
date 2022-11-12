@@ -115,7 +115,7 @@ type ExportFileResp = {
 
 export async function exportFile(pageId: string) {
     return request.post<any, ExportFileResp>(
-        " /api/page/export",
+        "/api/page/export",
         {pageId}
     );
 }

@@ -24,8 +24,12 @@ export class LinearTool extends GenericDrawingTool {
         this.last.x = e.x; this.last.y = e.y;
         if(this._shape === "line")
             scene.actElem = new Line(IdGenerator.genElementId(), e.x, e.y);
-         else
+        else
             scene.actElem = new Arrow(IdGenerator.genElementId(), e.x, e.y);
+        let el = scene.actElem;
+        el.strokeColor = this.strokeColor;
+        el.strokeWidth = this.strokeWidth;
+        el.opacity = this.opacity;
     }
 
 

@@ -6,7 +6,7 @@ export type WinToolType = "changeBackgroundColor" | "changeStrokeColor" | "chang
 // 二级的暂时写在这里
 export type StrokeWidthType = "sStroke" | "mStroke" | "lStroke"
 export type FontSizeType = "sFont" | "mFont" | "lFont"
-export type FontStyleType = "bold" | "italic" | "underline"
+export type FontStyleType = "normal" | "bold" | "italic" | "underline"
 export type TextAlignType = "left" | "center" | "right"
 export type ElementPositionType = "toTop" | "toBottom" | "toNext" | "toLast"
 export type OperationsType ="delete"

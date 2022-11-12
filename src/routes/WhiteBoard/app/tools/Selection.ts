@@ -8,11 +8,15 @@ import {CmdType} from "../../ws/message";
 import {ElementState} from "../element/ElementState";
 import {TextElement} from "../element/TextElement";
 import {PathElement} from "../element/PathElement";
+import {ElementSum} from "../../components/WindowToolBar";
+import {GenericElement} from "../element/GenericElement";
 
 
 enum SelectionOperation {
     None, Moving, Rotating, Scaling
 }
+
+export type OnElemSelected = (e:ElementBase) => void;
 
 export class Selection extends Modifier<CmdType.Adjust>{
 
@@ -23,6 +27,8 @@ export class Selection extends Modifier<CmdType.Adjust>{
     private curSelectedElem:ElementBase | null = null;
 
     private oldState:ElementState<any> | null = null;
+
+    public onElemSelected:OnElemSelected = () => {}
 
     constructor() {
         super("selection");
@@ -61,9 +67,6 @@ export class Selection extends Modifier<CmdType.Adjust>{
         }
     }
 
-    /**
-     *  1、
-     */
     protected onDown(e: SceneTouchEvent, scene: DrawingScene) {
         this.last.x = e.x; this.last.y = e.y;
         let cse = this.curSelectedElem;
@@ -102,55 +105,17 @@ export class Selection extends Modifier<CmdType.Adjust>{
             elem.selected = true;
             this.curSelectedElem = elem;
             this.oldState = new ElementState(elem);
-            if(elem instanceof TextElement) this.oldState.fontSize = (elem as TextElement).fontSize;
+            // 针对不同元素保存不同状态
+            if(elem instanceof TextElement) {
+                this.oldState.fontSize = elem.fontSize;
+                this.oldState.fontStyle = elem.fontStyle;
+            }
             if(elem instanceof PathElement) this.oldState.points = [...(elem as PathElement).points];
+            if(elem instanceof GenericElement) this.oldState.backgroundColor = elem.backgroundColor;
             scene.activate(elem);
+            this.onElemSelected(elem);
         }
     }
-    // protected onDown(e: SceneTouchEvent, scene: DrawingScene) {
-    //     this.last.x = e.x; this.last.y = e.y;
-    //     let trySelectNewElem = () => {
-    //         let elem = scene.findElemByEvent(e);
-    //         if(elem !== null) {
-    //             if(scene.actElem) scene.actElem.selected = false;
-    //             elem.selected = true;
-    //             scene.setBackgroundOf(elem);
-    //             scene.actElem = elem;
-    //             scene.render();
-    //         }
-    //     }
-    //     if(this.curSelectedElem == null) {
-    //         trySelectNewElem();
-    //     } else {
-    //         if(this.curSelectedElem = finish) {
-    //             if(scene.actElem.isRotateHandle(e.x, e.y)) {
-    //                 this.selectionOp = SelectionOperation.Rotating;
-    //             } else if (scene.actElem.isScaleHandle(e.x, e.y)) {
-    //                 this.selectionOp = SelectionOperation.Scaling;
-    //                 scene.actElem.onScaleStart();
-    //             } else if(!scene.actElem.inRectRange(e.x, e.y)) {
-    //                 trySelectNewElem();
-    //             }
-    //         } else {
-    //             // 使用选择工具按下时，如果激活元素未完成，完成并绘制到背景
-    //             let textTool = this.parent.getTool("text") as TextTool;
-    //             if(textTool.editing && textTool.outOfBound(e)) {
-    //                 textTool.closeEditor();
-    //                 scene.actElem.finish = true;
-    //                 const empty = (scene.actElem as TextElement).text === ""
-    //                 if(!scene.getElem(scene.actElem.id)) {
-    //                     if(!empty) scene.addElem(scene.actElem);
-    //                     scene.actElem = null;
-    //                 } else {
-    //                     if(empty) scene.removeElem(scene.actElem); // 如果修改之后为空，删除元素
-    //                     else scene.unSelectAll();
-    //                 }
-    //
-    //             }
-    //
-    //         }
-    //     }
-    // }
 
     protected onMove(e: SceneTouchEvent, scene: DrawingScene) {
         if(this.selectionOp === SelectionOperation.Rotating) this.doRotation(e, scene.actElem!)
@@ -205,8 +170,20 @@ export class Selection extends Modifier<CmdType.Adjust>{
         }
     }
 
-
-
-
-
+    /**
+     *  如果当前有被选择元素，修改元素属性
+     */
+    public setProp(prop: keyof ElementSum, value: any):boolean {
+        if(this.curSelectedElem) {
+            (this.curSelectedElem as any)[prop] = value;
+            if(this.curSelectedElem instanceof TextElement && (prop === "fontSize" || prop === "fontStyle")) {
+                let size = this.scene.measureText(this.curSelectedElem);
+                this.curSelectedElem.width = size.width;
+                this.curSelectedElem.height = size.height;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -1,14 +1,20 @@
 import {Creator, ICreator, IModifier, OnCreate, OnModify, Tool} from "./Tool";
 import {SceneTouchEvent} from "../element/TouchEvent";
 import {DrawingScene} from "../DrawingScene";
-import {TextAlign, TextElement} from "../element/TextElement";
+import {TextElement} from "../element/TextElement";
 import {CmdType} from "../../ws/message";
 import {IdGenerator} from "../../../../utils/IdGenerator";
+
+export type FontStyle = "normal" | "bold"  | "italic" | "underline";
+
+export type TextAlign = "left" | "center" | "right";
 
 export class TextTool extends Tool
     implements IModifier<CmdType.Adjust | CmdType.Delete>, ICreator{
 
     protected fontSize:number = 30;
+
+    protected fontStyle:FontStyle = "normal";
 
     private _textAlign:TextAlign = "left";
     set textAlign(a:TextAlign){this._textAlign = a;}
@@ -107,9 +113,11 @@ export class TextTool extends Tool
                 // 新创建
                 this._curElem = scene.actElem = new TextElement(IdGenerator.genElementId(), e.x, e.y);
                 this.editState = "create";
-                this.textEditor.style.width = "5px"; this.textEditor.style.height = `${this._curElem.fontSize}px`
-                this.textEditor.style.fontSize = `${this._curElem.fontSize}px`;
+                this.textEditor.style.width = "5px"; this.textEditor.style.height = `${this.fontSize}px`;
+                this.textEditor.style.font = this.getStandardFont();
                 this.textEditor.style.textAlign = this._textAlign;
+                this.textEditor.style.color = this.strokeColor;
+                this.textEditor.style.opacity = `${this.opacity}`;
                 this.textEditor.style.transform = `scale(${scene.scale},${scene.scale})`;
             } else {
                 // 重新编辑
@@ -117,9 +125,12 @@ export class TextTool extends Tool
                 const el = this._curElem = scene.actElem! as TextElement;
                 this.textEditor.style.width = `${el.width}px`; this.editorW = el.width;
                 this.textEditor.style.height = `${el.height}px`; this.editorH = el.height;
+                if(el.fontStyle === "underline") this.textEditor.style.textDecoration = "underline";
+                this.textEditor.style.font = el.getStandardFont();
                 this.textEditor.style.textAlign = el.textAlign;
-                this.textEditor.style.fontSize = `${el.fontSize}px`;
+                this.textEditor.style.color = el.strokeColor;
                 this.textEditor.value = el.text;
+                this.textEditor.style.opacity = `${this.opacity}`;
                 this.textEditor.style.transform = `scale(${scene.scale},${scene.scale}) rotate(${el.angle / Math.PI * 180}deg)`;
                 // TODO 编辑器打开的时候还是有小bug
             }
@@ -150,6 +161,19 @@ export class TextTool extends Tool
 
     public setOnModifyListener(l: OnModify<CmdType.Adjust | CmdType.Delete>): void {
         this.onModify = l;
+    }
+
+    /**
+     * 获取css标准font
+     */
+    public getStandardFont() {
+        let res = "";
+        if(this.fontStyle !== "underline") {
+            res = `${this.fontStyle} ${this.fontSize}px 黑体`;
+        } else {
+            res = `${this.fontSize}px 黑体`
+        }
+        return res;
     }
 
 }

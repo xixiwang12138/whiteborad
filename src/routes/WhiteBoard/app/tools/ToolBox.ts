@@ -6,10 +6,13 @@ import {GenericElementTool} from "./GenericElementTool";
 import {LinearTool} from "./LinearTool";
 import {Eraser} from "./Eraser";
 import {CmdPayloads, CmdType} from "../../ws/message";
+import {DrawingScene} from "../DrawingScene";
 
 export type CursorStyle = "default" | "grab" | "move" | "se-resize" | "cell" | "crosshair" | "text";
 
 export class ToolBox {
+
+    private scene:DrawingScene;
 
     private currentCursor:CursorStyle = "default";
 
@@ -19,8 +22,9 @@ export class ToolBox {
 
     get curTool(){return this._curTool;}
 
-    public constructor() {
+    public constructor(scene:DrawingScene) {
         this.tools = new Map<ToolType, Tool>();
+        this.scene = scene;
         this.initTools();
         this._curTool = this.tools.get("selection")!;
     }
@@ -35,6 +39,7 @@ export class ToolBox {
     private addTool(tool:Tool) {
         this.tools.set(tool.type, tool);
         tool.setToolBox(this);
+        tool.setScene(this.scene);
         if("onModify" in tool) {
             (tool as Modifier<any>).setOnModifyListener((t, e, p)=>{
                 this.onModify.get(t)!(t, e, p);

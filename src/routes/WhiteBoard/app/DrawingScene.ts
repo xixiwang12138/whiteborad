@@ -2,6 +2,7 @@ import {ElementBase} from "./element/ElementBase";
 import {SceneTouchEvent, SceneTouchEventType} from "./element/TouchEvent";
 import {ScaleUtil} from "../../../utils/math";
 import {Page} from "./data/Page";
+import {TextElement} from "./element/TextElement";
 
 export type OnRenderListener = (cvs:DrawingScene)=>void
 
@@ -154,7 +155,6 @@ export class DrawingScene {
         return this.elements.get(id);
     }
 
-
     /**
      *  测量textarea元素的长度，宽度
      */
@@ -162,6 +162,18 @@ export class DrawingScene {
         this.realCvsCtx.font = getComputedStyle(textarea).font; // 获取字体样式
         let str = textarea.value.split("\n");
         let height = Number.parseInt(textarea.style.fontSize) * 1.2;
+        let maxWidth = 0;
+        for(let line of str) {
+            let size = this.realCvsCtx.measureText(line);
+            if(size.width > maxWidth) maxWidth = size.width;
+        }
+        return {width:maxWidth, height:height * str.length};
+    }
+
+    public measureText(text:TextElement) {
+        this.realCvsCtx.font = text.getStandardFont();
+        let str = text.text.split("\n");
+        let height = text.fontSize * 1.2;
         let maxWidth = 0;
         for(let line of str) {
             let size = this.realCvsCtx.measureText(line);

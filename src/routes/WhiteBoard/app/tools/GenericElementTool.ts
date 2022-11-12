@@ -6,6 +6,8 @@ import {IdGenerator} from "../../../../utils/IdGenerator";
 
 export class GenericElementTool extends GenericDrawingTool {
 
+    public backgroundColor:string = "#00000000";
+
     private _shape:GenericElementType = "rectangle";
     set shape(s:GenericElementType){this._shape = s};
 
@@ -19,8 +21,12 @@ export class GenericElementTool extends GenericDrawingTool {
 
     protected onDown(e: SceneTouchEvent, scene: DrawingScene) {
         this.last.x = e.x; this.last.y = e.y;
-        scene.actElem = GenericElement.newGenericElement(
+        let el = scene.actElem = GenericElement.newGenericElement(
             this._shape, IdGenerator.genElementId(), e.x, e.y);
+        el.strokeColor = this.strokeColor;
+        el.strokeWidth = this.strokeWidth;
+        el.backgroundColor = this.backgroundColor;
+        el.opacity = this.opacity;
     }
 
 

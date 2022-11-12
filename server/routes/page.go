@@ -13,9 +13,9 @@ import (
 )
 
 func registerPage(g *gin.RouterGroup) {
-	g.GET("/", Handler(GetPageVo))
-	g.POST("/", Handler(CreatPage))
-	g.DELETE("/", Handler(DeletePage))
+	g.GET("", Handler(GetPageVo))
+	g.POST("", Handler(CreatPage))
+	g.DELETE("", Handler(DeletePage))
 	g.GET("/export", ExportPage)
 }
 

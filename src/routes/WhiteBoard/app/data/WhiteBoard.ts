@@ -21,6 +21,7 @@ export class WhiteBoard extends SerializableData {
     @field
     public updateTime:number;
 
+
     @field
     public defaultPage:string;
 

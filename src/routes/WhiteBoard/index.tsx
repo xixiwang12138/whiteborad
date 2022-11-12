@@ -2,7 +2,7 @@ import React from "react";
 import "./index.css";
 import BaseRow from "./components/BaseRow";
 import ToolList, {IOpListener, SecondLevelType} from "./components/ToolList";
-import WindowToolBar from "./components/WindowToolBar";
+import WindowToolBar, {ElementSum, ToolReactor} from "./components/WindowToolBar";
 import {WhiteBoardApp} from "./app/WhiteBoardApp";
 import {ToolType} from "./app/tools/Tool";
 import {DrawingScene} from "./app/DrawingScene";
@@ -18,7 +18,7 @@ export interface WhiteBoardRouteParam {
     id:string
 }
 
-class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRouteParam>> implements IOpListener, IWidget {
+class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRouteParam>> implements IOpListener, ToolReactor {
     private app!:WhiteBoardApp;
 
     private root!:HTMLElement;
@@ -39,6 +39,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
             id: "白板id",
             name:"白板名字"
         },
+        scale:1,
         pages: [] as Partial<Page>[],
         memberList:[],
     }
@@ -52,7 +53,8 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
                 <div id={"text-editor-container"}/>
                 <canvas style={{width: "100%", height: "100%", backgroundColor:"#F2F0F1"}} id="show-canvas"/>
             </div>
-            <WindowToolBar OnWinTypeSelected={(type)=>{console.log(type)}} />
+            {/*TODO 完善propSetter 和 toolOrElemType*/}
+            <WindowToolBar OnWinTypeSelected={this.selectTool.bind(this)}  propSetter={this} toolOrElemType={ElementType.generic}/>
         </div>
     }
 
@@ -220,6 +222,19 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
             this.setState({scale:res})
         }
         return res;
+    }
+
+    public setProps(prop: keyof ElementSum, value: any) {
+        console.log(prop)
+        console.log(value)
+    }
+
+    public copy() {
+
+    }
+
+    public delete() {
+
     }
 
 }

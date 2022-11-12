@@ -92,7 +92,8 @@ function MyBoard(){
         switch (key) {
             case '1': {
                 refreshList().then();
-            } break;
+                break;
+            }
             case '2':{
                 loadMyCreatList().then()
                 break;

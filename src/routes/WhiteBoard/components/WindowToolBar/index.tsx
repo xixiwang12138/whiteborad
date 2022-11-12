@@ -119,7 +119,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
                     }</div>
                 </div>
             </div>
-            <div className="single-box">
+            <div className="single-box" style={{display: false ? "flex" : "none"}}>
                 <div className="single-box-title">描边</div>
                 <div className="single-box-contain">{
                     this.colorGroups.map((t,i) => {
@@ -130,7 +130,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
                     })
                 }</div>
             </div>
-            <div className="single-box">
+            <div className="single-box" style={{display: false ? "flex" : "none"}}>
                 <div className="single-box-title">描边宽度</div>
                 <div className="single-box-contain" >{
                     this.widthGroups.map((t,i) => {

@@ -3,7 +3,6 @@ import {SceneTouchEvent} from "../element/TouchEvent";
 import {DrawingScene} from "../DrawingScene";
 import {ElementBase} from "../element/ElementBase";
 import {CmdPayloads, CmdType} from "../../ws/message";
-import {TextElement} from "../element/TextElement";
 
 export type ToolType = "translation" | "selection" |
     "eraser" | "freePen" | "text" | "generic" | "linear" | "image";
@@ -13,6 +12,7 @@ export class Point {
     y:number;
     constructor(x:number, y:number) {this.x = x; this.y = y;}
 }
+
 
 export abstract class Tool {
 
@@ -27,6 +27,7 @@ export abstract class Tool {
     }
 
     public abstract op(e: SceneTouchEvent, scene: DrawingScene):void;
+
 
 }
 

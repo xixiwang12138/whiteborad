@@ -2,10 +2,19 @@ import React, {useState} from "react";
 import "./index.css";
 import "../../../../App.css";
 import sort from "../../icon/排序.svg";
-import {Button, Modal, Input, Form, Tabs, Popover} from "antd";
+import {Button, Modal, Input, Form, Popover, Tabs} from "antd";
 import {doCreateBoard, getCreatedBoards, getJoinedBoards} from "../../../../api/api";
 import {useHistory} from "react-router-dom";
 import {WhiteBoard} from "../../../WhiteBoard/app/data/WhiteBoard";
+
+const contentStyle: React.CSSProperties = {
+    height: "300px",
+    backgroundColor: "red",
+    width: "850px",
+    overflowY: "auto",
+    display: "flex",
+    flexFlow: "wrap"
+}
 
 function MyBoard(){
 
@@ -142,8 +151,11 @@ function MyBoard(){
     )
 
 
-    refreshList().then()
-    const AllBoard = <div className="board-container">{allListDiv}</div>
+    refreshList().then();
+    console.log("allListDiv:",allListDiv)
+    console.log("createListDiv:",creatListDiv)
+    console.log("joinListDiv:",joinListDiv)
+    const AllBoard = <div className="board-container"> {allListDiv}</div>
     const MyCreate = <div className="board-container"> {creatListDiv}</div>
     const MyJoin = <div className="board-container"> {joinListDiv}</div>
     // const LikeBoard = <div className="board-container">这里是收藏白板</div>
@@ -155,7 +167,7 @@ function MyBoard(){
                 <div style={{marginBottom:'20px'}}/>
                 <div className="list">
                     <div className="list-left">
-                        <Tabs defaultActiveKey="1" onChange={onTabsChange}
+                        <Tabs onChange={onTabsChange} defaultActiveKey="4"
                         items={[
                             {
                                 label: `全部白板`,
@@ -172,11 +184,11 @@ function MyBoard(){
                                 key: '3',
                                 children: MyJoin
                             },
-                            // {
-                            //     label: `收藏白板`,
-                            //     key: '4',
-                            //     children: LikeBoard
-                            // }
+                            {
+                                label: `我的收藏`,
+                                key: '4',
+                                children: "功能尚未开启，请耐心等待",
+                            }
                         ]}/>
                         {/*<div className="left-box"><span className="box-text">全部白板</span></div>*/}
                         {/*<div className="left-box"><span className="box-text">我创建的</span></div>*/}
@@ -184,7 +196,6 @@ function MyBoard(){
                         {/*<div className="left-box"><span className="box-text">收藏白板</span></div>*/}
                     </div>
                     {/*<div className="list-right">*/}
-                    {/*    /!*访问时间这里改成排序吧，就不要筛选了*!/*/}
                     {/*    <div className="right-icon">*/}
                     {/*        <img src={sort}/>*/}
                     {/*    </div>*/}

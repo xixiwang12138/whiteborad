@@ -6,6 +6,8 @@ import {RotateUtil} from "../../../../utils/math";
 import {TextTool} from "./TextTool";
 import {CmdType} from "../../ws/message";
 import {ElementState} from "../element/ElementState";
+import {TextElement} from "../element/TextElement";
+import {PathElement} from "../element/PathElement";
 
 
 enum SelectionOperation {
@@ -32,6 +34,7 @@ export class Selection extends Modifier<CmdType.Adjust>{
             case "move":this.onMove(e, scene);break;
             case "up":this.onUp(e, scene);break;
             case "doubleClick": this.onDoubleClick(e, scene);break;
+            case "hover": this.onHover(e, scene);break;
         }
     }
 
@@ -50,14 +53,6 @@ export class Selection extends Modifier<CmdType.Adjust>{
     public unSelectedCurElem() {
         let cse = this.curSelectedElem;
         if(cse) {
-            // 对当前选择元素判断属性是否被修改，并逐一回调
-            // if(this.oldState!.isScaled(cse))
-            //     this.onModify(CmdType.Adjust, {
-            //         factorH: cse.width / this.oldState!.width,
-            //         factorV: cse.height / this.oldState!.height
-            //     });
-            // if(this.oldState!.isMoved(cse)) this.onModify(CmdType.Move, {x:cse.x, y:cse.y});
-            // if(this.oldState!.isRotated(cse)) this.onModify(CmdType.Adjust, {p:"angle", value: cse.angle});
             let change = this.oldState!.analyseDiff(this.curSelectedElem);
             if(change) this.onModify(CmdType.Adjust, cse, change)
             // 更新当前选中元素信息
@@ -107,7 +102,8 @@ export class Selection extends Modifier<CmdType.Adjust>{
             elem.selected = true;
             this.curSelectedElem = elem;
             this.oldState = new ElementState(elem);
-            // if(elem instanceof TextElement) this.oldState.extra = [{key:"text", value:elem.text}];
+            if(elem instanceof TextElement) this.oldState.fontSize = (elem as TextElement).fontSize;
+            if(elem instanceof PathElement) this.oldState.points = [...(elem as PathElement).points];
             scene.activate(elem);
         }
     }
@@ -168,6 +164,25 @@ export class Selection extends Modifier<CmdType.Adjust>{
         this.selectionOp = SelectionOperation.None;
     }
 
+    private onHover(e: SceneTouchEvent, scene: DrawingScene) {
+        let cse = this.curSelectedElem;
+        if(cse) {
+            if (cse.isRotateHandle(e.x, e.y)) {
+                this.parent.changeCursorStyle("grab");
+            } else if (cse.isScaleHandle(e.x, e.y)) {
+                this.parent.changeCursorStyle("se-resize");
+            } else {
+                this.parent.changeCursorStyle("default");
+            }
+        } else {
+            let elem = scene.findElemByEvent(e);
+            if (elem)
+                this.parent.changeCursorStyle("move");
+            else
+                this.parent.changeCursorStyle("default");
+        }
+    }
+
     private doRotation(e:SceneTouchEvent, elem:ElementBase) {
         const center = elem.getCenter();
         let a1 = this.last.x - center.x, a2 = this.last.y - center.y;
@@ -189,6 +204,8 @@ export class Selection extends Modifier<CmdType.Adjust>{
             elem.move(e.x - this.last.x, e.y - this.last.y);
         }
     }
+
+
 
 
 

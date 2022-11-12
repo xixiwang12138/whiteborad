@@ -1,4 +1,5 @@
 import {ElementBase} from "./ElementBase";
+import {CmdPayloads, CmdType} from "../../ws/message";
 
 
 export class ElementState<T extends ElementBase> {
@@ -8,6 +9,8 @@ export class ElementState<T extends ElementBase> {
     public width:number;
     public height:number;
     public angle:number;
+    public fontSize:number; // text
+    public points:number[]; // path
 
     constructor(e:T) {
         this.x = e.x;
@@ -29,12 +32,12 @@ export class ElementState<T extends ElementBase> {
     //     return e.angle !== this.angle;
     // }
 
-    public analyseDiff(e:T):Record<string, any> | null {
-        let res:Record<string, any> = {}
+    public analyseDiff(e:T):CmdPayloads[CmdType.Adjust] | null {
+        let res:CmdPayloads[CmdType.Adjust] = {}
         let flag = false;
-        ["x", "y", "angle", "width", "height"].forEach((k) => {
-            if((this as any)[k] !== (e as any)[k]) {
-                res[k] = (e as any)[k];
+        ["x", "y", "angle", "width", "height", "fontSize", "points"].forEach((k) => {
+            if(this[k] !== e[k]) {
+                res[k] = [this[k] ,e[k]];
                 flag = true;
             }
         })

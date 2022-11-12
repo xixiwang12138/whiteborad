@@ -7,6 +7,7 @@ import {Button} from "antd";
 import {ToolType} from "../../app/tools/Tool";
 import {GenericElementType} from "../../app/element/GenericElement";
 import {LinearElementType} from "../../app/tools/LinearTool";
+import {Op, OperableListener} from "../../app/operationTracker/OperationTracker";
 
 
 // export const DODOs = [
@@ -33,28 +34,14 @@ export interface IOpListener {
 class ToolListProp {
     onToolSelected:OnToolSelected = () => {};
     opListener:IOpListener = new class implements IOpListener {
-        onRedo(): void {}
-        onUndo(): void {}
+        onRedo():void{}
+        onUndo():void{}
     }()
 }
 
-class ToolList extends React.Component<ToolListProp> {
+class ToolList extends React.Component<ToolListProp> implements OperableListener {
 
-    private DODOs = [
-        {
-            name: "undo",
-            src: undo,
-            cb: () => {},
-            disabled: false
-        },
-        {
-            name: "redo",
-            src: redo,
-            cb: () => {},
-            disabled: true
-        }
-
-    ]
+    state:{undoAble:boolean; redoAble:boolean;}
 
     // 这里的类型意思是，一级类型数组 | 一级类型，[二级类型数组]
     private iconGroups:(ToolType[]|[ToolType, SecondLevelType[]])[] = [
@@ -74,34 +61,29 @@ class ToolList extends React.Component<ToolListProp> {
         super(props);
         this.onToolSelected = props.onToolSelected;
         this.opListener = props.opListener;
-        this.DODOs[0].cb = this.opListener.onUndo.bind(this.opListener);
-        this.DODOs[1].cb = this.opListener.onRedo.bind(this.opListener);
+        this.state =  {
+            undoAble:false,
+            redoAble:false
+        }
     }
 
+    public onAbilityChange(op:Op, ability:boolean) {
+        if (op === "undo") this.setState({undoAble: ability});
+        else this.setState({redoAble: ability});
+    }
 
     render() {
-
         return <div className="tool-list">
             <div className="tool-do">
-
-                <div className="do-box">{
-                    this.DODOs.map((dodo)=> {
-                        // const [isDoDisabled, setIsDoDisabled] = useState(false)
-
-                        let className = "icon";
-                        if(dodo.disabled) className = "icon-disabled";
-
-                        return<div>
-                            <Button className={className} name={dodo.name} disabled={dodo.disabled} onClick={dodo.cb}>
-                                <img src={dodo.src}/>
-                            </Button>
-                        </div>
-                    })
-                }
-                    {/*<Button className="icon" disabled={true}><img src={undo}/></Button>*/}
-                    {/*<Button className="icon" disabled={false}><img src={redo}/></Button>*/}
-                    {/*<div className="icon"><img src={undo}/></div>*/}
-                    {/*<div className="icon"><img src={redo}/></div>*/}
+                <div className="do-box">
+                    <Button className={"icon" + this.state.undoAble ? "" : "icon-disabled"} name="undo"
+                            onClick={this.opListener.onUndo.bind(this.opListener)}>
+                        <img src={undo}/>
+                    </Button>
+                    <Button className={"icon" + this.state.redoAble ? "" : "icon-disabled"} name="redo"
+                            onClick={this.opListener.onRedo.bind(this.opListener)}>
+                        <img src={redo}/>
+                    </Button>
                 </div>
             </div>
             <div className="tool-bar"> {

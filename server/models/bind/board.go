@@ -20,3 +20,8 @@ type BoardMode struct {
 	BoardId string           `json:"boardId"`
 	Mode    models.BoardType `json:"mode"` //控制是否可编辑
 }
+
+type NewPageReq struct {
+	BoardId string `json:"boardId"`
+	Name    string `json:"name"`
+}

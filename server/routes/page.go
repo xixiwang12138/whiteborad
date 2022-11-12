@@ -19,8 +19,8 @@ func registerPage(g *gin.RouterGroup) {
 	g.GET("/export", ExportPage)
 }
 
-func CreatPage(ctx *gin.Context, req *bind.BoardReq) (any, error) {
-	_, err := dao.PageRepo.CreatePage(req.BoardId, "")
+func CreatPage(ctx *gin.Context, req *bind.NewPageReq) (any, error) {
+	_, err := dao.PageRepo.CreatePage(req.BoardId, req.Name)
 	if err != nil {
 		return nil, err
 	}

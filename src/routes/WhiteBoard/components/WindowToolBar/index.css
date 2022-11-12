@@ -82,6 +82,10 @@
     justify-content: space-between;
     align-items: center;
 }
+.slider-opacity {
+    width: 140px;
+}
+
 .color-box {
     width: 20px;
     height: 20px;

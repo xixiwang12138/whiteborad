@@ -100,23 +100,15 @@ export async function getPages(boardId:string):Promise<Page[]> {
     return res.pages.map(r => Object.assign(new Page(), r));
 }
 
-
-
-
-
-
-
-
-
-
 type ExportFileResp = {
-    pageId:string
+    name: string
+    data: string
 }
 
 export async function exportFile(pageId: string) {
-    return request.post<any, ExportFileResp>(
+    return request.get<any, ExportFileResp>(
         "/api/page/export",
-        {pageId}
+        {params: {pageId}}
     );
 }
 

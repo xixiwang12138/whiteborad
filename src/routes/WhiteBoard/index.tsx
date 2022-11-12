@@ -55,7 +55,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
                 <canvas style={{width: "100%", height: "100%", backgroundColor:"#F2F0F1"}} id="show-canvas"/>
             </div>
             {/*TODO 完善propSetter 和 toolOrElemType*/}
-            <WindowToolBar OnWinTypeSelected={this.selectTool.bind(this)}  propSetter={this} toolOrElemType={ElementType.generic}/>
+            <WindowToolBar OnWinTypeSelected={this.selectTool.bind(this)}  propSetter={this} toolOrElemType={null}/>
         </div>
     }
 
@@ -230,9 +230,6 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         console.log(value)
     }
 
-    public copy() {
-
-    }
 
     public delete() {
 

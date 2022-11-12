@@ -9,6 +9,6 @@ export type FontSizeType = "sFont" | "mFont" | "lFont"
 export type FontStyleType = "bold" | "italic" | "underline"
 export type TextAlignType = "left" | "center" | "right"
 export type ElementPositionType = "toTop" | "toBottom" | "toNext" | "toLast"
-export type OperationsType = "copy" | "delete"
+export type OperationsType ="delete"
 
 export type ColorType = "color1" | "color2" | "color3" | "color4" | "color5" | "color6"

@@ -94,3 +94,8 @@ func (this *BaseRepo[T]) UpdateFiled(pk string, newValue map[string]interface{})
 	t := new(T)
 	return sources.MysqlSource.Db.Model(t).Where("id = ?", pk).Updates(newValue).Error
 }
+
+func (this *BaseRepo[T]) DeleteByPK(pk string) error {
+	t := new(T)
+	return sources.MysqlSource.Db.Model(t).Delete(t, pk).Error
+}

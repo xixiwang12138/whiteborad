@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"server/common/utils"
+	"server/dao"
 	"server/logic"
 	"server/models"
 	"server/models/bind"
@@ -13,7 +14,25 @@ import (
 
 func registerPage(g *gin.RouterGroup) {
 	g.GET("/", Handler(GetPageVo))
+	g.POST("/", Handler(CreatPage))
+	g.DELETE("/", Handler(DeletePage))
 	g.GET("/export", ExportPage)
+}
+
+func CreatPage(ctx *gin.Context, req *bind.BoardReq) (any, error) {
+	_, err := dao.PageRepo.CreatePage(req.BoardId, "")
+	if err != nil {
+		return nil, err
+	}
+	return logic.GetBoardVO(req.BoardId)
+}
+
+func DeletePage(ctx *gin.Context, req *bind.PageReq) (any, error) {
+	err := dao.PageRepo.DeleteByPK(req.PageId)
+	if err != nil {
+		return nil, err
+	}
+	return logic.GetBoardVO(req.BoardId)
 }
 
 func GetPageVo(ctx *gin.Context, req *bind.PageReq) (any, error) {

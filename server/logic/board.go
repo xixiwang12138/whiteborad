@@ -57,3 +57,16 @@ func StoreBoard(bId string) {
 	}
 	wg.Wait()
 }
+
+func GetBoardVO(boardId string) (*models.WhiteBoard, error) {
+	b, err := dao.WhiteBoardRepo.FindByID(boardId)
+	if err != nil {
+		return nil, err
+	}
+	p, err := dao.PageRepo.GetBoardPages(boardId)
+	if err != nil {
+		return nil, err
+	}
+	b.Pages = p
+	return b, err
+}

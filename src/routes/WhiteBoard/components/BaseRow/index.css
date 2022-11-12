@@ -1,16 +1,36 @@
-.base-row {
+.container {
+    width: 100vw;
+    height: 96px;
+    /*background-color: #DC8AF9;*/
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.base-row1 {
     width: 100vw;
     height: 60px;
     background-color: #FDD3D3;
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 20;
+    z-index: 50;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 0 4px 2px #d7d7d7;
+}
+.base-row2 {
+    width: 100vw;
+    height: 26px;
+    /*background-color: black;*/
+    position: absolute;
+    top: 70px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
 }
 .row-left{
     height: 40px;
@@ -214,6 +234,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.box {
+    width: 100px;
+    height: 20px;
+    position: absolute;
+    border-radius: 10px;
+    background-color: #FDD3D3;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.icon {
+    height: 20px;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.icon img{
+    height: 15px;
+    width: 15px;
+    object-fit: contain;
+    cursor: pointer;
 }
 
 /*.ant-checkbox-checked:hover {*/

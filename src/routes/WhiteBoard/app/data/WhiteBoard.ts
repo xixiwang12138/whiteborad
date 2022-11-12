@@ -11,6 +11,8 @@ export class WhiteBoard extends SerializableData {
     @field
     public mode:BoardType;
     @field
+    public name: string;
+    @field
     public creator:string;
     @field
     public creatTime:number;
@@ -20,6 +22,9 @@ export class WhiteBoard extends SerializableData {
     public updateTime:number;
     @field
     public name:string;
+
+    @field
+    public defaultPage:string;
 
     @field(Array<Page>)
     public pages:Page[];

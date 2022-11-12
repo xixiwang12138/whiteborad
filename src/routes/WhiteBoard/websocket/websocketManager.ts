@@ -1,36 +1,24 @@
-import {Cmd, CmdPayloads, CmdType, Message} from "./message";
-import {DataLoader, DataOccasion} from "../../../utils/data/DataLoader";
+import {onMessageHandler} from "./handler";
 
-const host = 'ws://localhost:10400'
+const host = 'ws://175.178.81.93:10400'
 
-// const host = 'ws://175.178.81.93:10400'
-// const host = 'ws://192.168.137.17:10400'
-// const host = 'ws://175.178.81.93:10400'
-// const host = 'ws://172.21.216.71:10400';
 
-export interface IWebsocket {
-    onOpen: ((ev: Event) => any) | null;
-    onClose: ((ev: CloseEvent) => any) | null;
-    onError: ((ev:Event ) => any) | null;
-    onMessage: ((ev: MessageEvent) => any) | null;
-}
-
-export class WebsocketManager {
+class WebsocketManager {
     public ws: WebSocket | undefined;
     private readonly onOpen: ((ev: Event) => any) | null;
     private readonly onClose: ((ev: CloseEvent) => any) | null;
     private readonly onError: ((ev:Event ) => any) | null;
     private readonly onMessage: ((ev: MessageEvent) => any) | null;
 
-    private boardId: string = "";
-    private userId: string = "";
+    private boardId: number = 0;
+    private userId: number = 0;
 
 
-    constructor(impl:IWebsocket) {
-        this.onOpen = impl.onOpen;
-        this.onClose = impl.onClose;
-        this.onMessage = impl.onMessage;
-        this.onError = impl.onError;
+    constructor(onOpen: (( ev: Event) => any), onClose: (ev: CloseEvent) => any, onMessage: (ev: MessageEvent) => any, onError: (ev:Event ) => any) {
+        this.onOpen = onOpen;
+        this.onClose = onClose;
+        this.onMessage = onMessage;
+        this.onError = onError;
     }
 
 
@@ -49,12 +37,11 @@ export class WebsocketManager {
      * @param boardId 连接的白板id
      * @param userId 用户id
      */
-    public connect(boardId: string, userId: string) {
-        console.log(boardId, userId)
+    public connect(boardId: number, userId: number) {
         if(this.connecting()) return
         this.boardId = boardId;
         this.userId = userId;
-        this.ws = new WebSocket(`${host}/${boardId}/${userId}`);
+        this.ws = new WebSocket(host + userId + "/" + boardId)
         //绑定各种事件的处理方法
         this.ws.onmessage = this.onMessage
         this.ws.onopen = this.onOpen
@@ -74,17 +61,20 @@ export class WebsocketManager {
         if(this.connecting()) {
             this.ws?.close()
             this.ws = undefined;
-            this.userId = "";
-            this.boardId = "";
+            this.userId = 0;
+            this.boardId = 0;
         }
     }
 
     /**
      * 发送消息
      */
-    public sendCmd<T extends CmdType>(cmd: Cmd<T>) {
-        let msg:Message = {type: "cmd", data:JSON.stringify(cmd)};
-        this.ws?.send(JSON.stringify(msg));
+    public sendMessage(obj: Object) {
+        this.ws?.send(JSON.stringify(obj))
     }
-
 }
+
+
+
+
+export const websocketManager = new WebsocketManager(() => {}, () => {}, onMessageHandler, () => {});

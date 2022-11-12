@@ -29,6 +29,7 @@ export enum CmdType { //枚举从最后开始添加
     Adjust, //调整单个属性
     SwitchPage,  //切换页面
     // Scale, //缩放
+    SwitchMode
 }
 
 //此处CmdPayloads中的值,即为payload
@@ -40,6 +41,7 @@ export type CmdPayloads = {
     [CmdType.Withdraw]: Cmd<CmdType> //需要撤销的操作
     [CmdType.Adjust]: Record<string, [any, any]> //p键值为操作的属性，[0]:before, [1]:after
     [CmdType.SwitchPage]: {from: number, to: number} //从from页面切换到to页面
+    [CmdType.SwitchMode]: number //新的mode
     // [CmdType.Scale]: {factorH: number, factorV: number} //缩放因子
 }
 

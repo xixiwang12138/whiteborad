@@ -65,6 +65,30 @@ export async function joinBoard(boardId: string):Promise<WhiteBoard> {
     return DataLoader.load(WhiteBoard, res.board);
 }
 
+export async function getCreatedBoards():Promise<any> {
+    let res = await request.get<any, {boards:WhiteBoard[]}>(
+        "/api/board/boards"
+    );
+    return res.boards
+}
+
+
+export async function getJoinedBoards():Promise<any> {
+    let res = await request.get<any, {boards:WhiteBoard[]}>(
+        "/api/board/boards/joined"
+    );
+    return res.boards
+}
+
+
+
+
+
+
+
+
+
+
 type ExportFileResp = {
     pageId:string
 }

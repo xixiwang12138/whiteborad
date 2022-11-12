@@ -20,11 +20,12 @@ class BaseColumn extends React.Component {
 
     async componentDidMount() {
         await UserManager.syncUser();
-        this.setState({avatar: await UserManager.getAvatar()})
+        this.setState({avatar: await UserManager.getAvatar(), userName:  await UserManager.getUserName()})
     }
 
     private async rename(e: React.MouseEvent<HTMLElement>) {
         await rename(this.state.userName);
+        this.setState({isNameOpen:false})
     }
 
     render() {
@@ -36,7 +37,6 @@ class BaseColumn extends React.Component {
                     </div>
                     <div style={{marginTop:'10px'}}/>
                     <div className="base-name" onClick={() => this.setState({isNameOpen:true})}>
-                        {/*后期加个判断：username是否为空*/}
                         <div className="name" >{this.state.userName}</div>
                         <div className="name-icon">
                             <img src={write}/>
@@ -71,7 +71,7 @@ class BaseColumn extends React.Component {
                        // onOk={() => this.setState({isNameOpen:false})}
                        onCancel={() => this.setState({isNameOpen:false})}
                        footer={
-                           <Button key="copy" onClick={this.rename}>确 认</Button>
+                           <Button key="copy" onClick={this.rename.bind(this)}>确 认</Button>
                        }>
                     {/*<Form.Item name="userName">*/}
                     <Input className="win-form-input" placeholder="请输入昵称" id="username"

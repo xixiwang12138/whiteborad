@@ -1,7 +1,9 @@
 import axios, {AxiosError} from "axios";
 import {message} from "antd";
-
-const host = "http://175.178.81.93:10300"
+// const host = "http://175.178.81.93:10300";
+const host = "http://localhost:10300";
+// const host = "http://192.168.137.17:10300";
+// const host = "http://175.178.81.93:10300"
 // const host = "http://172.21.216.71:10300";
 
 

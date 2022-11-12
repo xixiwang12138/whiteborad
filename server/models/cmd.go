@@ -9,9 +9,9 @@ const (
 	Delete     CmdType = 1
 	Withdraw   CmdType = 2
 	Adjust     CmdType = 3
-	SwitchPage CmdType = 4
-
+	SwitchPage CmdType = 4 //演示模式
 	SwitchMode CmdType = 5
+	LoadPage   CmdType = 6
 )
 
 type ElementKV map[string]any

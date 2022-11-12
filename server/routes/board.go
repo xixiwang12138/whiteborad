@@ -117,7 +117,7 @@ func switchMode(ctx *gin.Context, req *bind.BoardMode) (interface{}, error) {
 		return nil, errors.New("only Board Owner Can Switch Mode")
 	}
 	//广播切换的命令
-	ws.HubMgr.BroadcastCmd(bId, models.NewCmd(models.SwitchMode, strconv.Itoa(int(req.Mode)), bId, uId), uId)
+	ws.HubMgr.BroadcastCmd(bId, models.NewCmd(models.SwitchMode, strconv.Itoa(int(req.Mode)), bId, uId)) //包括发送者自己
 
 	err = dao.WhiteBoardRepo.UpdateFiled(bId, map[string]interface{}{
 		"mode": req.Mode,

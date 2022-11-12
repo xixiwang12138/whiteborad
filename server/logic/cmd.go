@@ -12,7 +12,26 @@ import (
 	"server/ws"
 )
 
-var actuallyHandlers = []func(cmd *models.Cmd) error{AddCmd, DeleteCmd, WithdrawCmd, AdjustCmd, SwitchPageCmd}
+var actuallyHandlers = []func(cmd *models.Cmd) error{AddCmd, DeleteCmd, WithdrawCmd, AdjustCmd, SwitchPageCmd, SwitchMode, LoadPageCmd}
+
+func LoadPageCmd(cmd *models.Cmd) error {
+	pageId := cmd.PageId //需要加载pageId的内容
+	pageVo, err := dao.PageRepo.GetPageVo(pageId)
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+	err = ws.HubMgr.SendLoadMessage(cmd.BoardId, cmd.Creator, pageVo)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SwitchMode 不会接受到的cmd类型
+func SwitchMode(cmd *models.Cmd) error {
+	return nil
+}
 
 func init() {
 	ws.CmdHandler = CmdHandler
@@ -29,6 +48,9 @@ func CmdHandler(o *models.Cmd, boardId string, userId string) error {
 				log.Printf(cts.ErrorFormat, r)
 			}
 		}()
+		if o.Type == models.LoadPage { //load 命令不需要转发
+			return
+		}
 		ws.HubMgr.BroadcastCmd(boardId, o, userId) //注意不给发送者转发
 	}()
 
@@ -98,5 +120,6 @@ func AdjustCmd(cmd *models.Cmd) error {
 
 // SwitchPageCmd 切换页面
 func SwitchPageCmd(cmd *models.Cmd) error {
+	//judge cmd creator is owner or not
 	return nil
 }

@@ -161,6 +161,17 @@ func (h *HubManager) BroadcastCmd(boardId string, cmd *models.Cmd, exceptUser ..
 	}, exceptUser...)
 }
 
+func (h *HubManager) SendLoadMessage(boardId string, userId string, loadData *models.PageVO) error {
+	//获取hub
+	hub := h.GetHub(boardId)
+	userConnection := hub.GetUserConnection(userId)
+	err := userConnection.SendLoadingData(loadData)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 //endregion
 
 //region Hub部分

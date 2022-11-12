@@ -81,13 +81,14 @@ export async function getJoinedBoards():Promise<any> {
 }
 
 type ExportFileResp = {
-    pageId:string
+    name: string
+    data: string
 }
 
 export async function exportFile(pageId: string) {
-    return request.post<any, ExportFileResp>(
-        " /api/page/export",
-        {pageId}
+    return request.get<any, ExportFileResp>(
+        "/api/page/export",
+        {params: {pageId}}
     );
 }
 

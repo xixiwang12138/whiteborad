@@ -153,9 +153,6 @@ function MyBoard(){
 
 
     refreshList().then();
-    console.log("allListDiv:",allListDiv)
-    console.log("createListDiv:",creatListDiv)
-    console.log("joinListDiv:",joinListDiv)
     const AllBoard = <div className="board-container"> {allListDiv}</div>
     const MyCreate = <div className="board-container"> {creatListDiv}</div>
     const MyJoin = <div className="board-container"> {joinListDiv}</div>

@@ -10,6 +10,7 @@ import attribute from "../../icon/属性选中.svg";
 import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, message} from "antd";
 import {NavLink} from 'react-router-dom';
 import {UserManager} from "../../../../UserManager";
+import {exportFile} from "../../../../api/api";
 class BaseRowProps {
     boardInfo:{id:string, name:string, defaultPage:string}
     memberList:{id:string, name:string, avatar:string}[]
@@ -44,7 +45,14 @@ class BaseRow extends React.Component<BaseRowProps> {
         this.setState({isInviteOpen:false})
     }
     private async handleExportFile(e:React.MouseEvent<HTMLElement>){
-        // await exportFile(this.props.boardInfo.defaultPage)
+        const pageId = "1591247059763789825"
+        const resp = await exportFile(pageId)
+        const url = window.URL.createObjectURL(new Blob([resp.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', resp.name);
+        document.body.appendChild(link);
+        link.click();
         console.log("导出文件")
         this.setState({isExportOpen : false})
     }
@@ -146,7 +154,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                        onCancel={() => this.setState({isExportOpen : false})}
                        footer={<div style={{width: "fit-content", height: "fit-content",
                        display: "flex", flexDirection: "row", alignItems: "center"}}>
-                           <Button key="exportFile" onClick={this.handleExportFile}>导出文件</Button>
+                           <Button key="exportFile" onClick={this.handleExportFile.bind(this)}>导出文件</Button>
                            <Button key="exportImage" onClick={this.handleExportImage}>导出图片</Button>
                        </div>
                 }>

@@ -2,7 +2,7 @@ import React from "react";
 import "./index.css";
 import BaseRow from "./components/BaseRow";
 import ToolList, {IOpListener, SecondLevelType} from "./components/ToolList";
-import WindowToolBar from "./components/WindowToolBar";
+import WindowToolBar, {ElementSum, ToolReactor} from "./components/WindowToolBar";
 import {WhiteBoardApp} from "./app/WhiteBoardApp";
 import {ToolType} from "./app/tools/Tool";
 import {DrawingScene} from "./app/DrawingScene";
@@ -10,13 +10,14 @@ import {joinBoard} from "../../api/api";
 import {RouteComponentProps} from "react-router-dom";
 import {UserManager} from "../../UserManager";
 import {message} from "antd";
+import {ElementType} from "./app/element/ElementBase";
 
 
 export interface WhiteBoardRouteParam {
     id:string
 }
 
-class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRouteParam>> implements IOpListener {
+class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRouteParam>> implements IOpListener, ToolReactor {
     private app!:WhiteBoardApp;
 
     private root!:HTMLElement;
@@ -49,7 +50,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
                 <canvas style={{width: "100%", height: "100%", backgroundColor:"gray"}} id="show-canvas"/>
             </div>
             {/*TODO 完善propSetter 和 toolOrElemType*/}
-            <WindowToolBar OnWinTypeSelected={this.selectTool.bind(this)}  propSetter={null} toolOrElemType={null}/>
+            <WindowToolBar OnWinTypeSelected={this.selectTool.bind(this)}  propSetter={this} toolOrElemType={ElementType.generic}/>
         </div>
     }
 
@@ -198,6 +199,19 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
     onRedo(){this.app?.redo();}
 
     onUndo(){this.app?.undo();}
+
+    public setProps(prop: keyof ElementSum, value: any) {
+        console.log(prop)
+        console.log(value)
+    }
+
+    public copy() {
+
+    }
+
+    public delete() {
+
+    }
 
 }
 

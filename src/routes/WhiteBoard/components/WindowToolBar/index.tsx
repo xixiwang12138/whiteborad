@@ -98,30 +98,30 @@ class WinToolList extends React.Component<WinTypeListProp> {
 
     //1.black 2.#3E6182 3.#956AA4 4.#A46A6A 5.#609A7E 6.#CE6464
     private colorMap = {
-        '1': "#000000",
-        '2': "#3E6182",
-        '3': "#956AA4",
-        '4': "#A46A6A",
-        '5': "#609A7E",
-        '6': "#CE6464",
+        '0': "#000000",
+        '1': "#3E6182",
+        '2': "#956AA4",
+        '3': "#A46A6A",
+        '4': "#609A7E",
+        '5': "#CE6464",
     }
 
     private widthMap = {
-        '1': 0,
-        '2': 0,
-        '3': 0,
+        '0': 20,
+        '1': 40,
+        '2': 60,
     }
 
     private sizeMap = {
-        '1': 0,
-        '2': 0,
-        '3': 0,
+        '0': 100,
+        '1': 200,
+        '2': 300,
     }
 
     private textAlignMap = {
-        '1': this.textFics[1][1][0],
-        '2': this.textFics[1][1][1],
-        '3': this.textFics[1][1][2],
+        '0': this.textFics[1][1][0],
+        '1': this.textFics[1][1][1],
+        '2': this.textFics[1][1][2],
     }
 
 
@@ -168,13 +168,13 @@ class WinToolList extends React.Component<WinTypeListProp> {
         //填充颜色
         const clickFillColor = (e: React.MouseEvent<HTMLDivElement>) => {
             const selectedColorIdx = e.currentTarget.id
-            this.propSetter.setProps("strokeWidth", this.colorMap[selectedColorIdx]);
+            this.propSetter.setProps("backgroundColor", this.colorMap[selectedColorIdx]);
         }
 
         //边框颜色
         const clickLineColor = (e: React.MouseEvent<HTMLDivElement>) => {
             const selectedColorIdx = e.currentTarget.id
-            this.propSetter.setProps("strokeWidth", this.colorMap[selectedColorIdx]);
+            this.propSetter.setProps("strokeColor", this.colorMap[selectedColorIdx]);
         }
 
 
@@ -187,7 +187,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
         //字体大小
         const clickFontSize = (e: React.MouseEvent<HTMLDivElement>) => {
             const selectedId = e.currentTarget.id
-            this.propSetter.setProps("fontSize", this.widthMap[selectedId])
+            this.propSetter.setProps("fontSize", this.sizeMap[selectedId])
         }
 
         //文字样式——————TODO 待定
@@ -206,8 +206,8 @@ class WinToolList extends React.Component<WinTypeListProp> {
         const clickOperation = (e: React.MouseEvent<HTMLDivElement>) => {
             const selectedId = e.currentTarget.id
             switch (selectedId) {
-                case '1': this.propSetter.copy();break;
-                case '2': this.propSetter.delete();break;
+                case '0': this.propSetter.copy();break;
+                case '1': this.propSetter.delete();break;
                 default: throw new Error("no supported operation");
             }
         }
@@ -230,6 +230,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
             }
         }
 
+        freshDisplay()
 
 
         const str = (i: number)  => { return i + ""}
@@ -241,7 +242,6 @@ class WinToolList extends React.Component<WinTypeListProp> {
                 <div className="single-box-contain">
                     <div className="single-box-contain">{
                         this.colorGroups.map((t,i) => {
-
                             return <div key={i} id={str(i)} className="color-box" onClick={(e) => clickFillColor(e)}>{
                                 t.map(s =>
                                     <img style={{width: "30px", height: "30px"}} src={require(`../../icon/${s}.svg`)}/>)

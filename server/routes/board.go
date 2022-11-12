@@ -22,6 +22,20 @@ func registerBoard(g *gin.RouterGroup) {
 	g.POST("/join", Handler(joinBoard))
 
 	g.POST("/switchMode", Handler(switchMode))
+	g.GET("/pages", Handler(getPages))
+}
+
+// getCreatedBoards 查询用户创建的所有的Board
+func getPages(_ *gin.Context, req *bind.BoardReq) (interface{}, error) {
+	pages, err := dao.PageRepo.GetBoardPages(req.BoardId)
+	if err != nil {
+		return nil, err
+	}
+	return struct {
+		Pages interface{} `json:"pages"`
+	}{
+		pages,
+	}, nil
 }
 
 // getCreatedBoards 查询用户创建的所有的Board

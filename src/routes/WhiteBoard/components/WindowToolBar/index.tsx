@@ -93,7 +93,16 @@ class WinToolList extends React.Component<WinTypeListProp> {
     }
 
 
+
     render() {
+        const clickColor = (e: React.MouseEvent<HTMLDivElement>) => {
+            const selectedColorIdx = e.currentTarget.id
+            console.log(selectedColorIdx)
+
+            // console.log(e)
+        }
+
+
         return <div className="win-tool-bar">
             {/*缺个判断类型：isGeneric || isPen || isText --> display为flex或none */}
             <div className="single-box" style={{display: false ? "flex" : "none"}}>
@@ -101,7 +110,8 @@ class WinToolList extends React.Component<WinTypeListProp> {
                 <div className="single-box-contain">
                     <div className="single-box-contain">{
                         this.colorGroups.map((t,i) => {
-                            return <div key={i} className="color-box">{
+
+                            return <div key={i} className="color-box" onClick={(e) => clickColor(e)}>{
                                 t.map(s =>
                                     <img style={{width: "30px", height: "30px"}} src={require(`../../icon/${s}.svg`)}/>)
                             }</div>
@@ -113,7 +123,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
                 <div className="single-box-title">描边</div>
                 <div className="single-box-contain">{
                     this.colorGroups.map((t,i) => {
-                        return <div key={i} className="color-box">{
+                        return <div key={i} className="color-box" onClick={(e) => clickColor(e)} >{
                             t.map(s =>
                             <img style={{width: "30px", height: "30px"}} src={require(`../../icon/${s}.svg`)}/>)
                         }</div>
@@ -122,7 +132,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
             </div>
             <div className="single-box">
                 <div className="single-box-title">描边宽度</div>
-                <div className="single-box-contain">{
+                <div className="single-box-contain" >{
                     this.widthGroups.map((t,i) => {
                         return <div key={i} className="border-box">{
                             t.map(s =>

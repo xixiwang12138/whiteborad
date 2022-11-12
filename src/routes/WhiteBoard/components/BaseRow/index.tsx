@@ -2,8 +2,8 @@ import React, {useEffect, useState} from "react";
 import "./index.css";
 import "../../../../App.css";
 import home from "../../icon/home.svg";
-import file from "../../icon/导入文件.svg";
-import ex from "../../icon/导出.svg";
+import file from "../../icon/topimport.svg";
+import ex from "../../icon/topexport.svg";
 import allDelete from "../../icon/一键清空.svg";
 
 // import list from "../../icon/属性-收起.svg"; 这个用不了，先用下面的顶替
@@ -12,8 +12,6 @@ import attribute from "../../icon/属性选中.svg";
 import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, message} from "antd";
 import {NavLink} from 'react-router-dom';
 import {UserManager} from "../../../../UserManager";
-import {exportFile} from "../../../../api/api";
-
 class BaseRowProps {
     boardInfo:{id:string, name:string}
     memberList:{id:string, name:string, avatar:string}[]

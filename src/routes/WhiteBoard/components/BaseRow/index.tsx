@@ -71,6 +71,10 @@ class BaseRow extends React.Component<BaseRowProps> {
         this.setState({isExportOpen : false})
     }
 
+    private async handleImportFile(e:React.MouseEvent<HTMLElement>){
+        document.getElementById("open").click();
+    }
+
     private propertyTool() {
         return (
             <div>
@@ -132,7 +136,9 @@ class BaseRow extends React.Component<BaseRowProps> {
                         </div>
                         <div className="right2">
                             <div className="import-icon" title="导入">
-                                <img src={file}/>
+                                <img src={file} onClick={this.handleImportFile}/>
+                                {/*下面的input组件其实就是个工具*/}
+                                <input type="file" name="filename" id="open" style={{display: "none"}}/>
                             </div>
                             <div className="export-icon" title="导出">
                                 <img src={ex} onClick={()=>this.setState({isExportOpen:true})}/>

@@ -4,11 +4,13 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
-	"server/common/utils"
+	"github.com/pkg/errors"
 	"server/dao"
 	"server/logic"
 	"server/models"
 	"server/models/bind"
+	"server/ws"
+	"strconv"
 	"time"
 )
 
@@ -16,11 +18,41 @@ func registerPage(g *gin.RouterGroup) {
 	g.GET("", Handler(GetPageVo))
 	g.POST("", Handler(CreatPage))
 	g.DELETE("", Handler(DeletePage))
-	g.GET("/export", ExportPage)
+	g.GET("/export", NoParamHandler(ExportPage))
 }
 
 func CreatPage(ctx *gin.Context, req *bind.NewPageReq) (any, error) {
-	_, err := dao.PageRepo.CreatePage(req.BoardId, req.Name)
+	userId := GetUser(ctx)
+	pageId, err := dao.PageRepo.CreatePage(req.BoardId, req.Name)
+	if req.Data != "" {
+		//新建一个有数据的页面，进行两次解码
+		decode, err := base64Decode([]byte(req.Data))
+		if err != nil {
+			return nil, errors.Wrap(err, "invalid content")
+		}
+		buf, err := base64Decode(decode)
+		if err != nil {
+			return nil, errors.Wrap(err, "invalid content")
+		}
+		elements := make([]models.ElementKV, 0)
+		err = json.Unmarshal(buf, &elements)
+		if err != nil {
+			return nil, errors.Wrap(err, "invalid content")
+		}
+
+		page, err := dao.PageRepo.FindByID(pageId)
+		if err != nil {
+			return nil, err
+		}
+		vo := &models.PageVO{
+			Page:     page,
+			Elements: elements,
+		}
+		err = ws.HubMgr.SendLoadMessage(req.BoardId, userId, vo)
+		if err != nil {
+			return nil, err
+		}
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -47,37 +79,23 @@ func GetPageVo(ctx *gin.Context, req *bind.PageReq) (any, error) {
 	}, nil
 }
 
-const filePath = "/home/data/"
+const filePath = "D://"
 
-func ExportPage(ctx *gin.Context) {
-	req := &bind.PageReq{}
-	err := ctx.ShouldBind(req)
-	if err != nil {
-		return
-	}
-	page, err := logic.LoadPage(req.PageId)
+func ExportPage(ctx *gin.Context) (any, error) {
+	pageId := ctx.Query("pageId")
+
+	page, err := logic.LoadPage(pageId)
 	data := page.Elements
 	bytes, err := json.Marshal(data)
 	if err != nil {
-		ctx.JSON(500, "invalid page content")
-		return
+		return nil, err
 	}
 	fileData := base64Encode(base64Encode(bytes))
-	name := page.DisplayName + time.Now().String() + "_export.wb"
-
-	err = utils.WriteFile(filePath+name, fileData)
-	if err != nil {
-		ctx.JSON(500, "some error occur")
-		return
-	}
-
-	ctx.Header("Content-Type", "application/octet-stream")
-	//强制浏览器下载
-	ctx.Header("Content-Disposition", "attachment; filename="+name)
-	//浏览器下载或预览
-	ctx.Header("Content-Disposition", "inline;filename="+name)
-	ctx.Header("Content-Transfer-Encoding", "binary")
-	ctx.File(filePath + name)
+	name := page.DisplayName + "_" + strconv.Itoa(int(time.Now().UnixMilli())) + "_export.wb"
+	return struct {
+		Name string `json:"name,omitempty"`
+		Data string `json:"data"`
+	}{name, string(fileData)}, nil
 }
 
 func base64Encode(src []byte) []byte {

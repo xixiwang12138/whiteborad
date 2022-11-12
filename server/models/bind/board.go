@@ -24,4 +24,5 @@ type BoardMode struct {
 type NewPageReq struct {
 	BoardId string `json:"boardId"`
 	Name    string `json:"name"`
+	Data    string `json:"pageData"`
 }

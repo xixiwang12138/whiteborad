@@ -16,7 +16,7 @@ var actuallyHandlers = []func(cmd *models.Cmd) error{AddCmd, DeleteCmd, Withdraw
 
 func LoadPageCmd(cmd *models.Cmd) error {
 	pageId := cmd.PageId //需要加载pageId的内容
-	pageVo, err := dao.PageRepo.GetPageVo(pageId)
+	pageVo, err := LoadPage(pageId)
 	if err != nil {
 		log.Println(err)
 		return err

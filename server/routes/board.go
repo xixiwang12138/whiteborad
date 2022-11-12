@@ -26,8 +26,9 @@ func registerBoard(g *gin.RouterGroup) {
 }
 
 // getCreatedBoards 查询用户创建的所有的Board
-func getPages(_ *gin.Context, req *bind.BoardReq) (interface{}, error) {
-	pages, err := dao.PageRepo.GetBoardPages(req.BoardId)
+func getPages(ctx *gin.Context, req *bind.BoardReq) (interface{}, error) {
+	bId := ctx.Query("boardId")
+	pages, err := dao.PageRepo.GetBoardPages(bId)
 	if err != nil {
 		return nil, err
 	}

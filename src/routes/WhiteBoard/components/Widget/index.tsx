@@ -19,7 +19,7 @@ export type ScaleType = "enlarge" | "small";
 export interface IWidget {
     onScale(t:ScaleType):number;
     onSwitchPage(pageId:string):void;
-    onCreatePage(name:string):void;
+    onCreatePage(name:string):Promise<Page[]>;
 }
 
 class WidgetProps {
@@ -50,16 +50,16 @@ class Widget extends React.Component<WidgetProps> {
     }
 
     private openCreatePageWindow() {
-        this.setState({creatingPage: true, newPageName: `页面${this.state.otherPages.length + 1}`})
+        this.setState({creatingPage: true, newPageName: `页面${this.state.otherPages.length + 2}`})
     }
 
     private async createPage() {
-        this.props.wCtrl.onCreatePage(this.state.newPageName);
-        let res = await getPages(this.props.boardId);
+        let res  = await this.props.wCtrl.onCreatePage(this.state.newPageName);
+        let curPage = res.splice(res.length - 1, 1)[0];
         this.setState({
             expandPage: false,
             creatingPage: false,
-            curPage: res.splice(res.length - 1, 1)[0],
+            curPage: curPage,
         })
         this.setState({otherPages: res});
     }

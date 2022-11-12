@@ -6,19 +6,20 @@ import WindowToolBar, {ElementSum, ToolReactor} from "./components/WindowToolBar
 import {WhiteBoardApp} from "./app/WhiteBoardApp";
 import {ToolType} from "./app/tools/Tool";
 import {DrawingScene} from "./app/DrawingScene";
-import {createPage, joinBoard} from "../../api/api";
+import {joinBoard} from "../../api/api";
 import {RouteComponentProps} from "react-router-dom";
 import {UserManager} from "../../UserManager";
 import {message} from "antd";
 
 import {Page} from "./app/data/Page";
 import Widget, {IWidget, ScaleType} from "./components/Widget";
+import {ElementType} from "./app/element/ElementBase";
 
 export interface WhiteBoardRouteParam {
     id:string
 }
 
-class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRouteParam>> implements IOpListener, ToolReactor {
+class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRouteParam>> implements IOpListener, ToolReactor, IWidget {
     private app!:WhiteBoardApp;
 
     private root!:HTMLElement;

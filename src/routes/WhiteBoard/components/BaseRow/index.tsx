@@ -13,7 +13,7 @@ import {UserManager} from "../../../../UserManager";
 import {exportFile} from "../../../../api/api";
 
 class BaseRowProps {
-    boardInfo:{id:string, name:string, defaultPage:string}
+    boardInfo:{id:string, name:string}
     memberList:{id:string, name:string, avatar:string}[]
 }
 

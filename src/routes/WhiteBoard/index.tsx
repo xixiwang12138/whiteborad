@@ -6,12 +6,13 @@ import WindowToolBar, {ElementSum, ToolReactor} from "./components/WindowToolBar
 import {WhiteBoardApp} from "./app/WhiteBoardApp";
 import {ToolType} from "./app/tools/Tool";
 import {DrawingScene} from "./app/DrawingScene";
-import {joinBoard} from "../../api/api";
+import {createPage, joinBoard} from "../../api/api";
 import {RouteComponentProps} from "react-router-dom";
 import {UserManager} from "../../UserManager";
 import {message} from "antd";
-import {ElementType} from "./app/element/ElementBase";
 
+import {Page} from "./app/data/Page";
+import Widget, {IWidget, ScaleType} from "./components/Widget";
 
 export interface WhiteBoardRouteParam {
     id:string
@@ -36,19 +37,21 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
     state = {
         boardInfo: {
             id: "白板id",
-            name:"白板名字",
-            defaultPage:"",
+            name:"白板名字"
         },
+        scale:1,
+        pages: [] as Partial<Page>[],
         memberList:[],
     }
 
     render() {
         return <div className="board">
-            <BaseRow boardInfo={this.state.boardInfo} memberList={this.state.memberList} />
+            <BaseRow boardInfo={this.state.boardInfo} memberList={this.state.memberList}/>
+            <Widget boardId={this.state.boardInfo.id} wCtrl={this} scale={this.state.scale}/>
             <ToolList onToolSelected={this.selectTool.bind(this)} opListener={this} />
             <div id="canvas-root" style={{width:"100%", height:"100%", overflow:"hidden"}}>
                 <div id={"text-editor-container"}/>
-                <canvas style={{width: "100%", height: "100%", backgroundColor:"gray"}} id="show-canvas"/>
+                <canvas style={{width: "100%", height: "100%", backgroundColor:"#F2F0F1"}} id="show-canvas"/>
             </div>
             {/*TODO 完善propSetter 和 toolOrElemType*/}
             <WindowToolBar OnWinTypeSelected={this.selectTool.bind(this)}  propSetter={this} toolOrElemType={ElementType.generic}/>
@@ -95,17 +98,15 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
             e.preventDefault();
             e.stopPropagation();
             if (this.refactoringScene) {
-                if(this.app?.zoomScene(-Math.sign(e.deltaY) * 0.05, e.x, e.y)){
-                    this.app?.refreshScene();
-                    // TODO UI同步到缩放+-按钮上
-                }
+                this.onScale(Math.sign(e.deltaY) > 0 ? "small" : "enlarge");
             }}, {passive:false});
     }
 
     private async setupApp() {
         let board = await joinBoard(this.props.match.params.id);
         this.setState({
-            boardInfo: {name:board.name, id:board.id}
+            boardInfo: {name:board.name, id:board.id},
+            pages: board.pages,
         });
         this.app = new WhiteBoardApp(board);
         this.app.setup();
@@ -163,7 +164,9 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
                 this.app?.dispatchMouseEvent(e, true);
             }
         } else {
-            this.app?.dispatchMouseEvent(e, false);
+            if(!this.refactoringScene) {
+                this.app?.dispatchMouseEvent(e, false);
+            }
         }
     }
 
@@ -201,6 +204,26 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
 
     onUndo(){this.app?.undo();}
 
+    public async onCreatePage(name:string):Promise<Page[]> {
+        let pages = await this.app.createPage(name);
+        this.setState({ pages });
+        return pages;
+    }
+
+    public async onSwitchPage(pageId:string) {
+        this.app.switchPage(pageId);
+    }
+
+    public onScale(t:ScaleType):number {
+        let res = this.app?.zoomScene(t === "enlarge" ? 0.05: -0.05,
+            this.root.clientWidth / 2, this.root.clientHeight / 2);
+        if(res !== -1) {
+            this.app.refreshScene();
+            this.setState({scale:res})
+        }
+        return res;
+    }
+
     public setProps(prop: keyof ElementSum, value: any) {
         console.log(prop)
         console.log(value)
@@ -213,15 +236,5 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
 
 }
 
-// function WhiteBoard() {
-//     return (
-//         <div className="board">
-//             <BaseRow />
-//             <ToolList onToolSelected={(e,a)=>{console.log(e,a)}}/>
-//             {/*<WindowInvite />*/}
-//             <WindowToolBar />
-//         </div>
-//     )
-// }
 
 export default WhiteBoard;

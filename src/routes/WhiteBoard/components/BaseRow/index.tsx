@@ -12,7 +12,7 @@ import {NavLink} from 'react-router-dom';
 import {UserManager} from "../../../../UserManager";
 import {exportFile} from "../../../../api/api";
 class BaseRowProps {
-    boardInfo:{id:string, name:string, defaultPage:string}
+    boardInfo:{id:string, name:string}
     memberList:{id:string, name:string, avatar:string}[]
 }
 
@@ -170,27 +170,6 @@ class BaseRow extends React.Component<BaseRowProps> {
                     {/*    </Radio.Group>*/}
                     {/*</div>*/}
                 </Modal>
-
-                <div className="base-row2">
-                    <div className="box" style={{left: "20px"}}>
-                        <div className="icon" style={{marginRight:"10px"}}>
-                            <img src={require("../../icon/reduce.png")} />
-                        </div>
-                        <div className="opacity">56%</div>
-                        <div className="icon" style={{marginLeft:"10px"}}>
-                            <img src={require("../../icon/plus.png")} />
-                        </div>
-                    </div>
-                    <div className="box" style={{right: "20px"}}>
-                        <div>页面1</div>
-                        <div className="icon" style={{marginLeft:"10px"}}>
-                            <img src={require("../../icon/plus.png")} />
-                        </div>
-                        {/*<Dropdown trigger={['click']}>*/}
-                        {/*    页面1 */}
-                        {/*</Dropdown>*/}
-                    </div>
-                </div>
             </div>
         )
     }

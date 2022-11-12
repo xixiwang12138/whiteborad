@@ -1,8 +1,8 @@
 import axios, {AxiosError} from "axios";
 import {message} from "antd";
 // const host = "http://175.178.81.93:10300";
-const host = "http://localhost:10300";
-// const host = "http://192.168.137.17:10300";
+// const host = "http://localhost:10300";
+const host = "http://192.168.137.17:10300";
 // const host = "http://175.178.81.93:10300"
 // const host = "http://172.21.216.71:10300";
 
@@ -35,7 +35,7 @@ request.interceptors.request.use((c)=>{
 });
 
 request.interceptors.response.use((res)=> {
-    console.log("打印：",res.data.data)
+    // console.log("打印：",res.data.data)
     return res.data.data;
 },(e:AxiosError)=> {
     const resp = e.response?.data as ErrorResponse;

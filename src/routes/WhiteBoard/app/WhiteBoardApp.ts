@@ -25,6 +25,8 @@ import {UserInfo, UserManager} from "../../../UserManager";
 import {message} from "antd";
 import {PictureBook} from "./PictureBook";
 import {ElementBase} from "./element/ElementBase";
+import {createPage} from "../../../api/api";
+import {Page} from "./data/Page";
 
 export type OnMember = (user:UserInfo, type:MemberMessageType) => void;
 
@@ -103,11 +105,6 @@ export class WhiteBoardApp implements IWebsocket {
                 .setUser(UserManager.getId()).setElement(e)
                 .setPayload(p).build();
             this.cmdTracker.do(cmd);
-            // let elem = this.book.curPage.findElemById(cmd.o);
-            // if(elem) {
-            //     let adjust = JSON.parse(cmd.payload) as CmdPayloads[CmdType.Adjust];
-            //     this.updateElemState(elem, adjust);
-            // } 工具已经执行过了
             this.wsClient.sendCmd(cmd);
         });
         this.toolBox.addOnModifyListener(CmdType.Delete, (t, e) => {
@@ -167,12 +164,12 @@ export class WhiteBoardApp implements IWebsocket {
     }
 
     // 返回是否成功缩放
-    public zoomScene(dScale:number, sx:number, sy:number):boolean {
+    public zoomScene(dScale:number, sx:number, sy:number):number {
         if((dScale < 0 && this.scene.scale >= 0.2) || (dScale > 0 && this.scene.scale <= 2)) {
             this.scene.zoom(dScale, sx, sy);
-            return true;
+            return this.scene.scale;
         }
-        return false;
+        return -1;
     }
 
     public translateScene(dx:number, dy:number) {
@@ -225,56 +222,6 @@ export class WhiteBoardApp implements IWebsocket {
         }
     }
 
-    // /**
-    //  *  反转元素的存在状态, 只对当前页面进行
-    //  */
-    // public reverseElemExist(elem:ElementBase | null) {
-    //     if(elem) {
-    //         if(elem.isDeleted) {
-    //             elem.isDeleted = false;
-    //             this.scene.restoreElem(elem);
-    //         } else {
-    //             elem.isDeleted = true;
-    //             this.scene.refreshBackground();
-    //         }
-    //     } else {
-    //         console.error(`elem not found`);
-    //     }
-    // }
-
-    // /**
-    //  *  删除元素，注意删除已经被其他人删除的元素的情况
-    //  */
-    // public deleteElem(elem:ElementBase | null) {
-    //     if(elem && !elem.isDeleted) {
-    //         elem.isDeleted = true;
-    //         this.scene.refreshBackground();
-    //     } else {
-    //         console.error(`elem not found`);
-    //     }
-    // }
-
-    // public restoreElem(elem:ElementBase | null) {
-    //     if(elem && elem.isDeleted) {
-    //         elem.isDeleted = false;
-    //         this.scene.addElem(elem);
-    //     } else {
-    //         console.error(`elem not found`);
-    //     }
-    // }
-
-    // public updateElemState(elem:ElementBase, adjust:CmdPayloads[CmdType.Adjust], backTrace:boolean = false) {
-    //     if(elem) {
-    //         Object.keys(adjust).forEach(k => {
-    //             if(backTrace) elem[k] = adjust[k][0];
-    //             else elem[k] = adjust[k][1];
-    //         });
-    //         this.scene.refreshBackground();
-    //     } else {
-    //         console.error(`elem not found`);
-    //     }
-    // }
-
     private handleCmdMessage(cmd:Cmd<any>) {
         switch (cmd.type) {
             case CmdType.Add: this.addElemByCmd(cmd); break;
@@ -323,6 +270,30 @@ export class WhiteBoardApp implements IWebsocket {
 
     public usingSelection() {
         return this.toolBox.curTool.type === "selection";
+    }
+
+    public switchPage(pageId:string) {
+        // 先尝试从本地缓存读取
+        if(this.book.switchPage(pageId)) {
+            this.scene.renderPage(this.book.curPage);
+        } else {
+            let sCmd = new CmdBuilder<CmdType.LoadPage>()
+                .setType(CmdType.LoadPage).setUser(UserManager.getId())
+                .setPage(this.whiteBoard.id, pageId).build();
+            this.wsClient.sendCmd(sCmd);
+        }
+        // 切换页面后注意取消选中和scene的激活元素
+        (this.toolBox.getTool("selection") as Selection).unSelectedCurElem();
+        this.scene.deactivateElem();
+    }
+
+    public async createPage(name:string):Promise<Page[]> {
+        let pages = await createPage(this.whiteBoard.id, name);
+        const l = pages[pages.length - 1];
+        message.success("创建白板成功，正在切换");
+        this.book.addPage(l); this.book.switchPage(l.id);
+        this.scene.renderPage(this.book.curPage);
+        return pages;
     }
 
 }

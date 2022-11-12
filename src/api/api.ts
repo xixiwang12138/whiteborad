@@ -3,6 +3,7 @@ import request from "../utils/request";
 import {WhiteBoard} from "../routes/WhiteBoard/app/data/WhiteBoard";
 import {DataLoader} from "../utils/data/DataLoader";
 import {UserInfo} from "../UserManager";
+import {Page} from "../routes/WhiteBoard/app/data/Page";
 
 export type LoginForm = {
     phone: string;
@@ -62,7 +63,9 @@ export async function joinBoard(boardId: string):Promise<WhiteBoard> {
         "/api/board/join",
         {boardId}
     );
-    return DataLoader.load(WhiteBoard, res.board);
+    let board = DataLoader.load(WhiteBoard, res.board);
+    board.pages = board.pages.map(r => Object.assign(new Page(), r));
+    return board;
 }
 
 export async function getCreatedBoards():Promise<any> {
@@ -78,6 +81,23 @@ export async function getJoinedBoards():Promise<any> {
         "/api/board/boards/joined"
     );
     return res.boards
+}
+
+export async function createPage(boardId:string, name:string):Promise<Page[]> {
+    let res = await request.post<any, {pages:Page[]}>(
+        "/api/page",{boardId, name}
+    );
+    return res.pages.map(r => Object.assign(new Page(), r));
+}
+
+/**
+ * 获取所有页面的概要信息
+ */
+export async function getPages(boardId:string):Promise<Page[]> {
+    let res = await request.get<any, {pages:Page[]}>(
+        `/api/board/pages?boardId=${boardId}`
+    );
+    return res.pages.map(r => Object.assign(new Page(), r));
 }
 
 type ExportFileResp = {

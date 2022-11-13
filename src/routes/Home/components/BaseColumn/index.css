@@ -1,6 +1,6 @@
 .base-column{
     height: 100%;
-    width: 20%;
+    width: 9%;
     position: absolute;
     top: 0;
     left: 0;
@@ -44,6 +44,7 @@
     justify-content: space-between;
     cursor: pointer;
     /*background-color: white;*/
+    font-family: PingFangSC-Regular, sans-serif;
 }
 .name {
     height: 20px;
@@ -77,6 +78,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-family: PingFangSC-Regular, sans-serif;
 }
 .bottom-item {
     width: 100px;

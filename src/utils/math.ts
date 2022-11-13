@@ -60,3 +60,7 @@ export class ScaleUtil {
 
 }
 
+export function randomPick<T>(arr: T[]) {
+    const randomIdx = Math.floor(Math.random()*arr.length)
+    return arr[randomIdx]
+}

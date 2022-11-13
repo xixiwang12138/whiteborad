@@ -1,7 +1,9 @@
 .background {
     height: 100vh;
     width: 100vw;
-    background-color: #FEE3E3;
+    /*background-color: #FEE3E3;*/
+    background-image: url('./image/login.svg');
+    background-size:cover;
 }
 .form {
     position: absolute;

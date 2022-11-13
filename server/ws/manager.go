@@ -86,7 +86,7 @@ func (h *HubManager) EnterHub(boardId string, userId string, conn *websocket.Con
 			return
 		}
 	}
-	
+
 	//添加连接
 	userConnection := NewUserConnection(NewBaseConnection(conn), userId, boardId)
 	hub.AddUser(userConnection)

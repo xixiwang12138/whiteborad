@@ -6,6 +6,7 @@ import {Button, Modal, Input, Form, Popover, Tabs} from "antd";
 import {doCreateBoard, getCreatedBoards, getJoinedBoards} from "../../../../api/api";
 import {useHistory} from "react-router-dom";
 import {WhiteBoard} from "../../../WhiteBoard/app/data/WhiteBoard";
+import {randomPick} from "../../../../utils/math";
 
 const contentStyle: React.CSSProperties = {
     height: "300px",
@@ -18,6 +19,12 @@ const contentStyle: React.CSSProperties = {
 
 function MyBoard(){
 
+    const bkColor = ["#DFCDCD", "#DFD6CD", "#DBDFCD",
+        "#DFD6CD", "#D6CDDF", "#CDDFD5",
+        "#D2DFCD", "#CDCFDF", "#DFDFCD",
+        "#DFCDD8", "#CDD7DF", "#CDD0DF"
+    ]
+
     const tool = (
         <svg width="20" height="20" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2.86111 14.2266C3.51322 14.2266 4.13862 13.9675 4.59973 13.5064C5.06084 13.0453 5.31989 12.4199 5.31989 11.7678C5.31989 11.1157 5.06084 10.4903 4.59973 10.0292C4.13862 9.56807 3.51322 9.30902 2.86111 9.30902C2.20901 9.30902 1.58361 9.56807 1.1225 10.0292C0.661392 10.4903 0.402344 11.1157 0.402344 11.7678C0.402344 12.4199 0.661392 13.0453 1.1225 13.5064C1.58361 13.9675 2.20901 14.2266 2.86111 14.2266V14.2266Z" fill="black"/>
@@ -26,17 +33,10 @@ function MyBoard(){
         </svg>
     )
     const miniBoard = (boardName: string, bId: string) => {
+        const c = randomPick(bkColor)
         return (
             <div className="mini-board-container" >
-                <div className="mini-board-box" style={{ cursor: "pointer" }} id={bId} onClick={(e)=> handleClickJoin(e)} title={"点击进入白板"}>
-                    {/*<div className="mini-board-tool">*/}
-                    {/*    <Popover placement="top" content={MiniBoardTool} trigger="hover">*/}
-                    {/*        /!*<Button>tool</Button>*!/*/}
-                    {/*        <div className="tool-icon" id="toolbtn">*/}
-                    {/*            {tool}*/}
-                    {/*        </div>*/}
-                    {/*    </Popover>*/}
-                    {/*</div>*/}
+                <div className="mini-board-box"   style={{ cursor: "pointer", backgroundColor: c}} id={bId} onClick={(e)=> handleClickJoin(e)} title={"点击进入白板"}>
                 </div>
                 <div className="mini-board-name">{boardName}</div>
             </div>

@@ -41,7 +41,7 @@ export type CmdPayloads = {
     // [CmdType.Move]: {x: number, y: number}  //移动后的新位置
     [CmdType.Withdraw]: Cmd<CmdType> //需要撤销的操作
     [CmdType.Adjust]: Record<string, [any, any]> //p键值为操作的属性，[0]:before, [1]:after
-    [CmdType.SwitchPage]: {from: number, to: number} //从from页面切换到to页面
+    [CmdType.SwitchPage]: {from: string, to: string} //从from页面切换到to页面
     [CmdType.SwitchMode]: number //新的mode
     [CmdType.LoadPage]: null
     // [CmdType.Scale]: {factorH: number, factorV: number} //缩放因子

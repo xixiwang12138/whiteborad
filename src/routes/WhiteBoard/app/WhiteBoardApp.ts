@@ -29,6 +29,7 @@ import {createPage} from "../../../api/api";
 import {Page} from "./data/Page";
 import {ElementSum, ToolReactor} from "../components/WindowToolBar";
 import {Eraser} from "./tools/Eraser";
+import {BoardMode} from "../index";
 import {InteractEvent} from "./event/InteractEvent";
 
 export type OnMember = (user:UserInfo, type:MemberMessageType) => void;
@@ -76,8 +77,11 @@ export class WhiteBoardApp implements IWebsocket, ToolReactor {
                     this.onMember(memberMsg.payload, "leave")
                 }
                 break;
+
         }
     }
+
+    public onSwitchMode= (mode: BoardMode) => {};
 
     public onMember:OnMember = () => {}
 
@@ -122,7 +126,6 @@ export class WhiteBoardApp implements IWebsocket, ToolReactor {
             // this.deleteElem(e); 工具已经执行过了
             this.wsClient.sendCmd(cmd);
         });
-
     }
 
     public setOnRenderListener(listener:OnRenderListener) {
@@ -244,8 +247,13 @@ export class WhiteBoardApp implements IWebsocket, ToolReactor {
                 const subCmd = DataLoader.load(Cmd, cmd.payload);
                 this.undoCmd(subCmd);
                 break;
-            case CmdType.SwitchPage:
-                throw "待实现";
+            case CmdType.SwitchPage: //只读模式下，白板的创建者发出切换页面，其他人进行处理
+                const res = JSON.parse(cmd.payload) as CmdPayloads[CmdType.SwitchPage]
+                message.success("白板创建者正切换页面").then()
+                this.switchPage(res.to); break;
+            case CmdType.SwitchMode: //收到由创建者发出的切换模式
+                const mode = Number.parseInt(cmd.payload) as BoardMode; //新模式
+                this.onSwitchMode(mode);
         }
     }
 

@@ -7,17 +7,27 @@ import ex from "../../icon/topexport.svg";
 import allDelete from "../../icon/一键清空.svg";
 import type {MenuProps}  from "antd";
 import attribute from "../../icon/属性选中.svg";
-import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, message} from "antd";
+import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, message, Form, Input} from "antd";
 import {NavLink} from 'react-router-dom';
 import {UserManager} from "../../../../UserManager";
+import {createPage, exportFile, switchMode} from "../../../../api/api";
+import { Base64 }  from 'js-base64';
+import reduce from "../../icon/reduce.svg";
+import plus from "../../icon/plus.svg";
+import up from "../../icon/up.svg";
+import down from "../../icon/down.svg";
+import {BoardMode} from "../../index";
+import {BoardManager} from "../../../../BoardManager";
+
 import {exportFile} from "../../../../api/api";
 import ClipboardJS from "clipboard";
 
 class BaseRowProps {
-    boardInfo:{id:string, name:string}
+    boardInfo:{id:string, name:string, creator: string}
     memberList:{id:string, name:string, avatar:string}[]
+    mode: BoardMode
+    setMode: (m: BoardMode) => void
 }
-
 
 
 class BaseRow extends React.Component<BaseRowProps> {
@@ -26,19 +36,28 @@ class BaseRow extends React.Component<BaseRowProps> {
         isCreator: true,
         isInviteOpen: false,
         isExportOpen: false,
-        useRadio: 1,
+        // useRadio: 1, //1为编辑模式，2为只读模式
         isExportImage: false,
         exportType: 0,
         fitted: false,
         currentPageId:"",
-        avatar: "#956AA4" // TODO 设置默认头像
+        avatar: "#956AA4", // TODO 设置默认头像
+        userId: "",
+        creatingPage: false,
+        pageNameUpload: "新页面1",
+        pageContentUpload: "",
+    }
+
+    async componentWillReceiveProps(nextProps: Readonly<BaseRowProps>, nextContext: any) {
+        this.setState({isCreator: await BoardManager.getCreator() === UserManager.getId()})
     }
 
     async componentDidMount() {
         await UserManager.syncUser();
         this.setState({
             avatar: await UserManager.getAvatar(),
-            isCreator: this.props.boardInfo.id === UserManager.getId()
+            userId: UserManager.getId(),
+            isCreator: await BoardManager.getCreator() === UserManager.getId()
         })
         let clipboard = new ClipboardJS("#copy-btn")
         clipboard.on('success', (e) => {
@@ -47,9 +66,8 @@ class BaseRow extends React.Component<BaseRowProps> {
         })
 
     }
-
     private async handleExportFile(e:React.MouseEvent<HTMLElement>){
-        const pageId = "1591247059763789825"
+        const pageId = this.state.currentPageId;
         const resp = await exportFile(pageId)
         const url = window.URL.createObjectURL(new Blob([resp.data]));
         const link = document.createElement('a');
@@ -61,11 +79,11 @@ class BaseRow extends React.Component<BaseRowProps> {
         this.setState({isExportOpen : false})
     }
     private async handleExportImage(e:React.MouseEvent<HTMLElement>){
-        var canvas = document.getElementById("show-canvas");
-        var MIME_TYPE = "image/png";
+        const canvas = document.getElementById("show-canvas");
+        const MIME_TYPE = "image/png";
         // @ts-ignore
-        var imgURL = canvas.toDataURL(MIME_TYPE);
-        var dlLink = document.createElement('a');
+        const imgURL = canvas.toDataURL(MIME_TYPE);
+        const dlLink = document.createElement('a');
         dlLink.download = "画布";
         dlLink.href = imgURL;
         dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
@@ -76,16 +94,29 @@ class BaseRow extends React.Component<BaseRowProps> {
     }
 
     private async handleImportFile(e:React.MouseEvent<HTMLElement>){
-        document.getElementById("open").click();
+        const open = document.getElementById("open")
+        open.click();
     }
+
+    private handleModeSwitch(mode: BoardMode) {
+        const modeString = mode === BoardMode.ReadOnly ? "只读模式" : "编辑模式";
+        if(this.props.mode === mode){
+            message.info(`当前已经在${modeString}`)
+            return
+        }
+        this.props.setMode(mode)
+        //向后端发送切换模式的POST请求
+        switchMode(this.props.boardInfo.id, mode)
+    }
+
 
     private propertyTool() {
         return (
             <div>
-                <Radio.Group onChange={(e) => this.setState({useRadio:e.target.value})}
-                             value={this.state.useRadio} style={{display: "flex", flexDirection: "column"}}>
-                    <Radio value={1} disabled={!this.state.isCreator}>编辑模式</Radio>
-                    <Radio value={2} disabled={!this.state.isCreator}>只读模式</Radio>
+                <Radio.Group onChange={(e) => this.handleModeSwitch(e.target.value)}
+                             value={this.props.mode} style={{display: "flex", flexDirection: "column"}}>
+                    <Radio value={BoardMode.Editable} disabled={!this.state.isCreator}>编辑模式</Radio>
+                    <Radio value={BoardMode.ReadOnly} disabled={!this.state.isCreator}>只读模式</Radio>
                 </Radio.Group>
                 {/*{this.props.isCreator ?*/}
                 {/*    <div>*/}
@@ -93,18 +124,34 @@ class BaseRow extends React.Component<BaseRowProps> {
                 {/*    </div> :*/}
                 {/*    <div></div>*/}
                 {/*}*/}
-                <div>
-                    <Checkbox onChange={(e) => this.setState({fitted:e.target.value})}>
-                        线条拟合
-                    </Checkbox>
-                </div>
-                <div style={{cursor: "pointer"}}><img src={allDelete}/>&nbsp;一键清空</div>
+                {/*<div>*/}
+                {/*    <Checkbox onChange={(e) => this.setState({fitted:e.target.value})}>*/}
+                {/*        线条拟合*/}
+                {/*    </Checkbox>*/}
+                {/*</div>*/}
+                {/*<div style={{cursor: "pointer"}}><img src={allDelete}/>&nbsp;一键清空</div>*/}
             </div>
         )
     }
 
+    private async createPage() {
+        await createPage(this.props.boardInfo.id, this.state.pageNameUpload, this.state.pageContentUpload)
+        message.success("文件在新页面上传成功");
+        this.setState({creatingPage: false}) //弹窗关闭
+    }
+
 
     render() {
+        const loadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+            const  files = e.target.files
+            if(files.length >= 2 || files.length <= 0) message.error("一次只能上传一个文件")
+            for (let i = 0; i < files.length; i++) {
+                const f = files.item(i)
+                const base64Data = await f.text()
+                this.setState({creatingPage: true}) //弹窗
+                this.setState({pageContentUpload: base64Data})
+            }
+        }
         return(
             <div className="container">
                 <div className="base-row1">
@@ -133,20 +180,18 @@ class BaseRow extends React.Component<BaseRowProps> {
                     </div>
                     <div className="row-right">
                         <div className="right1-click">
-                            <Popover placement="bottom" content={this.propertyTool.bind(this)} trigger="click">
+                            <Popover placement="bottom" content={this.propertyTool.bind(this)} trigger="hover">
                                 <img src={attribute}/>
                             </Popover>
                             {/*<img src={shuxing}/>*/}
                         </div>
-                        <div className="right2">
-                            <div className="import-icon" title="导入">
-                                <img src={file} onClick={this.handleImportFile}/>
-                                {/*下面的input组件其实就是个工具*/}
-                                <input type="file" name="filename" id="open" style={{display: "none"}}/>
-                            </div>
-                            <div className="export-icon" title="导出">
-                                <img src={ex} onClick={()=>this.setState({isExportOpen:true})}/>
-                            </div>
+                        <div className="import-icon" title="导入">
+                            <img src={file} onClick={this.handleImportFile}/>
+                            {/*下面的input组件其实就是个工具*/}
+                            <input type="file" name="filename" id="open" accept= ".wb" onChange={(e) => loadFile(e)} style={{display: "none"}}/>
+                        </div>
+                        <div className="export-icon" title="导出">
+                            <img src={ex} onClick={()=>this.setState({isExportOpen:true})}/>
                         </div>
                         <div className="right3">
                             <div className="btn-invite" onClick={()=>{this.setState({isInviteOpen:true})}}>邀请</div>
@@ -165,7 +210,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                        footer={<div style={{width: "fit-content", height: "fit-content",
                        display: "flex", flexDirection: "row", alignItems: "center"}}>
                            <Button key="exportFile" onClick={this.handleExportFile.bind(this)}>导出文件</Button>
-                           <Button key="exportImage" onClick={this.handleExportImage}>导出图片</Button>
+                           <Button key="exportImage" onClick={this.handleExportImage.bind(this)}>导出图片</Button>
                        </div>
                 }>
                     {/*<div>请选择导出类型：</div>*/}
@@ -179,6 +224,19 @@ class BaseRow extends React.Component<BaseRowProps> {
                     {/*        </div>*/}
                     {/*    </Radio.Group>*/}
                     {/*</div>*/}
+                </Modal>
+
+
+                <Modal title="创建新页面" open={this.state.creatingPage}
+                       onCancel={() => this.setState({creatingPage:false})}
+                       footer={
+                           <Button key="copy" onClick={this.createPage.bind(this)}>创 建</Button> }>
+                    <Form>
+                        <Form.Item name="boardName" initialValue={this.state.pageNameUpload}>
+                            <Input className="win-form-input" placeholder="请输入导入的新页面名称"
+                                   onChange={(e)=>{ this.setState({pageNameUpload:e.target.value})}}/>
+                        </Form.Item>
+                    </Form>
                 </Modal>
             </div>
         )

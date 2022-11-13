@@ -28,15 +28,15 @@ function MyBoard(){
     const miniBoard = (boardName: string, bId: string) => {
         return (
             <div className="mini-board-container" >
-                <div className="mini-board-box" style={{ cursor: "pointer" }} id={bId} onClick={(e)=> handleClickJoin(e)}>
-                    <div className="mini-board-tool">
-                        <Popover placement="top" content={MiniBoardTool} trigger="hover">
-                            {/*<Button>tool</Button>*/}
-                            <div className="tool-icon" id="toolbtn">
-                                {tool}
-                            </div>
-                        </Popover>
-                    </div>
+                <div className="mini-board-box" style={{ cursor: "pointer" }} id={bId} onClick={(e)=> handleClickJoin(e)} title={"点击进入白板"}>
+                    {/*<div className="mini-board-tool">*/}
+                    {/*    <Popover placement="top" content={MiniBoardTool} trigger="hover">*/}
+                    {/*        /!*<Button>tool</Button>*!/*/}
+                    {/*        <div className="tool-icon" id="toolbtn">*/}
+                    {/*            {tool}*/}
+                    {/*        </div>*/}
+                    {/*    </Popover>*/}
+                    {/*</div>*/}
                 </div>
                 <div className="mini-board-name">{boardName}</div>
             </div>
@@ -160,53 +160,55 @@ function MyBoard(){
 
     return(
         <div className="my-board">
-            <div className="contain">
-                <div className="title">我的白板</div>
-                <div style={{marginBottom:'20px'}}/>
-                <div className="list">
-                    <div className="list-left">
-                        <Tabs onChange={onTabsChange} defaultActiveKey="1"
-                        items={[
-                            {
-                                label: `全部白板`,
-                                key: '1',
-                                children: AllBoard,
-                            },
-                            {
-                                label: `我创建的`,
-                                key: '2',
-                                children: MyCreate
-                            },
-                            {
-                                label: `我参与的`,
-                                key: '3',
-                                children: MyJoin
-                            },
-                            {
-                                label: `我的收藏`,
-                                key: '4',
-                                children: "功能尚未开启，请耐心等待",
-                            }
-                        ]}/>
-                        {/*<div className="left-box"><span className="box-text">全部白板</span></div>*/}
-                        {/*<div className="left-box"><span className="box-text">我创建的</span></div>*/}
-                        {/*<div className="left-box"><span className="box-text">我参与的</span></div>*/}
-                        {/*<div className="left-box"><span className="box-text">收藏白板</span></div>*/}
+            <div className="my-board-contain">
+                <div className="contain">
+                    <div className="title">我的白板</div>
+                    <div style={{marginBottom:'20px'}}/>
+                    <div className="list">
+                        <div className="list-left">
+                            <Tabs onChange={onTabsChange} defaultActiveKey="4"
+                                  items={[
+                                      {
+                                          label: `全部白板`,
+                                          key: '1',
+                                          children: AllBoard,
+                                      },
+                                      {
+                                          label: `我创建的`,
+                                          key: '2',
+                                          children: MyCreate
+                                      },
+                                      {
+                                          label: `我参与的`,
+                                          key: '3',
+                                          children: MyJoin
+                                      },
+                                      {
+                                          label: `我的收藏`,
+                                          key: '4',
+                                          children: "功能尚未开启，请耐心等待",
+                                      }
+                                  ]}/>
+                            {/*<div className="left-box"><span className="box-text">全部白板</span></div>*/}
+                            {/*<div className="left-box"><span className="box-text">我创建的</span></div>*/}
+                            {/*<div className="left-box"><span className="box-text">我参与的</span></div>*/}
+                            {/*<div className="left-box"><span className="box-text">收藏白板</span></div>*/}
+                        </div>
+                        {/*<div className="list-right">*/}
+                        {/*    <div className="right-icon">*/}
+                        {/*        <img src={sort}/>*/}
+                        {/*    </div>*/}
+                        {/*    <div className="right-box">访问时间</div>*/}
+                        {/*</div>*/}
                     </div>
-                    {/*<div className="list-right">*/}
-                    {/*    <div className="right-icon">*/}
-                    {/*        <img src={sort}/>*/}
-                    {/*    </div>*/}
-                    {/*    <div className="right-box">访问时间</div>*/}
-                    {/*</div>*/}
-                </div>
-                <div style={{marginBottom:'20px'}}/>
-                <div style={{width: '1000px', height: '400px'}}></div>
-                <div style={{marginBottom:'20px'}}/>
-                <div className="contain-btns">
-                    <div className="btns">
-                        <div className="btn-join" onClick={showJoin}>加入白板</div>
-                        <div className="btn-create" onClick={showCreate}>新增白板</div>
+                    {/*<div style={{marginBottom:'20px'}}/>*/}
+                    {/*<div style={{width: '1000px', height: '400px'}}></div>*/}
+                    {/*<div style={{marginBottom:'20px'}}/>*/}
+                    <div className="contain-btns">
+                        <div className="btns">
+                            <div className="btn-join" onClick={showJoin}>加入白板</div>
+                            <div className="btn-create" onClick={showCreate}>新增白板</div>
+                        </div>
                     </div>
                 </div>
             </div>

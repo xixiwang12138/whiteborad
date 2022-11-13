@@ -13,6 +13,7 @@ import plus from "../../icon/plus.svg";
 import up from "../../icon/up.svg";
 import down from "../../icon/down.svg";
 import {Page} from "../../app/data/Page";
+import {BoardMode} from "../../index";
 
 export type ScaleType = "none" | "enlarge" | "small";
 
@@ -26,6 +27,8 @@ class WidgetProps {
     boardId: string = "白板id";
     wCtrl:IWidget;
     scale: number = 1; // 当前缩放比例
+
+    mode: BoardMode
 }
 
 class Widget extends React.Component<WidgetProps> {
@@ -65,8 +68,10 @@ class Widget extends React.Component<WidgetProps> {
     }
 
     private expandPages() {
-        this.getPages(this.props.boardId).then();
-        this.setState({expandPage : true});
+        if(this.state.otherPages.length !== 0) {
+            this.getPages(this.props.boardId).then();
+            this.setState({expandPage : true});
+        }
     }
 
     private async getPages(boardId:string) {
@@ -87,6 +92,10 @@ class Widget extends React.Component<WidgetProps> {
     }
 
     render() {
+        const isEditable = () => {
+            return this.props.mode === BoardMode.Editable
+        }
+
         return(
             <div>
             <div className="base-row2">
@@ -104,10 +113,10 @@ class Widget extends React.Component<WidgetProps> {
                 <div className={"box-wrapper"}  style={{right: "80px"}}>
                     <div className={"box " + (this.state.expandPage ? "box-top" : "box-main") } >
                         <div style={{width:"auto", fontWeight:"bold"}}>{this.state.curPage?.displayName}</div>
-                        {this.state.otherPages.length > 0 && <div className="icon"
+                        <div className="icon"
                              onClick={ this.state.expandPage ? () => {this.setState({expandPage: false})} : this.expandPages.bind(this)}>
                             <img src={this.state.expandPage ? up : down} />
-                        </div>}
+                        </div>
                     </div>
                     { this.state.expandPage &&
                         this.state.otherPages.map((p , i) => {
@@ -119,7 +128,7 @@ class Widget extends React.Component<WidgetProps> {
                         })
                     }
                 </div>
-                <div className={"create-btn box-wrapper"} onClick={this.openCreatePageWindow.bind(this)}>
+                <div className={"create-btn box-wrapper"} onClick={this.openCreatePageWindow.bind(this)} style={{display: isEditable() ? "flex" : "none"}}>
                     <img src={plus}/>
                 </div>
             </div>

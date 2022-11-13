@@ -4,6 +4,7 @@ import {WhiteBoard} from "../routes/WhiteBoard/app/data/WhiteBoard";
 import {DataLoader} from "../utils/data/DataLoader";
 import {UserInfo} from "../UserManager";
 import {Page} from "../routes/WhiteBoard/app/data/Page";
+import {BoardMode} from "../routes/WhiteBoard";
 
 export type LoginForm = {
     phone: string;
@@ -39,6 +40,16 @@ export async function getUserInfo():Promise<UserInfo> {
     )).user;
 }
 
+
+export async function getBoardInfo(boardId: string):Promise<WhiteBoard> {
+    const res = (await request.get<any, WhiteBoard>(
+        `/api/board/board?boardId=${boardId}`
+    ));
+    let board = DataLoader.load(WhiteBoard, res);
+    board.pages = board.pages.map(r => Object.assign(new Page(), r));
+    return board;
+}
+
 type ResetForm = RegisterForm;
 export async function doReset(form: ResetForm) {
     return request.post<any, null>(
@@ -55,6 +66,13 @@ export function doCreateBoard(boardName:string) {
     return request.post<any, CreateBoardResp>(
         "/api/board/board",
         {boardName}
+    );
+}
+
+export function switchMode(boardId:string, mode: BoardMode) {
+    return request.post<any, null>(
+        "/api/board/switchMode",
+        {boardId, mode}
     );
 }
 
@@ -83,9 +101,9 @@ export async function getJoinedBoards():Promise<any> {
     return res.boards
 }
 
-export async function createPage(boardId:string, name:string):Promise<Page[]> {
+export async function createPage(boardId:string, name:string, pageData?: string):Promise<Page[]> {
     let res = await request.post<any, {pages:Page[]}>(
-        "/api/page",{boardId, name}
+        "/api/page",{boardId, name, pageData}
     );
     return res.pages.map(r => Object.assign(new Page(), r));
 }

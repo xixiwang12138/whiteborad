@@ -6,7 +6,7 @@ import WindowToolBar, {ElementSum, ToolReactor} from "./components/WindowToolBar
 import {WhiteBoardApp} from "./app/WhiteBoardApp";
 import {ToolType} from "./app/tools/Tool";
 import {DrawingScene} from "./app/DrawingScene";
-import {joinBoard} from "../../api/api";
+import {joinBoard, switchMode} from "../../api/api";
 import {RouteComponentProps} from "react-router-dom";
 import {UserManager} from "../../UserManager";
 import {message} from "antd";
@@ -18,6 +18,11 @@ import {InteractEvent, MouseInteractEvent, NewInteractEvent, TouchInteractEvent}
 
 export interface WhiteBoardRouteParam {
     id:string
+}
+
+export enum BoardMode {
+    Editable,
+    ReadOnly
 }
 
 function toolElementTypeMapping(type:ToolType):ElementType {
@@ -50,7 +55,8 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
     state = {
         boardInfo: {
             id: "白板id",
-            name:"白板名字"
+            name:"白板名字",
+            creator: "创建者"
         },
         scale:1,
         pages: [] as Partial<Page>[],
@@ -58,30 +64,32 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         toolOrElemType: ElementType.none,
 
         undoAble:false,
-        redoAble:false
+        redoAble:false,
+
+        mode: BoardMode.Editable,
     }
 
     render() {
         return <div className="board">
-            <BaseRow boardInfo={this.state.boardInfo} memberList={this.state.memberList}/>
-            <Widget boardId={this.state.boardInfo.id} wCtrl={this} scale={this.state.scale}/>
+            <BaseRow boardInfo={this.state.boardInfo} memberList={this.state.memberList} mode={this.state.mode} setMode={this.onSwitchMode.bind(this)}/>
+            <Widget boardId={this.state.boardInfo.id} wCtrl={this} scale={this.state.scale} mode={this.state.mode}/>
             <ToolList undoAble={this.state.undoAble} redoAble={this.state.redoAble}
-                      onToolSelected={this.selectTool.bind(this)} opListener={this} />
+                      onToolSelected={this.selectTool.bind(this)} opListener={this}  mode={this.state.mode}/>
             <div id="canvas-root" style={{width:"100%", height:"100%", overflow:"hidden"}}>
                 <div id={"text-editor-container"}/>
                 <canvas style={{width: "100%", height: "100%", backgroundColor:"#F2F0F1"}} id="show-canvas"/>
             </div>
-            <WindowToolBar  propSetter={this} toolOrElemType={this.state.toolOrElemType}/>
+            <WindowToolBar  propSetter={this} toolOrElemType={this.state.toolOrElemType} mode={this.state.mode}/>
         </div>
     }
 
 
     async componentDidMount() {
+        await UserManager.syncUser();
         this.setupCanvas();
         this.setupWindow();
         this.setupRootNode();
         await this.setupApp();
-        await UserManager.syncUser();
     }
 
     private setupCanvas() {
@@ -133,9 +141,11 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
 
     private async setupApp() {
         let board = await joinBoard(this.props.match.params.id);
+        console.log(board)
         this.setState({
-            boardInfo: {name:board.name, id:board.id},
+            boardInfo: {name:board.name, id:board.id, creator: board.creator},
             pages: board.pages,
+            mode: board.mode
         });
         this.app = new WhiteBoardApp(board);
         this.app.setup();
@@ -163,6 +173,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         })
         this.app.translateScene((this.showCanvas.width - 1920) / 2, (this.showCanvas.height - 1080) / 2);
         this.app.refreshScene();
+        this.app.onSwitchMode = this.onSwitchMode.bind(this)
     }
 
 
@@ -261,6 +272,14 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
     }
 
     public async onSwitchPage(pageId:string) {
+        //判断是否在已读模式下
+        if(this.state.mode === BoardMode.ReadOnly) {
+            //如果不是创建者，不能切换页面
+            if(this.state.boardInfo.creator !== UserManager.getId()) {
+                message.warn("在只读模式下只有创建者可以切换页面")
+            }
+            return
+        }
         this.app.switchPage(pageId);
     }
 
@@ -283,6 +302,13 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.app.setProps(prop, value);
     }
 
+
+    public async onSwitchMode(mode: BoardMode) {
+        //调整组件
+        this.setState({mode: mode})
+        const modeString = mode === BoardMode.ReadOnly ? "只读模式" : "编辑模式";
+        await  message.info(`白板由创建者切换到${modeString}`)
+    }
 }
 
 

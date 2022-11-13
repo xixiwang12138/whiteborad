@@ -33,7 +33,7 @@ class BaseColumn extends React.Component {
             <div className="base-column">
                 <div className="column-top">
                     <div className="base-avatar">
-                        <div className="avatar" style={{backgroundColor: `#${this.state.avatar}`}}></div>
+                        <div className="avatar" style={{backgroundColor: `${this.state.avatar}`}}></div>
                     </div>
                     <div style={{marginTop:'10px'}}/>
                     <div className="base-name" onClick={() => this.setState({isNameOpen:true})}>

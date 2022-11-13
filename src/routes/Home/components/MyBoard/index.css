@@ -1,29 +1,35 @@
 .my-board {
-    height: 100%;
-    width: 80%;
-    left: 20%;
+    height: 100vh;
+    width: 100vw;
     /*background-color: #282c34;*/
     position: absolute;
     top: 0;
-    /*left: 0;*/
+    left: 0;
     display: flex;
     align-items: center;
 }
+.my-board-contain {
+    height: 90%;
+    width: 80%;
+    position: absolute;
+    left: 200px;
+    /*border: 1px black solid;*/
+    display: flex;
+}
 .contain {
-    height: 80%;
-    width: fit-content;
+    height: 100%;
+    width: 100%;
     max-width: 100vw;
     position: absolute;
-    /*left: 300px;*/
+    left: 0;
     /*background-color: #DC8AF9;*/
     display: flex;
     flex-direction: column;
-    /*align-items: center;*/
-    margin-left: 30px;
-    justify-content: center;
+    align-items: center;
+    /*justify-content: space-between;*/
 }
 .title {
-    width: 1000px;
+    width: 100%;
     height: 40px;
     line-height: 40px;
     font-size: 35px;
@@ -31,7 +37,7 @@
     /*background-color: #282c34;*/
 }
 .list {
-    width: 1000px;
+    width: 100%;
     height: 25px;
     /*background-color: #282c34;*/
     display: flex;
@@ -39,7 +45,7 @@
     justify-content: space-between;
 }
 .list-left{
-    width: 500px;
+    width: 100%;
     height: 25px;
     /*background-color: red;*/
     display: flex;
@@ -91,9 +97,11 @@
     color: black;
 }
 .board-container {
-    width: 850px;
+    width: 100%;
     height: 300px;
     /*max-height: 300px;*/
+
+
     overflow-y: auto;
     display: flex;
     flex-flow: wrap;
@@ -101,16 +109,18 @@
     /*background-color: rgba(179,190,194,0.1);*/
 }
 .contain-btns {
-    width: 900px;
+    width: 100%;
     height: 40px;
     /*background-color: #282c34;*/
+    position: absolute;
+    bottom: 0;
+    right: 0;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: right;
 }
 .btns {
-    position: absolute;
     width: 250px;
     height: 40px;
     /*background-color: red;*/
@@ -225,21 +235,21 @@
 /*    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);*/
 /*}*/
 .mini-board-container {
-    width: 250px;
-    height: 180px;
+    width: 180px;
+    height: 150px;
     /*background-color: #DC8AF9;*/
     /*border: 1px grey solid;*/
     margin-right: 20px;
     margin-bottom: 20px;
 }
 .mini-board-box {
-    width: 250px;
-    height: 150px;
+    width: 180px;
+    height: 120px;
     background-color: rgba(179,190,194,0.5);
     border-radius: 10px;
 }
 .mini-board-tool {
-    width: 250px;
+    width: 180px;
     height: 30px;
     /*background-color: #DC8AF9;*/
     display: flex;

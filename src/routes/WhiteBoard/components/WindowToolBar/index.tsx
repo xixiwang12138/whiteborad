@@ -19,6 +19,7 @@ import {PathElement} from "../../app/element/PathElement";
 import {Line} from "../../app/element/Line";
 import {ToolType} from "../../app/tools/Tool";
 import {BoardMode} from "../../index";
+import {BoardManager} from "../../../../BoardManager";
 
 export type SecondLevelType = StrokeWidthType | FontSizeType |
     FontStyleType | TextAlignType | ElementPositionType | OperationsType;
@@ -180,10 +181,15 @@ class WinToolList extends React.Component<WinTypeListProp> {
             [ElementType.linear]:{},
             [ElementType.generic]:{},
             [ElementType.freedraw]:{}
-        }
+        },
+        mode: BoardMode.Editable
     }
 
-    componentWillReceiveProps(nextProps: Readonly<WinTypeListProp>, nextContext: any) {
+    async componentDidMount() {
+        this.setState({mode: await BoardManager.getMode()})
+    }
+
+    async componentWillReceiveProps(nextProps: Readonly<WinTypeListProp>, nextContext: any) {
         let displays = [false, false, false, false, false, false, false, false] ;        // 如果不为工具类型, 表示为选中元素，才提供操作
         if(typeof nextProps.toolOrElemType !== "string") {
             displays[ToolBar.Operation] = true;
@@ -204,6 +210,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
             }
         }
         this.setState({displays})
+        this.setState({mode: nextProps.mode})
     }
 
     render() {
@@ -260,7 +267,7 @@ class WinToolList extends React.Component<WinTypeListProp> {
         const str = (i: number)  => { return i + ""}
 
         const isEditable = () => {
-            return this.props.mode === BoardMode.Editable
+            return this.state.mode === BoardMode.Editable
         }
 
         return <div style={{display: isEditable() ? "flex" : "none"}}> {

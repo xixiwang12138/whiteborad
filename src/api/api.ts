@@ -40,6 +40,16 @@ export async function getUserInfo():Promise<UserInfo> {
     )).user;
 }
 
+
+export async function getBoardInfo(boardId: string):Promise<WhiteBoard> {
+    const res = (await request.get<any, WhiteBoard>(
+        `/api/board/board?boardId=${boardId}`
+    ));
+    let board = DataLoader.load(WhiteBoard, res);
+    board.pages = board.pages.map(r => Object.assign(new Page(), r));
+    return board;
+}
+
 type ResetForm = RegisterForm;
 export async function doReset(form: ResetForm) {
     return request.post<any, null>(

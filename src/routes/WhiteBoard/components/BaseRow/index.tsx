@@ -17,6 +17,7 @@ import plus from "../../icon/plus.svg";
 import up from "../../icon/up.svg";
 import down from "../../icon/down.svg";
 import {BoardMode} from "../../index";
+import {BoardManager} from "../../../../BoardManager";
 
 class BaseRowProps {
     boardInfo:{id:string, name:string, creator: string}
@@ -49,7 +50,7 @@ class BaseRow extends React.Component<BaseRowProps> {
         this.setState({
             avatar: await UserManager.getAvatar(),
             userId: UserManager.getId(),
-            isCreator: this.props.boardInfo.creator === UserManager.getId()
+            isCreator: await BoardManager.getCreator() === UserManager.getId()
         })
     }
 
@@ -204,7 +205,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                        footer={<div style={{width: "fit-content", height: "fit-content",
                        display: "flex", flexDirection: "row", alignItems: "center"}}>
                            <Button key="exportFile" onClick={this.handleExportFile.bind(this)}>导出文件</Button>
-                           <Button key="exportImage" onClick={this.handleExportImage}>导出图片</Button>
+                           <Button key="exportImage" onClick={this.handleExportImage.bind(this)}>导出图片</Button>
                        </div>
                 }>
                     {/*<div>请选择导出类型：</div>*/}

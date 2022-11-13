@@ -83,11 +83,11 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
 
 
     async componentDidMount() {
+        await UserManager.syncUser();
         this.setupCanvas();
         this.setupWindow();
         this.setupRootNode();
         await this.setupApp();
-        await UserManager.syncUser();
     }
 
     private setupCanvas() {
@@ -127,9 +127,11 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
 
     private async setupApp() {
         let board = await joinBoard(this.props.match.params.id);
+        console.log(board)
         this.setState({
             boardInfo: {name:board.name, id:board.id, creator: board.creator},
             pages: board.pages,
+            mode: board.mode
         });
         this.app = new WhiteBoardApp(board);
         this.app.setup();

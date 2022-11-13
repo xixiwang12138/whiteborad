@@ -283,6 +283,11 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
             if(this.state.boardInfo.creator !== UserManager.getId()) {
                 message.warn("在只读模式下只有创建者可以切换页面");
                 return;
+            } else {
+                let i = this.state.pages.findIndex((e)=>e.id === pageId);
+                this.setState({curPageId:pageId, curPageIdx:i})
+                this.app.creatorSwitchPage(pageId);
+                return
             }
         }
         let i = this.state.pages.findIndex((e)=>e.id === pageId);

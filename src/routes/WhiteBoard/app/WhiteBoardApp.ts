@@ -28,7 +28,6 @@ import {ElementBase} from "./element/ElementBase";
 import {createPage} from "../../../api/api";
 import {Page} from "./data/Page";
 import {ElementSum, ToolReactor} from "../components/WindowToolBar";
-import {Eraser} from "./tools/Eraser";
 import {BoardMode} from "../index";
 import {InteractEvent} from "./event/InteractEvent";
 
@@ -302,6 +301,16 @@ export class WhiteBoardApp implements IWebsocket, ToolReactor {
         // 切换页面后注意取消选中和scene的激活元素
         (this.toolBox.getTool("selection") as Selection).unSelectedCurElem();
         this.scene.deactivateElem();
+    }
+
+    public creatorSwitchPage(pageId: string) {
+        this.switchPage(pageId); // 创建者先自己切换页面
+        let cmd = new CmdBuilder<CmdType.SwitchPage>()
+            .setType(CmdType.SwitchPage).setPage(this.whiteBoard.id, pageId)
+            .setUser(UserManager.getId()).setPayload({
+                from: this.book.curPage.id, to:pageId
+            }).build();
+        this.wsClient.sendCmd(cmd);
     }
 
     public async createPage(name:string, data?:string):Promise<Page[]> {

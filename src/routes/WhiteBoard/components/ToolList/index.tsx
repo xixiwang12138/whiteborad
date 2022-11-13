@@ -8,6 +8,7 @@ import {ToolType} from "../../app/tools/Tool";
 import {GenericElementType} from "../../app/element/GenericElement";
 import {LinearElementType} from "../../app/tools/LinearTool";
 import {Op} from "../../app/operationTracker/OperationTracker";
+import {BoardMode} from "../../index";
 
 
 // export const DODOs = [
@@ -41,6 +42,8 @@ class ToolListProp {
 
     undoAble:boolean = false;
     redoAble:boolean = false;
+
+    mode: BoardMode
 }
 
 class ToolList extends React.Component<ToolListProp>  {
@@ -94,7 +97,11 @@ class ToolList extends React.Component<ToolListProp>  {
     }
 
     render() {
-        return <div className="tool-list">
+        const isEditable = () => {
+            return this.props.mode === BoardMode.Editable
+        }
+
+        return <div className="tool-list" style={{display: isEditable() ? "flex" : "none"}}>
             <div className="tool-do">
                 <div className="do-box">
                     <div className={"icon " + (this.props.undoAble ? "" : "icon-disabled")}

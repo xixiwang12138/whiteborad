@@ -10,15 +10,19 @@ import attribute from "../../icon/属性选中.svg";
 import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, message, Form, Input} from "antd";
 import {NavLink} from 'react-router-dom';
 import {UserManager} from "../../../../UserManager";
-import {createPage, exportFile} from "../../../../api/api";
+import {createPage, exportFile, switchMode} from "../../../../api/api";
 import { Base64 }  from 'js-base64';
 import reduce from "../../icon/reduce.svg";
 import plus from "../../icon/plus.svg";
 import up from "../../icon/up.svg";
 import down from "../../icon/down.svg";
+import {BoardMode} from "../../index";
+
 class BaseRowProps {
-    boardInfo:{id:string, name:string}
+    boardInfo:{id:string, name:string, creator: string}
     memberList:{id:string, name:string, avatar:string}[]
+    mode: BoardMode
+    setMode: (m: BoardMode) => void
 }
 
 
@@ -28,7 +32,7 @@ class BaseRow extends React.Component<BaseRowProps> {
         isCreator: true,
         isInviteOpen: false,
         isExportOpen: false,
-        useRadio: 1,
+        // useRadio: 1, //1为编辑模式，2为只读模式
         isExportImage: false,
         exportType: 0,
         fitted: false,
@@ -45,7 +49,7 @@ class BaseRow extends React.Component<BaseRowProps> {
         this.setState({
             avatar: await UserManager.getAvatar(),
             userId: UserManager.getId(),
-            isCreator: this.props.boardInfo.id === UserManager.getId()
+            isCreator: this.props.boardInfo.creator === UserManager.getId()
         })
     }
 
@@ -55,7 +59,7 @@ class BaseRow extends React.Component<BaseRowProps> {
         this.setState({isInviteOpen:false})
     }
     private async handleExportFile(e:React.MouseEvent<HTMLElement>){
-        const pageId = "1591247059763789825"
+        const pageId = this.state.currentPageId;
         const resp = await exportFile(pageId)
         const url = window.URL.createObjectURL(new Blob([resp.data]));
         const link = document.createElement('a');
@@ -86,14 +90,25 @@ class BaseRow extends React.Component<BaseRowProps> {
         open.click();
     }
 
+    private async handleModeSwitch(mode: BoardMode) {
+        const modeString = mode === BoardMode.ReadOnly ? "只读模式" : "编辑模式";
+        if(this.props.mode === mode){
+            message.info(`当前已经在${modeString}`)
+            return
+        }
+        this.props.setMode(mode)
+        //向后端发送切换模式的POST请求
+        await switchMode(this.props.boardInfo.id, mode)
+    }
+
 
     private propertyTool() {
         return (
             <div>
-                <Radio.Group onChange={(e) => this.setState({useRadio:e.target.value})}
-                             value={this.state.useRadio} style={{display: "flex", flexDirection: "column"}}>
-                    <Radio value={1} disabled={!this.state.isCreator}>编辑模式</Radio>
-                    <Radio value={2} disabled={!this.state.isCreator}>只读模式</Radio>
+                <Radio.Group onChange={(e) => this.handleModeSwitch(e.target.value)}
+                             value={this.props.mode} style={{display: "flex", flexDirection: "column"}}>
+                    <Radio value={BoardMode.Editable} disabled={!this.state.isCreator}>编辑模式</Radio>
+                    <Radio value={BoardMode.ReadOnly} disabled={!this.state.isCreator}>只读模式</Radio>
                 </Radio.Group>
                 {/*{this.props.isCreator ?*/}
                 {/*    <div>*/}
@@ -101,11 +116,11 @@ class BaseRow extends React.Component<BaseRowProps> {
                 {/*    </div> :*/}
                 {/*    <div></div>*/}
                 {/*}*/}
-                <div>
-                    <Checkbox onChange={(e) => this.setState({fitted:e.target.value})}>
-                        线条拟合
-                    </Checkbox>
-                </div>
+                {/*<div>*/}
+                {/*    <Checkbox onChange={(e) => this.setState({fitted:e.target.value})}>*/}
+                {/*        线条拟合*/}
+                {/*    </Checkbox>*/}
+                {/*</div>*/}
                 <div style={{cursor: "pointer"}}><img src={allDelete}/>&nbsp;一键清空</div>
             </div>
         )
@@ -114,7 +129,7 @@ class BaseRow extends React.Component<BaseRowProps> {
     private async createPage() {
         await createPage(this.props.boardInfo.id, this.state.pageNameUpload, this.state.pageContentUpload)
         message.success("文件在新页面上传成功");
-        this.setState({creatingPage: false}) //弹窗
+        this.setState({creatingPage: false}) //弹窗关闭
     }
 
 

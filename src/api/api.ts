@@ -4,6 +4,7 @@ import {WhiteBoard} from "../routes/WhiteBoard/app/data/WhiteBoard";
 import {DataLoader} from "../utils/data/DataLoader";
 import {UserInfo} from "../UserManager";
 import {Page} from "../routes/WhiteBoard/app/data/Page";
+import {BoardMode} from "../routes/WhiteBoard";
 
 export type LoginForm = {
     phone: string;
@@ -55,6 +56,13 @@ export function doCreateBoard(boardName:string) {
     return request.post<any, CreateBoardResp>(
         "/api/board/board",
         {boardName}
+    );
+}
+
+export function switchMode(boardId:string, mode: BoardMode) {
+    return request.post<any, null>(
+        "/api/board/switchMode",
+        {boardId, mode}
     );
 }
 

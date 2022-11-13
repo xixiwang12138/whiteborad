@@ -13,6 +13,7 @@ import plus from "../../icon/plus.svg";
 import up from "../../icon/up.svg";
 import down from "../../icon/down.svg";
 import {Page} from "../../app/data/Page";
+import {BoardMode} from "../../index";
 
 export type ScaleType = "enlarge" | "small";
 
@@ -26,6 +27,8 @@ class WidgetProps {
     boardId: string = "白板id";
     wCtrl:IWidget;
     scale: number = 1; // 当前缩放比例
+
+    mode: BoardMode
 }
 
 class Widget extends React.Component<WidgetProps> {
@@ -87,6 +90,10 @@ class Widget extends React.Component<WidgetProps> {
     }
 
     render() {
+        // const isEditable = () => {
+        //     return this.props.mode === BoardMode.Editable
+        // }
+
         return(
             <div>
             <div className="base-row2">

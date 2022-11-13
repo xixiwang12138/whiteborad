@@ -4,22 +4,13 @@ import "../../../../App.css";
 import home from "../../icon/home.svg";
 import file from "../../icon/topimport.svg";
 import ex from "../../icon/topexport.svg";
-import allDelete from "../../icon/一键清空.svg";
-import type {MenuProps}  from "antd";
 import attribute from "../../icon/属性选中.svg";
 import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, message, Form, Input} from "antd";
 import {NavLink} from 'react-router-dom';
 import {UserManager} from "../../../../UserManager";
 import {createPage, exportFile, switchMode} from "../../../../api/api";
-import { Base64 }  from 'js-base64';
-import reduce from "../../icon/reduce.svg";
-import plus from "../../icon/plus.svg";
-import up from "../../icon/up.svg";
-import down from "../../icon/down.svg";
 import {BoardMode} from "../../index";
 import {BoardManager} from "../../../../BoardManager";
-
-import {exportFile} from "../../../../api/api";
 import ClipboardJS from "clipboard";
 
 class BaseRowProps {

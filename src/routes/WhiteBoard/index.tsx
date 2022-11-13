@@ -241,6 +241,14 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
     }
 
     public async onSwitchPage(pageId:string) {
+        //判断是否在已读模式下
+        if(this.state.mode === BoardMode.ReadOnly) {
+            //如果不是创建者，不能切换页面
+            if(this.state.boardInfo.creator !== UserManager.getId()) {
+                message.warn("在只读模式下只有创建者可以切换页面")
+            }
+            return
+        }
         this.app.switchPage(pageId);
     }
 

@@ -90,9 +90,9 @@ class Widget extends React.Component<WidgetProps> {
     }
 
     render() {
-        // const isEditable = () => {
-        //     return this.props.mode === BoardMode.Editable
-        // }
+        const isEditable = () => {
+            return this.props.mode === BoardMode.Editable
+        }
 
         return(
             <div>
@@ -126,7 +126,7 @@ class Widget extends React.Component<WidgetProps> {
                         })
                     }
                 </div>
-                <div className={"create-btn box-wrapper"} onClick={this.openCreatePageWindow.bind(this)}>
+                <div className={"create-btn box-wrapper"} onClick={this.openCreatePageWindow.bind(this)} style={{display: isEditable() ? "flex" : "none"}}>
                     <img src={plus}/>
                 </div>
             </div>

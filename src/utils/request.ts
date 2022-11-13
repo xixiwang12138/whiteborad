@@ -1,8 +1,8 @@
 import axios, {AxiosError} from "axios";
 import {message} from "antd";
-const host = "https://www.amarobot.site:10300";
+// const host = "https://www.amarobot.site:10300";
 // const host = "http://localhost:10300";
-// const host = "http://192.168.137.17:10300";
+const host = "http://192.168.137.17:10300";
 // const host = "http://175.178.81.93:10300"
 // const host = "http://172.21.216.71:10300";
 
@@ -40,6 +40,9 @@ request.interceptors.response.use((res)=> {
 },(e:AxiosError)=> {
     const resp = e.response?.data as ErrorResponse;
     if(resp) {
+        if(resp.code === 100003){
+            window.location.replace("/")
+        }
         message.error(resp.error).then();
     } else {
         message.error(e.message).then(); //错误提示

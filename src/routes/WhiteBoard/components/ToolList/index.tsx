@@ -61,7 +61,7 @@ class ToolList extends React.Component<ToolListProp>  {
 
     state = {
         iconState: [
-            [false, true], // 默认为选择工具
+            [true, false], // 默认为选择工具
             [false, false],
             [false, false],
             [false, false],

@@ -59,7 +59,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
             creator: "创建者"
         },
         scale:1,
-        pages: [] as Partial<Page>[],
+        pages: [] as Page[],
         memberList:[],
         toolOrElemType: ElementType.none,
 
@@ -67,12 +67,17 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         redoAble:false,
 
         mode: BoardMode.Editable,
+
+        curPageId: "", // 为了给baseRow的导出功能提供id
+        curPageIdx: 0, // 为了widget能够获得当前页面
     }
 
     render() {
         return <div className="board">
-            <BaseRow boardInfo={this.state.boardInfo} memberList={this.state.memberList} mode={this.state.mode} setMode={this.onSwitchMode.bind(this)}/>
-            <Widget boardId={this.state.boardInfo.id} wCtrl={this} scale={this.state.scale} mode={this.state.mode}/>
+            <BaseRow curPageId={this.state.curPageId} boardInfo={this.state.boardInfo} memberList={this.state.memberList}
+                     mode={this.state.mode} setMode={this.onSwitchMode.bind(this)} onUploadPage={this.onCreatePage.bind(this)}/>
+            <Widget pages={this.state.pages} curPageIdx={this.state.curPageIdx} boardId={this.state.boardInfo.id}
+                    wCtrl={this} scale={this.state.scale} mode={this.state.mode}/>
             <ToolList undoAble={this.state.undoAble} redoAble={this.state.redoAble}
                       onToolSelected={this.selectTool.bind(this)} opListener={this}  mode={this.state.mode}/>
             <div id="canvas-root" style={{width:"100%", height:"100%", overflow:"hidden"}}>
@@ -90,6 +95,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.setupWindow();
         this.setupRootNode();
         await this.setupApp();
+        this.selectTool("translation");
     }
 
     private setupCanvas() {
@@ -141,7 +147,7 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
 
     private async setupApp() {
         let board = await joinBoard(this.props.match.params.id);
-        console.log(board)
+        this.setState({curPageId:board.defaultPage})
         this.setState({
             boardInfo: {name:board.name, id:board.id, creator: board.creator},
             pages: board.pages,
@@ -265,10 +271,9 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
 
     onUndo(){this.app?.undo();}
 
-    public async onCreatePage(name:string):Promise<Page[]> {
-        let pages = await this.app.createPage(name);
-        this.setState({ pages });
-        return pages;
+    public async onCreatePage(name:string, data?:string) {
+        let pages = await this.app.createPage(name, data);
+        this.setState({ pages, curPageId:pages[pages.length - 1].id, curPageIdx:pages.length - 1});
     }
 
     public async onSwitchPage(pageId:string) {
@@ -276,10 +281,12 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         if(this.state.mode === BoardMode.ReadOnly) {
             //如果不是创建者，不能切换页面
             if(this.state.boardInfo.creator !== UserManager.getId()) {
-                message.warn("在只读模式下只有创建者可以切换页面")
+                message.warn("在只读模式下只有创建者可以切换页面");
+                return;
             }
-            return
         }
+        let i = this.state.pages.findIndex((e)=>e.id === pageId);
+        this.setState({curPageId:pageId, curPageIdx:i})
         this.app.switchPage(pageId);
     }
 
@@ -306,8 +313,9 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
     public async onSwitchMode(mode: BoardMode) {
         //调整组件
         this.setState({mode: mode})
+        if(mode === BoardMode.ReadOnly) this.selectTool("translation");
         const modeString = mode === BoardMode.ReadOnly ? "只读模式" : "编辑模式";
-        await  message.info(`白板由创建者切换到${modeString}`)
+        await message.info(`白板由创建者切换到${modeString}`)
     }
 }
 

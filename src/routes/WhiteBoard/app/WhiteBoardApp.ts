@@ -304,12 +304,12 @@ export class WhiteBoardApp implements IWebsocket, ToolReactor {
         this.scene.deactivateElem();
     }
 
-    public async createPage(name:string):Promise<Page[]> {
-        let pages = await createPage(this.whiteBoard.id, name);
+    public async createPage(name:string, data?:string):Promise<Page[]> {
+        let pages = await createPage(this.whiteBoard.id, name, data);
         const l = pages[pages.length - 1];
         message.success("创建白板成功，正在切换");
         this.book.addPage(l); this.book.switchPage(l.id);
-        this.scene.renderPage(this.book.curPage);
+        if(!data) this.scene.renderPage(this.book.curPage);
         return pages;
     }
 

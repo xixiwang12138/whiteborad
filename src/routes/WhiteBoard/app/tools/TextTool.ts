@@ -85,6 +85,7 @@ export class TextTool extends Tool
      *  判断某个事件是否对该工具起作用
      */
     public outOfBound(e:SceneTouchEvent):boolean {
+        e.rawY = e.rawY / window.devicePixelRatio; e.rawX = e.rawX / window.devicePixelRatio;
         return e.rawX > this.editorX + this.editorW ||
             e.rawY > this.editorY + this.editorH ||
             e.rawX < this.editorX ||
@@ -120,7 +121,7 @@ export class TextTool extends Tool
                     if(!this.editText(e, scene)) return;
                 }
                 this._curElem.finish = false;
-                this.editorX = e.rawX; this.editorY = e.rawY;
+                this.editorX = e.rawX / window.devicePixelRatio; this.editorY = e.rawY / window.devicePixelRatio;
                 this.textEditor.oninput = () => {
                     let size = scene.measureTextArea(this.textEditor);
                     this.textEditor.style.width = `${size.width}px`;
@@ -137,7 +138,7 @@ export class TextTool extends Tool
     }
 
     private createText(e: SceneTouchEvent, scene: DrawingScene) {
-        this.textEditor.style.top = `${e.rawY}px`; this.textEditor.style.left = `${e.rawX}px`;
+        this.textEditor.style.top = `${e.rawY / window.devicePixelRatio}px`; this.textEditor.style.left = `${e.rawX / window.devicePixelRatio}px`;
         this.textEditor.style.transformOrigin = "left top"; // 设置缩放中心点为左上角
         // 新创建
         this._curElem = scene.actElem = new TextElement(IdGenerator.genElementId(), e.x, e.y);
@@ -156,7 +157,7 @@ export class TextTool extends Tool
     private editText(e: SceneTouchEvent, scene: DrawingScene):boolean {
         const el = this._curElem = scene.actElem! as TextElement;
         if(!el) return false;
-        this.textEditor.style.top = `${e.rawY}px`; this.textEditor.style.left = `${e.rawX}px`;
+        this.textEditor.style.top = `${e.rawY / window.devicePixelRatio}px`; this.textEditor.style.left = `${e.rawX / window.devicePixelRatio}px`;
         this.textEditor.style.transformOrigin = "left top"; // 设置缩放中心点为左上角
         // 重新编辑
         this.editState = "edit";

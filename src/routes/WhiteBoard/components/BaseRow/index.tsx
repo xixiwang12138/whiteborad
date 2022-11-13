@@ -12,12 +12,16 @@ import {createPage, exportFile, switchMode} from "../../../../api/api";
 import {BoardMode} from "../../index";
 import {BoardManager} from "../../../../BoardManager";
 import ClipboardJS from "clipboard";
+import {IWidget} from "../Widget";
+
 
 class BaseRowProps {
     boardInfo:{id:string, name:string, creator: string}
     memberList:{id:string, name:string, avatar:string}[]
     mode: BoardMode
+    curPageId:string
     setMode: (m: BoardMode) => void
+    onUploadPage:IWidget["onCreatePage"]
 }
 
 
@@ -31,7 +35,7 @@ class BaseRow extends React.Component<BaseRowProps> {
         isExportImage: false,
         exportType: 0,
         fitted: false,
-        currentPageId:"",
+        // currentPageId:"",
         avatar: "#956AA4", // TODO 设置默认头像
         userId: "",
         creatingPage: false,
@@ -58,7 +62,7 @@ class BaseRow extends React.Component<BaseRowProps> {
 
     }
     private async handleExportFile(e:React.MouseEvent<HTMLElement>){
-        const pageId = this.state.currentPageId;
+        const pageId = this.props.curPageId;
         const resp = await exportFile(pageId)
         const url = window.URL.createObjectURL(new Blob([resp.data]));
         const link = document.createElement('a');
@@ -69,6 +73,7 @@ class BaseRow extends React.Component<BaseRowProps> {
         console.log("导出文件")
         this.setState({isExportOpen : false})
     }
+
     private async handleExportImage(e:React.MouseEvent<HTMLElement>){
         const canvas = document.getElementById("show-canvas");
         const MIME_TYPE = "image/png";
@@ -125,9 +130,9 @@ class BaseRow extends React.Component<BaseRowProps> {
         )
     }
 
-    private async createPage() {
-        await createPage(this.props.boardInfo.id, this.state.pageNameUpload, this.state.pageContentUpload)
-        message.success("文件在新页面上传成功");
+    private async uploadPage() {
+        await this.props.onUploadPage(this.state.pageNameUpload, this.state.pageContentUpload);
+        message.success("文件在上传成功， 正在切换");
         this.setState({creatingPage: false}) //弹窗关闭
     }
 
@@ -221,7 +226,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                 <Modal title="创建新页面" open={this.state.creatingPage}
                        onCancel={() => this.setState({creatingPage:false})}
                        footer={
-                           <Button key="copy" onClick={this.createPage.bind(this)}>创 建</Button> }>
+                           <Button key="copy" onClick={this.uploadPage.bind(this)}>创 建</Button> }>
                     <Form>
                         <Form.Item name="boardName" initialValue={this.state.pageNameUpload}>
                             <Input className="win-form-input" placeholder="请输入导入的新页面名称"

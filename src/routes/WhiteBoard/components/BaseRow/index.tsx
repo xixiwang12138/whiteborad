@@ -45,6 +45,10 @@ class BaseRow extends React.Component<BaseRowProps> {
         pageContentUpload: "",
     }
 
+    async componentWillReceiveProps(nextProps: Readonly<BaseRowProps>, nextContext: any) {
+        this.setState({isCreator: await BoardManager.getCreator() === UserManager.getId()})
+    }
+
     async componentDidMount() {
         await UserManager.syncUser();
         this.setState({
@@ -53,7 +57,6 @@ class BaseRow extends React.Component<BaseRowProps> {
             isCreator: await BoardManager.getCreator() === UserManager.getId()
         })
     }
-
     private async handleCopy(e:React.MouseEvent<HTMLElement>) {
         await navigator.clipboard.writeText(this.props.boardInfo.id);
         message.success("已复制到剪切板");
@@ -91,7 +94,7 @@ class BaseRow extends React.Component<BaseRowProps> {
         open.click();
     }
 
-    private async handleModeSwitch(mode: BoardMode) {
+    private handleModeSwitch(mode: BoardMode) {
         const modeString = mode === BoardMode.ReadOnly ? "只读模式" : "编辑模式";
         if(this.props.mode === mode){
             message.info(`当前已经在${modeString}`)
@@ -99,7 +102,7 @@ class BaseRow extends React.Component<BaseRowProps> {
         }
         this.props.setMode(mode)
         //向后端发送切换模式的POST请求
-        await switchMode(this.props.boardInfo.id, mode)
+        switchMode(this.props.boardInfo.id, mode)
     }
 
 
@@ -173,7 +176,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                     </div>
                     <div className="row-right">
                         <div className="right1-click">
-                            <Popover placement="bottom" content={this.propertyTool.bind(this)} trigger="click">
+                            <Popover placement="bottom" content={this.propertyTool.bind(this)} trigger="hover">
                                 <img src={attribute}/>
                             </Popover>
                             {/*<img src={shuxing}/>*/}

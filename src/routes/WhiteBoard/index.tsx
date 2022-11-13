@@ -20,8 +20,8 @@ export interface WhiteBoardRouteParam {
 }
 
 export enum BoardMode {
-    ReadOnly,
-    Editable
+    Editable,
+    ReadOnly
 }
 
 function toolElementTypeMapping(type:ToolType):ElementType {
@@ -274,10 +274,10 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
 
 
     public async onSwitchMode(mode: BoardMode) {
-        const modeString = mode === BoardMode.ReadOnly ? "只读模式" : "编辑模式";
-        await  message.info(`白板由创建者切换到${modeString}`)
         //调整组件
         this.setState({mode: mode})
+        const modeString = mode === BoardMode.ReadOnly ? "只读模式" : "编辑模式";
+        await  message.info(`白板由创建者切换到${modeString}`)
     }
 }
 

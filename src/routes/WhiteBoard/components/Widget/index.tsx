@@ -68,8 +68,10 @@ class Widget extends React.Component<WidgetProps> {
     }
 
     private expandPages() {
-        this.getPages(this.props.boardId).then();
-        this.setState({expandPage : true});
+        if(this.state.otherPages.length !== 0) {
+            this.getPages(this.props.boardId).then();
+            this.setState({expandPage : true});
+        }
     }
 
     private async getPages(boardId:string) {
@@ -111,10 +113,10 @@ class Widget extends React.Component<WidgetProps> {
                 <div className={"box-wrapper"}  style={{right: "80px"}}>
                     <div className={"box " + (this.state.expandPage ? "box-top" : "box-main") } >
                         <div style={{width:"auto", fontWeight:"bold"}}>{this.state.curPage?.displayName}</div>
-                        {this.state.otherPages.length > 0 && <div className="icon"
+                        <div className="icon"
                              onClick={ this.state.expandPage ? () => {this.setState({expandPage: false})} : this.expandPages.bind(this)}>
                             <img src={this.state.expandPage ? up : down} />
-                        </div>}
+                        </div>
                     </div>
                     { this.state.expandPage &&
                         this.state.otherPages.map((p , i) => {

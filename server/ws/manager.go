@@ -77,6 +77,16 @@ func (h *HubManager) EnterHub(boardId string, userId string, conn *websocket.Con
 	}
 	//获取hub
 	hub := h.GetHub(boardId)
+
+	//已经存在的连接重复连接直接断开
+	if hub.GetUserConnection(userId) != nil {
+		err := conn.Close()
+		if err != nil {
+			log.Printf(cts.ErrorFormat, err)
+			return
+		}
+	}
+	
 	//添加连接
 	userConnection := NewUserConnection(NewBaseConnection(conn), userId, boardId)
 	hub.AddUser(userConnection)

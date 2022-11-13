@@ -16,7 +16,7 @@ var actuallyHandlers = []func(cmd *models.Cmd) error{AddCmd, DeleteCmd, Withdraw
 
 func LoadPageCmd(cmd *models.Cmd) error {
 	pageId := cmd.PageId //需要加载pageId的内容
-	pageVo, err := LoadPage(pageId)
+	pageVo, err := Load(cmd.BoardId, pageId)
 	if err != nil {
 		log.Println(err)
 		return err
@@ -121,5 +121,6 @@ func AdjustCmd(cmd *models.Cmd) error {
 // SwitchPageCmd 切换页面
 func SwitchPageCmd(cmd *models.Cmd) error {
 	//judge cmd creator is owner or not
+	//judge mode is readonly???
 	return nil
 }

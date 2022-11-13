@@ -45,3 +45,13 @@ func (this *whiteBoardRepo) DefaultPageId(boardId string) (string, error) {
 	}
 	return b.DefaultPage, nil
 }
+
+func (this *whiteBoardRepo) GetBoardInfo(boardId string) (*models.WhiteBoard, error) {
+	b, err := this.FindByID(boardId)
+	pages, err := PageRepo.GetBoardPages(boardId)
+	if err != nil {
+		return nil, err
+	}
+	b.Pages = pages
+	return b, nil
+}

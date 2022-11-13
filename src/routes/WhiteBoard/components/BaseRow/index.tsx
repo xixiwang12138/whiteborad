@@ -125,7 +125,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                 {/*        线条拟合*/}
                 {/*    </Checkbox>*/}
                 {/*</div>*/}
-                <div style={{cursor: "pointer"}}><img src={allDelete}/>&nbsp;一键清空</div>
+                {/*<div style={{cursor: "pointer"}}><img src={allDelete}/>&nbsp;一键清空</div>*/}
             </div>
         )
     }
@@ -181,15 +181,13 @@ class BaseRow extends React.Component<BaseRowProps> {
                             </Popover>
                             {/*<img src={shuxing}/>*/}
                         </div>
-                        <div className="right2">
-                            <div className="import-icon" title="导入">
-                                <img src={file} onClick={this.handleImportFile}/>
-                                {/*下面的input组件其实就是个工具*/}
-                                <input type="file" name="filename" id="open" accept= ".wb" onChange={(e) => loadFile(e)} style={{display: "none"}}/>
-                            </div>
-                            <div className="export-icon" title="导出">
-                                <img src={ex} onClick={()=>this.setState({isExportOpen:true})}/>
-                            </div>
+                        <div className="import-icon" title="导入">
+                            <img src={file} onClick={this.handleImportFile}/>
+                            {/*下面的input组件其实就是个工具*/}
+                            <input type="file" name="filename" id="open" accept= ".wb" onChange={(e) => loadFile(e)} style={{display: "none"}}/>
+                        </div>
+                        <div className="export-icon" title="导出">
+                            <img src={ex} onClick={()=>this.setState({isExportOpen:true})}/>
                         </div>
                         <div className="right3">
                             <div className="btn-invite" onClick={()=>{this.setState({isInviteOpen:true})}}>邀请</div>

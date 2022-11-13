@@ -7,7 +7,7 @@ import {Button} from "antd";
 import {ToolType} from "../../app/tools/Tool";
 import {GenericElementType} from "../../app/element/GenericElement";
 import {LinearElementType} from "../../app/tools/LinearTool";
-import {Op, OperableListener} from "../../app/operationTracker/OperationTracker";
+import {Op} from "../../app/operationTracker/OperationTracker";
 
 
 // export const DODOs = [
@@ -33,15 +33,18 @@ export interface IOpListener {
 
 class ToolListProp {
     onToolSelected:OnToolSelected = () => {};
+
     opListener:IOpListener = new class implements IOpListener {
         onRedo():void{}
         onUndo():void{}
-    }()
+    }();
+
+    undoAble:boolean = false;
+    redoAble:boolean = false;
 }
 
-class ToolList extends React.Component<ToolListProp> implements OperableListener {
+class ToolList extends React.Component<ToolListProp>  {
 
-    state:{undoAble:boolean; redoAble:boolean;}
 
     // 这里的类型意思是，一级类型数组 | 一级类型，[二级类型数组]
     private iconGroups:(ToolType[]|[ToolType, SecondLevelType[]])[] = [
@@ -52,51 +55,74 @@ class ToolList extends React.Component<ToolListProp> implements OperableListener
         ["text", "image"]
     ]
 
-    private readonly onToolSelected:OnToolSelected;
+    state = {
+        iconState: [
+            [false, true], // 默认为选择工具
+            [false, false],
+            [false, false],
+            [false, false],
+            [false, false]
+        ]
+    }
+
+    private onToolSelected(i1:number, i2?:number) {
+        this.setState((s) => {
+            let a = [[false, false],
+                [false, false],
+                [false, false],
+                [false, false],
+                [false, false]];
+            a[i1][i2] = true;
+            return {
+                iconState:a
+            }
+        })
+        if(this.iconGroups[i1][1] instanceof Array) {
+            this.props.onToolSelected(this.iconGroups[i1][0], this.iconGroups[i1][1][i2] as SecondLevelType);
+        } else {
+            this.props.onToolSelected(this.iconGroups[i1][i2] as ToolType);
+        }
+
+    }
+
 
     private readonly opListener:IOpListener;
 
     public constructor(props:ToolListProp) {
         super(props);
-        this.onToolSelected = props.onToolSelected;
         this.opListener = props.opListener;
-        this.state =  {
-            undoAble:false,
-            redoAble:false
-        }
-    }
-
-    public onAbilityChange(op:Op, ability:boolean) {
-        if (op === "undo") this.setState({undoAble: ability});
-        else this.setState({redoAble: ability});
     }
 
     render() {
         return <div className="tool-list">
             <div className="tool-do">
                 <div className="do-box">
-                    <Button className={"icon" + this.state.undoAble ? "" : "icon-disabled"} name="undo"
+                    <div className={"icon " + (this.props.undoAble ? "" : "icon-disabled")}
                             onClick={this.opListener.onUndo.bind(this.opListener)}>
                         <img src={undo}/>
-                    </Button>
-                    <Button className={"icon" + this.state.redoAble ? "" : "icon-disabled"} name="redo"
+                    </div>
+                    <div className={"icon " + (this.props.redoAble ? "" : "icon-disabled")}
                             onClick={this.opListener.onRedo.bind(this.opListener)}>
                         <img src={redo}/>
-                    </Button>
+                    </div>
                 </div>
             </div>
             <div className="tool-bar"> {
-                    this.iconGroups.map((t,i) => {
-                        return <div key={i} className={"bar-box" + (i === 4? "" : " separate")}>{
+                    this.iconGroups.map((t,i1) => {
+                        return <div key={i1} className={"bar-box" + (i1 === 4? "" : " separate")}>{
                             // 存在二级元素
                             t.length > 1 && t[1] instanceof Array ?
-                                t[1].map(s =>
-                                    <div key={s} className="bar-icon" onClick={()=>this.onToolSelected(t[0], s)}>
-                                        <img className="bar-icon-selected" src={require(`../../icon/${s}.svg`)}/>
+                                t[1].map((s, i2) =>
+                                    <div key={s}
+                                         className={"bar-icon" + (this.state.iconState[i1][i2] ? " bar-icon-selected" : "")}
+                                         onClick={()=>this.onToolSelected(i1, i2)}>
+                                        <img  src={require(`../../icon/${s}.svg`)}/>
                                     </div>
                                 ) :
-                                t.map(f =>
-                                    <div key={f as ToolType} className="bar-icon" onClick={()=>this.onToolSelected(f as ToolType)}>
+                                t.map((f, i2) =>
+                                    <div key={f}
+                                         className={"bar-icon" + (this.state.iconState[i1][i2] ? " bar-icon-selected" : "")}
+                                         onClick={()=>this.onToolSelected(i1, i2)}>
                                         <img src={require(`../../icon/${f}.svg`)}/>
                                     </div>
                                 )}

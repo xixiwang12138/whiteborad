@@ -27,14 +27,20 @@ export class TextElement extends ElementBase {
             const s = ctx._scale;
             ctx.fillStyle = this.strokeColor;
             ctx.textAlign = this.textAlign;
-            if(this.fontStyle !== "underline") ctx.lineWidth = this.fontSize / 6;
-            ctx.font = this.getStandardFont();
+            let x;
+            switch (this.textAlign) {
+                case "left": x = this.x * s; break;
+                case "center" : x = (this.x + this.width / 2) * s; break;
+                case "right" : x = (this.x + this.width) * s;
+            }
+            if(this.fontStyle === "underline") ctx.lineWidth = this.fontSize / 12 * s;
+            ctx.font = this.getStandardFont(s);
             const lines = this.text.split("\n");
             for(let i = 0;i < lines.length;i++) {
-                ctx.fillText(lines[i], this.x * s, (this.y + this.fontSize * (1.2 * i + 1)) * s, this.width * s);
+                ctx.fillText(lines[i], x, (this.y + this.fontSize * 1.1 * (i + 1)) * s, this.width * s);
                 if(this.fontStyle === "underline") {
                     ctx.beginPath();
-                    const y = (this.y + this.fontSize * (1.1 * (i + 1) + 1)) * s;
+                    const y = (this.y + this.fontSize * 1.15 * (i + 1)) * s;
                     ctx.moveTo(this.x * s, y);
                     ctx.lineTo((this.x + this.width) * s, y);
                     ctx.stroke();
@@ -56,12 +62,12 @@ export class TextElement extends ElementBase {
     /**
      * 获取css标准font
      */
-    public getStandardFont() {
+    public getStandardFont(scale:number = 1) {
         let res = "";
         if(this.fontStyle !== "underline") {
-            res = `${this.fontStyle} ${this.fontSize}px 黑体`;
+            res = `${this.fontStyle} ${Math.floor(this.fontSize * scale)}px 黑体`;
         } else {
-            res = `${this.fontSize}px 黑体`
+            res = `${Math.floor(this.fontSize * scale)}px 黑体`
         }
         return res;
     }

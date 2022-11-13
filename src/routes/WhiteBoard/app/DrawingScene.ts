@@ -267,11 +267,13 @@ export class DrawingScene {
             (e.x - this.x) / this.scale,
             (e.y -this.y) / this.scale, e.x, e.y);
         if(doubleClick) event.type = "doubleClick";
-        switch (e.type.slice(5)) {
-            case "up": case "down" : event.type = e.type.slice(5) as SceneTouchEventType; break;
-            case "move":
-                if(isDown) event.type = "move";
-                else event.type = "hover";
+        else {
+            switch (e.type.slice(5)) {
+                case "up": case "down" : event.type = e.type.slice(5) as SceneTouchEventType; break;
+                case "move":
+                    if(isDown) event.type = "move";
+                    else event.type = "hover";
+            }
         }
         return event;
     }

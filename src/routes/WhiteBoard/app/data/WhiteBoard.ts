@@ -1,15 +1,12 @@
 import {field, SerializableData} from "../../../../utils/data/DataLoader";
 import {Page} from "./Page";
-
-export enum BoardType {
-    Editable, ReadOnly
-}
+import {BoardMode} from "../../index";
 
 export class WhiteBoard extends SerializableData {
     @field
     public id:string;
     @field
-    public mode:BoardType;
+    public mode:BoardMode;
     @field
     public name: string;
     @field

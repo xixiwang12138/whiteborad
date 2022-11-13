@@ -58,6 +58,7 @@ func StoreBoard(bId string) {
 	wg.Wait()
 }
 
+// GetBoardVO 从数据库中load
 func GetBoardVO(boardId string) (*models.WhiteBoard, error) {
 	b, err := dao.WhiteBoardRepo.FindByID(boardId)
 	if err != nil {

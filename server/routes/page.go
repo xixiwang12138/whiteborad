@@ -5,6 +5,10 @@ import (
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/pkg/errors"
+	"log"
+	"server/common/cache"
+	"server/common/sources"
+	"server/common/utils"
 	"server/dao"
 	"server/logic"
 	"server/models"
@@ -38,6 +42,34 @@ func CreatPage(ctx *gin.Context, req *bind.NewPageReq) (any, error) {
 		err = json.Unmarshal(buf, &elements)
 		if err != nil {
 			return nil, errors.Wrap(err, "invalid content")
+		}
+
+		pip := sources.RedisSource.Client.TxPipeline()
+		for _, v := range elements {
+			id := utils.GenerateId()
+			pip.SAdd(cache.PageElementsKey(pageId), id)
+			containsPoints, err := models.StringElementArray(v)
+			if err != nil {
+				log.Println(err)
+			}
+			//store in redis
+			v["id"] = id
+			pip.HMSet(cache.ElementKey(id), v)
+			if containsPoints {
+				//将points重新转换为数组
+				var arrayData []any
+				err := json.Unmarshal([]byte((v["points"]).(string)), &arrayData)
+				if err != nil {
+					return nil, err
+				}
+				v["points"] = arrayData
+			}
+		}
+
+		_, err = pip.Exec()
+		if err != nil {
+			log.Println(err)
+			return nil, err
 		}
 
 		page, err := dao.PageRepo.FindByID(pageId)

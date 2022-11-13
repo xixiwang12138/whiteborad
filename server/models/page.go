@@ -33,8 +33,8 @@ type WhiteBoard struct {
 }
 
 const (
-	DefaultPageName       = "default"
-	DefaultWhiteBoardName = "default"
+	DefaultPageName       = "页面1"
+	DefaultWhiteBoardName = "默认"
 )
 
 type Page struct {

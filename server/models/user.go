@@ -2,8 +2,8 @@ package models
 
 import "server/common/utils"
 
-var as = []string{"#3E6182", "#956AA4", "#A46A6A"}
-var names = []string{"scut", "七牛", "勇敢牛牛"}
+var as = []string{"#3E6182", "#956AA4", "#A46A6A", "#CDD7DF", "#CDD0DF"}
+var names = []string{"七牛牛", "勇敢牛牛"}
 
 type User struct {
 	Model
@@ -20,6 +20,6 @@ func NewUser(phone string, password string) *User {
 		Phone:    phone,
 		Password: password,
 		Avatar:   utils.RandomPick(as),
-		Name:     utils.RandomPick(names) + "_" + utils.RandomString(2),
+		Name:     utils.RandomPick(names) + "#_" + utils.RandomStringUsingChars(2, "0123456789"),
 	}
 }

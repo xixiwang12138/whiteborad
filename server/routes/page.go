@@ -83,7 +83,6 @@ const filePath = "D://"
 
 func ExportPage(ctx *gin.Context) (any, error) {
 	pageId := ctx.Query("pageId")
-
 	page, err := logic.LoadPage(pageId)
 	data := page.Elements
 	bytes, err := json.Marshal(data)

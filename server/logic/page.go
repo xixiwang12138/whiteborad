@@ -60,7 +60,6 @@ func StorePage(pageId string) error {
 	return nil
 }
 
-// LoadPage 从数据库中加载一个页面上的所有对象并缓存至Redis中
 func LoadPage(pageId string) (*models.PageVO, error) {
 	var vo *models.PageVO
 	page, err := dao.PageRepo.FindByID(pageId)

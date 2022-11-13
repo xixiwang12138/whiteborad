@@ -165,7 +165,7 @@ function MyBoard(){
                 <div style={{marginBottom:'20px'}}/>
                 <div className="list">
                     <div className="list-left">
-                        <Tabs onChange={onTabsChange} defaultActiveKey="4"
+                        <Tabs onChange={onTabsChange} defaultActiveKey="1"
                         items={[
                             {
                                 label: `全部白板`,

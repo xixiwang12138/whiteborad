@@ -11,10 +11,13 @@ import {Avatar, Tooltip, Dropdown, Button, Modal, Popover, Checkbox, Radio, mess
 import {NavLink} from 'react-router-dom';
 import {UserManager} from "../../../../UserManager";
 import {exportFile} from "../../../../api/api";
+import ClipboardJS from "clipboard";
+
 class BaseRowProps {
     boardInfo:{id:string, name:string}
     memberList:{id:string, name:string, avatar:string}[]
 }
+
 
 
 class BaseRow extends React.Component<BaseRowProps> {
@@ -37,13 +40,14 @@ class BaseRow extends React.Component<BaseRowProps> {
             avatar: await UserManager.getAvatar(),
             isCreator: this.props.boardInfo.id === UserManager.getId()
         })
+        let clipboard = new ClipboardJS("#copy-btn")
+        clipboard.on('success', (e) => {
+            message.success("已复制到剪切板");
+            this.setState({isInviteOpen:false})
+        })
+
     }
 
-    private async handleCopy(e:React.MouseEvent<HTMLElement>) {
-        await navigator.clipboard.writeText(this.props.boardInfo.id);
-        message.success("已复制到剪切板");
-        this.setState({isInviteOpen:false})
-    }
     private async handleExportFile(e:React.MouseEvent<HTMLElement>){
         const pageId = "1591247059763789825"
         const resp = await exportFile(pageId)
@@ -151,7 +155,7 @@ class BaseRow extends React.Component<BaseRowProps> {
                 </div>
                 <Modal title="Invite" open={this.state.isInviteOpen}
                        onCancel={() => this.setState({isInviteOpen : false})}
-                       footer={<Button key="copy" onClick={this.handleCopy.bind(this)}>复 制</Button> }>
+                       footer={<Button key="copy" data-clipboard-target="#text" id={"copy-btn"}>复 制</Button> }>
                     {/*<p>SOME</p>*/}
                     <p className="info-text" id="text">{this.props.boardInfo.id}</p>
                     {/*<textarea id="input">copy</textarea>*/}

@@ -14,7 +14,7 @@ import up from "../../icon/up.svg";
 import down from "../../icon/down.svg";
 import {Page} from "../../app/data/Page";
 
-export type ScaleType = "enlarge" | "small";
+export type ScaleType = "none" | "enlarge" | "small";
 
 export interface IWidget {
     onScale(t:ScaleType):number;

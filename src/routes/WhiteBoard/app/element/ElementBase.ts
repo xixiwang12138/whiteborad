@@ -84,13 +84,14 @@ export class ElementBase extends SerializableData {
             this.x + this.width + o, this.y - o,
             this.x + this.width + o, this.y + this.height + o,
             this.x - o, this.y + this.height + o].map(c => c * ctx._scale);
+        ctx.save();
         ctx.beginPath();
         ctx.moveTo(corners[0], corners[1]);
         ctx.setLineDash([5])
         for(let i = 1;i < 4;i++) ctx.lineTo(corners[2 * i], corners[2 * i + 1]);
         ctx.closePath();
         ctx.stroke();
-        ctx.setLineDash([0])
+        ctx.restore();
     }
 
     // 绘制旋转句柄，圆圈大小与scale无关
@@ -246,10 +247,10 @@ export class ElementBase extends SerializableData {
         const p = RotateUtil.rotate(this.x + this.width + this.strokeWidth / 2,
             this.y + this.height + this.strokeWidth / 2,
             center.x, center.y, this.angle);
-        return x > p[0] - 10
-            && x < p[0] + 10
-            && y > p[1] - 10
-            && y < p[1] + 10;
+        return x > p[0] - 20
+            && x < p[0] + 20
+            && y > p[1] - 20
+            && y < p[1] + 20;
         }
 
     /**

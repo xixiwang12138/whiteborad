@@ -7,7 +7,7 @@ import MyBoard from "./components/MyBoard";
 
 function Home() {
     return (
-        <div className="home">
+        <div className="home" style={{width:"100%", height:"100%"}}>
             <BaseColumn />
             <MyBoard />
             {/*<WindowJoin />*/}

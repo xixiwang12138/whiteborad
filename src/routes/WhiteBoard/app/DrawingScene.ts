@@ -3,6 +3,7 @@ import {SceneTouchEvent, SceneTouchEventType} from "./element/TouchEvent";
 import {ScaleUtil} from "../../../utils/math";
 import {Page} from "./data/Page";
 import {TextElement} from "./element/TextElement";
+import {InteractEvent} from "./event/InteractEvent";
 
 export type OnRenderListener = (cvs:DrawingScene)=>void
 
@@ -236,7 +237,8 @@ export class DrawingScene {
     public zoom(dScale:number, sx:number, sy:number) {
         const pScale = (this.scale + dScale) / this.scale; // 缩放倍数变化倍数
         this.scale += dScale;
-        [this.x, this.y] = ScaleUtil.scale(this.x, this.y, pScale, pScale, sx, sy);
+        [this.x, this.y] = ScaleUtil.scale(this.x, this.y,
+            pScale, pScale, sx, sy);
         this.refreshCanvasSize();
         this.drawAllElement();
     }
@@ -248,19 +250,11 @@ export class DrawingScene {
     /**
      *  将原生触摸事件转化成场景事件
      */
-    public toSceneEvent(e:MouseEvent, isDown:boolean, doubleClick:boolean = false):SceneTouchEvent {
+    public toSceneEvent(e:InteractEvent):SceneTouchEvent {
         let event =  new SceneTouchEvent(
             (e.x - this.x) / this.scale,
             (e.y -this.y) / this.scale, e.x, e.y);
-        if(doubleClick) event.type = "doubleClick";
-        else {
-            switch (e.type.slice(5)) {
-                case "up": case "down" : event.type = e.type.slice(5) as SceneTouchEventType; break;
-                case "move":
-                    if(isDown) event.type = "move";
-                    else event.type = "hover";
-            }
-        }
+        event.type = e.type as SceneTouchEventType;
         return event;
     }
 
@@ -288,5 +282,6 @@ export class DrawingScene {
         this.drawAllElement();
         this.render();
     }
+
 
 }

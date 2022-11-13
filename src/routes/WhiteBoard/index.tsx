@@ -14,6 +14,7 @@ import {message} from "antd";
 import {Page} from "./app/data/Page";
 import Widget, {IWidget, ScaleType} from "./components/Widget";
 import {ElementType} from "./app/element/ElementBase";
+import {InteractEvent, MouseInteractEvent, NewInteractEvent, TouchInteractEvent} from "./app/event/InteractEvent";
 
 export interface WhiteBoardRouteParam {
     id:string
@@ -28,6 +29,7 @@ function toolElementTypeMapping(type:ToolType):ElementType {
         default: return ElementType.none;
     }
 }
+
 
 class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRouteParam>> implements IOpListener, IWidget, ToolReactor {
     private app!:WhiteBoardApp;
@@ -84,8 +86,8 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
 
     private setupCanvas() {
         this.showCanvas = document.getElementById("show-canvas") as HTMLCanvasElement;
-        this.showCanvas.width = this.showCanvas.clientWidth;
-        this.showCanvas.height = this.showCanvas.clientHeight;
+        this.showCanvas.width = this.showCanvas.clientWidth * window.devicePixelRatio;
+        this.showCanvas.height = this.showCanvas.clientHeight * window.devicePixelRatio;
         this.showCanvasCtx = this.showCanvas.getContext('2d')!;
     }
 
@@ -100,20 +102,32 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
                 window.document.body.style.cursor = "default";
             }
         })
+        window.addEventListener("touchmove", function (e){
+            e.preventDefault();
+        }, {passive: false})
         window.onresize = this.onCanvasResize.bind(this);
     }
 
     private setupRootNode() {
         this.root = document.getElementById("canvas-root")!;
-        this.root.onmousedown = this.onDown.bind(this);
-        this.root.onmouseup = this.onUp.bind(this);
-        this.root.onmousemove = this.onMove.bind(this);
+        // 判断是否为移动平台
+        const isIPad = (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 0) || navigator.platform === 'iPad';
+        const isAndroid = navigator.userAgent.indexOf("Mobile") > 1;
+        if(isIPad || isAndroid) {
+            this.root.ontouchstart = this.onDown.bind(this);
+            this.root.ontouchend = this.onUp.bind(this);
+            this.root.ontouchmove = this.onMove.bind(this);
+        } else {
+            this.root.onmousedown = this.onDown.bind(this);
+            this.root.onmouseup = this.onUp.bind(this);
+            this.root.onmousemove = this.onMove.bind(this);
+        }
         this.root.addEventListener("wheel", (e) => {
             // 阻止默认全局缩放事件
             e.preventDefault();
             e.stopPropagation();
             if (this.refactoringScene) {
-                this.onScale(Math.sign(e.deltaY) > 0 ? "small" : "enlarge");
+                this.onScale(Math.sign(e.deltaY) > 0 ? "small" : "enlarge", e.x, e.y);
             }}, {passive:false});
     }
 
@@ -151,55 +165,70 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.app.refreshScene();
     }
 
-    private onDown(e:MouseEvent) {
-        // mousedown之后才捕捉move事件
-        this.isMouseDown = true;
-        if(this.refactoringScene) {
-            this.lastX = e.x; this.lastY = e.y;
-        } else {
-            let newTime = new Date();
-            if(newTime.valueOf() - this.lastTime.valueOf() < 400) {
-                this.app?.dispatchMouseEvent(e, true, true);
-                newTime.setFullYear(2000); // 设置一个足够久的时间，防止三连击
-            } else {
-                this.app?.dispatchMouseEvent(e, true); // 双击时不触发down事件
-            }
-            this.lastTime = newTime;
-        }
-    }
 
-    private onUp(e:MouseEvent) {
-        if(!this.refactoringScene) {
-            this.app?.dispatchMouseEvent(e, false);
-        }
-        this.isMouseDown = false;
-    }
-
-    private onMove(e:MouseEvent) {
-        if(this.isMouseDown) {
+    private onDown(eRaw:MouseEvent | TouchEvent) {
+        let e = NewInteractEvent(eRaw);
+        if(e.type !== "scalestart") {
+            this.isMouseDown = true;
             if(this.refactoringScene) {
-                this.app?.translateScene(e.x - this.lastX, e.y - this.lastY);
-                this.app?.refreshScene();
                 this.lastX = e.x; this.lastY = e.y;
             } else {
-                this.app?.dispatchMouseEvent(e, true);
+                let newTime = new Date();
+                if(newTime.valueOf() - this.lastTime.valueOf() < 300) {
+                    e.type = "doubleClick";
+                    this.app?.dispatchInteractEvent(e);
+                    newTime.setFullYear(2000); // 设置一个足够久的时间，防止三连击
+                } else {
+                    this.app?.dispatchInteractEvent(e); // 双击时不触发down事件
+                }
+                this.lastTime = newTime;
             }
-        } else {
+        }
+    }
+
+    private onUp(eRaw:MouseEvent | TouchEvent) {
+        let e = NewInteractEvent(eRaw);
+        if(e.type !== "scaleend") {
             if(!this.refactoringScene) {
-                this.app?.dispatchMouseEvent(e, false);
+                this.app?.dispatchInteractEvent(e);
+            }
+            this.isMouseDown = false;
+        }
+    }
+
+    private onMove(eRaw:MouseEvent | TouchEvent) {
+        let e = NewInteractEvent(eRaw);
+        if(e.type === "scaling") {
+            this.onScale((e as TouchInteractEvent).scaleType, e.x, e.y);
+        } else {
+            if(this.isMouseDown) {
+                if(this.refactoringScene) {
+                    this.app?.translateScene(e.x - this.lastX, e.y - this.lastY);
+                    this.app?.refreshScene();
+                    this.lastX = e.x; this.lastY = e.y;
+                } else {
+                    this.app?.dispatchInteractEvent(e);
+                }
+            } else {
+                if(!this.refactoringScene) {
+                    e.type = "hover";
+                    this.app?.dispatchInteractEvent(e);
+                }
             }
         }
     }
 
     private onCanvasResize() {
-        this.showCanvas.width = this.showCanvas.clientWidth;
-        this.showCanvas.height = this.showCanvas.clientHeight;
+        this.showCanvas.width = this.showCanvas.clientWidth * window.devicePixelRatio;
+        this.showCanvas.height = this.showCanvas.clientHeight * window.devicePixelRatio;
         this.clearCanvas();
         this.app?.refreshScene();
     }
 
     private clearCanvas() {
-        this.showCanvasCtx.clearRect(0,0, this.showCanvas.clientWidth, this.showCanvas.clientHeight);
+        this.showCanvasCtx.clearRect(0,0,
+            this.showCanvas.clientWidth * window.devicePixelRatio,
+            this.showCanvas.clientHeight * window.devicePixelRatio);
     }
 
     private refreshShowCanvas(s:DrawingScene) {
@@ -235,9 +264,10 @@ class WhiteBoard extends React.Component<RouteComponentProps<WhiteBoardRoutePara
         this.app.switchPage(pageId);
     }
 
-    public onScale(t:ScaleType):number {
+    public onScale(t:ScaleType, sx = this.showCanvas.clientWidth * window.devicePixelRatio / 2,
+                   sy = this.showCanvas.clientHeight * window.devicePixelRatio / 2):number {
         let res = this.app?.zoomScene(t === "enlarge" ? 0.05: -0.05,
-            this.root.clientWidth / 2, this.root.clientHeight / 2);
+            sx, sy);
         if(res !== -1) {
             this.app.refreshScene();
             this.setState({scale:res})

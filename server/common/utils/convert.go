@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"github.com/pkg/errors"
+	"log"
 	"reflect"
 	"strconv"
 )
@@ -18,6 +19,10 @@ func MapValueConvert(filedMap FiledTypeMap, v map[string]string) (map[string]int
 		if !ok {
 			// not in field-type map
 			return nil, errors.New(field + " not in field-type map")
+		}
+		if value == "" && kind != reflect.String {
+			log.Println("[warning] occur empty string in value, filed is", field)
+			continue
 		}
 		switch kind {
 		case reflect.String:

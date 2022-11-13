@@ -1,0 +1,5 @@
+package whiteboarddao
+
+func Create() {
+
+}

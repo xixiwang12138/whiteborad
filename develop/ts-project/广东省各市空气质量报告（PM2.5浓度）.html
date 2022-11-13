@@ -1,0 +1,79 @@
+<html>
+<!--用每个城市的均值，然后生成O3与PM2.5关系散点图-->
+<head lang="en">
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <style type="text/css">
+        #main{height:600px;width: 1000px}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.1/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="main"></div>
+<script type="text/javascript">
+
+    // 基于准备好的dom，初始化 echarts 实例并绘制图表。
+    var myChart = echarts.init(document.getElementById("main"));
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '广东省各市空气质量报告（PM2.5浓度）'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data: ['广州', '佛山', '深圳', '阳江', '江门','清远']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['2021.9','2022.10','2021.11','2021.12','2022.1','2022.2','2022.3','2022.4']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name: '广州',
+                type: 'line',
+                data: [22.0, 20.0, 25.0, 31.0, 31.0, 16.0, 24.0, 21.0]
+            },
+            {
+                name: '佛山',
+                type: 'line',
+                data: [21.0, 20.0, 24.0, 33.0, 32.0, 16.0, 24.0, 21.0]
+            },
+            {
+                name: '深圳',
+                type: 'line',
+                data: [16.0, 16.0, 24.0, 27.0, 26.0, 13.0, 17.0, 16.0]
+            },
+            {
+                name: '阳江',
+                type: 'line',
+                data: [14.0, 20.0, 29.0, 39.0, 41.0, 21.0, 24.0, 19.0]
+            },
+            {
+                name: '清远',
+                type: 'line',
+                data: [20.0, 18.0, 20.0, 24.0, 26.0, 12.0, 27.0, 23.0]
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表
+    myChart.setOption(option);
+</script>
+</body>
+</html>

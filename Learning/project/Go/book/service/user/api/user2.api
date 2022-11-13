@@ -1,0 +1,4 @@
+
+type Father {
+    name string
+}

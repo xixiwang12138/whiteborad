@@ -1,0 +1,74 @@
+<html>
+<!--用每个城市的均值，然后生成O3与PM2.5关系散点图,阐述两者之间的关系-->
+<head lang="en">
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <style type="text/css">
+        #main {
+            height: 600px;
+            width: 1000px
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.1/dist/echarts.min.js"></script>
+    <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+</head>
+<body>
+<div id="main"></div>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化 echarts 实例并绘制图表。
+    var myChart = echarts.init(document.getElementById("main"));
+
+
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: "臭氧浓度与PM2.5浓度的关系",
+            left: 'center',
+            top: 0
+        },
+        xAxis: {
+            min: 100,
+            max: 180,
+            name: '臭氧浓度指标'
+        },
+        yAxis: {
+            min: 15,
+            max: 30,
+            name: 'PM2.5浓度'
+        },
+        series: [
+
+            {
+                symbolSize: 20,
+                data: [
+                    [133.5, 23.25],
+                    [165.875, 23.125],
+                    [152.625, 23.875],
+                    [141.125, 23.75],
+                    [119.5, 19.875],
+                    [133.125, 19.5],
+                    [162.5, 24.875],
+                    [144.375, 27.875],
+                    [122.875, 21.625],
+                    [113.25, 20.25],
+                    [137.25, 21.25],
+                    [138.375, 21.25],
+                    [134.875, 19.0],
+                    [119.25, 24.0],
+                    [133.125, 19.375],
+                    [147.125, 25.875],
+                    [123.375, 25.125],
+                    [132.625, 24.875],
+                    [145.25, 22.625],
+                    [154.75, 23.0],
+                    [143.5, 21.125]
+                ],
+                type: 'scatter',
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表
+    myChart.setOption(option);
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+option go_package = "../pb";
+package pb;
+
+message AdditionArgs {
+  int64 nums1 = 1;
+  int64 nums2 = 2;
+  int64 ans = 3;
+}
+
+service calculate_service {
+  rpc process (AdditionArgs) returns (AdditionArgs) {}
+}

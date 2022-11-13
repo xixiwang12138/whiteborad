@@ -1,0 +1,46 @@
+<html>
+<!---->
+<head lang="en">
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <style type="text/css">
+        #main {
+            height: 600px;
+            width: 1000px
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.1/dist/echarts.min.js"></script>
+</head>
+<body>
+<div id="main"></div>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化 echarts 实例并绘制图表。
+    var myChart = echarts.init(document.getElementById("main"));
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: "广东省平均PM2.5浓度趋势变化",
+            left: 'center',
+            top: 0
+        },
+        xAxis: {
+            type: 'category',
+            data: ['2021.9', '2022.10', '2021.11', '2021.12', '2022.1', '2022.2', '2022.3', '2022.4'],
+            name: '日期'
+        },
+        yAxis: {
+            type: 'value',
+            name: 'PM2.5浓度'
+        },
+        series: [
+            {
+                data: [17.333333333333332, 18.904761904761905, 25.523809523809526, 31.095238095238095, 27.666666666666668, 18.047619047619047, 22.142857142857142, 13.047619047619047],
+                type: 'line'
+            }
+        ]
+    };
+    // 使用刚指定的配置项和数据显示图表
+    myChart.setOption(option);
+</script>
+</body>
+</html>

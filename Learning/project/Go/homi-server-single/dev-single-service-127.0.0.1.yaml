@@ -1,0 +1,25 @@
+service-name: single
+service-id: 08c753d0589472877024
+local-address: 127.0.0.1
+
+redis:
+  address: 175.178.81.93:6379
+  password: L2q81sNBKFKFW23y
+  DB: 0
+
+http:
+  port: :8090 #注意PORT的形式，有一个冒号，这样就
+
+wx:
+  appID: wxd1456ddc8b073f35
+  secret: 1e995500b1a4483587522141e027c2a9
+
+websocket:
+  port: :3000
+
+mongo:
+  userName:
+  password:
+  host: localhost
+  port: 27017
+  dataBase: demo

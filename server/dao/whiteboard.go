@@ -48,9 +48,15 @@ func (this *whiteBoardRepo) DefaultPageId(boardId string) (string, error) {
 
 func (this *whiteBoardRepo) GetBoardInfo(boardId string) (*models.WhiteBoard, error) {
 	b, err := this.FindByID(boardId)
+	if b == nil {
+		return nil, nil
+	}
 	pages, err := PageRepo.GetBoardPages(boardId)
 	if err != nil {
 		return nil, err
+	}
+	if pages == nil || len(pages) == 0 {
+		pages = make([]*models.Page, 0)
 	}
 	b.Pages = pages
 	return b, nil

@@ -80,13 +80,15 @@ func (h *HubManager) EnterHub(boardId string, userId string, conn *websocket.Con
 
 	//已经存在的连接重复连接直接断开
 	if oldConn := hub.GetUserConnection(userId); oldConn != nil {
+		hub.DeleteUser(userId)
+		//断开需要删除链接
 		err := oldConn.Close()
 		if err != nil {
 			log.Printf(cts.ErrorFormat, err)
 			return
 		}
 	}
-	
+
 	//添加连接
 	userConnection := NewUserConnection(NewBaseConnection(conn), userId, boardId)
 	hub.AddUser(userConnection)

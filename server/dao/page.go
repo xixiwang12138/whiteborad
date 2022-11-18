@@ -26,9 +26,9 @@ func (this *pageRepo) CreatePage(boardId string, displayName string) (string, er
 	return pageId, nil
 }
 
-func (this *pageRepo) SavePageContent(pageId string, data []string) error {
+func (this *pageRepo) SavePageContent(pageId string, data []models.StringStringElement) error {
 	return this.UpdateFiled(pageId, map[string]interface{}{
-		"content": models.DataToStringFiled(data),
+		"content": utils.Serialize(data),
 	})
 }
 

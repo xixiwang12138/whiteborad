@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"encoding/json"
+	"github.com/pkg/errors"
 	"log"
 	"server/common/cache"
 	"server/common/cts"
@@ -53,9 +53,8 @@ func CmdHandler(o *models.Cmd, boardId string, userId string) error {
 		}
 		ws.HubMgr.BroadcastCmd(boardId, o, userId) //注意不给发送者转发
 	}()
-
-	o.Fill(boardId, userId)
 	//更改数据
+	o.SetInfo(boardId, userId)
 	handler := actuallyHandlers[o.Type] //通过下标访问选择哪一个处理方法
 	err := handler(o)
 	if err != nil {
@@ -68,14 +67,14 @@ func CmdHandler(o *models.Cmd, boardId string, userId string) error {
 func AddCmd(cmd *models.Cmd) error {
 	//存储元素对象
 	p := cmd.Payload
-	m := utils.DeserializeMap(p)
-	models.StringElementArray(m)
-
-	err := sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), m).Err()
+	element, err := models.NewElementKV(p).StringfyFiled()
 	if err != nil {
 		return err
 	}
-	//存储一个页面上所有的元素id
+	err = sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), element).Err()
+	if err != nil {
+		return err
+	}
 	err = sources.RedisSource.Client.SAdd(cache.PageElementsKey(cmd.PageId), cmd.O).Err()
 	if err != nil {
 		return err
@@ -85,11 +84,7 @@ func AddCmd(cmd *models.Cmd) error {
 
 // DeleteCmd 在页面上删除某一个元素
 func DeleteCmd(cmd *models.Cmd) error {
-	err := sources.RedisSource.Del(cache.ElementKey(cmd.O))
-	if err != nil {
-		return err
-	}
-	err = sources.RedisSource.Client.SRem(cache.PageElementsKey(cmd.PageId), cmd.O).Err()
+	err := elementOpr.Delete(cmd.PageId, cmd.O)
 	if err != nil {
 		return err
 	}
@@ -97,20 +92,46 @@ func DeleteCmd(cmd *models.Cmd) error {
 }
 
 func WithdrawCmd(cmd *models.Cmd) error {
-	return nil
+	//AddCmd, DeleteCmd, WithdrawCmd, AdjustCmd, SwitchPageCmd, SwitchMode, LoadPageCmd
+	//对撤销操作求逆，进行持久化更改
+	payloadCmd := utils.Deserialize[models.Cmd](cmd.Payload)
+	switch payloadCmd.Type {
+	case models.Add:
+		err := elementOpr.Delete(payloadCmd.PageId, payloadCmd.O)
+		if err != nil {
+			return err
+		}
+		return nil
+	case models.Delete:
+		err := sources.RedisSource.Client.HMSet(cache.ElementKey(payloadCmd.O), map[string]interface{}{
+			"isDeleted": "0",
+		}).Err()
+		err = sources.RedisSource.Client.SAdd(cache.PageElementsKey(payloadCmd.PageId), payloadCmd.O).Err()
+		if err != nil {
+			return err
+		}
+		return nil
+	case models.Adjust:
+		before, err := models.NewRepeatedElement(payloadCmd.Payload).GetBefore().StringfyFiled()
+		err = sources.RedisSource.Client.HMSet(cache.ElementKey(payloadCmd.O), before).Err()
+		if err != nil {
+			return err
+		}
+		return nil
+	default:
+		return errors.New("no-supported withdraw cmd")
+
+	}
 }
 
 // AdjustCmd 调整一个对象的某一个属性
 func AdjustCmd(cmd *models.Cmd) error {
 	p := cmd.Payload
-	var data models.ReceiveCmdElement
-	err := json.Unmarshal([]byte(p), &data)
+	after, err := models.NewRepeatedElement(p).GetAfter().StringfyFiled()
 	if err != nil {
 		log.Println(err)
 		return err
 	}
-	after := data.GetAfter()
-	models.StringElementArray(after)
 	err = sources.RedisSource.Client.HMSet(cache.ElementKey(cmd.O), after).Err()
 	if err != nil {
 		return err
@@ -122,5 +143,23 @@ func AdjustCmd(cmd *models.Cmd) error {
 func SwitchPageCmd(cmd *models.Cmd) error {
 	//judge cmd creator is owner or not
 	//judge mode is readonly???
+	return nil
+}
+
+var elementOpr = &ElementOperator{}
+
+type ElementOperator struct{}
+
+func (opr *ElementOperator) Delete(pageId string, elementId string) error {
+	//err := sources.RedisSource.Client.SRem(cache.PageElementsKey(pageId), elementId).Err()
+	//if err != nil {
+	//	return err
+	//}
+	err := sources.RedisSource.Client.HMSet(cache.ElementKey(elementId), map[string]interface{}{
+		"isDeleted": "1",
+	}).Err()
+	if err != nil {
+		return err
+	}
 	return nil
 }

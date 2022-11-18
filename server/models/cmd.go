@@ -1,6 +1,11 @@
 package models
 
-import "time"
+import (
+	"encoding/json"
+	"log"
+	"server/common/utils"
+	"time"
+)
 
 type CmdType int8
 
@@ -15,16 +20,87 @@ const (
 )
 
 type ElementKV map[string]any
-type ReceiveCmdElement map[string][2]any
+
+func NewElementKV(seq string) ElementKV {
+	var m ElementKV
+	err := json.Unmarshal([]byte(seq), &m)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	return m
+}
+
+func (e ElementKV) StringfyFiled() (map[string]any, error) {
+	for _, k := range ElementFieldsWhichArray {
+		v, ok := e[k]
+		if ok {
+			points := v.([]any)
+			bytes, err := json.Marshal(points)
+			if err != nil {
+				log.Println(err)
+				return nil, err
+			}
+			e[k] = string(bytes)
+		}
+	}
+	return e, nil
+}
 
 func (e ElementKV) GetElementId() string {
 	return e["id"].(string)
 }
 
-func (e ReceiveCmdElement) GetAfter() map[string]any {
+func (e ElementKV) SetElementId(id string) {
+	e["id"] = id
+}
+
+type RepeatedElement map[string][2]any
+
+func NewRepeatedElement(seq string) RepeatedElement {
+	var m RepeatedElement
+	err := json.Unmarshal([]byte(seq), &m)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+	return m
+}
+
+func (e RepeatedElement) GetBefore() ElementKV {
+	res := make(map[string]any)
+	for k, v := range e {
+		res[k] = v[0]
+	}
+	return res
+}
+
+func (e RepeatedElement) GetAfter() ElementKV {
 	res := make(map[string]any)
 	for k, v := range e {
 		res[k] = v[1]
+	}
+	return res
+}
+
+type StringStringElement map[string]string
+
+func (e StringStringElement) Convert() (ElementKV, error) {
+	return utils.MapValueConvert(ElementFiledMap, e)
+}
+
+func (e StringStringElement) GetElementId() string {
+	return e["id"]
+}
+
+func (e StringStringElement) SetElementId(id string) {
+	e["id"] = id
+}
+
+func (e StringStringElement) UpwardTransformation() map[string]any {
+	res := make(map[string]any, len(e))
+	for k, v := range e {
+		res[k] = v
 	}
 	return res
 }
@@ -45,7 +121,7 @@ func NewCmd(t CmdType, payload string, boardId string, creator string) *Cmd {
 	return &Cmd{Type: t, Payload: payload, BoardId: boardId, Creator: creator, Time: time.Now().UnixMilli()}
 }
 
-func (cmd *Cmd) Fill(boardId string, creator string) {
+func (cmd *Cmd) SetInfo(boardId string, creator string) {
 	cmd.BoardId = boardId
 	cmd.Creator = creator
 }

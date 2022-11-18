@@ -50,6 +50,7 @@ func StoreBoard(bId string) {
 	var wg sync.WaitGroup
 	wg.Add(len(pages))
 	for _, id := range pages {
+		id := id
 		go func() {
 			defer wg.Done()
 			StorePage(id)

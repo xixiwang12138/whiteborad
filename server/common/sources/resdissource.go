@@ -122,6 +122,7 @@ func (this *redisSource) SetMany(values map[string]any, exp time.Duration) error
 
 func (this *redisSource) Del(keys ...string) error {
 	if err := this.Client.Del(keys...).Err(); err != nil {
+		//TODO 如果删除一个不在的key??
 		return errors.Wrap(err, "==========> Delete ")
 	}
 	return nil

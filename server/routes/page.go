@@ -46,6 +46,7 @@ func DeletePage(ctx *gin.Context, req *bind.PageReq) (any, error) {
 func GetPageVo(ctx *gin.Context, req *bind.PageReq) (any, error) {
 	page, err := logic.LoadPage(req.PageId)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	return struct {

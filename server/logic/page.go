@@ -12,8 +12,8 @@ import (
 )
 
 // ImportPage 在某个页面上导入文件，并保存到redis缓存中
-func ImportPage(crypto string, pageId string) (*models.PageVO, error) {
-	elements, err := models.Decrypt([]byte(crypto)) //StringStringMap
+func ImportPage(crypto string, pageId string, importer string) (*models.PageVO, error) {
+	elements, err := models.Decrypt([]byte(crypto))
 	page, err := dao.PageRepo.FindByID(pageId)
 	if err != nil {
 		return nil, err
@@ -22,6 +22,12 @@ func ImportPage(crypto string, pageId string) (*models.PageVO, error) {
 		Page:     page,
 		Elements: elements,
 	}
+	//send loading page data to user
+	err = ws.HubMgr.SendLoadMessage(page.WhiteBoardID, importer, vo)
+	if err != nil {
+		return nil, err
+	}
+
 	//save to redis
 	err = SaveElements2Cache(elements, pageId)
 	if err != nil {

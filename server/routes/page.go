@@ -8,7 +8,6 @@ import (
 	"server/logic"
 	"server/models"
 	"server/models/bind"
-	"server/ws"
 	"strconv"
 	"time"
 )
@@ -28,12 +27,7 @@ func CreatPage(ctx *gin.Context, req *bind.NewPageReq) (any, error) {
 	}
 	if req.Data != "" {
 		//import
-		vo, err := logic.ImportPage(req.Data, pageId)
-		if err != nil {
-			return nil, err
-		}
-		//send loading page data to user
-		err = ws.HubMgr.SendLoadMessage(req.BoardId, userId, vo)
+		_, err := logic.ImportPage(req.Data, pageId, userId)
 		if err != nil {
 			return nil, err
 		}

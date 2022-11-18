@@ -6,7 +6,6 @@ import (
 	"log"
 	"server/common/cache"
 	"server/common/sources"
-	"server/common/utils"
 	"server/dao"
 	"server/models"
 	"server/ws"
@@ -19,23 +18,12 @@ func ImportPage(crypto string, pageId string) (*models.PageVO, error) {
 	if err != nil {
 		return nil, err
 	}
-	voElements := make([]models.ElementKV, len(elements))
-	//re generate id for elements
-	//convert to element
-	for i, element := range elements {
-		id := utils.GenerateId()
-		element.SetElementId(id)
-		voElements[i], err = element.Convert()
-		if err != nil {
-			return nil, err
-		}
-	}
 	vo := &models.PageVO{
 		Page:     page,
-		Elements: voElements,
+		Elements: elements,
 	}
 	//save to redis
-	err = SaveStrStrElements2Cache(elements, pageId)
+	err = SaveElements2Cache(elements, pageId)
 	if err != nil {
 		return nil, err
 	}

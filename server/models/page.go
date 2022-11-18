@@ -52,13 +52,6 @@ type PageVO struct {
 // Encrypt 加密一个页面的所有数据，存储的时候采用与数据库一致的StringStringMap
 func (v *PageVO) Encrypt() ([]byte, error) {
 	data := v.Elements
-	//convert elements to StringStringMap, consistent with the database
-	for _, elementKV := range data {
-		_, err := elementKV.StringfyFiled()
-		if err != nil {
-			return nil, err
-		}
-	}
 	bytes, err := json.Marshal(data)
 	if err != nil {
 		return nil, err
@@ -66,7 +59,7 @@ func (v *PageVO) Encrypt() ([]byte, error) {
 	return utils.Base64Encode(utils.Base64Encode(bytes)), nil
 }
 
-func Decrypt(data []byte) ([]StringStringElement, error) {
+func Decrypt(data []byte) ([]ElementKV, error) {
 	//新建一个有数据的页面，进行两次解码
 	decode, err := utils.Base64Decode(data)
 	if err != nil {
@@ -76,7 +69,7 @@ func Decrypt(data []byte) ([]StringStringElement, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "invalid content")
 	}
-	elements := make([]StringStringElement, 0)
+	elements := make([]ElementKV, 0)
 	err = json.Unmarshal(buf, &elements)
 	if err != nil {
 		return nil, errors.Wrap(err, "invalid content")

@@ -1,0 +1,79 @@
+.background {
+    height: 100vh;
+    width: 100vw;
+    /*background-color: #FEE3E3;*/
+    background-image: url('./image/login.svg');
+    background-size:cover;
+}
+.form {
+    position: absolute;
+    top: 10vh;
+    left: 5vw;
+    height: 80vh;
+    width: 50vw;
+    min-width: 400px;
+    min-height: 400px;
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 40px;
+}
+.circles {
+    position: absolute;
+    right: 0;
+    height: 100vh;
+    width: 45vw;
+    /*background: white;*/
+}
+.circle1 {
+    position: absolute;
+    top: 5vh;
+    right: 20vw;
+    height: 80px;
+    width: 80px;
+    border-radius: 40px;
+    background: linear-gradient(#F6CEEE, white);
+}
+.circle2 {
+    position: absolute;
+    top: 20vh;
+    right: 10vw;
+    height: 120px;
+    width: 120px;
+    border-radius: 60px;
+    background: linear-gradient(white, #FAA6A4);
+}
+.circle3 {
+    position: absolute;
+    top: 30vh;
+    right: 30vw;
+    height: 60px;
+    width: 60px;
+    border-radius: 30px;
+    background: linear-gradient(white, #FAA6A4);
+}
+.circle4 {
+    position: absolute;
+    top: 45vh;
+    right: 20vw;
+    height: 80px;
+    width: 80px;
+    border-radius: 40px;
+    background: linear-gradient(#F6CEEE, white);
+}
+.circle5 {
+    position: absolute;
+    top: 60vh;
+    right: 10vw;
+    height: 110px;
+    width: 110px;
+    border-radius: 55px;
+    background: linear-gradient(#FFB687, white);
+}
+.circle6 {
+    position: absolute;
+    top: 80vh;
+    right: 25vw;
+    height: 80px;
+    width: 80px;
+    border-radius: 40px;
+    background: linear-gradient(#FFB687, white);
+}

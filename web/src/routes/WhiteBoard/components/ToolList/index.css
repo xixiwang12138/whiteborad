@@ -1,0 +1,152 @@
+.tool-list {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 80px;
+    width: 100vw;
+    /*background-color: #DC8AF9;*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.tool-do {
+    position: absolute;
+    left: 10%;
+    height: 60px;
+    width: auto;
+    /*background-color: #282c34;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
+}
+.do-box {
+    height: 40px;
+    width: 100px;
+    /*background-color: white;*/
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.do-box .icon {
+    height: 40px !important;
+    width: 40px !important;
+    border-radius: 10px !important;
+    background-color: #FFEDED !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+}
+.do-box .icon-disabled {
+    height: 40px !important;
+    width: 40px !important;
+    border-radius: 10px !important;
+    background-color: #d2d2d2 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: not-allowed !important;
+}
+
+
+.do-box .icon-disabled img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+.do-box .icon img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+.bar-icon {
+    height: 40px;
+    width: 40px;
+    border-radius: 10px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.bar-icon:hover{
+    background-color: #FFEDED;
+}
+
+.bar-icon-selected {
+    background-color: #FFEDED;
+}
+
+.bar-icon img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+}
+.tool-bar {
+    height: 50px;
+    width: fit-content;
+    padding: 0 15px;
+    /*width: fit-content;*/
+    border-radius: 10px;
+    background-color: white;
+    border: 1px solid white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.separate{
+    border-right: lightgray 2px solid;
+}
+
+/*.tool-list .tool-do .do-box .ant-btn {*/
+/*    height: 40px;*/
+/*    width: 40px;*/
+/*    border-radius: 10px;*/
+/*    background-color: #FFEDED;*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.bar-minbox {*/
+/*    height: 50px;*/
+/*    width: 100px;*/
+/*    !*background-color: #282c34;*!*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    align-items: center;*/
+/*    justify-content: space-between;*/
+/*}*/
+/*.bar-maxbox {*/
+/*    height: 50px;*/
+/*    width: fit-content;*/
+/*    padding: 0 10px;*/
+/*    display: flex;*/
+/*    flex-direction: row;*/
+/*    align-items: center;*/
+/*    justify-content: space-between;*/
+/*    !*background-color: #282c34;*!*/
+/*}*/
+
+.bar-box {
+    height: 40px;
+    width: fit-content;
+    padding: 0 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.tool-zhanwei {
+    height: 60px;
+    width: 200px;
+    /*background-color: #282c34;*/
+}

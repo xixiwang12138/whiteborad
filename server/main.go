@@ -8,6 +8,7 @@ import (
 )
 
 func main() {
+	fmt.Println("starting")
 	config.SetupConfig("./config.yaml")
 	sources.DataSourceContext.SetupSources(config.GlobalConfig)
 	go ws.StartUp(config.GlobalConfig.WebSocketConfig)
